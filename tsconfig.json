@@ -16,6 +16,7 @@
     },
     "jsx": "react-native"
   },
+
   "extends": [
     "node_modules",
     "babel.config.js",
