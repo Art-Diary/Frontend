@@ -6,17 +6,32 @@
  */
 
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  NativeStackNavigationProp,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
 import React from 'react';
 import {LogBox} from 'react-native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {RecoilRoot} from 'recoil';
-import ExhibitionRoutes from '~/pages/Exhibition/ExhibitionRoutes';
-// import MyDiaryRoutes from '~/pages/MyDiary/MyDiaryRoutes';
-import Container from '~/components/Container';
+import BottomRoutes from './pages/BottomRoutes';
+import MyExhAddScreen from './screens/mydiary/MyExhAddScreen';
+import MyDiariesRoutes from './pages/mydiary/MyDiariesRoutes';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Main: undefined;
+  MyAddExhibition: undefined;
+  MyDiaries: undefined;
+  // MyDiaries : {
+  //     id: number;
+  // };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
+
+export type RootStackNavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
 
 LogBox.ignoreAllLogs();
 
@@ -26,16 +41,18 @@ export default function App() {
       <NavigationContainer>
         <RecoilRoot>
           <Stack.Navigator
-            initialRouteName={'mydiary-routes'}
+            initialRouteName={'Main'}
             screenOptions={{headerShown: false}}>
-            {/* 로그인 회원가입 */}
             {/* 홈 화면 = 내 기록 */}
-            <Stack.Screen name="mydiary-routes" component={Container} />
-            {/* 전시회 화면 */}
-            <Stack.Screen
-              name="exhbition-routes"
-              component={ExhibitionRoutes}
-            />
+            <Stack.Screen name="Main" component={BottomRoutes} />
+            {/* <Stack.Screen name="mydiary" component={MyDiaryRoutes} /> */}
+            {/* [내 기록] 전시회 추가 화면 */}
+            <Stack.Screen name="MyAddExhibition" component={MyExhAddScreen} />
+            {/* [내 기록] 한 전시회의 기록 목록 화면 */}
+            <Stack.Screen name="MyDiaries" component={MyDiariesRoutes} />
+            {/* [전시회] 전시회 상세 정보 */}
+            {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
+            {/* 로그인 회원가입 */}
             {/* 캘린더 화면 */}
             {/* 전시 메이트 화면 */}
             {/* 설정 화면 */}

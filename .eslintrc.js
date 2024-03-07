@@ -30,10 +30,10 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react', 'prettier'],
   rules: {
     indent: ['error', 2],
-    'linebreak-style': ['error', 'windows'],
+    'linebreak-style': 'auto',
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     '@typescript-eslint/no-unused-vars': 'error',
-    'prettier/prettier': ['error', {endOfLine: 'crlf'}],
+    // 'prettier/prettier': ['error', {endOfLine: 'crlf'}],
   },
 };

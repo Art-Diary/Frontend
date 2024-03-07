@@ -1,7 +1,0 @@
-프로젝트에 필요한 재사용 컴포넌트 및 queries를 기능별로 분류하여 정리한 폴더이다.
-기능별로 파일을 쉽게 찾을 수 있고, 파일의 용도를 파악하기에 좋다.
-
-src/components에 존재하는 재사용 컴포넌트는 컴포넌트 전반에서 재사용된느 경우라면, src/features에 존재하는 재사용 컴포넌트는 특정 기능에 한해서만 재사용된다.
-예를 들어 CommonModal.tsx는 모든 모달의 뼈대가 되는 컴포넌트라면, BookmarkModal.tsx는 북마크 기능만을 수행하는 모달이다.
-
-상태관리 툴로 Redux-toolkit과 RTK-Query를 사용했는데, 이에 관련된 api, query, mutation들은 기능별로 분류하여 services 하위 폴더에 위치시켰다.
