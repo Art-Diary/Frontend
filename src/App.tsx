@@ -14,9 +14,9 @@ import React from 'react';
 import {LogBox} from 'react-native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {RecoilRoot} from 'recoil';
-import BottomRoutes from './pages/BottomRoutes';
+import BottomRoutes from './routes/BottomRoutes';
 import MyExhAddScreen from './screens/mydiary/MyExhAddScreen';
-import MyDiariesRoutes from './pages/mydiary/MyDiariesRoutes';
+import MyDiariesRoutes from './routes/MyDiary/MyDiariesRoutes';
 
 type RootStackParamList = {
   Main: undefined;
