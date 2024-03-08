@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, SafeAreaView} from 'react-native';
 import SvgIcon from '~/components/SvgIcon';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MyExhsScreen from '~/screens/mydiary/MyExhsScreen';
+import MyExhListScreen from '~/screens/mydiary/myExhList/MyExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import MateListScreen from '~/screens/mate/MateListScreen';
@@ -56,7 +56,7 @@ const BottomRoutes = () => {
         })}>
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
         <Tab.Screen name="Calender" component={CalendarScreen} />
-        <Tab.Screen name="Diary" component={MyExhsScreen} />
+        <Tab.Screen name="Diary" component={MyExhListScreen} />
         <Tab.Screen name="Mate" component={MateListScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />
       </Tab.Navigator>
