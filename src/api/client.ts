@@ -18,5 +18,5 @@ client.interceptors.request.use(async config => {
 
 // 사용자의 userId를 가져오는 함수 (임시)
 async function getUserId() {
-  return 10;
+  return 3;
 }
