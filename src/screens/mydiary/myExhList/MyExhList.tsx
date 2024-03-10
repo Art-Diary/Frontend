@@ -1,33 +1,36 @@
 import React from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import {useQuery} from 'react-query';
-import {fetchMyExhList} from '~/api/mydiary';
-import MyExhItem from './MyExhItem';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  Image,
+} from 'react-native';
 import InfoView from '~/components/InfoView';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
+import {useMyExh} from '~/zustand/mydiary/myexhs';
+import SvgIcon from '~/components/SvgIcon';
+import LoadingView from '~/components/LoadingView';
+import {useFetchMyExhList} from '~/api/queries/mydiary';
 
 const MyExhList = () => {
-  const {
-    data: myExhList,
-    isLoading,
-    isError,
-  } = useQuery('myExhList', fetchMyExhList, {
-    staleTime: 500000,
-    onError: err => {
-      console.log(err);
-      console.log('[MyExhListScreen] error fetch MyExhList');
-    },
-    onSuccess: (data: any) => {
-      console.log('[MyExhListScreen] success fetch MyExhList');
-    },
-    select: (res: any) => res.data,
-  });
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const updateExhId = useMyExh(state => state.updateExhId);
+  const {data: myExhList, isLoading, isError} = useFetchMyExhList();
+
+  const onPress = (exhId: number) => {
+    updateExhId(exhId);
+    navigation.navigate('MyDiaries');
+  };
 
   if (isError) {
     return <InfoView message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <InfoView message={'로딩중 :)'} />;
+    return <LoadingView message={'로딩 중 :)'} />;
   }
 
   if (myExhList.length === 0) {
@@ -35,29 +38,43 @@ const MyExhList = () => {
   }
 
   return (
-    // <Container bottom="Diary">
-    <>
-      {/* body */}
-      <View style={myDiaryStyles.view}>
-        <FlatList
-          data={myExhList}
-          renderItem={({item}) => (
-            <MyExhItem
-              title={item.exhName}
-              star={item.rate}
-              poster={item.poster}
+    <View style={myDiaryStyles.view}>
+      <FlatList
+        data={myExhList}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={contentStyles.viewRow}
+            onPress={() => onPress(item.exhId)}>
+            <Image
+              source={{uri: `data:image/png;base64,${item.poster}`}}
+              width={120}
+              height={147.69}
+              resizeMode="contain"
+              alt={'이미지 읽기 실패'}
             />
-          )}
-          numColumns={2}
-        />
-      </View>
-    </>
-    // </Container>
+            <View style={contentStyles.view2}>
+              <Text
+                style={contentStyles.exhTitle}
+                numberOfLines={2}
+                ellipsizeMode="tail">
+                {item.exhName}
+              </Text>
+              <View style={contentStyles.starView}>
+                <Text style={contentStyles.star}>{item.rate.toFixed(2)}</Text>
+                <SvgIcon name={'LightStarIcon'} />
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+        numColumns={2}
+      />
+    </View>
   );
 };
 
 export default MyExhList;
 
+/** style */
 const myDiaryStyles = StyleSheet.create({
   view: {
     flex: 1,
@@ -73,5 +90,40 @@ const myDiaryStyles = StyleSheet.create({
     backgroundColor: '#FF6F61',
     borderRadius: 4,
     padding: 12,
+  },
+});
+
+const contentStyles = StyleSheet.create({
+  viewRow: {
+    gap: 9,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '50%',
+    paddingTop: 20,
+    paddingBottom: 14,
+    borderColor: '#D3D3D3',
+    borderRightWidth: 0.5, // 테두리 너비
+    borderBottomWidth: 0.5, // 테두리 너비
+  },
+  view2: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  exhTitle: {
+    fontSize: 20,
+    color: '#3C4045',
+    fontFamily: 'omyu pretty',
+    textAlign: 'center',
+  },
+  starView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  star: {
+    fontSize: 18,
+    color: '#D3D3D3',
+    fontFamily: 'omyu pretty',
   },
 });

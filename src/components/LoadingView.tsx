@@ -1,24 +1,25 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 
-interface InfoViewProps {
+interface LoadingViewProps {
   message: string;
 }
 
-const InfoView: React.FC<InfoViewProps> = ({message}) => {
+const LoadingView: React.FC<LoadingViewProps> = ({message}) => {
   return (
     <View style={infoStyles.view}>
       <Text style={infoStyles.text}>{message}</Text>
+      <ActivityIndicator color={'#FF6F61'} />
     </View>
   );
 };
 
-export default InfoView;
+export default LoadingView;
 
 const infoStyles = StyleSheet.create({
   view: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F6F6F6',
