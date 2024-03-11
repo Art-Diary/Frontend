@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {ReactNode, useEffect} from 'react';
 import {StyleSheet, View, TouchableOpacity, BackHandler} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import SvgIcon from '~/components/SvgIcon';
+import {BackButton} from '~/assets/images/index';
 
 interface BackProps {
   children: ReactNode;
@@ -28,7 +28,7 @@ const BackView: React.FC<BackProps> = ({children}) => {
   return (
     <View style={backStyles.view}>
       <TouchableOpacity onPress={handlePressBack}>
-        <SvgIcon name="BackButton" />
+        <BackButton />
       </TouchableOpacity>
       {children}
     </View>
@@ -47,9 +47,5 @@ const backStyles = StyleSheet.create({
     width: '100%',
     height: 57,
     backgroundColor: '#F6F6F6',
-    // delete
-    // borderStyle: 'dashed',
-    // borderColor: '#D3D3D3',
-    // borderBottomWidth: 1.5, // 테두리 너비
   },
 });

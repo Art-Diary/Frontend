@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
 import BackView from '~/components/BackView';
-import SvgIcon from '~/components/SvgIcon';
 import MyDiaryList from './MyDiaryList';
+import {WriteDiaryButton} from '~/assets/images/index';
 
 const MyDiaryListScreen = () => {
   return (
@@ -10,7 +10,7 @@ const MyDiaryListScreen = () => {
       {/* header */}
       <BackView>
         <TouchableOpacity>
-          <SvgIcon name="WriteDiaryButton" />
+          <WriteDiaryButton />
         </TouchableOpacity>
       </BackView>
 

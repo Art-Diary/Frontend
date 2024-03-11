@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import BackView from '~/components/BackView';
-import {useMyExhExhId} from '~/zustand/mydiary/myexhs';
+import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import MyDiaryList from './MyDiaryList';
 
 const MyDiaryUpdateScreen = () => {
-  const exhId = useMyExhExhId();
+  const exhId = useMyDiaryExhId();
 
   return (
     <View style={screenStyles.view}>

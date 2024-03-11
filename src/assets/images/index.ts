@@ -10,7 +10,7 @@ export {default as OnMateButton} from './bottom_nav_icon/on_mate.svg';
 export {default as OnSettingButton} from './bottom_nav_icon/on_setting.svg';
 // other icon
 export {default as LightStarIcon} from './light_star.svg';
-export {default as DiaryWriteButton} from './diary_write_button.svg';
+export {default as AddMyExhButton} from './add_my_exh_button.svg';
 export {default as BackButton} from './back_button.svg';
 export {default as WriteDiaryButton} from './write_diary_button.svg';
 export {default as WriterIcon} from './writer_icon.svg';
