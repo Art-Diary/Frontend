@@ -2,16 +2,20 @@ import {create} from 'zustand';
 
 interface MyExhState {
   exhId: number;
-  updateExhId: (exhId: number) => void;
-  //   increase: () => void;
+  actions: {
+    updateExhId: (exhId: number) => void;
+  };
 }
 
 // create: 보관함(Store)을 만들어주는 유용한 함수
-export const useMyExh = create<MyExhState>(set => ({
+const useMyExh = create<MyExhState>(set => ({
   exhId: -1,
-  updateExhId: exhId => set(state => ({exhId: exhId})),
-  //   increase: () => set(state => ({count: state.count + 1})),
+  actions: {
+    updateExhId: exhId => set(state => ({exhId: exhId})),
+  },
 }));
 
+export const useMyExhExhId = () => useMyExh(state => state.exhId);
+export const useMyExhActions = () => useMyExh(state => state.actions);
 // https://itchallenger.tistory.com/814
 // https://www.nextree.io/zustand/

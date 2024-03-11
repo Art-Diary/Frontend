@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Header from '~/components/Header';
 import SvgIcon from '~/components/SvgIcon';
 import {useNavigation} from '@react-navigation/native';
@@ -11,7 +11,8 @@ const MyExhListScreen = () => {
 
   return (
     // <Container bottom="Diary">
-    <>
+    // </Container>
+    <View style={screenStyles.view}>
       {/* header */}
       <Header title={'내 기록'}>
         <TouchableOpacity
@@ -22,9 +23,14 @@ const MyExhListScreen = () => {
 
       {/* body */}
       <MyExhList />
-    </>
-    // </Container>
+    </View>
   );
 };
 
 export default MyExhListScreen;
+
+const screenStyles = StyleSheet.create({
+  view: {
+    flex: 1,
+  },
+});

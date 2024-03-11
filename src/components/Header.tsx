@@ -6,7 +6,7 @@ interface HeaderProps {
   children: ReactNode;
 }
 
-const ContentHeader: React.FC<HeaderProps> = ({title, children}) => {
+const Header: React.FC<HeaderProps> = ({title, children}) => {
   return (
     <View style={headerStyles.view}>
       <Text style={headerStyles.text}>{title}</Text>
@@ -15,7 +15,7 @@ const ContentHeader: React.FC<HeaderProps> = ({title, children}) => {
   );
 };
 
-export default ContentHeader;
+export default Header;
 
 const headerStyles = StyleSheet.create({
   view: {

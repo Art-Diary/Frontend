@@ -10,20 +10,15 @@ import {
 import InfoView from '~/components/InfoView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyExh} from '~/zustand/mydiary/myexhs';
+import {useMyExhActions} from '~/zustand/mydiary/myexhs';
 import SvgIcon from '~/components/SvgIcon';
 import LoadingView from '~/components/LoadingView';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 
 const MyExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const updateExhId = useMyExh(state => state.updateExhId);
+  const {updateExhId} = useMyExhActions();
   const {data: myExhList, isLoading, isError} = useFetchMyExhList();
-
-  const onPress = (exhId: number) => {
-    updateExhId(exhId);
-    navigation.navigate('MyDiaries');
-  };
 
   if (isError) {
     return <InfoView message={'에러 발생 ;('} />;
@@ -36,6 +31,11 @@ const MyExhList = () => {
   if (myExhList.length === 0) {
     return <InfoView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
   }
+
+  const onPress = (exhId: number) => {
+    updateExhId(exhId);
+    navigation.navigate('MyDiaries');
+  };
 
   return (
     <View style={myDiaryStyles.view}>
