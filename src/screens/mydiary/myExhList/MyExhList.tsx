@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,20 +10,19 @@ import {
 import InfoView from '~/components/InfoView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyExh} from '~/zustand/mydiary/myexhs';
-import SvgIcon from '~/components/SvgIcon';
+import {useMyDiaryActions} from '~/zustand/mydiary/mydiary';
 import LoadingView from '~/components/LoadingView';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
+import {LightStarIcon} from '~/assets/images/index';
 
 const MyExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const updateExhId = useMyExh(state => state.updateExhId);
-  const {data: myExhList, isLoading, isError} = useFetchMyExhList();
+  const {updateExhId} = useMyDiaryActions();
+  const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
-  const onPress = (exhId: number) => {
-    updateExhId(exhId);
-    navigation.navigate('MyDiaries');
-  };
+  useEffect(() => {
+    refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
+  }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
 
   if (isError) {
     return <InfoView message={'에러 발생 ;('} />;
@@ -36,6 +35,11 @@ const MyExhList = () => {
   if (myExhList.length === 0) {
     return <InfoView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
   }
+
+  const onPress = (exhId: number) => {
+    updateExhId(exhId);
+    navigation.navigate('MyDiaries');
+  };
 
   return (
     <View style={myDiaryStyles.view}>
@@ -61,7 +65,7 @@ const MyExhList = () => {
               </Text>
               <View style={contentStyles.starView}>
                 <Text style={contentStyles.star}>{item.rate.toFixed(2)}</Text>
-                <SvgIcon name={'LightStarIcon'} />
+                <LightStarIcon />
               </View>
             </View>
           </TouchableOpacity>

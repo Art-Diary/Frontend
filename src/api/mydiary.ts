@@ -1,16 +1,11 @@
-import {QueryFunction, QueryKey} from 'react-query';
 import {client} from './client';
 
 /** 내 기록 API */
 
-export const fetchMyExhList: QueryFunction<ExhList[], QueryKey> = async () =>
-  client.get(`/myexhs`);
+export const fetchMyExhList = () => client.get(`/myexhs`);
 
-/** 내 기록 인터페이스 */
+export const fetchMyDiaryList = (exhId: number) =>
+  client.get(`/myexhs/${exhId}/diaries`);
 
-export interface ExhList {
-  exhId: number;
-  exhName: string;
-  poster: string;
-  rate: number;
-}
+export const deleteMyDiary = (exhId: number, diaryId: number, solo: boolean) =>
+  client.delete(`/myexhs/${exhId}/diaries/${diaryId}`, {params: {solo}});

@@ -1,12 +1,20 @@
 import React from 'react';
 import {StyleSheet, SafeAreaView} from 'react-native';
-import SvgIcon from '~/components/SvgIcon';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MyExhListScreen from '~/screens/mydiary/myExhList/MyExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import MateListScreen from '~/screens/mate/MateListScreen';
 import SettingScreen from '~/screens/setting/SettingScreen';
+import {OnExhibitionButton} from '~/assets/images/index';
+import {OffExhibitionButton} from '~/assets/images/index';
+import {OnCalenderButton} from '~/assets/images/index';
+import {OffCalenderButton} from '~/assets/images/index';
+import {OffDiaryButton} from '~/assets/images/index';
+import {OnMateButton} from '~/assets/images/index';
+import {OffMateButton} from '~/assets/images/index';
+import {OnSettingButton} from '~/assets/images/index';
+import {OffSettingButton} from '~/assets/images/index';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,33 +29,23 @@ const BottomRoutes = () => {
 
             if (route.name === 'Exhibition') {
               iconSource = focused ? (
-                <SvgIcon name={'OnExhibitionButton'} />
+                <OnExhibitionButton />
               ) : (
-                <SvgIcon name={'OffExhibitionButton'} />
+                <OffExhibitionButton />
               );
             } else if (route.name === 'Calender') {
               iconSource = focused ? (
-                <SvgIcon name={'OnCalenderButton'} />
+                <OnCalenderButton />
               ) : (
-                <SvgIcon name={'OffCalenderButton'} />
+                <OffCalenderButton />
               );
             } else if (route.name === 'Diary') {
-              iconSource = <SvgIcon name={'OffDiaryButton'} />;
+              iconSource = <OffDiaryButton />;
             } else if (route.name === 'Mate') {
-              iconSource = focused ? (
-                <SvgIcon name={'OnMateButton'} />
-              ) : (
-                <SvgIcon name={'OffMateButton'} />
-              );
+              iconSource = focused ? <OnMateButton /> : <OffMateButton />;
             } else if (route.name === 'Setting') {
-              iconSource = focused ? (
-                <SvgIcon name={'OnSettingButton'} />
-              ) : (
-                <SvgIcon name={'OffSettingButton'} />
-              );
+              iconSource = focused ? <OnSettingButton /> : <OffSettingButton />;
             }
-
-            // 커스텀 아이콘 이미지를 반환합니다.
             return iconSource;
           },
           tabBarShowLabel: false,
