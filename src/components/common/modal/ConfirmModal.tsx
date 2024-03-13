@@ -7,7 +7,12 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-const ConfirmationMessage = ({message, onClose}) => {
+interface ConfirmModalProps {
+  message: string;
+  onClose: (isClosed: boolean) => void;
+}
+
+const ConfirmModal: React.FC<ConfirmModalProps> = ({message, onClose}) => {
   const displayTime = 600;
 
   useEffect(() => {
@@ -31,7 +36,7 @@ const ConfirmationMessage = ({message, onClose}) => {
   );
 };
 
-export default ConfirmationMessage;
+export default ConfirmModal;
 
 const modalStyles = StyleSheet.create({
   modalContainer: {

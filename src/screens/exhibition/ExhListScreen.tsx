@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Text, StyleSheet, View} from 'react-native';
-import Header from '~/components/Header';
+import Header from '~/components/common/Header';
 
 const ExhListScreen = () => {
   const navigation = useNavigation();

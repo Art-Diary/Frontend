@@ -45,7 +45,7 @@ const backStyles = StyleSheet.create({
     alignItems: 'center',
     padding: 17,
     width: '100%',
-    height: 57,
+    height: '6%',
     backgroundColor: '#F6F6F6',
   },
 });

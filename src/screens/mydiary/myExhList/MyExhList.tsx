@@ -7,11 +7,11 @@ import {
   Text,
   Image,
 } from 'react-native';
-import InfoView from '~/components/InfoView';
+import InfoMessage from '~/components/common/InfoMessage';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMyDiaryActions} from '~/zustand/mydiary/mydiary';
-import LoadingView from '~/components/LoadingView';
+import Loading from '~/components/common/Loading';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import {LightStarIcon} from '~/assets/images/index';
 
@@ -25,15 +25,15 @@ const MyExhList = () => {
   }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
 
   if (isError) {
-    return <InfoView message={'에러 발생 ;('} />;
+    return <InfoMessage message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <LoadingView message={'로딩 중 :)'} />;
+    return <Loading message={'로딩 중 :)'} />;
   }
 
   if (myExhList.length === 0) {
-    return <InfoView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
+    return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
   }
 
   const onPress = (exhId: number) => {

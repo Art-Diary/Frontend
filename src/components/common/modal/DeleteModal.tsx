@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,45 +8,49 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
-import {
-  useMyDiaryExhId,
-  useMyDiaryId,
-  useMyDiaryIsSolo,
-} from '~/zustand/mydiary/mydiary';
+import {useMyDiaryExhId, useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
 
 interface DeleteModalProps {
+  handleCloseModal: (state: number) => void;
   message: string;
-  onClose: (isDeleted: number) => void;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({onClose, message}) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({
+  handleCloseModal,
+  message,
+}) => {
   const myDiaryExhId = useMyDiaryExhId();
-  const myDiaryId = useMyDiaryId();
-  const myDiaryIsSolo = useMyDiaryIsSolo();
-  const {mutate, isLoading, isError, isSuccess} = useDeleteMyDiary(
+  const myDiaryInfo = useMyDiaryInfo();
+  const {
+    mutate: deleteMyDiary,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useDeleteMyDiary(
     myDiaryExhId,
-    myDiaryId,
-    myDiaryIsSolo,
+    myDiaryInfo.diaryId,
+    myDiaryInfo.userExhId === null ? false : true, // 모임 or 혼자
   );
 
-  if (isError) {
-    onClose(2);
-  }
-
-  if (isSuccess) {
-    onClose(1);
-  }
+  useEffect(() => {
+    if (isError) {
+      handleCloseModal(2);
+    }
+    if (isSuccess) {
+      handleCloseModal(1);
+    }
+  }, [isError, isSuccess, handleCloseModal]);
 
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      onRequestClose={() => onClose(3)}>
-      <TouchableWithoutFeedback onPress={() => onClose(3)}>
+      onRequestClose={() => handleCloseModal(3)}>
+      <TouchableWithoutFeedback onPress={() => handleCloseModal(3)}>
         <View style={modalStyles.modalContainer}>
           <View style={modalStyles.modalContent}>
             <Text style={modalStyles.message}>{message}</Text>
-            <TouchableOpacity onPress={() => mutate()}>
+            <TouchableOpacity onPress={() => deleteMyDiary()}>
               <Text style={modalStyles.closeText}>삭제</Text>
             </TouchableOpacity>
           </View>

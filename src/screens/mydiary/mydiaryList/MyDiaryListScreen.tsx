@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import BackView from '~/components/BackView';
+import BackView from '~/components/common/BackView';
 import MyDiaryList from './MyDiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
 
@@ -25,6 +25,9 @@ export default MyDiaryListScreen;
 const screenStyles = StyleSheet.create({
   view: {
     flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '100%',
     backgroundColor: '#F6F6F6',
   },
 });

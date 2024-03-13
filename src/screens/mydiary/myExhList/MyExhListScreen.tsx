@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Header from '~/components/Header';
+import Header from '~/components/common/Header';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MyExhList from './MyExhList';
