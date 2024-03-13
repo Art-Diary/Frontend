@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import BackView from '~/components/BackView';
+import BackView from '~/components/common/BackView';
 import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import MyDiaryList from './MyDiaryList';
 

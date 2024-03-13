@@ -18,6 +18,8 @@ export {default as FillStarIcon} from './fill_star_icon.svg';
 export {default as EmptyStarIcon} from './empty_star_icon.svg';
 export {default as PrivateToggle} from './private_toggle.svg';
 export {default as PublicToggle} from './public_toggle.svg';
+export {default as LeftArrowIcon} from './left_arrow_icon.svg';
+export {default as RightArrowIcon} from './right_arrow_icon.svg';
 // will be erased
 export {default as Poster1} from './will_be_erased/poster1.svg';
 export {default as Poster2} from './will_be_erased/poster2.svg';

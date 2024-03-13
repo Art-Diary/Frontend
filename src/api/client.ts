@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const client = axios.create({
   //   baseURL: process.env.PUBLIC_API_URL,
-  baseURL: 'wifi ip 주소:8080',
+  baseURL: 'http://wifi ip 주소:8080',
   timeout: 2000,
 });
 
