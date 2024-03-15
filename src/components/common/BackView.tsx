@@ -1,8 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {ReactNode, useEffect} from 'react';
-import {StyleSheet, View, TouchableOpacity, BackHandler} from 'react-native';
+import {TouchableOpacity, BackHandler} from 'react-native';
+import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {BackButton} from '~/assets/images/index';
+import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
 
 interface BackProps {
   children: ReactNode;
@@ -26,26 +28,24 @@ const BackView: React.FC<BackProps> = ({children}) => {
   }, [handlePressBack]);
 
   return (
-    <View style={backStyles.view}>
+    <Container>
       <TouchableOpacity onPress={handlePressBack}>
         <BackButton />
       </TouchableOpacity>
       {children}
-    </View>
+    </Container>
   );
 };
 
 export default BackView;
 
 /** style */
-const backStyles = StyleSheet.create({
-  view: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', // 양 끝으로 버튼 배치
-    alignItems: 'center',
-    padding: 17,
-    width: '100%',
-    height: '6%',
-    backgroundColor: '#F6F6F6',
-  },
-});
+const Container = styled.View`
+  flex-direction: row;
+  justify-content: space-between; // 양 끝으로 버튼 배치
+  align-items: center;
+  padding: ${hp(12.5)}px;
+  width: 100%;
+  height: ${hp(35)}px;
+  background-color: #f6f6f6;
+`;

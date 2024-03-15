@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
+import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
 
 interface InfoMessageProps {
   message: string;
@@ -7,26 +8,25 @@ interface InfoMessageProps {
 
 const InfoMessage: React.FC<InfoMessageProps> = ({message}) => {
   return (
-    <View style={infoStyles.view}>
-      <Text style={infoStyles.text}>{message}</Text>
-    </View>
+    <Container>
+      <Message>{message}</Message>
+    </Container>
   );
 };
 
 export default InfoMessage;
 
-const infoStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F6F6F6',
-  },
-  text: {
-    fontSize: 20,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-    textAlign: 'center',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f6f6;
+`;
+
+const Message = styled.Text`
+  text-align: center;
+  font-size: ${fp(17.9)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;

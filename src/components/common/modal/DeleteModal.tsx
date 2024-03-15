@@ -1,14 +1,12 @@
 import React, {useEffect} from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
+import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
 import {useMyDiaryExhId, useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
+import {
+  heightPercentage as hp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 interface DeleteModalProps {
   handleCloseModal: (state: number) => void;
@@ -47,14 +45,14 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       transparent={true}
       onRequestClose={() => handleCloseModal(3)}>
       <TouchableWithoutFeedback onPress={() => handleCloseModal(3)}>
-        <View style={modalStyles.modalContainer}>
-          <View style={modalStyles.modalContent}>
-            <Text style={modalStyles.message}>{message}</Text>
+        <Container>
+          <Contents>
+            <Message>{message}</Message>
             <TouchableOpacity onPress={() => deleteMyDiary()}>
-              <Text style={modalStyles.closeText}>삭제</Text>
+              <DeleteButton>삭제</DeleteButton>
             </TouchableOpacity>
-          </View>
-        </View>
+          </Contents>
+        </Container>
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -62,35 +60,39 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
 
 export default DeleteModal;
 
-const modalStyles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 20,
-    width: '100%',
-  },
-  message: {
-    fontSize: 20,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-    textAlign: 'center',
-    paddingVertical: 63,
-  },
-  closeText: {
-    fontSize: 20,
-    marginTop: 20,
-    textAlign: 'center',
-    fontFamily: 'omyu pretty',
-    color: 'white',
-    backgroundColor: '#FF6F61',
-    paddingVertical: 13,
-    borderRadius: 5,
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
+
+const Contents = styled.View`
+  background-color: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: ${hp(14)}px;
+  width: 100%;
+`;
+
+const Message = styled.Text`
+  text-align: center;
+  font-size: ${fp(17.9)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+  padding-top: ${hp(45)}px;
+  padding-bottom: ${hp(45)}px;
+`;
+
+const DeleteButton = styled.Text`
+  text-align: center;
+  margin-top: ${hp(14)}px;
+  font-size: ${fp(17.9)}px;
+  font-family: 'omyu pretty';
+  color: white;
+  background-color: #ff6f61;
+  padding-top: ${hp(9.5)}px;
+  padding-bottom: ${hp(9.5)}px;
+  border-radius: 5px;
+`;

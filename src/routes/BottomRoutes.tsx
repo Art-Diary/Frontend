@@ -61,7 +61,7 @@ const BottomRoutes = () => {
             ...footerStyles.view,
             paddingTop: wp(8),
             height: hp(41),
-            borderTopWidth: wp(1.4), // 테두리 너비
+            borderTopWidth: wp(1.3), // 테두리 너비
           },
         })}>
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
@@ -76,6 +76,7 @@ const BottomRoutes = () => {
 
 export default BottomRoutes;
 
+/** style */
 const Container = styled.SafeAreaView`
   flex: 1;
   flex-direction: column;
