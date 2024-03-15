@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import DeleteModal from '../common/modal/DeleteModal';
 import ConfirmModal from '../common/modal/ConfirmModal';
+import styled from 'styled-components/native';
+import {
+  widthPercentage as wp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 interface TitleProps {
   diaryId: number;
@@ -31,17 +36,17 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title}) => {
   };
 
   return (
-    <View style={contentStyles.view}>
+    <Container>
       {/* 기록 제목 */}
-      <Text style={contentStyles.titleText}>{title}</Text>
+      <TitleText>{title}</TitleText>
       {/* 수정 | 삭제 */}
-      <View style={{flexDirection: 'row', gap: 4}}>
+      <EventView>
         <TouchableOpacity>
-          <Text style={contentStyles.eventText}>수정</Text>
+          <EventText>수정</EventText>
         </TouchableOpacity>
-        <Text style={contentStyles.eventText}>|</Text>
+        <EventText>|</EventText>
         <TouchableOpacity onPress={() => deleteModalOpen(diaryId, true)}>
-          <Text style={contentStyles.eventText}>삭제</Text>
+          <EventText>삭제</EventText>
           {isDeletePressed && (
             <DeleteModal
               handleCloseModal={deleteModalClose}
@@ -55,29 +60,34 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title}) => {
             />
           )}
         </TouchableOpacity>
-      </View>
-    </View>
+      </EventView>
+    </Container>
   );
 };
 
 export default TitleInfo;
 
 /** style */
-const contentStyles = StyleSheet.create({
-  view: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
-  titleText: {
-    fontSize: 28,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-  },
-  eventText: {
-    fontSize: 17,
-    color: '#979797',
-    fontFamily: 'omyu pretty',
-  },
-});
+const Container = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const TitleText = styled.Text`
+  font-size: ${fp(25.8)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;
+
+const EventView = styled.View`
+  flex-direction: row;
+  gap: ${wp(3.7)}px;
+`;
+
+const EventText = styled.Text`
+  font-size: ${fp(15)}px;
+  color: #979797;
+  font-family: 'omyu pretty';
+`;

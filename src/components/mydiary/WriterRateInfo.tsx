@@ -1,8 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import styled from 'styled-components/native';
 import {WriterIcon} from '~/assets/images/index';
 import {FillStarIcon} from '~/assets/images/index';
 import {EmptyStarIcon} from '~/assets/images/index';
+import {
+  widthPercentage as wp,
+  heightPercentage as hp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 interface WriterRateProps {
   nickname: string;
@@ -24,45 +29,56 @@ const WriterRateInfo: React.FC<WriterRateProps> = ({nickname, rate}) => {
   };
 
   return (
-    <View style={contentStyles.view}>
+    <Container>
       {/* 닉네임 */}
-      <View style={{flexDirection: 'row', gap: 7}}>
-        <WriterIcon width={16} />
-        <Text style={contentStyles.nicknameText}>{nickname}</Text>
-      </View>
+      <NicknameView>
+        <WriterIcon width={fp(16)} />
+        <NicknameText>{nickname}</NicknameText>
+      </NicknameView>
       {/* 별점 */}
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: 10,
-          alignItems: 'center',
-        }}>
-        <Text style={contentStyles.rateText}>별점</Text>
-        <View style={{flexDirection: 'row'}}>{renderingRate(rate)}</View>
-      </View>
-    </View>
+      <RateView>
+        <RateText>별점</RateText>
+        <StarView>{renderingRate(rate)}</StarView>
+      </RateView>
+    </Container>
   );
 };
 
 export default WriterRateInfo;
 
 /** style */
-const contentStyles = StyleSheet.create({
-  view: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingVertical: 37,
-  },
-  nicknameText: {
-    fontSize: 18,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-  },
-  rateText: {
-    fontSize: 17,
-    color: '#979797',
-    fontFamily: 'omyu pretty',
-  },
-});
+const Container = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: ${hp(26.5)}px;
+  padding-bottom: ${hp(26.5)}px;
+`;
+
+const NicknameView = styled.View`
+  flex-direction: row;
+  gap: ${wp(5.5)}px;
+`;
+
+const NicknameText = styled.Text`
+  font-size: ${fp(16.3)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;
+
+const RateView = styled.View`
+  flex-direction: row;
+  gap: ${wp(9)}px;
+  align-items: center;
+`;
+
+const RateText = styled.Text`
+  font-size: ${fp(15.3)}px;
+  color: #979797;
+  font-family: 'omyu pretty';
+`;
+
+const StarView = styled.View`
+  flex-direction: row;
+`;
