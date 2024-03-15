@@ -1,17 +1,17 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
+import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
 
 const MyExhAddScreen = () => {
-  return <Text style={contentStyles.text}>[내 기록] 전시회 추가 화면</Text>;
+  return <ContentText>[내 기록] 전시회 추가 화면</ContentText>;
 };
 
 export default MyExhAddScreen;
 
-const contentStyles = StyleSheet.create({
-  text: {
-    flex: 1,
-    fontSize: 25,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-  },
-});
+/** style */
+const ContentText = styled.Text`
+  flex: 1;
+  font-size: ${fp(22)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;

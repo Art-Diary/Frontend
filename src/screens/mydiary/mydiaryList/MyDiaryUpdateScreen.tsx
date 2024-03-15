@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import MyDiaryList from './MyDiaryList';
@@ -8,21 +8,20 @@ const MyDiaryUpdateScreen = () => {
   const exhId = useMyDiaryExhId();
 
   return (
-    <View style={screenStyles.view}>
+    <Container>
       {/* header */}
       <BackView children={null}></BackView>
 
       {/* body */}
       <MyDiaryList />
-    </View>
+    </Container>
   );
 };
 
 export default MyDiaryUpdateScreen;
 
-const screenStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-    backgroundColor: '#F6F6F6',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+  background-color: #f6f6f6;
+`;

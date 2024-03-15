@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, StyleSheet, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
+import styled from 'styled-components/native';
+import {Shadow} from 'react-native-shadow-2';
 import InfoMessage from '~/components/common/InfoMessage';
 import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import Loading from '~/components/common/Loading';
@@ -10,7 +12,11 @@ import WriterRateInfo from '~/components/mydiary/WriterRateInfo';
 import OtherInfo from '~/components/mydiary/OtherInfo';
 import SayingInfo from '~/components/mydiary/SayingInfo';
 import Swiper from 'react-native-swiper';
-import {LeftArrowIcon, RightArrowIcon} from '~/assets/images';
+import {
+  widthPercentage as wp,
+  heightPercentage as hp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 const MyDiaryList = () => {
   const myExhId = useMyDiaryExhId();
@@ -49,12 +55,12 @@ const MyDiaryList = () => {
       // }
       showsPagination={true}>
       {myDiaryList.map((item: any) => (
-        <View key={item.diaryId} style={myDiaryStyles.wrapView}>
-          <View style={myDiaryStyles.shadowView}>
+        <Container key={item.diaryId}>
+          <Shadow distance={5}>
             {/* 썸네일 */}
             <ThumbnailInfo thumbnail={item.thumbnail} />
             {/* 세부 내용 */}
-            <View style={myDiaryStyles.infoView}>
+            <Contents>
               <TitleInfo diaryId={item.diaryId} title={item.title} />
               <WriterRateInfo nickname={item.nickname} rate={item.rate} />
               <OtherInfo
@@ -64,9 +70,9 @@ const MyDiaryList = () => {
                 diaryPrivate={item.diaryPrivate}
               />
               <SayingInfo saying={item.saying} exhName={item.exhName} />
-            </View>
-          </View>
-        </View>
+            </Contents>
+          </Shadow>
+        </Container>
       ))}
     </Swiper>
   );
@@ -75,37 +81,27 @@ const MyDiaryList = () => {
 export default MyDiaryList;
 
 /** style */
-const myDiaryStyles = StyleSheet.create({
-  wrapView: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '100%',
-    paddingBottom: 5,
-    paddingHorizontal: 3,
-    backgroundColor: '#F6F6F6',
-  },
-  shadowView: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingHorizontal: 3.5,
-    paddingTop: 4.5,
-    borderColor: 'white',
-    borderWidth: 0.1,
-    ...Platform.select({
-      android: {
-        elevation: 2.5,
-      },
-    }),
-  },
-  infoView: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 30,
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: ${hp(5)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
+  background-color: #f6f6f6;
+`;
 
+const Contents = styled.View`
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  padding-top: ${hp(20)}px;
+  padding-bottom: ${hp(20)}px;
+  padding-left: ${wp(30)}px;
+  padding-right: ${wp(30)}px;
+`;
+
+/** style for button */
 const styles = StyleSheet.create({
   wrapper: {
     // Swiper styles
