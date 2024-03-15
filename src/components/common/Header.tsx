@@ -1,5 +1,10 @@
 import React, {ReactNode} from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import styled from 'styled-components/native';
+import {
+  widthPercentage as wp,
+  heightPercentage as hp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 interface HeaderProps {
   title: string; // title prop의 타입을 문자열로 지정
@@ -8,31 +13,31 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({title, children}) => {
   return (
-    <View style={headerStyles.view}>
-      <Text style={headerStyles.text}>{title}</Text>
+    <Container>
+      <Title>{title}</Title>
       {children}
-    </View>
+    </Container>
   );
 };
 
 export default Header;
 
-const headerStyles = StyleSheet.create({
-  view: {
-    flexDirection: 'row',
-    justifyContent: 'space-between', // 양 끝으로 버튼 배치
-    alignItems: 'center',
-    padding: 17,
-    width: '100%',
-    height: 57,
-    borderStyle: 'dashed',
-    borderColor: '#D3D3D3',
-    borderBottomWidth: 1.5, // 테두리 너비
-    backgroundColor: '#F6F6F6',
-  },
-  text: {
-    fontSize: 25,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex-direction: row;
+  justify-content: space-between; // 양 끝으로 버튼 배치
+  align-items: center;
+  padding: ${hp(12)}px;
+  width: 100%;
+  height: ${hp(42)}px;
+  border-style: dashed;
+  border-color: #d3d3d3;
+  border-bottom-width: ${wp(1.3)}px;
+  background-color: #f6f6f6;
+`;
+
+const Title = styled.Text`
+  font-size: ${fp(22)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;

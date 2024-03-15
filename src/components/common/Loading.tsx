@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import styled from 'styled-components/native';
+import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
 
 interface LoadingProps {
   message: string;
@@ -7,27 +9,27 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({message}) => {
   return (
-    <View style={infoStyles.view}>
-      <Text style={infoStyles.text}>{message}</Text>
+    <Container>
+      <Message>{message}</Message>
       <ActivityIndicator color={'#FF6F61'} />
-    </View>
+    </Container>
   );
 };
 
 export default Loading;
 
-const infoStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F6F6F6',
-  },
-  text: {
-    fontSize: 20,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-    textAlign: 'center',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f6f6;
+`;
+
+const Message = styled.Text`
+  text-align: center;
+  font-size: ${fp(17.9)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;
