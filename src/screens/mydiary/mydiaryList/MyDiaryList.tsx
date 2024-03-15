@@ -35,8 +35,6 @@ const MyDiaryList = () => {
   }
 
   /**
-   * 기종마다 비율 같게
-   *
    * 기록 추가, 수정
    */
   return (
