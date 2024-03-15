@@ -1,12 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
+import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import MyDiaryList from './MyDiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
 
 const MyDiaryListScreen = () => {
   return (
-    <View style={screenStyles.view}>
+    <Container>
       {/* header */}
       <BackView>
         <TouchableOpacity>
@@ -16,18 +17,17 @@ const MyDiaryListScreen = () => {
 
       {/* body */}
       <MyDiaryList />
-    </View>
+    </Container>
   );
 };
 
 export default MyDiaryListScreen;
 
-const screenStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: '#F6F6F6',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: #f6f6f6;
+  align-items: center;
+  width: 100%;
+`;

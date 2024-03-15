@@ -1,37 +1,37 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Text, StyleSheet, View} from 'react-native';
+import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
+import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
 
 const SettingScreen = () => {
-  const navigation = useNavigation();
   return (
-    // <Container bottom="Exhibition">
-    <>
+    <Container>
       {/* header */}
       <Header title={'설정'} children={null} />
 
       {/* body */}
-      <View style={contentStyles.view}>
-        <Text style={contentStyles.text}>설정</Text>
-      </View>
-    </>
-    // </Container>
+      <Contents>
+        <ContentText>설정</ContentText>
+      </Contents>
+    </Container>
   );
 };
 
 export default SettingScreen;
 
-const contentStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#F6F6F6',
-    height: 53,
-  },
-  text: {
-    fontSize: 25,
-    color: '#3C4045',
-    fontFamily: 'omyu pretty',
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+`;
+
+const Contents = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: #f6f6f6;
+`;
+
+const ContentText = styled.Text`
+  font-size: ${fp(22)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;

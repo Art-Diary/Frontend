@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Header from '~/components/common/Header';
+import {TouchableOpacity} from 'react-native';
+import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
+import Header from '~/components/common/Header';
 import {RootStackNavigationProp} from '~/App';
 import MyExhList from './MyExhList';
 import {AddMyExhButton} from '~/assets/images/index';
@@ -10,9 +11,7 @@ const MyExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   return (
-    // <Container bottom="Diary">
-    // </Container>
-    <View style={screenStyles.view}>
+    <Container>
       {/* header */}
       <Header title={'내 기록'}>
         <TouchableOpacity
@@ -22,15 +21,22 @@ const MyExhListScreen = () => {
       </Header>
 
       {/* body */}
-      <MyExhList />
-    </View>
+      <Contents>
+        <MyExhList />
+      </Contents>
+    </Container>
   );
 };
 
 export default MyExhListScreen;
 
-const screenStyles = StyleSheet.create({
-  view: {
-    flex: 1,
-  },
-});
+/** style */
+const Container = styled.View`
+  flex: 1;
+`;
+
+const Contents = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: #f6f6f6;
+`;
