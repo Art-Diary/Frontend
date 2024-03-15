@@ -1,26 +1,33 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import styled from 'styled-components/native';
 import MyExhListScreen from '~/screens/mydiary/myExhList/MyExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import MateListScreen from '~/screens/mate/MateListScreen';
 import SettingScreen from '~/screens/setting/SettingScreen';
-import {OnExhibitionButton} from '~/assets/images/index';
-import {OffExhibitionButton} from '~/assets/images/index';
-import {OnCalenderButton} from '~/assets/images/index';
-import {OffCalenderButton} from '~/assets/images/index';
-import {OffDiaryButton} from '~/assets/images/index';
-import {OnMateButton} from '~/assets/images/index';
-import {OffMateButton} from '~/assets/images/index';
-import {OnSettingButton} from '~/assets/images/index';
-import {OffSettingButton} from '~/assets/images/index';
+import {
+  OnExhibitionButton,
+  OffExhibitionButton,
+  OnCalenderButton,
+  OffCalenderButton,
+  OffDiaryButton,
+  OnMateButton,
+  OffMateButton,
+  OnSettingButton,
+  OffSettingButton,
+} from '~/assets/images/index';
+import {
+  widthPercentage as wp,
+  heightPercentage as hp,
+} from '~/components/common/ResponsiveSize';
 
 const Tab = createBottomTabNavigator();
 
 const BottomRoutes = () => {
   return (
-    <SafeAreaView style={commonStyles.view}>
+    <Container>
       <Tab.Navigator
         initialRouteName="Diary"
         screenOptions={({route}) => ({
@@ -50,7 +57,12 @@ const BottomRoutes = () => {
           },
           tabBarShowLabel: false,
           headerShown: false,
-          tabBarStyle: commonStyles.footerView,
+          tabBarStyle: {
+            ...footerStyles.view,
+            paddingTop: wp(8),
+            height: hp(41),
+            borderTopWidth: wp(1.4), // 테두리 너비
+          },
         })}>
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
         <Tab.Screen name="Calender" component={CalendarScreen} />
@@ -58,34 +70,23 @@ const BottomRoutes = () => {
         <Tab.Screen name="Mate" component={MateListScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />
       </Tab.Navigator>
-    </SafeAreaView>
+    </Container>
   );
 };
 
 export default BottomRoutes;
 
-/**
- * {justify-content}: 콘텐츠 항목 사이와 주위에 공간을 분배하느 방법 정의
- * https://velog.io/@cherry_eong/CSS-justify-content-%EC%86%8D%EC%84%B1%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C-%EC%95%8C%EC%95%84%EB%B3%B4%EC%9E%90
- * "flex-direction: row;" 가로 배치
- * "flex-direction: column;" 세로 배치
- *
- * {flex: 1; 의미} https://velog.io/@mooongs/flex1%EC%9D%98-%EC%9D%98%EB%AF%B8
- */
+const Container = styled.SafeAreaView`
+  flex: 1;
+  flex-direction: column;
+`;
 
-const commonStyles = StyleSheet.create({
+const footerStyles = StyleSheet.create({
   view: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  footerView: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingTop: 8,
-    height: 57,
     borderStyle: 'dashed',
     borderColor: '#D3D3D3',
-    borderTopWidth: 1.5, // 테두리 너비
     backgroundColor: '#F6F6F6',
     elevation: 0, // 상단 테두리의 음영 효과를 없애기 위해 elevation 속성을 0으로 설정
   },

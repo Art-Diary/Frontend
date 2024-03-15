@@ -16,7 +16,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
 import MyExhAddScreen from './screens/mydiary/MyExhAddScreen';
-import MyDiariesRoutes from './routes/MyDiary/MyDiariesRoutes';
+import MyDiaryRoutes from './routes/MyDiary/MyDiaryRoutes';
 
 type RootStackParamList = {
   Main: undefined;
@@ -49,7 +49,7 @@ export default function App() {
             {/* [내 기록] 전시회 추가 화면 */}
             <Stack.Screen name="MyAddExhibition" component={MyExhAddScreen} />
             {/* [내 기록] 한 전시회의 기록 목록 화면 */}
-            <Stack.Screen name="MyDiaries" component={MyDiariesRoutes} />
+            <Stack.Screen name="MyDiaries" component={MyDiaryRoutes} />
             {/* [전시회] 전시회 상세 정보 */}
             {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
             {/* 로그인 회원가입 */}
