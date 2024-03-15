@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {Shadow} from 'react-native-shadow-2';
@@ -17,6 +17,8 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import FlipCard from 'react-native-flip-card';
+import ContentsInfo from '~/components/mydiary/ContentsInfo';
 
 const MyDiaryList = () => {
   const myExhId = useMyDiaryExhId();
@@ -34,12 +36,65 @@ const MyDiaryList = () => {
     return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
   }
 
+  const [isFlipped, setIsFlipped] = useState(false); // 상태 추가
+  const toggleFlip = () => {
+    setIsFlipped(!isFlipped);
+  };
   /**
    * 기록 추가, 수정
    */
   return (
+    // <Swiper
+    //   style={styles.wrapper}
+    //   // showsButtons={true}
+    //   // prevButton={
+    //   //   <Text style={styles.prevButtonText}>
+    //   //     <LeftArrowIcon />
+    //   //   </Text>
+    //   // }
+    //   // nextButton={
+    //   //   <Text style={styles.nextButtonText}>
+    //   //     <RightArrowIcon />
+    //   //   </Text>
+    //   // }
+    //   showsPagination={true}>
+    //   {myDiaryList.map((item: any) => (
+    //     <Container key={item.diaryId}>
+    //       <FlipCard>
+    //         <Shadow distance={5}>
+    //           {/* 썸네일 */}
+    //           <ThumbnailInfo thumbnail={item.thumbnail} />
+    //           {/* 세부 내용 */}
+    //           <Contents>
+    //             <TitleInfo diaryId={item.diaryId} title={item.title} />
+    //             <WriterRateInfo nickname={item.nickname} rate={item.rate} />
+    //             <OtherInfo
+    //               userExhId={item.userExhId}
+    //               gatherName={item.gatherName}
+    //               visitDate={item.visitDate}
+    //               diaryPrivate={item.diaryPrivate}
+    //             />
+    //             <SayingInfo saying={item.saying} exhName={item.exhName} />
+    //           </Contents>
+    //         </Shadow>
+    //         {/* Back Side */}
+    //         <Shadow distance={5}>
+    //           <Contents>
+    //             <ContentsInfo
+    //               contents={item.contents}
+    //               writeDate={item.writeDate}
+    //             />
+    //           </Contents>
+    //         </Shadow>
+    //       </FlipCard>
+    //     </Container>
+    //   ))}
+    // </Swiper>
     <Swiper
       style={styles.wrapper}
+      // onTouchStart={() => setIsFlipped(false)} // 스와이프 시작시 뒤집은 상태 초기화
+      // onTouchMove={toggleFlip}
+      scrollEnabled={!isFlipped}
       // showsButtons={true}
       // prevButton={
       //   <Text style={styles.prevButtonText}>
@@ -54,22 +109,39 @@ const MyDiaryList = () => {
       showsPagination={true}>
       {myDiaryList.map((item: any) => (
         <Container key={item.diaryId}>
-          <Shadow distance={5}>
-            {/* 썸네일 */}
-            <ThumbnailInfo thumbnail={item.thumbnail} />
-            {/* 세부 내용 */}
-            <Contents>
-              <TitleInfo diaryId={item.diaryId} title={item.title} />
-              <WriterRateInfo nickname={item.nickname} rate={item.rate} />
-              <OtherInfo
-                userExhId={item.userExhId}
-                gatherName={item.gatherName}
-                visitDate={item.visitDate}
-                diaryPrivate={item.diaryPrivate}
-              />
-              <SayingInfo saying={item.saying} exhName={item.exhName} />
-            </Contents>
-          </Shadow>
+          <FlipCard
+            onFlipStart={toggleFlip}
+            // onFlipStart={() => setIsFlipped(true)}
+            // onFlipEnd={toggleFlip}
+            // flipped={isFlipped} // 뒤집혔는지 여부 전달
+            // onFlip={toggleFlip} // 카드 뒤집기 토글 함수 연결
+          >
+            <Shadow distance={5}>
+              {/* 썸네일 */}
+              <ThumbnailInfo thumbnail={item.thumbnail} />
+              {/* 세부 내용 */}
+              <Contents>
+                <TitleInfo diaryId={item.diaryId} title={item.title} />
+                <WriterRateInfo nickname={item.nickname} rate={item.rate} />
+                <OtherInfo
+                  userExhId={item.userExhId}
+                  gatherName={item.gatherName}
+                  visitDate={item.visitDate}
+                  diaryPrivate={item.diaryPrivate}
+                />
+                <SayingInfo saying={item.saying} exhName={item.exhName} />
+              </Contents>
+            </Shadow>
+            {/* Back Side */}
+            <Shadow distance={5}>
+              <Contents>
+                <ContentsInfo
+                  contents={item.contents}
+                  writeDate={item.writeDate}
+                />
+              </Contents>
+            </Shadow>
+          </FlipCard>
         </Container>
       ))}
     </Swiper>
@@ -86,7 +158,7 @@ const Container = styled.View`
   padding-bottom: ${hp(5)}px;
   padding-left: ${wp(5)}px;
   padding-right: ${wp(5)}px;
-  background-color: #f6f6f6;
+  background-color: white;
 `;
 
 const Contents = styled.View`
