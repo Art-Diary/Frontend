@@ -1,37 +1,37 @@
 import React, {useState} from 'react';
 import {ScrollView, Pressable} from 'react-native';
 import InfoMessage from '~/components/common/InfoMessage';
-import ThumbnailInfo from '~/components/mydiary/ThumbnailInfo';
-import TitleInfo from '~/components/mydiary/TitleInfo';
-import {myDiaryListData} from '../../screens/mydiary/dataset';
+import ThumbnailInfo from '~/components/diary/ThumbnailInfo';
+import TitleInfo from '~/components/diary/TitleInfo';
 import styled from 'styled-components/native';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import WriterRateInfo from '~/components/mydiary/WriterRateInfo';
-import OtherInfo from '~/components/mydiary/OtherInfo';
-import SayingInfo from '~/components/mydiary/SayingInfo';
+import WriterRateInfo from '~/components/diary/WriterRateInfo';
+import OtherInfo from '~/components/diary/OtherInfo';
+import SayingInfo from '~/components/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyDiaryActions} from '~/zustand/mydiary/mydiary';
+import {useMyDiaryActions, useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
+import {useFetchMyDiaryList} from '~/api/queries/mydiary';
+import Loading from '../common/Loading';
 
-const MyDiaryList = () => {
+const DiaryList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateMyDiaryInfo} = useMyDiaryActions();
   const [itemWidth, setItemWidth] = useState(0);
-  // const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
+  const myExhId = useMyDiaryExhId();
+  const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
 
-  // if (isError) {
-  //   return <InfoMessage message={'에러 발생 ;('} />;
-  // }
+  if (isError) {
+    return <InfoMessage message={'에러 발생 ;('} />;
+  }
 
-  // if (isLoading) {
-  //   return <Loading message={'로딩 중 :)'} />;
-  // }
-
-  const myDiaryList = myDiaryListData;
+  if (isLoading) {
+    return <Loading message={'로딩 중 :)'} />;
+  }
 
   if (myDiaryList.length === 0) {
     return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
@@ -68,7 +68,7 @@ const MyDiaryList = () => {
         decelerationRate="fast"
         onContentSizeChange={w => setItemWidth(w / myDiaryList.length)}
         showsHorizontalScrollIndicator={false}>
-        {myDiaryList.map(item => {
+        {myDiaryList.map((item: any) => {
           return (
             <Pressable
               onPress={() => onPressBack(item)}
@@ -99,7 +99,7 @@ const MyDiaryList = () => {
   );
 };
 
-export default MyDiaryList;
+export default DiaryList;
 
 /** style */
 const CarouselContainer = styled.View`

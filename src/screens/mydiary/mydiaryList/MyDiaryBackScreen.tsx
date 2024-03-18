@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {Shadow} from 'react-native-shadow-2';
-import ContentsInfo from '~/components/mydiary/ContentsInfo';
+import ContentsInfo from '~/components/diary/ContentsInfo';
 import {useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
 import {
   widthPercentage as wp,

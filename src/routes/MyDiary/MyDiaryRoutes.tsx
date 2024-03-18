@@ -1,7 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MyDiaryListScreen from '~/screens/mydiary/mydiaryList/MyDiaryListScreen';
-import MyDiaryBackScreen from '~/screens/mydiary/mydiaryList/MyDiaryBackScreen';
+import MyDiaryListScreen from '~/screens/mydiary/myDiaryList/MyDiaryListScreen';
+import MyDiaryBackScreen from '~/screens/mydiary/myDiaryList/MyDiaryBackScreen';
 
 const MyDiary = createNativeStackNavigator();
 
