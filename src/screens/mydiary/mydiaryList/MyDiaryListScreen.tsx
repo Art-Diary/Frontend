@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import MyDiaryList from './MyDiaryList';
+import DiaryList from '../../../components/diary/DiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
 
 const MyDiaryListScreen = () => {
@@ -16,7 +16,7 @@ const MyDiaryListScreen = () => {
       </BackView>
 
       {/* body */}
-      <MyDiaryList />
+      <DiaryList />
     </Container>
   );
 };

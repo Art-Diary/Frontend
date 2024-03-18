@@ -14,7 +14,7 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 
-const MyExhList = () => {
+const StoredExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateExhId} = useMyDiaryActions();
   const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
@@ -66,7 +66,7 @@ const MyExhList = () => {
   );
 };
 
-export default MyExhList;
+export default StoredExhList;
 
 /** style */
 const RowView = styled.TouchableOpacity`

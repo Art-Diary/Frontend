@@ -22,6 +22,8 @@ type RootStackParamList = {
   Main: undefined;
   MyAddExhibition: undefined;
   MyDiaries: undefined;
+  MyDiaryBack: undefined;
+  MyDiaryList: undefined;
   // MyDiaries : {
   //     id: number;
   // };

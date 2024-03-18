@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
-import MyDiaryList from './MyDiaryList';
+import DiaryList from '../../../components/diary/DiaryList';
 
 const MyDiaryUpdateScreen = () => {
   const exhId = useMyDiaryExhId();
@@ -13,7 +13,7 @@ const MyDiaryUpdateScreen = () => {
       <BackView children={null}></BackView>
 
       {/* body */}
-      <MyDiaryList />
+      <DiaryList />
     </Container>
   );
 };

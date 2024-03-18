@@ -7,7 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 
 interface SayingProps {
-  saying: number;
+  saying: string;
   exhName: string;
 }
 
@@ -17,9 +17,11 @@ const SayingInfo: React.FC<SayingProps> = ({saying, exhName}) => {
       {/* 한마디 */}
       <SayingText>한마디</SayingText>
       <SayingContentView>
-        <QuoteText>"</QuoteText>
-        <ContentText numberOfLines={8}>{saying}</ContentText>
-        <QuoteText>"</QuoteText>
+        <ContentText numberOfLines={8}>
+          <QuoteText>"</QuoteText>
+          {saying}
+          <QuoteText>"</QuoteText>
+        </ContentText>
       </SayingContentView>
       {/* 전시회 제목 */}
       <ContentText>{exhName}</ContentText>
@@ -48,7 +50,6 @@ const SayingText = styled.Text`
   color: #3c4045;
   font-family: 'omyu pretty';
 `;
-
 const SayingContentView = styled.View`
   flex-direction: row;
 `;

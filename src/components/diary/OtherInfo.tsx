@@ -9,8 +9,8 @@ import {
 } from '~/components/common/ResponsiveSize';
 
 interface OtherProps {
-  userExhId: number;
-  gatherName: string;
+  userExhId: number | null;
+  gatherName: string | null;
   visitDate: number[];
   diaryPrivate: boolean;
 }

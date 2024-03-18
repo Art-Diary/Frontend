@@ -10,6 +10,7 @@
     // "noEmit": true,
     // "strict": true,
     // "target": "esnext",
+    "types": ["@types/styled-components-react-native"],
     "baseUrl": "./src",
     "paths": {
       "~/*": ["*"]
