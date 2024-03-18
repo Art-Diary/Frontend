@@ -13,23 +13,25 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {myExhListData} from '../dataset';
 
 const MyExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateExhId} = useMyDiaryActions();
-  const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
+  // const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
-  useEffect(() => {
-    refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
-  }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
+  // useEffect(() => {
+  //   refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
+  // }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
 
-  if (isError) {
-    return <InfoMessage message={'에러 발생 ;('} />;
-  }
+  // if (isError) {
+  //   return <InfoMessage message={'에러 발생 ;('} />;
+  // }
 
-  if (isLoading) {
-    return <Loading message={'로딩 중 :)'} />;
-  }
+  // if (isLoading) {
+  //   return <Loading message={'로딩 중 :)'} />;
+  // }
+  const myExhList = myExhListData;
 
   if (myExhList.length === 0) {
     return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;

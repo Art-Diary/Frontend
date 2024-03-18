@@ -7,7 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 
 interface SayingProps {
-  saying: number;
+  saying: string;
   exhName: string;
 }
 
