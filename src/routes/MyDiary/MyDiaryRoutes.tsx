@@ -19,10 +19,11 @@ const MyDiariesRoutes = () => {
         component={MyDiaryListScreen}
         options={{headerShown: false}}
       />
+      {/* 전시회에 대한 기록의 뒷 페이지 */}
       <MyDiary.Screen
         name="MyDiaryBack"
         component={MyDiaryBackScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, animation: 'fade'}}
       />
       {/* 기록 추가 */}
       {/* 기록 수정 */}

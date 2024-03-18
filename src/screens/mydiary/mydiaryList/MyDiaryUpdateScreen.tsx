@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
-import MyDiaryList from './MyDiaryList';
+import MyDiaryList from '../../../components/mydiary/MyDiaryList';
 
 const MyDiaryUpdateScreen = () => {
   const exhId = useMyDiaryExhId();

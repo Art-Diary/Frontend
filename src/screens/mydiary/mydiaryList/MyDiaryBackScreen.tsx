@@ -1,25 +1,21 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import MyDiaryList from './MyDiaryList';
-import {BackButton, WriteDiaryButton} from '~/assets/images/index';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsInfo from '~/components/mydiary/ContentsInfo';
 import {useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
-  fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 
 const MyDiaryBackScreen = () => {
   const myDiaryInfo = useMyDiaryInfo();
 
   return (
-    <ModalContainer>
+    <Container>
       <BackView children={null} />
-      <Container>
+      <ContentsContainer>
         <Shadow distance={5}>
           <Contents>
             <ContentsInfo
@@ -28,8 +24,8 @@ const MyDiaryBackScreen = () => {
             />
           </Contents>
         </Shadow>
-      </Container>
-    </ModalContainer>
+      </ContentsContainer>
+    </Container>
   );
 };
 
@@ -37,6 +33,13 @@ export default MyDiaryBackScreen;
 
 /** style */
 const Container = styled.View`
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  background-color: white;
+`;
+
+const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
@@ -54,14 +57,4 @@ const Contents = styled.View`
   padding-bottom: ${hp(20)}px;
   padding-left: ${wp(30)}px;
   padding-right: ${wp(30)}px;
-`;
-
-const ModalContainer = styled.View`
-  flex: 1;
-  flex-direction: column;
-  width: 100%;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(5)}px;
-  padding-right: ${wp(5)}px;
-  background-color: white;
 `;

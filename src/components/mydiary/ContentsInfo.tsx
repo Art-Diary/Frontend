@@ -1,9 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
-import {RootStackNavigationProp} from '~/App';
 import {
-  widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
@@ -21,8 +18,7 @@ interface ContentsProps {
 //   return Math.ceil(text.length / numOfCharsPerLine) * font;
 // };
 
-const test = (text: string): string[] => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+const divideLines = (text: string): string[] => {
   const width = fp(25);
   var textList: string[] = [];
   let newText = text;
@@ -37,20 +33,10 @@ const test = (text: string): string[] => {
 };
 
 const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
-  console.log(contents);
-  // contents =
-  //   contents +
-  //   '아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고아기자기 귀엽고 재밌고';
-  const sentences = test(contents); // 나중에 기록 추가할 때 줄바꿈 데이터 넣으면 바꾸기.
-  //   const sentences: string[] = [];
-
-  // const move = () => {
-  //   navigation.navigate('MyAddExhibition');
-  // };
+  const sentences = divideLines(contents); // 나중에 기록 추가할 때 줄바꿈 데이터 넣으면 바꾸기.
 
   return (
     <Container>
-      {/* {move} */}
       {/* 내용 */}
       <ContentWrapper>
         <ContentScroll>
