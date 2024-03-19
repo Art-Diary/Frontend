@@ -68,13 +68,11 @@ const DiaryList = () => {
         decelerationRate="fast"
         onContentSizeChange={w => setItemWidth(w / myDiaryList.length)}
         showsHorizontalScrollIndicator={false}>
-        {myDiaryList.map((item: any) => {
+        {myDiaryList.map((item: any, index: number) => {
           return (
-            <Pressable
-              onPress={() => onPressBack(item)}
-              key={item.gatheringExhId}>
+            <Pressable key={index} onPress={() => onPressBack(item)}>
               <CarouselItemContainer width={itemWidth}>
-                <Container key={item.diaryId}>
+                <Container>
                   <Shadow distance={5}>
                     <ThumbnailInfo thumbnail={item.thumbnail} />
                     <Contents>
