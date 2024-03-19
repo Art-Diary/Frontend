@@ -37,7 +37,7 @@ const StoredExhList = () => {
 
   const onPress = (exhId: number) => {
     updateExhId(exhId);
-    navigation.navigate('MyDiaries');
+    navigation.navigate('MyDiaryRoutes');
   };
 
   return (

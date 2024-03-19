@@ -1,10 +1,19 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery} from 'react-query';
-import {deleteMyDiary, fetchMyDiaryList, fetchMyExhList} from '../mydiary';
+import {
+  deleteMyDiary,
+  fetchMyDiaryList,
+  fetchMyExhList,
+  fetchMyStoredDateListOfExh,
+} from '../mydiary';
 
 const mydiaryQueryKeys = createQueryKeys('mydiary', {
   fetchMyExhList: () => ['fetchMyExhList'],
   fetchMyDiaryList: (exhId: number) => ['fetchMyDiaryList', exhId],
+  fetchMyStoredDateListOfExh: (exhId: number) => [
+    'fetchMyStoredDateListOfExh',
+    exhId,
+  ],
 });
 
 export const useFetchMyExhList = () =>
@@ -54,3 +63,21 @@ export const useDeleteMyDiary = (
       // queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
     },
   });
+
+export const useFetchMyStoredDateListOfExh = (exhId: number) => {
+  return useQuery({
+    queryKey: mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId).queryKey,
+    queryFn: () => fetchMyStoredDateListOfExh(exhId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[ChooseVisitDateScreen] error fetch MyStoredDateListOfExh');
+    },
+    onSuccess: () => {
+      console.log(
+        '[ChooseVisitDateScreen] success fetch MyStoredDateListOfExh',
+      );
+    },
+    select: (res: any) => res.data,
+  });
+};

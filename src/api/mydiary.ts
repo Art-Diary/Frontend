@@ -9,3 +9,6 @@ export const fetchMyDiaryList = (exhId: number) =>
 
 export const deleteMyDiary = (exhId: number, diaryId: number, solo: boolean) =>
   client.delete(`/myexhs/${exhId}/diaries/${diaryId}`, {params: {solo}});
+
+export const fetchMyStoredDateListOfExh = (exhId: number) =>
+  client.get(`/myexhs/${exhId}`);

@@ -4,13 +4,21 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import DiaryList from '../../../components/diary/DiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 const MyDiaryListScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const onPressButton = () => {
+    navigation.navigate('ChooseVisitDate');
+  };
+
   return (
     <Container>
       {/* header */}
       <BackView>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPressButton}>
           <WriteDiaryButton />
         </TouchableOpacity>
       </BackView>

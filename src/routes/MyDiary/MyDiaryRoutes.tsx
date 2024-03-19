@@ -2,6 +2,7 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyDiaryListScreen from '~/screens/mydiary/myDiaryList/MyDiaryListScreen';
 import MyDiaryBackScreen from '~/screens/mydiary/myDiaryList/MyDiaryBackScreen';
+import ChooseVisitDateScreen from '~/screens/mydiary/chooseVisitDate/ChooseVisitDateScreen';
 
 const MyDiary = createNativeStackNavigator();
 
@@ -9,7 +10,7 @@ const MyDiary = createNativeStackNavigator();
 const MyDiariesRoutes = () => {
   return (
     <MyDiary.Navigator
-      initialRouteName="MyDiaryList "
+      initialRouteName="MyDiaryList"
       screenOptions={{
         gestureEnabled: true, // 제스처 기능을 활성화합니다.
       }}>
@@ -24,6 +25,12 @@ const MyDiariesRoutes = () => {
         name="MyDiaryBack"
         component={MyDiaryBackScreen}
         options={{headerShown: false, animation: 'fade'}}
+      />
+      {/* 방문한 전시회 날짜 선택 화면 */}
+      <MyDiary.Screen
+        name="ChooseVisitDate"
+        component={ChooseVisitDateScreen}
+        options={{headerShown: false}}
       />
       {/* 기록 추가 */}
       {/* 기록 수정 */}
