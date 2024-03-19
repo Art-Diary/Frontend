@@ -1,6 +1,8 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
+import {RootStackNavigationProp} from '~/App';
 import {
   heightPercentage as hp,
   fontPercentage as fp,
@@ -20,6 +22,7 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   myStoredDateListOfExh,
   value,
 }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [storeValue, setStoreValue] = useState<string | null>(null);
   const [chooseDate, setChooseDate] = useState<string | null>(null);
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
@@ -47,7 +50,8 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   };
 
   const onPressAddDate = () => {
-    // 다음 페이지로 이동
+    // 혼자 방문한 전시회 날짜 추가 화면으로 이동
+    navigation.navigate('AddSoloVisitDate');
   };
 
   const getVisitDates = (value: string | null): DateValue[] => {
@@ -129,12 +133,16 @@ const VisitDates: React.FC<VisitDatesProps> = ({
         />
       </Dates>
       <TouchableOpacity onPress={onPressNextButton}>
-        <NextButton>다음</NextButton>
+        {selectedItemIndex !== null ? (
+          <NextButton isPressed={true}>전시회 선택 완료</NextButton>
+        ) : (
+          <NextButton isPressed={false}>전시회 선택 완료</NextButton>
+        )}
       </TouchableOpacity>
     </>
   );
 };
-
+//D3D3D3
 export default VisitDates;
 
 /** style */
@@ -183,11 +191,15 @@ const DateText = styled.Text`
   font-family: 'omyu pretty';
 `;
 
-const NextButton = styled.Text`
+interface NextButtonProps {
+  isPressed: boolean;
+}
+const NextButton = styled.Text<NextButtonProps>`
   padding: ${hp(10)}px;
   border-radius: 5px;
   text-align: center;
-  background-color: #ff6f61;
+  background-color: ${(props: NextButtonProps) =>
+    props.isPressed ? '#ff6f61' : '#D3D3D3'};
   color: white;
   font-size: ${fp(17)}px;
   font-family: 'omyu pretty';
@@ -195,6 +207,7 @@ const NextButton = styled.Text`
 
 const pickerStyle = StyleSheet.create({
   selected: {
-    backgroundColor: '#fcd2cf',
+    backgroundColor: '#fde2e0',
+    borderRadius: 5,
   },
 });

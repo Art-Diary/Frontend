@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MyDiaryListScreen from '~/screens/mydiary/myDiaryList/MyDiaryListScreen';
 import MyDiaryBackScreen from '~/screens/mydiary/myDiaryList/MyDiaryBackScreen';
 import ChooseVisitDateScreen from '~/screens/mydiary/chooseVisitDate/ChooseVisitDateScreen';
+import AddSoloVisitDateScreen from '~/screens/mydiary/chooseVisitDate/AddSoloVisitDateScreen';
 
 const MyDiary = createNativeStackNavigator();
 
@@ -30,6 +31,12 @@ const MyDiariesRoutes = () => {
       <MyDiary.Screen
         name="ChooseVisitDate"
         component={ChooseVisitDateScreen}
+        options={{headerShown: false}}
+      />
+      {/* 혼자 방문한 전시회 날짜 추가 화면 */}
+      <MyDiary.Screen
+        name="AddSoloVisitDate"
+        component={AddSoloVisitDateScreen}
         options={{headerShown: false}}
       />
       {/* 기록 추가 */}
