@@ -7,20 +7,28 @@ import {
   widthPercentage as wp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {
+  useDeleteMyDiaryActions,
+  useMyExhIdInfo,
+} from '~/zustand/mydiary/mydiary';
 
 interface TitleProps {
   diaryId: number;
   title: string;
+  userExhId: number;
 }
 
-const TitleInfo: React.FC<TitleProps> = ({diaryId, title}) => {
+const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
   const [getDeleteMessage, setGetDeleteMessage] = useState<boolean>(false);
   const [deleteMessage, setDeleteMessage] = useState<string>('');
+  const myExhId = useMyExhIdInfo();
+  const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
 
-  const deleteModalOpen = (diaryId: number, solo: boolean) => {
+  const deleteModalOpen = (diaryId: number, userExhId: number) => {
     console.log('[MyDiaryDeleteModal] Opening my diary delete modal');
     // updateDiaryId(diaryId);
+    updateforDeleteMyDiary(myExhId, diaryId, userExhId);
     setIsDeletePressed(true);
   };
 
@@ -45,7 +53,7 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title}) => {
           <EventText>수정</EventText>
         </TouchableOpacity>
         <EventText>|</EventText>
-        <TouchableOpacity onPress={() => deleteModalOpen(diaryId, true)}>
+        <TouchableOpacity onPress={() => deleteModalOpen(diaryId, userExhId)}>
           <EventText>삭제</EventText>
           {isDeletePressed && (
             <DeleteModal

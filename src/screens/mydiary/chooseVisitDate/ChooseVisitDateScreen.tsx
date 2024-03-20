@@ -10,9 +10,9 @@ import {
 import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import InfoMessage from '~/components/common/InfoMessage';
 import Loading from '~/components/common/Loading';
-import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import DropDownPicker from 'react-native-dropdown-picker';
 import VisitDates from './VisitDates';
+import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface IPicker {
   label: string;
@@ -20,7 +20,7 @@ interface IPicker {
 }
 
 const ChooseVisitDateScreen = () => {
-  const exhId = useMyDiaryExhId();
+  const mySoloExhId = useMySoloInfo().exhId;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | null>(null);
   const [items, setItems] = useState<IPicker[]>([]);
@@ -30,7 +30,7 @@ const ChooseVisitDateScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useFetchMyStoredDateListOfExh(exhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
+  } = useFetchMyStoredDateListOfExh(mySoloExhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
 
   useEffect(() => {
     if (isSuccess) {

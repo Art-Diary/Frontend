@@ -14,15 +14,15 @@ import SayingInfo from '~/components/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyDiaryActions, useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
+import {useMyDiaryBackActions, useMyExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryList} from '~/api/queries/mydiary';
 import Loading from '../common/Loading';
 
 const DiaryList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateMyDiaryInfo} = useMyDiaryActions();
+  const {updateforBackInfo} = useMyDiaryBackActions();
+  const myExhId = useMyExhIdInfo();
   const [itemWidth, setItemWidth] = useState(0);
-  const myExhId = useMyDiaryExhId();
   const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
 
   if (isError) {
@@ -38,22 +38,7 @@ const DiaryList = () => {
   }
 
   const onPressBack = (item: any) => {
-    updateMyDiaryInfo({
-      diaryId: item.diaryId,
-      title: item.title,
-      rate: item.rate,
-      diaryPrivate: item.diaryPrivate,
-      contents: item.contents,
-      thumbnail: item.thumbnail,
-      writeDate: item.writeDate,
-      saying: item.saying,
-      nickname: item.nickname,
-      gatherName: item.gatherName,
-      visitDate: item.visitDate,
-      exhName: item.exhName,
-      userExhId: item.userExhId,
-      gatheringExhId: item.gatheringExhId,
-    });
+    updateforBackInfo(item.contents, item.writeDate);
     navigation.navigate('MyDiaryBack');
   };
 
@@ -76,7 +61,11 @@ const DiaryList = () => {
                   <Shadow distance={5}>
                     <ThumbnailInfo thumbnail={item.thumbnail} />
                     <Contents>
-                      <TitleInfo diaryId={item.diaryId} title={item.title} />
+                      <TitleInfo
+                        diaryId={item.diaryId}
+                        title={item.title}
+                        userExhId={item.userExhId}
+                      />
                       <WriterRateInfo nickname={item.nickname} rate={'3.0'} />
                       <OtherInfo
                         userExhId={item.userExhId}

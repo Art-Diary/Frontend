@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import Header from '~/components/common/Header';
 import {RootStackNavigationProp} from '~/App';
-import StoredExhList from '../../../components/diary/StoredExhList';
+import StoredExhList from '../../components/diary/StoredExhList';
 import {AddMyExhButton} from '~/assets/images/index';
 
 const MyExhListScreen = () => {

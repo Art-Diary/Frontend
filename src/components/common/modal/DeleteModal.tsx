@@ -2,7 +2,10 @@ import React, {useEffect} from 'react';
 import {TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
-import {useMyDiaryExhId, useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
+import {
+  useDeleteMyDiaryActions,
+  useDeleteMyDiaryInfo,
+} from '~/zustand/mydiary/mydiary';
 import {
   heightPercentage as hp,
   fontPercentage as fp,
@@ -17,17 +20,17 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   handleCloseModal,
   message,
 }) => {
-  const myDiaryExhId = useMyDiaryExhId();
-  const myDiaryInfo = useMyDiaryInfo();
+  const deletemyDiaryInfo = useDeleteMyDiaryInfo();
+  const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {
     mutate: deleteMyDiary,
     isLoading,
     isError,
     isSuccess,
   } = useDeleteMyDiary(
-    myDiaryExhId,
-    myDiaryInfo.diaryId,
-    myDiaryInfo.userExhId === null ? false : true, // 모임 or 혼자
+    deletemyDiaryInfo.exhId,
+    deletemyDiaryInfo.diaryId,
+    deletemyDiaryInfo.userExhId === null ? false : true, // 모임 or 혼자
   );
 
   useEffect(() => {
@@ -35,6 +38,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       handleCloseModal(2);
     }
     if (isSuccess) {
+      updateforDeleteMyDiary(-1, -1, -1);
       handleCloseModal(1);
     }
   }, [isError, isSuccess, handleCloseModal]);
