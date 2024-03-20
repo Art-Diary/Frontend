@@ -14,6 +14,7 @@ const AddSoloVisitDateScreen = () => {
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   const [addStateMessage, setAddStateMessage] = useState<string>('');
   const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
+  const [isRealSuccess, setIsRealSuccess] = useState<boolean>(false);
   // 혼자 방문한 날짜 가져오기
   const mySoloInfo = useMySoloInfo();
   const markedDates = mySoloInfo.visitDates;
@@ -32,6 +33,7 @@ const AddSoloVisitDateScreen = () => {
       setAddStateMessage('방문 가능한 날짜가 아닙니다');
     }
     if (isSuccess) {
+      setIsRealSuccess(true);
       setIsMessageOpen(true);
       setAddStateMessage('방문 날짜를 추가했습니다');
     }
@@ -43,7 +45,10 @@ const AddSoloVisitDateScreen = () => {
 
   const onClickNextButton = () => {
     addMyExhVisitDate();
-    updateOneVisitDate(selectedDate);
+    if (isRealSuccess) {
+      updateOneVisitDate(selectedDate);
+      setIsMessageOpen(false);
+    }
     // 다음 페이지로 이동
   };
 
