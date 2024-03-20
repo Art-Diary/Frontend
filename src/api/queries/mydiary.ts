@@ -1,5 +1,5 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, useQuery} from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   addMyExhVisitDate,
   deleteMyDiary,
@@ -52,18 +52,21 @@ export const useDeleteMyDiary = (
   exhId: number,
   diaryId: number,
   solo: boolean,
-) =>
-  useMutation({
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: () => deleteMyDiary(exhId, diaryId, solo),
     onError: err => {
       console.log(err);
       console.log('[MyDiaryDeleteModal] error fetch MyDiaryDelete');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
       console.log('[MyDiaryDeleteModal] success fetch MyDiaryDelete');
-      // queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
     },
   });
+};
 
 export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   return useQuery({
@@ -83,14 +86,20 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   });
 };
 
-export const useAddMyExhVisitDate = (exhId: number, visitDate: string) =>
-  useMutation({
+export const useAddMyExhVisitDate = (exhId: number, visitDate: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: () => addMyExhVisitDate({exhId, visitDate}),
     onError: err => {
       console.log(err);
       console.log('[AddSoloVisitDateScreen] error fetch AddSoloVisitDate');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId),
+      );
       console.log('[AddSoloVisitDateScreen] success fetch AddSoloVisitDate');
     },
   });
+};

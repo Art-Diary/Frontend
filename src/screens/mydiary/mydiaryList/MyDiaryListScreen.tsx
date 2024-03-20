@@ -6,11 +6,16 @@ import DiaryList from '../../../components/diary/DiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
+import {useMyExhIdInfo} from '~/zustand/mydiary/mydiary';
 
 const MyDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const myExhId = useMyExhIdInfo();
+  const {updateSoloExhId} = useMySoloActions();
 
   const onPressButton = () => {
+    updateSoloExhId(myExhId);
     navigation.navigate('ChooseVisitDate');
   };
 

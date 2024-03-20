@@ -3,14 +3,14 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsInfo from '~/components/diary/ContentsInfo';
-import {useMyDiaryInfo} from '~/zustand/mydiary/mydiary';
+import {useMyDiaryBackInfo} from '~/zustand/mydiary/mydiary';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
 
 const MyDiaryBackScreen = () => {
-  const myDiaryInfo = useMyDiaryInfo();
+  const myDiaryBackInfo = useMyDiaryBackInfo();
 
   return (
     <Container>
@@ -19,8 +19,8 @@ const MyDiaryBackScreen = () => {
         <Shadow distance={5}>
           <Contents>
             <ContentsInfo
-              contents={myDiaryInfo.contents}
-              writeDate={myDiaryInfo.writeDate}
+              contents={myDiaryBackInfo.contents}
+              writeDate={myDiaryBackInfo.writeDate}
             />
           </Contents>
         </Shadow>

@@ -5,23 +5,26 @@ import BackView from '~/components/common/BackView';
 import ConfirmModal from '~/components/common/modal/ConfirmModal';
 import AddVisitDate from '~/components/visitDate/AddVisitDate';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
-import {useMySoloVisitDates} from '~/zustand/mydiary/mySoloStoredDates';
-import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
+import {
+  useMySoloActions,
+  useMySoloInfo,
+} from '~/zustand/mydiary/mySoloStoredDates';
 
 const AddSoloVisitDateScreen = () => {
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   const [addStateMessage, setAddStateMessage] = useState<string>('');
   const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
   // 혼자 방문한 날짜 가져오기
-  const markedDates = useMySoloVisitDates();
+  const mySoloInfo = useMySoloInfo();
+  const markedDates = mySoloInfo.visitDates;
   // 내 기록의 전시회 방문 날짜 추가 API
-  const exhId = useMyDiaryExhId();
+  const {updateOneVisitDate} = useMySoloActions();
   const {
     mutate: addMyExhVisitDate,
     isLoading,
     isError,
     isSuccess,
-  } = useAddMyExhVisitDate(exhId, changeDotToHyphen(selectedDate));
+  } = useAddMyExhVisitDate(mySoloInfo.exhId, changeDotToHyphen(selectedDate));
 
   useEffect(() => {
     if (isError) {
@@ -39,8 +42,8 @@ const AddSoloVisitDateScreen = () => {
   };
 
   const onClickNextButton = () => {
-    console.log('??');
     addMyExhVisitDate();
+    updateOneVisitDate(selectedDate);
     // 다음 페이지로 이동
   };
 

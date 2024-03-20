@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
-import MyExhListScreen from '~/screens/mydiary/myExhList/MyExhListScreen';
+import MyExhListScreen from '~/screens/mydiary/MyExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import MateListScreen from '~/screens/mate/MateListScreen';

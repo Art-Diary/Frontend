@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import InfoMessage from '~/components/common/InfoMessage';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyDiaryActions} from '~/zustand/mydiary/mydiary';
+import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
 import Loading from '~/components/common/Loading';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import {LightStarIcon} from '~/assets/images/index';
@@ -16,12 +16,12 @@ import {
 
 const StoredExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateExhId} = useMyDiaryActions();
+  const {updateMyExhIdInfo} = useMyExhIdActions();
   const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
-  useEffect(() => {
-    refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
-  }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
+  // useEffect(() => { 새로고침에서 사용
+  //   refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
+  // }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
 
   if (isError) {
     return <InfoMessage message={'에러 발생 ;('} />;
@@ -36,7 +36,7 @@ const StoredExhList = () => {
   }
 
   const onPress = (exhId: number) => {
-    updateExhId(exhId);
+    updateMyExhIdInfo(exhId);
     navigation.navigate('MyDiaryRoutes');
   };
 
