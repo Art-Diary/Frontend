@@ -16,7 +16,7 @@ const MyDiaryListScreen = () => {
 
   const onPressButton = () => {
     updateSoloExhId(myExhId);
-    navigation.navigate('ChooseVisitDate');
+    navigation.navigate('AddMyVisitDateRoutes');
   };
 
   return (

@@ -7,7 +7,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-import {JoinDateWithDot} from '~/utils/Date';
+import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface DateValue {
@@ -76,7 +76,6 @@ const VisitDates: React.FC<VisitDatesProps> = ({
     var isSolo: boolean = false;
     var id: number;
     var visitDates: DateValue[] = [];
-    const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
     let dates: number[][] = [];
 
     if (value === null) {
@@ -108,14 +107,7 @@ const VisitDates: React.FC<VisitDatesProps> = ({
     for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
       visitDates.push({
         date: dates[dateIndex],
-        weekday:
-          WEEKDAY[
-            new Date(
-              dates[dateIndex][0],
-              dates[dateIndex][1] - 1,
-              dates[dateIndex][2],
-            ).getDay()
-          ],
+        weekday: getDateDay(dates[dateIndex]),
       });
     }
     return visitDates;
@@ -190,6 +182,7 @@ const Dates = styled.View`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 10px;
 `;
 
 const DateView = styled.View`

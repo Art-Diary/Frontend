@@ -21,3 +21,8 @@ export const JoinDateWithDot = (dates: number[]) => {
 export const changeDotToHyphen = (date: string) => {
   return date.replace(/\./g, '-');
 };
+
+export const getDateDay = (dates: number[]) => {
+  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  return WEEKDAY[new Date(dates[0], dates[1] - 1, dates[2]).getDay()];
+};
