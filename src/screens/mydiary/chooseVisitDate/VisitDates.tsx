@@ -1,10 +1,14 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
+import {RootStackNavigationProp} from '~/App';
 import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {JoinDateWithDot} from '~/utils/Date';
+import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface DateValue {
   date: number[];
@@ -20,11 +24,13 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   myStoredDateListOfExh,
   value,
 }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [storeValue, setStoreValue] = useState<string | null>(null);
   const [chooseDate, setChooseDate] = useState<string | null>(null);
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null,
   );
+  const {updateVisitDates} = useMySoloActions();
 
   useEffect(() => {
     if (storeValue !== value) {
@@ -47,7 +53,23 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   };
 
   const onPressAddDate = () => {
-    // 다음 페이지로 이동
+    // 혼자 방문한 날짜 리스트 추출
+    var dates = [];
+
+    if (value !== null) {
+      for (let index = 0; index < myStoredDateListOfExh.length; index++) {
+        if (
+          myStoredDateListOfExh[index].userExhId !== undefined &&
+          myStoredDateListOfExh[index].userExhId === Number(value.split('=')[1])
+        ) {
+          dates = myStoredDateListOfExh[index].dates;
+          break;
+        }
+      }
+      updateVisitDates(dates);
+    }
+    // 혼자 방문한 전시회 날짜 추가 화면으로 이동
+    navigation.navigate('AddSoloVisitDate');
   };
 
   const getVisitDates = (value: string | null): DateValue[] => {
@@ -119,22 +141,24 @@ const VisitDates: React.FC<VisitDatesProps> = ({
               style={index === selectedItemIndex && pickerStyle.selected}>
               <DateView key={index}>
                 <DateText>
-                  {item.date[0]}.{item.date[1] < 10 ? 0 : ''}
-                  {item.date[1]}.{item.date[2] < 10 ? 0 : ''}
-                  {item.date[2]} ({item.weekday})
+                  {JoinDateWithDot(item.date)} ({item.weekday})
                 </DateText>
               </DateView>
             </TouchableOpacity>
           )}
         />
       </Dates>
-      <TouchableOpacity onPress={onPressNextButton}>
-        <NextButton>다음</NextButton>
-      </TouchableOpacity>
+      {selectedItemIndex !== null ? (
+        <TouchableOpacity onPress={onPressNextButton}>
+          <NextButton isPressed={true}>전시회 선택 완료</NextButton>
+        </TouchableOpacity>
+      ) : (
+        <NextButton isPressed={false}>전시회 선택 완료</NextButton>
+      )}
     </>
   );
 };
-
+//D3D3D3
 export default VisitDates;
 
 /** style */
@@ -183,11 +207,15 @@ const DateText = styled.Text`
   font-family: 'omyu pretty';
 `;
 
-const NextButton = styled.Text`
+interface NextButtonProps {
+  isPressed: boolean;
+}
+const NextButton = styled.Text<NextButtonProps>`
   padding: ${hp(10)}px;
   border-radius: 5px;
   text-align: center;
-  background-color: #ff6f61;
+  background-color: ${(props: NextButtonProps) =>
+    props.isPressed ? '#ff6f61' : '#D3D3D3'};
   color: white;
   font-size: ${fp(17)}px;
   font-family: 'omyu pretty';
@@ -195,6 +223,7 @@ const NextButton = styled.Text`
 
 const pickerStyle = StyleSheet.create({
   selected: {
-    backgroundColor: '#fcd2cf',
+    backgroundColor: '#fde2e0',
+    borderRadius: 5,
   },
 });

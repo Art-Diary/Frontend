@@ -1,6 +1,7 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery} from 'react-query';
 import {
+  addMyExhVisitDate,
   deleteMyDiary,
   fetchMyDiaryList,
   fetchMyExhList,
@@ -81,3 +82,15 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
     select: (res: any) => res.data,
   });
 };
+
+export const useAddMyExhVisitDate = (exhId: number, visitDate: string) =>
+  useMutation({
+    mutationFn: () => addMyExhVisitDate({exhId, visitDate}),
+    onError: err => {
+      console.log(err);
+      console.log('[AddSoloVisitDateScreen] error fetch AddSoloVisitDate');
+    },
+    onSuccess: () => {
+      console.log('[AddSoloVisitDateScreen] success fetch AddSoloVisitDate');
+    },
+  });

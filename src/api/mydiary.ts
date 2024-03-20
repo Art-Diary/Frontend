@@ -12,3 +12,11 @@ export const deleteMyDiary = (exhId: number, diaryId: number, solo: boolean) =>
 
 export const fetchMyStoredDateListOfExh = (exhId: number) =>
   client.get(`/myexhs/${exhId}`);
+
+export const addMyExhVisitDate = (myExhVisitDateInfo: MyExhVisitDate) =>
+  client.post(`/myexhs`, myExhVisitDateInfo);
+
+interface MyExhVisitDate {
+  exhId: number;
+  visitDate: string;
+}

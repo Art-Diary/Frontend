@@ -7,6 +7,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {JoinDateWithDot} from '~/utils/Date';
 
 interface OtherProps {
   userExhId: number | null;
@@ -32,11 +33,7 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 관람 날짜 */}
       <ContentView>
         <CategoryText>관람 날짜</CategoryText>
-        <VisitText>
-          {visitDate[0]}.{visitDate[1] < 10 ? 0 : ''}
-          {visitDate[1]}.{visitDate[2] < 10 ? 0 : ''}
-          {visitDate[2]}
-        </VisitText>
+        <VisitText>{JoinDateWithDot(visitDate)}</VisitText>
       </ContentView>
       <LineView />
       {/* 공개여부 */}
