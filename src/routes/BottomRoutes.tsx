@@ -63,7 +63,8 @@ const BottomRoutes = () => {
             height: hp(41),
             borderTopWidth: wp(1.3), // 테두리 너비
           },
-        })}>
+        })}
+        backBehavior="none">
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
         <Tab.Screen name="Calender" component={CalendarScreen} />
         <Tab.Screen name="Diary" component={MyExhListScreen} />
