@@ -4,6 +4,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {JoinDateWithDot} from '~/utils/Date';
 
 interface ContentsProps {
   contents: string;
@@ -52,11 +53,7 @@ const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
       {/* 작성 날짜 */}
       <WriteDateView>
         <WriteDateText>작성날짜</WriteDateText>
-        <WriteDateText>
-          {writeDate[0]}.{writeDate[1] < 10 ? 0 : ''}
-          {writeDate[1]}.{writeDate[2] < 10 ? 0 : ''}
-          {writeDate[2]}
-        </WriteDateText>
+        <WriteDateText>{JoinDateWithDot(writeDate)}</WriteDateText>
       </WriteDateView>
     </Container>
   );

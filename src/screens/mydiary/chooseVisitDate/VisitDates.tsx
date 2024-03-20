@@ -7,6 +7,8 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {JoinDateWithDot} from '~/utils/Date';
+import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface DateValue {
   date: number[];
@@ -28,6 +30,7 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null,
   );
+  const {updateVisitDates} = useMySoloActions();
 
   useEffect(() => {
     if (storeValue !== value) {
@@ -50,6 +53,21 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   };
 
   const onPressAddDate = () => {
+    // 혼자 방문한 날짜 리스트 추출
+    var dates = [];
+
+    if (value !== null) {
+      for (let index = 0; index < myStoredDateListOfExh.length; index++) {
+        if (
+          myStoredDateListOfExh[index].userExhId !== undefined &&
+          myStoredDateListOfExh[index].userExhId === Number(value.split('=')[1])
+        ) {
+          dates = myStoredDateListOfExh[index].dates;
+          break;
+        }
+      }
+      updateVisitDates(dates);
+    }
     // 혼자 방문한 전시회 날짜 추가 화면으로 이동
     navigation.navigate('AddSoloVisitDate');
   };
@@ -123,22 +141,20 @@ const VisitDates: React.FC<VisitDatesProps> = ({
               style={index === selectedItemIndex && pickerStyle.selected}>
               <DateView key={index}>
                 <DateText>
-                  {item.date[0]}.{item.date[1] < 10 ? 0 : ''}
-                  {item.date[1]}.{item.date[2] < 10 ? 0 : ''}
-                  {item.date[2]} ({item.weekday})
+                  {JoinDateWithDot(item.date)} ({item.weekday})
                 </DateText>
               </DateView>
             </TouchableOpacity>
           )}
         />
       </Dates>
-      <TouchableOpacity onPress={onPressNextButton}>
-        {selectedItemIndex !== null ? (
+      {selectedItemIndex !== null ? (
+        <TouchableOpacity onPress={onPressNextButton}>
           <NextButton isPressed={true}>전시회 선택 완료</NextButton>
-        ) : (
-          <NextButton isPressed={false}>전시회 선택 완료</NextButton>
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ) : (
+        <NextButton isPressed={false}>전시회 선택 완료</NextButton>
+      )}
     </>
   );
 };
