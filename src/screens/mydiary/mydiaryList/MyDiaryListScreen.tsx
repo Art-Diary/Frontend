@@ -22,7 +22,7 @@ const MyDiaryListScreen = () => {
   return (
     <Container>
       {/* header */}
-      <BackView>
+      <BackView line={false}>
         <TouchableOpacity onPress={onPressButton}>
           <WriteDiaryButton />
         </TouchableOpacity>

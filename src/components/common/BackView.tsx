@@ -4,13 +4,17 @@ import {TouchableOpacity, BackHandler} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {BackButton} from '~/assets/images/index';
-import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
+import {
+  widthPercentage as wp,
+  heightPercentage as hp,
+} from '~/components/common/ResponsiveSize';
 
 interface BackProps {
+  line: boolean;
   children: ReactNode;
 }
 
-const BackView: React.FC<BackProps> = ({children}) => {
+const BackView: React.FC<BackProps> = ({line, children}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const handlePressBack = () => {
     if (navigation?.canGoBack()) {
@@ -28,12 +32,15 @@ const BackView: React.FC<BackProps> = ({children}) => {
   }, [handlePressBack]);
 
   return (
-    <Container>
-      <TouchableOpacity onPress={handlePressBack}>
-        <BackButton />
-      </TouchableOpacity>
-      {children}
-    </Container>
+    <>
+      <Container>
+        <TouchableOpacity onPress={handlePressBack}>
+          <BackButton />
+        </TouchableOpacity>
+        {children}
+      </Container>
+      {line && <DashLine />}
+    </>
   );
 };
 
@@ -48,4 +55,11 @@ const Container = styled.View`
   width: 100%;
   height: ${hp(35)}px;
   background-color: #f6f6f6;
+`;
+
+const DashLine = styled.View`
+  width: 100%;
+  border-style: dashed;
+  border-color: #d3d3d3;
+  border-bottom-width: ${wp(1.3)}px;
 `;

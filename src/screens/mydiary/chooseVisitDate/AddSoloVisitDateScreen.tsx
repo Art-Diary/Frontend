@@ -49,12 +49,12 @@ const AddSoloVisitDateScreen = () => {
       updateOneVisitDate(selectedDate);
       setIsMessageOpen(false);
     }
-    // 다음 페이지로 이동
+    // 다음 페이지로 이동 => 이전 페이지로 이동되도록
   };
 
   return (
     <Container>
-      <BackView children={null} />
+      <BackView line={false} children={null} />
       <AddVisitDate
         markedDates={markedDates}
         selectedDate={selectedDate}

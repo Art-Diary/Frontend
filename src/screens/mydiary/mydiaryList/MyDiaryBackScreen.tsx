@@ -14,7 +14,7 @@ const MyDiaryBackScreen = () => {
 
   return (
     <Container>
-      <BackView children={null} />
+      <BackView line={false} children={null} />
       <ContentsContainer>
         <Shadow distance={5}>
           <Contents>
