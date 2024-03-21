@@ -42,7 +42,7 @@ const MyExhAddScreen = () => {
 
   return (
     <Container>
-      <BackView children={null} />
+      <BackView line={false} children={null} />
       <ContentsContainer>
         {/* 검색창 */}
         <SearchContainer>

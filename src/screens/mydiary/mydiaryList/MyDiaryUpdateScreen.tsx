@@ -1,16 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import {useMyDiaryExhId} from '~/zustand/mydiary/mydiary';
 import DiaryList from '../../../components/diary/DiaryList';
 
 const MyDiaryUpdateScreen = () => {
-  const exhId = useMyDiaryExhId();
-
   return (
     <Container>
       {/* header */}
-      <BackView children={null}></BackView>
+      <BackView line={false} children={null}></BackView>
 
       {/* body */}
       <DiaryList />

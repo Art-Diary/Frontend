@@ -11,13 +11,21 @@ import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface DateValue {
-  date: number[];
+  index: number;
+  userExhId: number | undefined;
+  gatheringExhId: number | undefined;
+  visitDate: number[];
   weekday: string;
+}
+
+interface DateIds {
+  userExhId: number | undefined;
+  gatheringExhId: number | undefined;
 }
 
 interface VisitDatesProps {
   myStoredDateListOfExh: any;
-  value: string | null;
+  value: number | null;
 }
 
 const VisitDates: React.FC<VisitDatesProps> = ({
@@ -25,11 +33,15 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   value,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [storeValue, setStoreValue] = useState<string | null>(null);
-  const [chooseDate, setChooseDate] = useState<string | null>(null);
+  const [storeValue, setStoreValue] = useState<number | null>(null); // 모임 선택에 따라 바뀌는 value 값
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null,
-  );
+  ); // 아이템 선택
+  const [chooseDate, setChooseDate] = useState<string | null>(null); // 다음 페이지로 넘어갈 때 사용
+  const [selectedIds, setSelectedIds] = useState<DateIds>({
+    userExhId: -1,
+    gatheringExhId: -1,
+  }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatheringExhId
   const {updateVisitDates} = useMySoloActions();
 
   useEffect(() => {
@@ -39,30 +51,38 @@ const VisitDates: React.FC<VisitDatesProps> = ({
     }
   }, [value, storeValue]);
 
-  const onPressVisitDate = (item: DateValue, index: number) => {
-    setChooseDate(item.date[0] + '-' + item.date[1] + '-' + item.date[2]);
-    if (selectedItemIndex !== index) {
-      setSelectedItemIndex(index);
+  const onPressVisitDate = (item: DateValue) => {
+    setChooseDate(
+      item.visitDate[0] + '-' + item.visitDate[1] + '-' + item.visitDate[2],
+    );
+    if (selectedItemIndex !== item.index) {
+      setSelectedItemIndex(item.index);
     } else {
       setSelectedItemIndex(null);
     }
   };
 
   const onPressNextButton = () => {
-    // chooseDate가지고 다음 페이지로 이동
+    // chooseDate가지고 기록 작성 페이지로 이동
+    navigation.navigate('WriteMySoloDiary');
   };
 
   const onPressAddDate = () => {
     // 혼자 방문한 날짜 리스트 추출
     var dates = [];
 
-    if (value !== null) {
+    if (value === null || value === -1) {
+      updateVisitDates([]);
+    } else {
       for (let index = 0; index < myStoredDateListOfExh.length; index++) {
         if (
-          myStoredDateListOfExh[index].userExhId !== undefined &&
-          myStoredDateListOfExh[index].userExhId === Number(value.split('=')[1])
+          myStoredDateListOfExh[index].gatherName === undefined &&
+          myStoredDateListOfExh[index].index === value
         ) {
-          dates = myStoredDateListOfExh[index].dates;
+          const infoList = myStoredDateListOfExh[index].dateInfoList;
+          for (let info = 0; info < infoList.length; info++) {
+            dates.push(infoList[info].visitDate);
+          }
           break;
         }
       }
@@ -72,45 +92,24 @@ const VisitDates: React.FC<VisitDatesProps> = ({
     navigation.navigate('AddSoloVisitDate');
   };
 
-  const getVisitDates = (value: string | null): DateValue[] => {
-    var isSolo: boolean = false;
-    var id: number;
-    var visitDates: DateValue[] = [];
-    let dates: number[][] = [];
+  const getVisitDates = (value: number | null): DateValue[] => {
+    var visitDateInfoList: DateValue[] = [];
 
-    if (value === null) {
-      return visitDates;
+    if (value === null || value === -1) {
+      return visitDateInfoList;
     }
-    if (value.includes('userExhId=')) {
-      isSolo = true;
-      id = Number(value.split('=')[1]);
-    } else {
-      id = Number(value.split('=')[1]);
-    }
-    for (let index = 0; index < myStoredDateListOfExh.length; index++) {
-      if (
-        isSolo &&
-        myStoredDateListOfExh[index].userExhId !== undefined &&
-        myStoredDateListOfExh[index].userExhId === id
-      ) {
-        dates = myStoredDateListOfExh[index].dates;
-        break;
-      } else if (
-        !isSolo &&
-        myStoredDateListOfExh[index].gatheringExhId !== undefined &&
-        myStoredDateListOfExh[index].gatheringExhId === id
-      ) {
-        dates = myStoredDateListOfExh[index].dates;
-        break;
-      }
-    }
-    for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
-      visitDates.push({
-        date: dates[dateIndex],
-        weekday: getDateDay(dates[dateIndex]),
+    const dateInfoList = myStoredDateListOfExh[value].dateInfoList;
+
+    for (let index = 0; index < dateInfoList.length; index++) {
+      visitDateInfoList.push({
+        index: index,
+        userExhId: dateInfoList[index].userExhId,
+        gatheringExhId: dateInfoList[index].gatheringExhId,
+        visitDate: dateInfoList[index].visitDate,
+        weekday: getDateDay(dateInfoList[index].visitDate),
       });
     }
-    return visitDates;
+    return visitDateInfoList;
   };
 
   return (
@@ -118,22 +117,29 @@ const VisitDates: React.FC<VisitDatesProps> = ({
       {/* 날짜 목록 */}
       <AddDateGroupView>
         <GroupText>방문 날짜</GroupText>
-        {value?.includes('userExhId=') && (
-          <TouchableOpacity onPress={onPressAddDate}>
-            <AddDateText>추가</AddDateText>
-          </TouchableOpacity>
-        )}
+        {value !== null &&
+          (value === -1 ||
+            myStoredDateListOfExh[value].gatherName === undefined) && (
+            <TouchableOpacity onPress={onPressAddDate}>
+              <AddDateText>추가</AddDateText>
+            </TouchableOpacity>
+          )}
       </AddDateGroupView>
       <Dates>
         <FlatList
           data={getVisitDates(value)}
-          renderItem={({item, index}) => (
+          renderItem={({item}) => (
             <TouchableOpacity
-              onPress={() => onPressVisitDate(item, index)}
-              style={index === selectedItemIndex && pickerStyle.selected}>
-              <DateView key={index}>
+              onPress={() => onPressVisitDate(item)}
+              style={item.index === selectedItemIndex && pickerStyle.selected}>
+              <DateView key={item.index}>
+                {/* {item.index === selectedItemIndex &&
+                  setSelectedIds({
+                    userExhId: item.userExhId,
+                    gatheringExhId: item.gatheringExhId,
+                  })} */}
                 <DateText>
-                  {JoinDateWithDot(item.date)} ({item.weekday})
+                  {JoinDateWithDot(item.visitDate)} ({item.weekday})
                 </DateText>
               </DateView>
             </TouchableOpacity>

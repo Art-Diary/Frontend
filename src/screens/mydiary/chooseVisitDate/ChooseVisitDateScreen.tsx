@@ -16,13 +16,13 @@ import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface IPicker {
   label: string;
-  value: string;
+  value: number;
 }
 
 const ChooseVisitDateScreen = () => {
   const mySoloExhId = useMySoloInfo().exhId;
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<number | null>(null);
   const [items, setItems] = useState<IPicker[]>([]);
 
   const {
@@ -37,17 +37,15 @@ const ChooseVisitDateScreen = () => {
       // {label: '', value: ''}
       var gatherNameList: IPicker[] = [];
 
-      gatherNameList.push({label: '개인', value: 'userExhId='});
+      gatherNameList.push({label: '개인', value: -1});
       for (let index = 0; index < myStoredDateListOfExh.length; index++) {
-        if (myStoredDateListOfExh[index].userExhId === undefined) {
+        if (myStoredDateListOfExh[index].gatherName !== undefined) {
           gatherNameList.push({
             label: myStoredDateListOfExh[index].gatherName,
-            value:
-              'gatheringExhId=' + myStoredDateListOfExh[index].gatheringExhId,
+            value: myStoredDateListOfExh[index].index,
           });
         } else {
-          gatherNameList[0].value =
-            'userExhId=' + myStoredDateListOfExh[index].userExhId;
+          gatherNameList[0].value = myStoredDateListOfExh[index].index;
         }
       }
       setItems(gatherNameList);
@@ -64,7 +62,7 @@ const ChooseVisitDateScreen = () => {
 
   return (
     <Container>
-      <BackView children={null} />
+      <BackView line={false} children={null} />
       <ContentsContainer>
         {/* 모임선택 */}
         <GroupText>모임 선택</GroupText>
