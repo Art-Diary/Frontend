@@ -28,7 +28,8 @@ type RootStackParamList = {
   AddMyVisitDateRoutes: undefined;
   ChooseVisitDate: undefined;
   AddSoloVisitDate: undefined;
-  WriteMySoloDiary: undefined;
+  WriteMyDiaryInfo: undefined;
+  WriteMyDiaryContents: undefined;
   // MyDiaries : {
   //     id: number;
   // };

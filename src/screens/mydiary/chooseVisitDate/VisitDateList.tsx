@@ -29,7 +29,7 @@ interface VisitDatesProps {
   value: number | null;
 }
 
-const VisitDates: React.FC<VisitDatesProps> = ({
+const VisitDateList: React.FC<VisitDatesProps> = ({
   myStoredDateListOfExh,
   value,
 }) => {
@@ -72,7 +72,7 @@ const VisitDates: React.FC<VisitDatesProps> = ({
       (selectedIds.userExhId === -1 && selectedIds.gatheringExhId !== -1)
     ) {
       updateforIds(selectedIds.userExhId, selectedIds.gatheringExhId);
-      navigation.navigate('WriteMySoloDiary');
+      navigation.navigate('WriteMyDiaryInfo');
     }
   };
 
@@ -161,7 +161,7 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   );
 };
 //D3D3D3
-export default VisitDates;
+export default VisitDateList;
 
 /** style */
 const GroupText = styled.Text`

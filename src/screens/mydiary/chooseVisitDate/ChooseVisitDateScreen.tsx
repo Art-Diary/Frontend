@@ -11,7 +11,7 @@ import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import InfoMessage from '~/components/common/InfoMessage';
 import Loading from '~/components/common/Loading';
 import DropDownPicker from 'react-native-dropdown-picker';
-import VisitDates from './VisitDates';
+import VisitDateList from './VisitDateList';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface IPicker {
@@ -78,7 +78,7 @@ const ChooseVisitDateScreen = () => {
           placeholder="모임을 선택해 주세요."
         />
         {/* 날짜 목록 */}
-        <VisitDates
+        <VisitDateList
           myStoredDateListOfExh={myStoredDateListOfExh}
           value={value}
         />

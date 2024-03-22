@@ -27,7 +27,7 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 누구와 */}
       <ContentView>
         <CategoryText>with</CategoryText>
-        <WithText>{userExhId === null ? gatherName : '나'}</WithText>
+        <WithText>{userExhId === undefined ? gatherName : '나'}</WithText>
       </ContentView>
       <LineView />
       {/* 관람 날짜 */}

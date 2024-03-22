@@ -2,6 +2,7 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   addMyExhVisitDate,
+  createMyDiary,
   deleteMyDiary,
   fetchMyDiaryList,
   fetchMyExhList,
@@ -100,6 +101,25 @@ export const useAddMyExhVisitDate = (exhId: number, visitDate: string) => {
         mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId),
       );
       console.log('[AddSoloVisitDateScreen] success fetch AddSoloVisitDate');
+    },
+  });
+};
+
+export const useCreateMyDiary = (
+  exhId: number,
+  newMyDiary: FormData | null,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => createMyDiary(exhId, newMyDiary),
+    onError: err => {
+      console.log(err);
+      console.log('[WriteMyDiaryScreen] error fetch WriteMyDiary');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
+      console.log('[WriteMyDiaryScreen] success fetch WriteMyDiary');
     },
   });
 };
