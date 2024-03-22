@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Alert, Image, Platform, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
@@ -22,9 +22,10 @@ import {
 } from 'react-native-image-picker';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
-import RNFS from 'react-native-fs';
+import {RootStackNavigationProp} from '~/App';
 
-const WriteMySoloDiaryScreen = () => {
+const WriteMyDiaryInfoScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [starNum, setStarNum] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
   const [titleKeyword, setTitleKeyword] = useState<string>('');
@@ -103,22 +104,20 @@ const WriteMySoloDiaryScreen = () => {
       today.getMonth() + 1,
       today.getDate(),
     ];
-    var base64Image;
     if (imageUri === undefined) {
       console.log('사진 uri 없음.');
       return;
-    } else {
-      base64Image = await RNFS.readFile(imageUri, 'base64');
     }
     updateforDetailInfo(
       titleKeyword,
       starNum,
       isPublic,
-      base64Image,
+      imageUri,
       dateList,
       sayingKeyword,
     );
-    // TODO 다음 페이지로 이동
+    // 기록 내용 작성 페이지로 이동
+    navigation.navigate('WriteMyDiaryContents');
   };
 
   return (
@@ -215,7 +214,7 @@ const WriteMySoloDiaryScreen = () => {
   );
 };
 
-export default WriteMySoloDiaryScreen;
+export default WriteMyDiaryInfoScreen;
 
 /** style */
 const Container = styled.View`

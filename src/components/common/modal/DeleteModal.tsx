@@ -30,7 +30,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   } = useDeleteMyDiary(
     deletemyDiaryInfo.exhId,
     deletemyDiaryInfo.diaryId,
-    deletemyDiaryInfo.userExhId === null ? false : true, // 모임 or 혼자
+    deletemyDiaryInfo.userExhId === undefined ? false : true, // 모임 or 혼자
   );
 
   useEffect(() => {

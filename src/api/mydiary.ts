@@ -20,3 +20,8 @@ interface MyExhVisitDate {
   exhId: number;
   visitDate: string;
 }
+
+export const createMyDiary = (exhId: number, newMyDiary: FormData | null) =>
+  client.post(`/myexhs/${exhId}/diaries`, newMyDiary, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  });
