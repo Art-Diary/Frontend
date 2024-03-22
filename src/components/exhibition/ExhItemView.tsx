@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
 import {
   widthPercentage as wp,
@@ -13,6 +13,7 @@ interface SearchExhListProps {
   gallery: string;
   exhPeriodStart: number[];
   exhPeriodEnd: number[];
+  children?: ReactNode;
 }
 
 const ExhItemView: React.FC<SearchExhListProps> = ({
@@ -21,6 +22,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   gallery,
   exhPeriodStart,
   exhPeriodEnd,
+  children,
 }) => {
   const changeExhDateFormat = (
     exhPeriodStart: number[],
@@ -45,6 +47,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
         <ExhGallery>{gallery}</ExhGallery>
         <ExhDate>{changeExhDateFormat(exhPeriodStart, exhPeriodEnd)}</ExhDate>
       </ExhInfo>
+      {children}
     </ExhView>
   );
 };
