@@ -7,14 +7,16 @@ import {BackButton} from '~/assets/images/index';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
+  fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 
 interface BackProps {
+  title?: string;
   line: boolean;
   children: ReactNode;
 }
 
-const BackView: React.FC<BackProps> = ({line, children}) => {
+const BackView: React.FC<BackProps> = ({title, line, children}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const handlePressBack = () => {
     if (navigation?.canGoBack()) {
@@ -34,9 +36,12 @@ const BackView: React.FC<BackProps> = ({line, children}) => {
   return (
     <>
       <Container>
-        <TouchableOpacity onPress={handlePressBack}>
-          <BackButton />
-        </TouchableOpacity>
+        <LeftSection>
+          <TouchableOpacity onPress={handlePressBack}>
+            <BackButton />
+          </TouchableOpacity>
+          <Title>{title}</Title>
+        </LeftSection>
         {children}
       </Container>
       {line && <DashLine />}
@@ -51,7 +56,8 @@ const Container = styled.View`
   flex-direction: row;
   justify-content: space-between; // 양 끝으로 버튼 배치
   align-items: center;
-  padding: ${hp(12.5)}px;
+  padding-left: ${hp(12.5)}px;
+  padding-right: ${hp(12.5)}px;
   width: 100%;
   height: ${hp(35)}px;
   background-color: #f6f6f6;
@@ -62,4 +68,16 @@ const DashLine = styled.View`
   border-style: dashed;
   border-color: #d3d3d3;
   border-bottom-width: ${wp(1.3)}px;
+`;
+
+const Title = styled.Text`
+  font-size: ${fp(20)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+`;
+
+const LeftSection = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${wp(12)}px;
 `;

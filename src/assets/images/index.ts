@@ -22,6 +22,7 @@ export {default as LeftArrowIcon} from './left_arrow_icon.svg';
 export {default as RightArrowIcon} from './right_arrow_icon.svg';
 export {default as UnderArrowIcon} from './under_arrow_icon.svg';
 export {default as SearchIcon} from './search_icon.svg';
+export {default as CameraIcon} from './camera_icon.svg';
 // will be erased
 export {default as Poster1} from './will_be_erased/poster1.svg';
 export {default as Poster2} from './will_be_erased/poster2.svg';

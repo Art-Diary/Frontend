@@ -58,7 +58,6 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
         <NextButton isAlready={true}>이미 저장된 방문 날짜입니다</NextButton>
       ) : (
         <TouchableOpacity onPress={onClickNextButton}>
-          {/* onPress={onPressNextButton} */}
           <NextButton isAlready={false}>날짜 선택 완료</NextButton>
         </TouchableOpacity>
       )}
