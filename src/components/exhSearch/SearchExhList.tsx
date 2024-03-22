@@ -6,13 +6,8 @@ import {RootStackNavigationProp} from '~/App';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
 import InfoMessage from '~/components/common/InfoMessage';
 import Loading from '~/components/common/Loading';
-import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
-import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
+import ExhItemView from '../exhibition/ExhItemView';
 
 interface SearchExhListProps {
   searchKeyword: string;
@@ -51,37 +46,19 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     navigation.navigate('AddMyVisitDateRoutes');
   };
 
-  const changeExhDateFormat = (
-    exhPeriodStart: number[],
-    exhPeriodEnd: number[],
-  ): string => {
-    const start = JoinDateWithDot(exhPeriodStart);
-    const end = JoinDateWithDot(exhPeriodEnd);
-    const startDay = getDateDay(exhPeriodStart);
-    const endDay = getDateDay(exhPeriodEnd);
-    return start + ' (' + startDay + ')' + ' ~ ' + end + ' (' + endDay + ')';
-  };
-
   return (
     <ExhListView>
       <FlatList
         data={exhList}
         renderItem={({item, index}) => (
           <TouchableOpacity onPress={() => onPressExh(item.exhId)}>
-            <ExhView>
-              <Poster
-                source={{uri: `data:image/png;base64,${item.poster}`}}
-                resizeMode="contain"
-                alt={'이미지 읽기 실패'}
-              />
-              <ExhInfo>
-                <ExhName>{item.exhName}</ExhName>
-                <ExhGallery>{item.gallery}</ExhGallery>
-                <ExhDate>
-                  {changeExhDateFormat(item.exhPeriodStart, item.exhPeriodEnd)}
-                </ExhDate>
-              </ExhInfo>
-            </ExhView>
+            <ExhItemView
+              poster={item.poster}
+              exhName={item.exhName}
+              gallery={item.gallery}
+              exhPeriodStart={item.exhPeriodStart}
+              exhPeriodEnd={item.exhPeriodEnd}
+            />
           </TouchableOpacity>
         )}
       />
@@ -91,45 +68,8 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
 
 export default SearchExhList;
 
+/** style */
 const ExhListView = styled.View`
   flex: 1;
   flex-direction: column;
-`;
-
-const ExhView = styled.View`
-  flex-direction: row;
-  padding: ${wp(10)}px;
-  gap: ${wp(10)}px;
-  border-bottom-width: ${hp(0.5)}px;
-  border-bottom-color: #d3d3d3;
-`;
-
-const ExhInfo = styled.View`
-  flex-direction: column;
-  justify-content: center;
-  gap: ${hp(7)}px;
-`;
-
-const ExhName = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-`;
-
-const ExhGallery = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-`;
-
-const ExhDate = styled.Text`
-  font-size: ${fp(13)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-`;
-
-const Poster = styled.Image`
-  width: ${wp(70)}px;
-  height: ${hp(70)}px;
-  align-items: center;
 `;
