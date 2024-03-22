@@ -7,6 +7,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {dateToString} from '~/utils/Date';
 
 interface CalendarProps {
   onSelectedDate: (selectedDate: string) => void;
@@ -40,7 +41,9 @@ const CustomCalendar: React.FC<CalendarProps> = ({
   markedDates,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 월
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); // 선택한 날짜
+  const [selectedDate, setSelectedDate] = useState<string>(
+    dateToString(new Date()),
+  ); // 선택한 날짜
 
   const goToNextMonth = () => {
     setCurrentDate(

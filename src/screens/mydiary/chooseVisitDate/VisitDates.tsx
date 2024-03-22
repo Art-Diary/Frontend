@@ -9,18 +9,19 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 
 interface DateValue {
   index: number;
-  userExhId: number | undefined;
-  gatheringExhId: number | undefined;
+  userExhId: number;
+  gatheringExhId: number;
   visitDate: number[];
   weekday: string;
 }
 
 interface DateIds {
-  userExhId: number | undefined;
-  gatheringExhId: number | undefined;
+  userExhId: number;
+  gatheringExhId: number;
 }
 
 interface VisitDatesProps {
@@ -37,12 +38,12 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null,
   ); // 아이템 선택
-  const [chooseDate, setChooseDate] = useState<string | null>(null); // 다음 페이지로 넘어갈 때 사용
   const [selectedIds, setSelectedIds] = useState<DateIds>({
     userExhId: -1,
     gatheringExhId: -1,
   }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatheringExhId
   const {updateVisitDates} = useMySoloActions();
+  const {updateforIds} = useWriteMyDiaryActions();
 
   useEffect(() => {
     if (storeValue !== value) {
@@ -52,19 +53,27 @@ const VisitDates: React.FC<VisitDatesProps> = ({
   }, [value, storeValue]);
 
   const onPressVisitDate = (item: DateValue) => {
-    setChooseDate(
-      item.visitDate[0] + '-' + item.visitDate[1] + '-' + item.visitDate[2],
-    );
     if (selectedItemIndex !== item.index) {
       setSelectedItemIndex(item.index);
+      setSelectedIds({
+        userExhId: item.userExhId === null ? -1 : item.userExhId,
+        gatheringExhId: item.gatheringExhId === null ? -1 : item.gatheringExhId,
+      });
     } else {
       setSelectedItemIndex(null);
+      setSelectedIds({userExhId: -1, gatheringExhId: -1});
     }
   };
 
   const onPressNextButton = () => {
-    // chooseDate가지고 기록 작성 페이지로 이동
-    navigation.navigate('WriteMySoloDiary');
+    // 기록 작성 페이지로 이동
+    if (
+      (selectedIds.userExhId !== -1 && selectedIds.gatheringExhId === -1) ||
+      (selectedIds.userExhId === -1 && selectedIds.gatheringExhId !== -1)
+    ) {
+      updateforIds(selectedIds.userExhId, selectedIds.gatheringExhId);
+      navigation.navigate('WriteMySoloDiary');
+    }
   };
 
   const onPressAddDate = () => {
@@ -133,11 +142,6 @@ const VisitDates: React.FC<VisitDatesProps> = ({
               onPress={() => onPressVisitDate(item)}
               style={item.index === selectedItemIndex && pickerStyle.selected}>
               <DateView key={item.index}>
-                {/* {item.index === selectedItemIndex &&
-                  setSelectedIds({
-                    userExhId: item.userExhId,
-                    gatheringExhId: item.gatheringExhId,
-                  })} */}
                 <DateText>
                   {JoinDateWithDot(item.visitDate)} ({item.weekday})
                 </DateText>
