@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import DeleteModal from '../common/modal/DeleteModal';
-import ConfirmModal from '../common/modal/ConfirmModal';
 import styled from 'styled-components/native';
 import {
   widthPercentage as wp,
@@ -11,6 +10,7 @@ import {
   useDeleteMyDiaryActions,
   useMyExhIdInfo,
 } from '~/zustand/mydiary/mydiary';
+import {showToast} from '../common/modal/toastConfig';
 
 interface TitleProps {
   diaryId: number;
@@ -20,8 +20,6 @@ interface TitleProps {
 
 const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
-  const [getDeleteMessage, setGetDeleteMessage] = useState<boolean>(false);
-  const [deleteMessage, setDeleteMessage] = useState<string>('');
   const myExhId = useMyExhIdInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
 
@@ -35,11 +33,9 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
   const deleteModalClose = (isDeleted: number) => {
     setIsDeletePressed(false);
     if (isDeleted === 1) {
-      setDeleteMessage('기록을 삭제했습니다.');
-      setGetDeleteMessage(true);
+      showToast('기록을 삭제했습니다.');
     } else if (isDeleted === 2) {
-      setDeleteMessage('에러 발생 ;(');
-      setGetDeleteMessage(true);
+      showToast('에러 발생 ;(');
     }
   };
 
@@ -59,12 +55,6 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
             <DeleteModal
               handleCloseModal={deleteModalClose}
               message="기록을 삭제하겠습니까?"
-            />
-          )}
-          {getDeleteMessage && (
-            <ConfirmModal
-              message={deleteMessage}
-              onClose={setGetDeleteMessage}
             />
           )}
         </TouchableOpacity>

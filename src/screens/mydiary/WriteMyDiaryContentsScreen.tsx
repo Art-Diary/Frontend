@@ -8,15 +8,14 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
-import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
 import {RootStackNavigationProp} from '~/App';
 import {createMyDiary} from '~/api/mydiary';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {useCreateMyDiary} from '~/api/queries/mydiary';
-import ConfirmModal from '~/components/common/modal/ConfirmModal';
 import Loading from '~/components/common/Loading';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -24,12 +23,10 @@ const WriteMyDiaryContentsScreen = () => {
   const mySoloInfo = useMySoloInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
-  const [addStateMessage, setAddStateMessage] = useState<string>('');
-  const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // post
   const {
-    mutate: createMyDiarys,
+    mutate: createMyDiary,
     isLoading,
     isError,
     isSuccess,
@@ -37,14 +34,13 @@ const WriteMyDiaryContentsScreen = () => {
 
   useEffect(() => {
     if (createFormData) {
-      createMyDiarys();
+      createMyDiary();
     }
   }, [createFormData]);
 
   useEffect(() => {
     if (isError) {
-      setIsMessageOpen(true);
-      setAddStateMessage('감상 작성 실패');
+      showToast('기록 작성 실패');
     }
     if (isLoading) {
       setIsLoadingOpen(true);
@@ -56,6 +52,7 @@ const WriteMyDiaryContentsScreen = () => {
       navigation.navigate('MyDiaryRoutes'); // 기록 목록 화면으로 이동
     }
   }, [isError, isSuccess, isLoading]);
+
   const onClickNextButton = async () => {
     const formData = new FormData();
 
@@ -115,9 +112,6 @@ const WriteMyDiaryContentsScreen = () => {
           <NextButton moveNext={false}>다음</NextButton>
         )}
       </ContentsContainer>
-      {isMessageOpen && (
-        <ConfirmModal message={addStateMessage} onClose={setIsMessageOpen} />
-      )}
       {/* TODO 나중에 로딩 모달로 수정 */}
       {isLoadingOpen && <Loading message={'로딩 중 :)'} />}
     </Container>
