@@ -9,12 +9,11 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import SearchExhList from '../../components/exhSearch/SearchExhList';
-import ConfirmModal from '~/components/common/modal/ConfirmModal';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 const MyExhAddScreen = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
-  const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
 
   const onChangeText = useCallback((text: string) => {
     setSearchKeyword(text);
@@ -22,7 +21,7 @@ const MyExhAddScreen = () => {
 
   const onPressSearch = () => {
     if (checkKeyword(searchKeyword)) {
-      setIsMessageOpen(true);
+      showToast('다시 검색해 주세요');
     } else {
       setKeyword(searchKeyword);
     }
@@ -64,12 +63,6 @@ const MyExhAddScreen = () => {
           <SearchExhList
             searchKeyword={keyword}
             changeIsPressed={onPressSearch}
-          />
-        )}
-        {isMessageOpen && (
-          <ConfirmModal
-            message={'다시 검색해 주세요'}
-            onClose={setIsMessageOpen}
           />
         )}
       </ContentsContainer>

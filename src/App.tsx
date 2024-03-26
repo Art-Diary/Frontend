@@ -18,6 +18,8 @@ import BottomRoutes from './routes/BottomRoutes';
 import MyExhAddScreen from './screens/mydiary/MyExhAddScreen';
 import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
 import AddMyVisitDateRoutes from './routes/mydiary/AddMyVisitDateRoutes';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from './components/common/modal/toastConfig';
 
 type RootStackParamList = {
   Main: undefined;
@@ -69,6 +71,7 @@ export default function App() {
             {/* 전시 메이트 화면 */}
             {/* 설정 화면 */}
           </Stack.Navigator>
+          <Toast config={toastConfig} />
         </RecoilRoot>
       </NavigationContainer>
     </QueryClientProvider>

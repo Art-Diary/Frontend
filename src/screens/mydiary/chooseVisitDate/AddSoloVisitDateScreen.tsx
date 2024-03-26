@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useAddMyExhVisitDate} from '~/api/queries/mydiary';
 import BackView from '~/components/common/BackView';
-import ConfirmModal from '~/components/common/modal/ConfirmModal';
+import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/visitDate/AddVisitDate';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {
@@ -15,8 +15,6 @@ import {
 const AddSoloVisitDateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  const [addStateMessage, setAddStateMessage] = useState<string>('');
-  const [isMessageOpen, setIsMessageOpen] = useState<boolean>(false);
   const mySoloInfo = useMySoloInfo();
   // 혼자 방문한 날짜 가져오기
   const markedDates = mySoloInfo.visitDates;
@@ -31,13 +29,11 @@ const AddSoloVisitDateScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      setIsMessageOpen(true);
-      setAddStateMessage('방문 가능한 날짜가 아닙니다');
+      showToast('방문 가능한 날짜가 아닙니다');
     }
     if (isSuccess) {
       updateOneVisitDate(selectedDate);
-      setIsMessageOpen(true);
-      setAddStateMessage('방문 날짜를 추가했습니다');
+      showToast('방문 날짜를 추가했습니다');
       // TODO 다음 페이지로 이동 => 이전 페이지로 이동되도록
       navigation.goBack();
     }
@@ -60,9 +56,6 @@ const AddSoloVisitDateScreen = () => {
         onSelectedDate={onSelectedDate}
         onClickNextButton={onClickNextButton}
       />
-      {isMessageOpen && (
-        <ConfirmModal message={addStateMessage} onClose={setIsMessageOpen} />
-      )}
     </Container>
   );
 };
