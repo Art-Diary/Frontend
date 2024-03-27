@@ -13,6 +13,7 @@ import Loading from '~/components/common/Loading';
 import DropDownPicker from 'react-native-dropdown-picker';
 import VisitDateList from './VisitDateList';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
+import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 
 interface IPicker {
   label: string;
@@ -24,6 +25,7 @@ const ChooseVisitDateScreen = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number | null>(null);
   const [items, setItems] = useState<IPicker[]>([]);
+  const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
   const {
     data: myStoredDateListOfExh,
@@ -46,6 +48,20 @@ const ChooseVisitDateScreen = () => {
           });
         } else {
           gatherNameList[0].value = myStoredDateListOfExh[index].index;
+        }
+        // 기록 수정할 경우
+        if (writeMyDiaryInfo.isUpdate) {
+          var dateInfoList = myStoredDateListOfExh[index].dateInfoList;
+
+          for (let dIndex = 0; dIndex < dateInfoList.length; dIndex++) {
+            if (
+              writeMyDiaryInfo.gatheringExhId ===
+                dateInfoList[dIndex].gatheringExhId ||
+              writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
+            ) {
+              setValue(index);
+            }
+          }
         }
       }
       setItems(gatherNameList);

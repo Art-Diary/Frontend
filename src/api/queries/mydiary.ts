@@ -7,6 +7,7 @@ import {
   fetchMyDiaryList,
   fetchMyExhList,
   fetchMyStoredDateListOfExh,
+  updateMyDiary,
 } from '../mydiary';
 
 const mydiaryQueryKeys = createQueryKeys('mydiary', {
@@ -120,6 +121,26 @@ export const useCreateMyDiary = (
     onSuccess: () => {
       queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
       console.log('[WriteMyDiaryScreen] success fetch WriteMyDiary');
+    },
+  });
+};
+
+export const useUpdateMyDiary = (
+  exhId: number,
+  diaryId: number,
+  newMyDiary: FormData | null,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => updateMyDiary(exhId, diaryId, newMyDiary),
+    onError: err => {
+      console.log(err);
+      console.log('[WriteMyDiaryScreen(Update)] error fetch WriteMyDiary');
+    },
+    onSuccess: () => {
+      console.log('[WriteMyDiaryScreen(Update)] success fetch WriteMyDiary');
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
     },
   });
 };

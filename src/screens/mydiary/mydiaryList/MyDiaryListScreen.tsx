@@ -8,14 +8,17 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 import {useMyExhIdInfo} from '~/zustand/mydiary/mydiary';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 
 const MyDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const myExhId = useMyExhIdInfo();
   const {updateSoloExhId} = useMySoloActions();
+  const {updateIsUpdate} = useWriteMyDiaryActions();
 
   const onPressButton = () => {
     updateSoloExhId(myExhId);
+    updateIsUpdate(false);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

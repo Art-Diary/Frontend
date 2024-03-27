@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Alert, Image, Platform, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
@@ -21,17 +21,32 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
-import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
+import {
+  useWriteMyDiaryActions,
+  useWriteMyDiaryInfo,
+} from '~/zustand/mydiary/writeMyDiary';
 import {RootStackNavigationProp} from '~/App';
 
 const WriteMyDiaryInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const [titleKeyword, setTitleKeyword] = useState<string>('');
   const [starNum, setStarNum] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
-  const [titleKeyword, setTitleKeyword] = useState<string>('');
   const [sayingKeyword, setSayingKeyword] = useState<string>('');
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const {updateforDetailInfo} = useWriteMyDiaryActions();
+  const writeMyDiaryInfo = useWriteMyDiaryInfo();
+
+  useEffect(() => {
+    if (writeMyDiaryInfo.isUpdate) {
+      setTitleKeyword(writeMyDiaryInfo.title ?? '');
+      setStarNum(writeMyDiaryInfo.rate ?? 0.0);
+      setIsPublic(writeMyDiaryInfo.diaryPrivate ?? true);
+      setSayingKeyword(writeMyDiaryInfo.saying ?? '');
+      // thumbnail
+      setImageUri(`data:image/png;base64,${writeMyDiaryInfo.thumbnail}`);
+    }
+  }, []);
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -200,7 +215,6 @@ const WriteMyDiaryInfoScreen = () => {
         </ThumbnailSection>
         {/* 다음 버튼 */}
         {!checkKeyword(titleKeyword) &&
-        !checkKeyword(sayingKeyword) &&
         starNum > 0 &&
         imageUri !== undefined ? (
           <TouchableOpacity onPress={onClickNextButton}>

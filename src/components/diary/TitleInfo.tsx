@@ -11,22 +11,31 @@ import {
   useMyExhIdInfo,
 } from '~/zustand/mydiary/mydiary';
 import {showToast} from '../common/modal/toastConfig';
+import {
+  useWriteMyDiaryActions,
+  useWriteMyDiaryInfo,
+} from '~/zustand/mydiary/writeMyDiary';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
+import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface TitleProps {
-  diaryId: number;
-  title: string;
-  userExhId: number;
+  diaryInfo: any;
 }
 
-const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
+const TitleInfo: React.FC<TitleProps> = ({diaryInfo}) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
   const myExhId = useMyExhIdInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
+  const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
+    useWriteMyDiaryActions();
+  const {updateSoloExhId} = useMySoloActions();
 
-  const deleteModalOpen = (diaryId: number, userExhId: number) => {
+  const deleteModalOpen = () => {
     console.log('[MyDiaryDeleteModal] Opening my diary delete modal');
     // updateDiaryId(diaryId);
-    updateforDeleteMyDiary(myExhId, diaryId, userExhId);
+    updateforDeleteMyDiary(myExhId, diaryInfo.diaryId, diaryInfo.userExhId);
     setIsDeletePressed(true);
   };
 
@@ -39,17 +48,37 @@ const TitleInfo: React.FC<TitleProps> = ({diaryId, title, userExhId}) => {
     }
   };
 
+  const onPressUpdate = () => {
+    updateIsUpdate(true);
+    updateforIds(
+      diaryInfo.diaryId ? diaryInfo.diaryId : null,
+      diaryInfo.userExhId ?? -1,
+      diaryInfo.gatheringExhId ?? -1,
+    );
+    updateforDetailInfo(
+      diaryInfo.title,
+      diaryInfo.rate,
+      diaryInfo.diaryPrivate,
+      diaryInfo.thumbnail,
+      diaryInfo.writeDate,
+      diaryInfo.saying,
+    );
+    updateforContent(diaryInfo.contents);
+    updateSoloExhId(myExhId);
+    navigation.navigate('AddMyVisitDateRoutes');
+  };
+
   return (
     <Container>
       {/* 기록 제목 */}
-      <TitleText>{title}</TitleText>
+      <TitleText>{diaryInfo.title}</TitleText>
       {/* 수정 | 삭제 */}
       <EventView>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPressUpdate}>
           <EventText>수정</EventText>
         </TouchableOpacity>
         <EventText>|</EventText>
-        <TouchableOpacity onPress={() => deleteModalOpen(diaryId, userExhId)}>
+        <TouchableOpacity onPress={deleteModalOpen}>
           <EventText>삭제</EventText>
           {isDeletePressed && (
             <DeleteModal

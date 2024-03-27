@@ -2,49 +2,68 @@ import {create} from 'zustand';
 
 /** 내 기록 작성하기 */
 interface WriteMyDiaryState {
-  userExhId: number;
-  gatheringExhId: number;
-  title: string;
-  rate: number;
-  diaryPrivate: boolean;
-  contents: string;
-  thumbnail: string;
-  writeDate: number[];
-  saying: string;
+  isUpdate: boolean | null;
+  diaryId: number | null;
+  userExhId: number | null;
+  gatheringExhId: number | null;
+  title: string | null;
+  rate: number | null;
+  diaryPrivate: boolean | null;
+  contents: string | null;
+  thumbnail: string | null;
+  writeDate: number[] | null;
+  saying: string | null;
   actions: {
-    updateforIds: (userExhId: number, gatheringExhId: number) => void;
-    updateforDetailInfo: (
-      title: string,
-      rate: number,
-      diaryPrivate: boolean,
-      thumbnail: string,
-      writeDate: number[],
-      saying: string,
+    updateIsUpdate: (isUpdate: boolean | null) => void;
+    updateforIds: (
+      diaryId: number | null,
+      userExhId: number | null,
+      gatheringExhId: number | null,
     ) => void;
-    updateforContent: (contents: string) => void;
+    updateforDetailInfo: (
+      title: string | null,
+      rate: number | null,
+      diaryPrivate: boolean | null,
+      thumbnail: string | null,
+      writeDate: number[] | null,
+      saying: string | null,
+    ) => void;
+    updateforContent: (contents: string | null) => void;
   };
 }
 
 const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
-  userExhId: -1,
-  gatheringExhId: -1,
-  title: '',
-  rate: 0.0,
-  diaryPrivate: true,
-  thumbnail: 'string',
-  writeDate: [],
-  saying: '',
-  contents: '',
+  isUpdate: null,
+  diaryId: null,
+  userExhId: null,
+  gatheringExhId: null,
+  title: null,
+  rate: null,
+  diaryPrivate: null,
+  thumbnail: null,
+  writeDate: null,
+  saying: null,
+  contents: null,
   actions: {
-    updateforIds: (userExhId: number, gatheringExhId: number) =>
-      set(state => ({userExhId: userExhId, gatheringExhId: gatheringExhId})),
+    updateIsUpdate: (isUpdate: boolean | null) =>
+      set(state => ({isUpdate: isUpdate})),
+    updateforIds: (
+      diaryId: number | null,
+      userExhId: number | null,
+      gatheringExhId: number | null,
+    ) =>
+      set(state => ({
+        diaryId: diaryId,
+        userExhId: userExhId,
+        gatheringExhId: gatheringExhId,
+      })),
     updateforDetailInfo: (
-      title: string,
-      rate: number,
-      diaryPrivate: boolean,
-      thumbnail: string,
-      writeDate: number[],
-      saying: string,
+      title: string | null,
+      rate: number | null,
+      diaryPrivate: boolean | null,
+      thumbnail: string | null,
+      writeDate: number[] | null,
+      saying: string | null,
     ) =>
       set(state => ({
         title: title,
@@ -54,13 +73,15 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
         writeDate: writeDate,
         saying: saying,
       })),
-    updateforContent: (contents: string) =>
+    updateforContent: (contents: string | null) =>
       set(state => ({contents: contents})),
   },
 }));
 
 export const useWriteMyDiaryInfo = () =>
   useWriteMyDiary(state => ({
+    isUpdate: state.isUpdate,
+    diaryId: state.diaryId,
     userExhId: state.userExhId,
     gatheringExhId: state.gatheringExhId,
     title: state.title,

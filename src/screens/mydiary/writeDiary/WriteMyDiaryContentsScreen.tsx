@@ -15,7 +15,7 @@ import {
   useWriteMyDiaryInfo,
 } from '~/zustand/mydiary/writeMyDiary';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
-import {useCreateMyDiary} from '~/api/queries/mydiary';
+import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import Loading from '~/components/common/Loading';
 import {showToast} from '~/components/common/modal/toastConfig';
 
@@ -24,41 +24,69 @@ const WriteMyDiaryContentsScreen = () => {
   const [contentsKeyword, setContentsKeyword] = useState<string>('');
   const mySoloInfo = useMySoloInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
-  const {updateforIds, updateforDetailInfo, updateforContent} =
+  const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
     useWriteMyDiaryActions();
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // post
   const {
     mutate: createMyDiary,
-    isLoading,
-    isError,
-    isSuccess,
+    isLoading: isLoadingCreate,
+    isError: isErrorCreate,
+    isSuccess: isSuccessCreate,
   } = useCreateMyDiary(mySoloInfo.exhId, createFormData);
+  const {
+    mutate: updateMyDiary,
+    isLoading: isLoadingUpdate,
+    isError: isErrorUpdate,
+    isSuccess: isSuccessUpdate,
+  } = useUpdateMyDiary(
+    mySoloInfo.exhId,
+    writeMyDiaryInfo.diaryId ?? -1,
+    createFormData,
+  );
+
+  useEffect(() => {
+    setContentsKeyword(writeMyDiaryInfo.contents ?? '');
+  }, []);
 
   useEffect(() => {
     if (createFormData) {
-      createMyDiary();
-      updateforIds(null, null);
-      updateforDetailInfo(null, null, null, null, null, null);
-      updateforContent(null);
+      if (!writeMyDiaryInfo.isUpdate) {
+        createMyDiary();
+      } else {
+        // 업데이트
+        updateMyDiary();
+      }
     }
   }, [createFormData]);
 
   useEffect(() => {
-    if (isError) {
-      showToast('기록 작성 실패');
+    if (isErrorCreate || isErrorUpdate) {
+      // TODO 왜 뜨는거야!
+      showToast('기록 작성/수정 실패');
     }
-    if (isLoading) {
+    if (isLoadingCreate || isLoadingUpdate) {
       setIsLoadingOpen(true);
     }
-    if (!isLoading) {
+    if (!(isLoadingCreate || isLoadingUpdate)) {
       setIsLoadingOpen(false);
     }
-    if (isSuccess) {
+    if (isSuccessCreate || isSuccessUpdate) {
+      updateIsUpdate(null);
+      updateforIds(null, null, null);
+      updateforDetailInfo(null, null, null, null, null, null);
+      updateforContent(null);
       navigation.navigate('MyDiaryRoutes'); // 기록 목록 화면으로 이동
     }
-  }, [isError, isSuccess, isLoading]);
+  }, [
+    isErrorCreate,
+    isErrorUpdate,
+    isLoadingCreate,
+    isLoadingUpdate,
+    isSuccessCreate,
+    isSuccessUpdate,
+  ]);
 
   const onClickNextButton = async () => {
     const formData = new FormData();
@@ -73,6 +101,7 @@ const WriteMyDiaryContentsScreen = () => {
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
     formData.append('contents', contentsKeyword);
+    // 업데이트일 경우 고려
     formData.append('thumbnail', {
       name: filename,
       type,

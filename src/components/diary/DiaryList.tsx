@@ -61,11 +61,7 @@ const DiaryList = () => {
                   <Shadow distance={5}>
                     <ThumbnailInfo thumbnail={item.thumbnail} />
                     <Contents>
-                      <TitleInfo
-                        diaryId={item.diaryId}
-                        title={item.title}
-                        userExhId={item.userExhId}
-                      />
+                      <TitleInfo diaryInfo={item} />
                       <WriterRateInfo nickname={item.nickname} rate={'3.0'} />
                       <OtherInfo
                         userExhId={item.userExhId}
