@@ -9,7 +9,10 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
-import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
+import {
+  useWriteMyDiaryActions,
+  useWriteMyDiaryInfo,
+} from '~/zustand/mydiary/writeMyDiary';
 
 interface DateValue {
   index: number;
@@ -44,9 +47,32 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
   }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatheringExhId
   const {updateVisitDates} = useMySoloActions();
   const {updateforIds} = useWriteMyDiaryActions();
+  const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
   useEffect(() => {
-    if (storeValue !== value) {
+    if (writeMyDiaryInfo.isUpdate && storeValue === null && value !== null) {
+      const infoList = myStoredDateListOfExh[value].dateInfoList;
+
+      for (let info = 0; info < infoList.length; info++) {
+        if (
+          (writeMyDiaryInfo.userExhId !== -1 &&
+            writeMyDiaryInfo.userExhId === infoList[info].userExhId) ||
+          (writeMyDiaryInfo.gatheringExhId !== -1 &&
+            writeMyDiaryInfo.gatheringExhId === infoList[info].gatheringExhId)
+        ) {
+          setSelectedItemIndex(info);
+          setSelectedIds({
+            userExhId: writeMyDiaryInfo.userExhId
+              ? writeMyDiaryInfo.userExhId
+              : -1,
+            gatheringExhId: writeMyDiaryInfo.gatheringExhId
+              ? writeMyDiaryInfo.gatheringExhId
+              : -1,
+          });
+        }
+      }
+    }
+    if (storeValue !== null && storeValue !== value) {
       setStoreValue(value);
       setSelectedItemIndex(null);
     }
@@ -71,7 +97,11 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
       (selectedIds.userExhId !== -1 && selectedIds.gatheringExhId === -1) ||
       (selectedIds.userExhId === -1 && selectedIds.gatheringExhId !== -1)
     ) {
-      updateforIds(selectedIds.userExhId, selectedIds.gatheringExhId);
+      updateforIds(
+        writeMyDiaryInfo.diaryId,
+        selectedIds.userExhId,
+        selectedIds.gatheringExhId,
+      );
       navigation.navigate('WriteMyDiaryInfo');
     }
   };

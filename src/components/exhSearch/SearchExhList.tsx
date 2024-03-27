@@ -4,10 +4,10 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
-import InfoMessage from '~/components/common/InfoMessage';
-import Loading from '~/components/common/Loading';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 import ExhItemView from '../exhibition/ExhItemView';
+import LoadingModal from '../common/modal/LoadingModal';
 
 interface SearchExhListProps {
   searchKeyword: string;
@@ -34,11 +34,11 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
   }, [isSuccess]);
 
   if (isError) {
-    return <InfoMessage message={'에러 발생 ;('} />;
+    return <ErrorMessageView message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <Loading message={'로딩 중 :)'} />;
+    return <LoadingModal message={'전시회 조회 중 :)'} />;
   }
 
   const onPressExh = (exhId: number) => {

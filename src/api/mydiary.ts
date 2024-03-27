@@ -25,3 +25,12 @@ export const createMyDiary = (exhId: number, newMyDiary: FormData | null) =>
   client.post(`/myexhs/${exhId}/diaries`, newMyDiary, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+
+export const updateMyDiary = (
+  exhId: number,
+  diaryId: number,
+  newMyDiary: FormData | null,
+) =>
+  client.patch(`/myexhs/${exhId}/diaries/${diaryId}`, newMyDiary, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  });

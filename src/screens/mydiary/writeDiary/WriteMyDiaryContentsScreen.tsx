@@ -9,56 +9,94 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import {createMyDiary} from '~/api/mydiary';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
-import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
+import {
+  useWriteMyDiaryActions,
+  useWriteMyDiaryInfo,
+} from '~/zustand/mydiary/writeMyDiary';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
-import {useCreateMyDiary} from '~/api/queries/mydiary';
-import Loading from '~/components/common/Loading';
+import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [contentsKeyword, setContentsKeyword] = useState<string>('');
   const mySoloInfo = useMySoloInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
+  const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
+    useWriteMyDiaryActions();
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // post
   const {
     mutate: createMyDiary,
-    isLoading,
-    isError,
-    isSuccess,
+    isLoading: isLoadingCreate,
+    isError: isErrorCreate,
+    isSuccess: isSuccessCreate,
   } = useCreateMyDiary(mySoloInfo.exhId, createFormData);
+  const {
+    mutate: updateMyDiary,
+    isLoading: isLoadingUpdate,
+    isError: isErrorUpdate,
+    isSuccess: isSuccessUpdate,
+  } = useUpdateMyDiary(
+    mySoloInfo.exhId,
+    writeMyDiaryInfo.diaryId ?? -1,
+    createFormData,
+  );
+
+  useEffect(() => {
+    setContentsKeyword(writeMyDiaryInfo.contents ?? '');
+  }, []);
 
   useEffect(() => {
     if (createFormData) {
-      createMyDiary();
+      if (!writeMyDiaryInfo.isUpdate) {
+        createMyDiary();
+      } else {
+        // 업데이트
+        updateMyDiary();
+      }
     }
   }, [createFormData]);
 
   useEffect(() => {
-    if (isError) {
-      showToast('기록 작성 실패');
+    if (isErrorCreate) {
+      showToast('기록 작성 실패했습니다.');
     }
-    if (isLoading) {
+    if (isErrorUpdate) {
+      showToast('기록 수정 실패했습니다');
+    }
+    if (isLoadingCreate || isLoadingUpdate) {
       setIsLoadingOpen(true);
     }
-    if (!isLoading) {
+    if (!(isLoadingCreate || isLoadingUpdate)) {
       setIsLoadingOpen(false);
     }
-    if (isSuccess) {
+    if (isSuccessCreate || isSuccessUpdate) {
+      updateIsUpdate(null);
+      updateforIds(null, null, null);
+      updateforDetailInfo(null, null, null, null, null, null);
+      updateforContent(null);
+      if (isSuccessCreate) {
+        showToast('다이어리 작성 완료!');
+      } else if (isSuccessUpdate) {
+        showToast('다이어리 업데이트 완료!');
+      }
       navigation.navigate('MyDiaryRoutes'); // 기록 목록 화면으로 이동
     }
-  }, [isError, isSuccess, isLoading]);
+  }, [
+    isErrorCreate,
+    isErrorUpdate,
+    isLoadingCreate,
+    isLoadingUpdate,
+    isSuccessCreate,
+    isSuccessUpdate,
+  ]);
 
   const onClickNextButton = async () => {
     const formData = new FormData();
-
-    const filename = writeMyDiaryInfo.thumbnail.split('/').pop();
-    const match = /\.(\w+)$/.exec(filename || '');
-    const type = match ? `image/${match[1]}` : `image`;
 
     formData.append('userExhId', writeMyDiaryInfo.userExhId);
     formData.append('gatheringExhId', writeMyDiaryInfo.gatheringExhId);
@@ -66,11 +104,20 @@ const WriteMyDiaryContentsScreen = () => {
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
     formData.append('contents', contentsKeyword);
-    formData.append('thumbnail', {
-      name: filename,
-      type,
-      uri: writeMyDiaryInfo.thumbnail,
-    });
+
+    // 기록 생성에만 추가
+    if (!writeMyDiaryInfo.isUpdate) {
+      const filename = writeMyDiaryInfo.thumbnail?.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename || '');
+      const type = match ? `image/${match[1]}` : `image`;
+
+      formData.append('thumbnail', {
+        name: filename,
+        type,
+        uri: writeMyDiaryInfo.thumbnail,
+      });
+    }
+
     formData.append('writeDate', changeDotToHyphen(dateToString(new Date())));
     formData.append('saying', writeMyDiaryInfo.saying);
     setCreateFormData(formData);
@@ -106,14 +153,13 @@ const WriteMyDiaryContentsScreen = () => {
         </ScrollContents>
         {!checkKeyword(contentsKeyword) ? (
           <TouchableOpacity onPress={onClickNextButton}>
-            <NextButton moveNext={true}>다음</NextButton>
+            <NextButton moveNext={true}>완료</NextButton>
           </TouchableOpacity>
         ) : (
-          <NextButton moveNext={false}>다음</NextButton>
+          <NextButton moveNext={false}>완료</NextButton>
         )}
       </ContentsContainer>
-      {/* TODO 나중에 로딩 모달로 수정 */}
-      {isLoadingOpen && <Loading message={'로딩 중 :)'} />}
+      {isLoadingOpen && <LoadingModal message={'다이어리 저장 중 :)'} />}
     </Container>
   );
 };

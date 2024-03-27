@@ -11,7 +11,7 @@ import {
 import SearchExhList from '../../components/exhSearch/SearchExhList';
 import {showToast} from '~/components/common/modal/toastConfig';
 
-const MyExhAddScreen = () => {
+const MyExhSearchScreen = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
 
@@ -70,7 +70,7 @@ const MyExhAddScreen = () => {
   );
 };
 
-export default MyExhAddScreen;
+export default MyExhSearchScreen;
 
 /** style */
 const Container = styled.View`
