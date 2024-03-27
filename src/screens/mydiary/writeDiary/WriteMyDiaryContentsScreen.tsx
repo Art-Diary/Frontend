@@ -98,22 +98,26 @@ const WriteMyDiaryContentsScreen = () => {
   const onClickNextButton = async () => {
     const formData = new FormData();
 
-    const filename = writeMyDiaryInfo.thumbnail?.split('/').pop();
-    const match = /\.(\w+)$/.exec(filename || '');
-    const type = match ? `image/${match[1]}` : `image`;
-
     formData.append('userExhId', writeMyDiaryInfo.userExhId);
     formData.append('gatheringExhId', writeMyDiaryInfo.gatheringExhId);
     formData.append('title', writeMyDiaryInfo.title);
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
     formData.append('contents', contentsKeyword);
-    // 업데이트일 경우 고려
-    formData.append('thumbnail', {
-      name: filename,
-      type,
-      uri: writeMyDiaryInfo.thumbnail,
-    });
+
+    // 기록 생성에만 추가
+    if (!writeMyDiaryInfo.isUpdate) {
+      const filename = writeMyDiaryInfo.thumbnail?.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename || '');
+      const type = match ? `image/${match[1]}` : `image`;
+
+      formData.append('thumbnail', {
+        name: filename,
+        type,
+        uri: writeMyDiaryInfo.thumbnail,
+      });
+    }
+
     formData.append('writeDate', changeDotToHyphen(dateToString(new Date())));
     formData.append('saying', writeMyDiaryInfo.saying);
     setCreateFormData(formData);
