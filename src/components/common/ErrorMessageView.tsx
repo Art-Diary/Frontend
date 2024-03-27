@@ -1,27 +1,24 @@
 import React from 'react';
-import {ActivityIndicator} from 'react-native';
 import styled from 'styled-components/native';
 import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
 
-interface LoadingProps {
+interface ErrorMessageProps {
   message: string;
 }
 
-const Loading: React.FC<LoadingProps> = ({message}) => {
+const ErrorMessageView: React.FC<ErrorMessageProps> = ({message}) => {
   return (
     <Container>
       <Message>{message}</Message>
-      <ActivityIndicator color={'#FF6F61'} />
     </Container>
   );
 };
 
-export default Loading;
+export default ErrorMessageView;
 
 /** style */
 const Container = styled.View`
   flex: 1;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #f6f6f6;

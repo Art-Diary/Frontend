@@ -8,12 +8,12 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
-import InfoMessage from '~/components/common/InfoMessage';
-import Loading from '~/components/common/Loading';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
 import DropDownPicker from 'react-native-dropdown-picker';
 import VisitDateList from './VisitDateList';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 interface IPicker {
   label: string;
@@ -69,11 +69,11 @@ const ChooseVisitDateScreen = () => {
   }, [isSuccess, myStoredDateListOfExh]);
 
   if (isError) {
-    return <InfoMessage message={'에러 발생 ;('} />;
+    return <ErrorMessageView message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <Loading message={'로딩 중 :)'} />;
+    return <LoadingModal message={'방문 날짜 조회 중 :)'} />;
   }
 
   return (

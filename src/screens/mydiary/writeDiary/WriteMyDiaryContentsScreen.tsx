@@ -16,8 +16,8 @@ import {
 } from '~/zustand/mydiary/writeMyDiary';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
-import Loading from '~/components/common/Loading';
 import {showToast} from '~/components/common/modal/toastConfig';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -62,9 +62,11 @@ const WriteMyDiaryContentsScreen = () => {
   }, [createFormData]);
 
   useEffect(() => {
-    if (isErrorCreate || isErrorUpdate) {
-      // TODO 왜 뜨는거야!
-      showToast('기록 작성/수정 실패');
+    if (isErrorCreate) {
+      showToast('기록 작성 실패했습니다.');
+    }
+    if (isErrorUpdate) {
+      showToast('기록 수정 실패했습니다');
     }
     if (isLoadingCreate || isLoadingUpdate) {
       setIsLoadingOpen(true);
@@ -77,6 +79,11 @@ const WriteMyDiaryContentsScreen = () => {
       updateforIds(null, null, null);
       updateforDetailInfo(null, null, null, null, null, null);
       updateforContent(null);
+      if (isSuccessCreate) {
+        showToast('다이어리 작성 완료!');
+      } else if (isSuccessUpdate) {
+        showToast('다이어리 업데이트 완료!');
+      }
       navigation.navigate('MyDiaryRoutes'); // 기록 목록 화면으로 이동
     }
   }, [
@@ -142,14 +149,13 @@ const WriteMyDiaryContentsScreen = () => {
         </ScrollContents>
         {!checkKeyword(contentsKeyword) ? (
           <TouchableOpacity onPress={onClickNextButton}>
-            <NextButton moveNext={true}>다음</NextButton>
+            <NextButton moveNext={true}>완료</NextButton>
           </TouchableOpacity>
         ) : (
-          <NextButton moveNext={false}>다음</NextButton>
+          <NextButton moveNext={false}>완료</NextButton>
         )}
       </ContentsContainer>
-      {/* TODO 나중에 로딩 모달로 수정 */}
-      {isLoadingOpen && <Loading message={'로딩 중 :)'} />}
+      {isLoadingOpen && <LoadingModal message={'다이어리 저장 중 :)'} />}
     </Container>
   );
 };

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {ScrollView, Pressable} from 'react-native';
-import InfoMessage from '~/components/common/InfoMessage';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
 import ThumbnailInfo from '~/components/diary/ThumbnailInfo';
 import TitleInfo from '~/components/diary/TitleInfo';
 import styled from 'styled-components/native';
@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMyDiaryBackActions, useMyExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryList} from '~/api/queries/mydiary';
-import Loading from '../common/Loading';
+import LoadingModal from '../common/modal/LoadingModal';
 
 const DiaryList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -26,15 +26,17 @@ const DiaryList = () => {
   const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
 
   if (isError) {
-    return <InfoMessage message={'에러 발생 ;('} />;
+    return <ErrorMessageView message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <Loading message={'로딩 중 :)'} />;
+    return <LoadingModal message={'내 다이어리 목록 조회 중 :)'} />;
   }
 
   if (myDiaryList.length === 0) {
-    return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
+    return (
+      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
+    );
   }
 
   const onPressBack = (item: any) => {

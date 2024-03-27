@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
-import InfoMessage from '~/components/common/InfoMessage';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
-import Loading from '~/components/common/Loading';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import {LightStarIcon} from '~/assets/images/index';
 import {
@@ -13,6 +12,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import LoadingModal from '../common/modal/LoadingModal';
 
 const StoredExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -24,15 +24,17 @@ const StoredExhList = () => {
   // }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
 
   if (isError) {
-    return <InfoMessage message={'에러 발생 ;('} />;
+    return <ErrorMessageView message={'에러 발생 ;('} />;
   }
 
   if (isLoading) {
-    return <Loading message={'로딩 중 :)'} />;
+    return <LoadingModal message={'내가 기록한 전시회 목록 조회 중 :)'} />;
   }
 
   if (myExhList.length === 0) {
-    return <InfoMessage message={'아직 전시회에 대한 기록이 없습니다 >_<'} />;
+    return (
+      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
+    );
   }
 
   const onPress = (exhId: number) => {
