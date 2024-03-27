@@ -15,7 +15,7 @@ const MyExhListScreen = () => {
       {/* header */}
       <Header title={'내 기록'}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('MyAddExhibition')}>
+          onPress={() => navigation.navigate('MyExhibitionSearch')}>
           <AddMyExhButton />
         </TouchableOpacity>
       </Header>

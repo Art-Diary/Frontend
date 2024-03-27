@@ -9,9 +9,11 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import {createMyDiary} from '~/api/mydiary';
 import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
-import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
+import {
+  useWriteMyDiaryActions,
+  useWriteMyDiaryInfo,
+} from '~/zustand/mydiary/writeMyDiary';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {useCreateMyDiary} from '~/api/queries/mydiary';
 import Loading from '~/components/common/Loading';
@@ -22,6 +24,8 @@ const WriteMyDiaryContentsScreen = () => {
   const [contentsKeyword, setContentsKeyword] = useState<string>('');
   const mySoloInfo = useMySoloInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
+  const {updateforIds, updateforDetailInfo, updateforContent} =
+    useWriteMyDiaryActions();
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // post
@@ -35,6 +39,9 @@ const WriteMyDiaryContentsScreen = () => {
   useEffect(() => {
     if (createFormData) {
       createMyDiary();
+      updateforIds(null, null);
+      updateforDetailInfo(null, null, null, null, null, null);
+      updateforContent(null);
     }
   }, [createFormData]);
 
@@ -56,7 +63,7 @@ const WriteMyDiaryContentsScreen = () => {
   const onClickNextButton = async () => {
     const formData = new FormData();
 
-    const filename = writeMyDiaryInfo.thumbnail.split('/').pop();
+    const filename = writeMyDiaryInfo.thumbnail?.split('/').pop();
     const match = /\.(\w+)$/.exec(filename || '');
     const type = match ? `image/${match[1]}` : `image`;
 

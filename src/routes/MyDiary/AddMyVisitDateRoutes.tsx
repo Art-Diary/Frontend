@@ -2,8 +2,8 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ChooseVisitDateScreen from '~/screens/mydiary/chooseVisitDate/ChooseVisitDateScreen';
 import AddSoloVisitDateScreen from '~/screens/mydiary/chooseVisitDate/AddSoloVisitDateScreen';
-import WriteMyDiaryInfoScreen from '~/screens/mydiary/WriteMyDiaryInfoScreen';
-import WriteMyDiaryContentsScreen from '~/screens/mydiary/WriteMyDiaryContentsScreen';
+import WriteMyDiaryInfoScreen from '~/screens/mydiary/writeDiary/WriteMyDiaryInfoScreen';
+import WriteMyDiaryContentsScreen from '~/screens/mydiary/writeDiary/WriteMyDiaryContentsScreen';
 
 const AddMyVisitDate = createNativeStackNavigator();
 

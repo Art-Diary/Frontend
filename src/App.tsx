@@ -15,7 +15,7 @@ import {LogBox} from 'react-native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
-import MyExhAddScreen from './screens/mydiary/MyExhAddScreen';
+import MyExhSearchScreen from './screens/mydiary/MyExhSearchScreen';
 import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
 import AddMyVisitDateRoutes from './routes/mydiary/AddMyVisitDateRoutes';
 import Toast from 'react-native-toast-message';
@@ -23,7 +23,7 @@ import {toastConfig} from './components/common/modal/toastConfig';
 
 type RootStackParamList = {
   Main: undefined;
-  MyAddExhibition: undefined;
+  MyExhibitionSearch: undefined;
   MyDiaryRoutes: undefined;
   MyDiaryBack: undefined;
   MyDiaryList: undefined;
@@ -57,7 +57,10 @@ export default function App() {
             <Stack.Screen name="Main" component={BottomRoutes} />
             {/* <Stack.Screen name="mydiary" component={MyDiaryRoutes} /> */}
             {/* [내 기록] 전시회 추가 화면 */}
-            <Stack.Screen name="MyAddExhibition" component={MyExhAddScreen} />
+            <Stack.Screen
+              name="MyExhibitionSearch"
+              component={MyExhSearchScreen}
+            />
             {/* [내 기록] 한 전시회의 기록 목록 화면 */}
             <Stack.Screen name="MyDiaryRoutes" component={MyDiaryRoutes} />
             <Stack.Screen
