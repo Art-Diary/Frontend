@@ -18,6 +18,7 @@ import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -106,15 +107,28 @@ const WriteMyDiaryContentsScreen = () => {
     formData.append('contents', contentsKeyword);
 
     // 기록 생성에만 추가
-    if (!writeMyDiaryInfo.isUpdate) {
-      const filename = writeMyDiaryInfo.thumbnail?.split('/').pop();
+
+    if (writeMyDiaryInfo.thumbnail.search('file://') !== -1) {
+      const resizedImage = await ImageResizer.createResizedImage(
+        writeMyDiaryInfo.thumbnail, // path
+        300, // width
+        300, // height
+        'JPEG', // format
+        100, // quality
+        undefined, // rotation
+        // uploadFileName, // outputPath
+        undefined, // keepMeta,
+        undefined, // options => object
+      );
+      const uri = resizedImage.uri;
+      const filename = uri.split('/').pop();
       const match = /\.(\w+)$/.exec(filename || '');
       const type = match ? `image/${match[1]}` : `image`;
 
       formData.append('thumbnail', {
         name: filename,
         type,
-        uri: writeMyDiaryInfo.thumbnail,
+        uri: uri,
       });
     }
 

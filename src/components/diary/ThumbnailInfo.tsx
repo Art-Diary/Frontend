@@ -11,7 +11,7 @@ const ThumbnailInfo: React.FC<ThumbnailProps> = ({thumbnail}) => {
       {/* 썸네일 */}
       <ThumbnailBackground
         source={{uri: `data:image/png;base64,${thumbnail}`}}
-        blurRadius={8}
+        blurRadius={40}
         resizeMode="cover"
         alt={'이미지 읽기 실패'}>
         <Thumbnail
