@@ -5,6 +5,7 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import HighlightText from 'react-native-highlight-underline-text';
 
 interface SayingProps {
   saying: string;
@@ -17,6 +18,21 @@ const SayingInfo: React.FC<SayingProps> = ({saying, exhName}) => {
       {/* 한마디 */}
       <SayingText>한마디</SayingText>
       <SayingContentView>
+        <HighlightText
+          isFixed={false}
+          underlineSize={0}
+          bottom={4}
+          ratio={0.1}
+          underlineColor="#ec2"
+          textStyle={{
+            color: '#333333',
+            fontSize: 30,
+          }}
+          text="Custom Highlight Underline Text"
+        />
+
+        {/* <HighlightText ratio={0.3} text="ratio" /> */}
+        {/* <HighlightText ratio={0.3} text="ratio" /> */}
         <ContentText numberOfLines={8}>
           <QuoteText>"</QuoteText>
           {saying}
@@ -58,6 +74,14 @@ const ContentText = styled.Text`
   font-size: ${fp(18.5)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
+  text-decoration: underline solid #8e8e93;
+  /* 출처: https://honeystorage.tistory.com/329 [꿀팁 저장소:티스토리] */
+  /* border-bottom-width: 1px; */
+  /* text-decoration-line: underline;
+  text-decoration-color: red;
+  text-decoration-style: solid; */
+  /* text-underline-offset: 1px; */
+  /* text-underline-position: left; */
 `;
 
 const QuoteText = styled.Text`

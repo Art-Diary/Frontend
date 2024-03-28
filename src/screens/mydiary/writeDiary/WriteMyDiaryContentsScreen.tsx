@@ -108,9 +108,9 @@ const WriteMyDiaryContentsScreen = () => {
 
     // 기록 생성에만 추가
 
-    if (writeMyDiaryInfo.thumbnail.search('file://') !== -1) {
+    if (writeMyDiaryInfo.thumbnail?.search('file://') !== -1) {
       const resizedImage = await ImageResizer.createResizedImage(
-        writeMyDiaryInfo.thumbnail, // path
+        writeMyDiaryInfo.thumbnail ?? '', // path
         300, // width
         300, // height
         'JPEG', // format

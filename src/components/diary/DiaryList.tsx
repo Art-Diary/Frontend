@@ -22,7 +22,6 @@ const DiaryList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateforBackInfo} = useMyDiaryBackActions();
   const myExhId = useMyExhIdInfo();
-  const [itemWidth, setItemWidth] = useState(0);
   const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
 
   if (isError) {
@@ -53,12 +52,11 @@ const DiaryList = () => {
         contentContainerStyle={{width: `${100 * myDiaryList.length}%`}}
         scrollEventThrottle={200}
         decelerationRate="fast"
-        onContentSizeChange={w => setItemWidth(w / myDiaryList.length)}
         showsHorizontalScrollIndicator={false}>
         {myDiaryList.map((item: any, index: number) => {
           return (
             <Pressable key={index} onPress={() => onPressBack(item)}>
-              <CarouselItemContainer width={itemWidth}>
+              <CarouselItemContainer width={wp(360)}>
                 <Container>
                   <Shadow distance={5}>
                     <ThumbnailInfo thumbnail={item.thumbnail} />
