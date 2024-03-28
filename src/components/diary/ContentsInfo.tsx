@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
+  widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
@@ -11,18 +12,11 @@ interface ContentsProps {
   writeDate: number[];
 }
 
-// const {width} = Dimensions.get('window');
-// const measureWidth = (text: string) => {
-//   const font = 16; // 텍스트의 폰트 크기 설정
-//   const adjustedWidth = width - 20; // 텍스트 컨테이너의 가로 너비에서 여유 공간 제외
-//   const numOfCharsPerLine = Math.floor(adjustedWidth / font);
-//   return Math.ceil(text.length / numOfCharsPerLine) * font;
-// };
-
 const divideLines = (text: string): string[] => {
-  const width = fp(25);
+  const width = Math.floor(wp(420) / fp(15));
   var textList: string[] = [];
   let newText = text;
+
   while (newText.length > width) {
     textList.push(newText.slice(0, width));
     newText = newText.slice(width, newText.length - 1);
@@ -34,6 +28,9 @@ const divideLines = (text: string): string[] => {
 };
 
 const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
+  const longWord =
+    contents +
+    'sonjdnlfkjenwsonj해리퐅터숫다dnlfkjenwㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜsonjdnlfkjenwso해리퐅터숫다njdnlfkjenwsonjdnlfkjenws해리퐅터숫다onjdnlf해리퐅터숫다kjenwsonjdnlfkjenwsonjdn해리퐅터숫다lfkjenwsonjdnlfkjenw';
   const sentences = divideLines(contents); // 나중에 기록 추가할 때 줄바꿈 데이터 넣으면 바꾸기.
 
   return (
@@ -44,7 +41,7 @@ const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
           {sentences.map((sentence, index) => (
             <ContentsView key={index}>
               <ContentsText>{sentence}</ContentsText>
-              <DotLine />
+              {sentences.length - 1 !== index && <DotLine />}
             </ContentsView>
           ))}
         </ContentScroll>
@@ -70,19 +67,20 @@ const Container = styled.View`
 `;
 
 const ContentWrapper = styled.View`
+  height: 100%;
+  width: 100%;
   padding-bottom: ${hp(28)}px;
 `;
 
 const ContentScroll = styled.ScrollView`
   height: 100%;
+  width: 100%;
 `;
 
 const ContentsView = styled.View`
-  flex: 1;
   width: 100%;
-  height: 100%;
-  padding-top: 15px;
-  gap: 5px;
+  padding-top: 10px;
+  gap: 10px;
 `;
 
 const ContentsText = styled.Text`
@@ -106,6 +104,7 @@ const WriteDateText = styled.Text`
 `;
 
 const DotLine = styled.View`
+  width: 100%;
   border-bottom-width: 1px;
   border-bottom-color: #d3d3d3;
 `;
