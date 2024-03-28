@@ -55,6 +55,6 @@ const Contents = styled.View`
   align-items: center;
   padding-top: ${hp(20)}px;
   padding-bottom: ${hp(20)}px;
-  padding-left: ${wp(30)}px;
-  padding-right: ${wp(30)}px;
+  padding-left: ${wp(20)}px;
+  padding-right: ${wp(20)}px;
 `;
