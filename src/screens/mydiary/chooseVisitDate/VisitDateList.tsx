@@ -50,7 +50,7 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
   useEffect(() => {
-    if (writeMyDiaryInfo.isUpdate && storeValue === null && value !== null) {
+    if (writeMyDiaryInfo.isUpdate && value !== null) {
       const infoList = myStoredDateListOfExh[value].dateInfoList;
 
       for (let info = 0; info < infoList.length; info++) {
@@ -72,7 +72,7 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
         }
       }
     }
-    if (storeValue !== null && storeValue !== value) {
+    if (storeValue !== value) {
       setStoreValue(value);
       setSelectedItemIndex(null);
     }

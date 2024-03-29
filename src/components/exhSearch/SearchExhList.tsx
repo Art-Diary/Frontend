@@ -8,6 +8,8 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 import ExhItemView from '../exhibition/ExhItemView';
 import LoadingModal from '../common/modal/LoadingModal';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
+import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
 
 interface SearchExhListProps {
   searchKeyword: string;
@@ -26,6 +28,8 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     isSuccess,
   } = useFetchSearchExh(searchKeyword);
   const {updateSoloExhId} = useMySoloActions();
+  const {updateIsUpdate} = useWriteMyDiaryActions();
+  const {updateMyExhIdInfo} = useMyExhIdActions();
 
   useEffect(() => {
     if (isSuccess) {
@@ -43,6 +47,8 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
 
   const onPressExh = (exhId: number) => {
     updateSoloExhId(exhId);
+    updateIsUpdate(false);
+    updateMyExhIdInfo(exhId);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

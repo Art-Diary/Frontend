@@ -48,7 +48,11 @@ const WriteMyDiaryContentsScreen = () => {
   );
 
   useEffect(() => {
-    setContentsKeyword(writeMyDiaryInfo.contents ?? '');
+    if (writeMyDiaryInfo.isUpdate) {
+      setContentsKeyword(writeMyDiaryInfo.contents ?? '');
+    } else {
+      setContentsKeyword('');
+    }
   }, []);
 
   useEffect(() => {
@@ -163,6 +167,7 @@ const WriteMyDiaryContentsScreen = () => {
             placeholder={'전시회 감상을 기록해보세요!'}
             onChangeText={onChangeContents}
             value={contentsKeyword}
+            align={'center'}
           />
         </ScrollContents>
         {!checkKeyword(contentsKeyword) ? (
@@ -206,13 +211,19 @@ const ScrollContents = styled.ScrollView`
   border-radius: 5px;
 `;
 
-const WriteContents = styled.TextInput`
+interface WriteTypeProps {
+  align: string;
+  color: string;
+}
+
+const WriteContents = styled.TextInput<WriteTypeProps>`
   width: 100%;
   font-size: ${fp(17)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
   padding-left: ${wp(10)}px;
   padding-right: ${wp(10)}px;
+  text-align: ${(props: WriteTypeProps) => props.align};
 `;
 
 interface NextButtonProps {

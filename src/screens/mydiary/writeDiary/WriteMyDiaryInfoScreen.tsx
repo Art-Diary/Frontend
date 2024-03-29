@@ -45,6 +45,13 @@ const WriteMyDiaryInfoScreen = () => {
       setSayingKeyword(writeMyDiaryInfo.saying ?? '');
       // thumbnail
       setImageUri(`data:image/png;base64,${writeMyDiaryInfo.thumbnail}`);
+    } else {
+      setTitleKeyword('');
+      setStarNum(0.0);
+      setIsPublic(true);
+      setSayingKeyword('');
+      // thumbnail
+      setImageUri(undefined);
     }
   }, []);
 
