@@ -83,9 +83,12 @@ const ChooseVisitDateScreen = () => {
         {/* 모임선택 */}
         <GroupText>모임 선택</GroupText>
         <DropDownPicker
-          style={pickerStyle.box}
+          style={{
+            ...pickerStyle.box,
+            backgroundColor: writeMyDiaryInfo.isUpdate ? '#D3D3D3' : '#f6f6f6',
+          }}
           textStyle={pickerStyle.gatherName}
-          open={open}
+          open={writeMyDiaryInfo.isUpdate ? false : open}
           value={value}
           items={items}
           setOpen={setOpen}
@@ -139,7 +142,6 @@ const pickerStyle = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ff6f61',
-    backgroundColor: '#f6f6f6',
   },
   gatherName: {
     fontSize: 19,
