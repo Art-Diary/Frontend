@@ -19,7 +19,7 @@ interface DateValue {
   userExhId: number;
   gatheringExhId: number;
   visitDate: number[];
-  weekday: string;
+  weekday: string | null;
 }
 
 interface DateIds {
@@ -145,7 +145,10 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
         userExhId: dateInfoList[index].userExhId,
         gatheringExhId: dateInfoList[index].gatheringExhId,
         visitDate: dateInfoList[index].visitDate,
-        weekday: getDateDay(dateInfoList[index].visitDate),
+        weekday:
+          dateInfoList[index].visitDate === null
+            ? null
+            : getDateDay(dateInfoList[index].visitDate),
       });
     }
     return visitDateInfoList;
@@ -173,7 +176,9 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
               style={item.index === selectedItemIndex && pickerStyle.selected}>
               <DateView key={item.index}>
                 <DateText>
-                  {JoinDateWithDot(item.visitDate)} ({item.weekday})
+                  {item.visitDate === null
+                    ? '기억 안 남'
+                    : JoinDateWithDot(item.visitDate) + ' ' + item.weekday}
                 </DateText>
               </DateView>
             </TouchableOpacity>

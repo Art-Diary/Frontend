@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
@@ -13,6 +13,7 @@ interface AddVisitDateProps {
   selectedDate: string;
   onSelectedDate: (selectedDate: string) => void;
   onClickNextButton: () => void;
+  children?: ReactNode;
 }
 
 const AddVisitDate: React.FC<AddVisitDateProps> = ({
@@ -20,6 +21,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
   selectedDate,
   onSelectedDate,
   onClickNextButton,
+  children,
 }) => {
   const alreadyMarkedDate = () => {
     for (var marked = 0; marked < markedDates.length; marked++) {
@@ -45,13 +47,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
           <BodyText>추가할 날짜</BodyText>
           <BodyText>{selectedDate}</BodyText>
         </BodyView>
-        {/* <BodyView>
-            <BodyText>방문 날짜가 기억 안 날 땐?</BodyText>
-
-            <TouchableOpacity onPress={}>
-              <ForgetText>기억 안 남</ForgetText>
-            </TouchableOpacity>
-          </BodyView> */}
+        {children}
       </View>
       {/* 하단 버튼 */}
       {alreadyMarkedDate() ? (

@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useAddMyExhVisitDate} from '~/api/queries/mydiary';
@@ -11,10 +12,15 @@ import {
   useMySoloActions,
   useMySoloInfo,
 } from '~/zustand/mydiary/mySoloStoredDates';
+import {
+  heightPercentage as hp,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
 
 const AddSoloVisitDateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
+  const [isForgot, setIsForgot] = useState(false);
   const mySoloInfo = useMySoloInfo();
   // 혼자 방문한 날짜 가져오기
   const markedDates = mySoloInfo.visitDates;
@@ -25,7 +31,16 @@ const AddSoloVisitDateScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useAddMyExhVisitDate(mySoloInfo.exhId, changeDotToHyphen(selectedDate));
+  } = useAddMyExhVisitDate(
+    mySoloInfo.exhId,
+    isForgot ? null : changeDotToHyphen(selectedDate),
+  );
+
+  useEffect(() => {
+    if (isForgot) {
+      addMyExhVisitDate();
+    }
+  }, [isForgot]);
 
   useEffect(() => {
     if (isError) {
@@ -47,6 +62,10 @@ const AddSoloVisitDateScreen = () => {
     addMyExhVisitDate();
   };
 
+  const onClickForgotButton = () => {
+    setIsForgot(true);
+  };
+
   return (
     <Container>
       <BackView line={false} children={null} />
@@ -54,8 +73,18 @@ const AddSoloVisitDateScreen = () => {
         markedDates={markedDates}
         selectedDate={selectedDate}
         onSelectedDate={onSelectedDate}
-        onClickNextButton={onClickNextButton}
-      />
+        onClickNextButton={onClickNextButton}>
+        <BodyView>
+          <BodyText>방문 날짜가 기억 안 날 땐?</BodyText>
+          {mySoloInfo.haveForgot ? (
+            <ForgetText haveForgot={true}>기억 안 남</ForgetText>
+          ) : (
+            <TouchableOpacity onPress={onClickForgotButton}>
+              <ForgetText haveForgot={false}>기억 안 남</ForgetText>
+            </TouchableOpacity>
+          )}
+        </BodyView>
+      </AddVisitDate>
     </Container>
   );
 };
@@ -68,4 +97,32 @@ const Container = styled.View`
   flex-direction: column;
   width: 100%;
   background-color: #f6f6f6;
+`;
+
+const BodyView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: ${hp(5)}px;
+  padding-bottom: ${hp(5)}px;
+`;
+
+const BodyText = styled.Text`
+  font-size: ${fp(17)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+  padding-top: ${hp(5)}px;
+  padding-bottom: ${hp(5)}px;
+`;
+
+interface ForgotProps {
+  haveForgot: boolean;
+}
+
+const ForgetText = styled.Text<ForgotProps>`
+  font-size: ${fp(17)}px;
+  color: ${(props: ForgotProps) => (props.haveForgot ? '#D3D3D3' : '#ff6f61')};
+  font-family: 'omyu pretty';
+  padding-top: ${hp(5)}px;
+  padding-bottom: ${hp(5)}px;
+  text-decoration-line: underline;
 `;

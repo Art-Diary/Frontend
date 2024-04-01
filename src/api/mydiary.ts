@@ -18,7 +18,7 @@ export const addMyExhVisitDate = (myExhVisitDateInfo: MyExhVisitDate) =>
 
 interface MyExhVisitDate {
   exhId: number;
-  visitDate: string;
+  visitDate: string | null;
 }
 
 export const createMyDiary = (exhId: number, newMyDiary: FormData | null) =>

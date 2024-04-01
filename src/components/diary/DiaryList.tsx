@@ -62,7 +62,10 @@ const DiaryList = () => {
                     <ThumbnailInfo thumbnail={item.thumbnail} />
                     <Contents>
                       <TitleInfo diaryInfo={item} />
-                      <WriterRateInfo nickname={item.nickname} rate={'3.0'} />
+                      <WriterRateInfo
+                        nickname={item.nickname}
+                        rate={item.rate}
+                      />
                       <OtherInfo
                         userExhId={item.userExhId}
                         gatherName={item.gatherName}

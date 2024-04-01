@@ -156,7 +156,7 @@ const CustomCalendar: React.FC<CalendarProps> = ({
     <Container>
       <CalHeader>
         <TouchableOpacity onPress={goToPreviousMonth}>
-          <MonthLabel>&lt;</MonthLabel>
+          <ArrowLabel>&lt;</ArrowLabel>
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
           {currentDate.getFullYear() !== new Date().getFullYear() && (
@@ -165,7 +165,7 @@ const CustomCalendar: React.FC<CalendarProps> = ({
           <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
         </View>
         <TouchableOpacity onPress={goToNextMonth}>
-          <MonthLabel>&gt;</MonthLabel>
+          <ArrowLabel>&gt;</ArrowLabel>
         </TouchableOpacity>
       </CalHeader>
       <WeekDayView>
@@ -197,6 +197,14 @@ const CalHeader = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+`;
+
+const ArrowLabel = styled.Text`
+  padding-left: 3px;
+  padding-right: 3px;
+  font-size: ${fp(16.56)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
 `;
 
 const MonthLabel = styled.Text`
