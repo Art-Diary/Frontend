@@ -13,12 +13,12 @@ import {ClassifyButton} from '~/assets/images/index';
 import {EmptyHeart} from '~/assets/images/index';
 import {FullHeart} from '~/assets/images/index';
 import {useQuery} from 'react-query';
-import {fetchAllExh} from '~/api/exhibition';
+import {fetchAddLike, fetchAllExh} from '~/api/exhibition';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-//import {useFetchLike} from '~/api/queries/exhibition';
+import {useAddLike} from '~/api/queries/exhibition';
 
 interface Exhibition {
   exhId: number;
@@ -37,19 +37,53 @@ const ExhListScreen = () => {
     fetchAllExh,
     {
       onSuccess: data =>
-        console.log('[MyExhListScreen] success fetch AllExhLists', data),
+        console.log('[MyExhListScreen] success fetch AllExhLists'),
       onError: error => console.error('Error fetching data:', error),
       select: (res: any) => res.data,
     },
   );
 
   const [hearts, setHearts] = useState<Exhibition[]>([]);
+  const [texhId,settexhId]=useState<number>(3);
+  //post
+  const {
+    mutate: addLike,
+    isLoading: isLoadingLike,
+    isError: isErrorLike,
+    isSuccess: isSuccessLike,
+  } =useAddLike(texhId);
 
   useEffect(() => {
     if (isSuccess) {
       setHearts(data);
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (isErrorLike) {
+      //showToast('좋아요 실패했습니다.');
+      console.log('좋아요 실패');
+    }
+    if (isLoadingLike) {
+     // setIsLoadingOpen(true);
+      console.log('좋아요 로딩중')
+    }
+    if (isSuccessLike) {
+
+      console.log('좋아요 성공');
+
+     /* navigation.reset({
+        // 기록 목록 화면으로 이동
+        index: 0,
+        routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
+      });*/
+    }
+  }, [
+    isErrorLike,
+    isLoadingLike,
+    isSuccessLike,
+  ]);
+
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
@@ -59,13 +93,24 @@ const ExhListScreen = () => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
+ /* useEffect(() => {
+    if (hearts) {
+      addLike();
+    }
+  }, [hearts]);
+*/
   const onPressHeart = (exhId: number) => {
     const updatedItems = hearts.map((item: any) =>
       item.exhId === exhId ? {...item, favoriteExh: !item.favoriteExh} : item,
+      //item.exhId === exhId ? {...item, favoriteExh: !item.favoriteExh} : item,
     );
-    console.log(updatedItems);
+    //console.log(updatedItems);
+    //addLike();
+    addLike();
     setHearts(updatedItems);
   };
+
+  
 
   return (
     <Container>
@@ -75,8 +120,8 @@ const ExhListScreen = () => {
           <TouchableOpacity>
             <ClassifyButton />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('MyAddExhibition')}>
+          <TouchableOpacity>
+           
             <AnotherSearchIcon />
           </TouchableOpacity>
           <TouchableOpacity>
