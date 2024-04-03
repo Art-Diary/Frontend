@@ -33,7 +33,9 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 관람 날짜 */}
       <ContentView>
         <CategoryText>관람 날짜</CategoryText>
-        <VisitText>{JoinDateWithDot(visitDate)}</VisitText>
+        <VisitText>
+          {visitDate === undefined ? '기억 안 남' : JoinDateWithDot(visitDate)}
+        </VisitText>
       </ContentView>
       <LineView />
       {/* 공개여부 */}

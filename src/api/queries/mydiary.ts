@@ -88,7 +88,10 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   });
 };
 
-export const useAddMyExhVisitDate = (exhId: number, visitDate: string) => {
+export const useAddMyExhVisitDate = (
+  exhId: number,
+  visitDate: string | null,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -119,8 +122,9 @@ export const useCreateMyDiary = (
       console.log('[WriteMyDiaryScreen] error fetch WriteMyDiary');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
       console.log('[WriteMyDiaryScreen] success fetch WriteMyDiary');
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
     },
   });
 };
@@ -141,6 +145,7 @@ export const useUpdateMyDiary = (
     onSuccess: () => {
       console.log('[WriteMyDiaryScreen(Update)] success fetch WriteMyDiary');
       queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
     },
   });
 };

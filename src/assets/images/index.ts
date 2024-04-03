@@ -28,8 +28,3 @@ export {default as AnotherSearchIcon} from './another_search_icon.svg';
 export {default as ClassifyButton} from './classify_button.svg';
 export {default as EmptyHeart} from './empty_heart.svg';
 export {default as FullHeart} from './full_heart.svg';
-
-
-// will be erased
-export {default as Poster1} from './will_be_erased/poster1.svg';
-export {default as Poster2} from './will_be_erased/poster2.svg';
