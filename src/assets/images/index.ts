@@ -23,3 +23,8 @@ export {default as RightArrowIcon} from './right_arrow_icon.svg';
 export {default as UnderArrowIcon} from './under_arrow_icon.svg';
 export {default as SearchIcon} from './search_icon.svg';
 export {default as CameraIcon} from './camera_icon.svg';
+export {default as CalendarIcon} from './calendar_icon.svg';
+export {default as AnotherSearchIcon} from './another_search_icon.svg';
+export {default as ClassifyButton} from './classify_button.svg';
+export {default as EmptyHeart} from './empty_heart.svg';
+export {default as FullHeart} from './full_heart.svg';

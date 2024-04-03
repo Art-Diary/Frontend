@@ -14,28 +14,13 @@ import {
 } from '~/components/common/ResponsiveSize';
 import LoadingModal from '../common/modal/LoadingModal';
 
-const StoredExhList = () => {
+interface ExhProps {
+  myExhList: any[];
+}
+
+const StoredExhList: React.FC<ExhProps> = ({myExhList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateMyExhIdInfo} = useMyExhIdActions();
-  const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
-
-  // useEffect(() => { 새로고침에서 사용
-  //   refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
-  // }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'내가 기록한 전시회 목록 조회 중 :)'} />;
-  }
-
-  if (myExhList.length === 0) {
-    return (
-      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
-    );
-  }
 
   const onPress = (exhId: number) => {
     updateMyExhIdInfo(exhId);

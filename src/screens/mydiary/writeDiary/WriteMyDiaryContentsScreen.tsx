@@ -89,7 +89,11 @@ const WriteMyDiaryContentsScreen = () => {
       } else if (isSuccessUpdate) {
         showToast('다이어리 업데이트 완료!');
       }
-      navigation.navigate('MyDiaryRoutes'); // 기록 목록 화면으로 이동
+      navigation.reset({
+        // 기록 목록 화면으로 이동
+        index: 0,
+        routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
+      });
     }
   }, [
     isErrorCreate,
