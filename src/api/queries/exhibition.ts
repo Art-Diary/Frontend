@@ -1,6 +1,6 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useQuery,useMutation, useQueryClient} from 'react-query';
-import {fetchSearchExh,fetchAddLike,fetchLikeList} from '../exhibition';
+import {fetchSearchExh,fetchAddLike,fetchLikeList,fetchDeleteLike} from '../exhibition';
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
   fetchSearchExh: (searchName: string) => ['fetchSearchExh', searchName],
@@ -30,8 +30,6 @@ export const useFetchSearchExh = (searchName: string) =>
   export const useAddLike = (
     exhId: number,
   ) => {
-   // const queryClient = useQueryClient();
-  
     return useMutation({
       mutationFn: () => fetchAddLike(exhId),
       onError: err => {
@@ -40,8 +38,21 @@ export const useFetchSearchExh = (searchName: string) =>
       },
       onSuccess: () => {
         console.log('[AddLikeExhibition] success fetch favorite');
-       // queryClient.invalidateQueries(favoriteQueryKeys.fetchLikeList());
-       // queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      },
+    });
+  };
+
+  export const useDeleteLike = (
+    favoriteExhsList: number[],
+  ) => {
+    return useMutation({
+      mutationFn: () => fetchDeleteLike(favoriteExhsList),
+      onError: err => {
+        console.log(err);
+        console.log('[DeleteLikeExhibition] error fetch delete favorite');
+      },
+      onSuccess: () => {
+        console.log('[DeleteLikeExhibition] success fetch delete favorite');
       },
     });
   };
