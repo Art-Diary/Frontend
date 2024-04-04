@@ -9,8 +9,12 @@ import {
 import GreyNameTag from './GreyNameTag';
 import ProfileNameTag from './ProfileNameTag';
 import {TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 const SettingScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
   return (
     <Container>
       {/* header */}
@@ -26,7 +30,8 @@ const SettingScreen = () => {
         {/* 설정 */}
         <SettingWrapper>
           <TitleText>설정</TitleText>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FavoriteRoutes')}>
             <GreyNameTag content="좋아요 전시회 목록" />
           </TouchableOpacity>
           <TouchableOpacity>

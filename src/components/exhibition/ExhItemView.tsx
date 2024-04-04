@@ -14,6 +14,7 @@ interface SearchExhListProps {
   exhPeriodStart: number[];
   exhPeriodEnd: number[];
   children?: ReactNode;
+  noLine?: boolean;
 }
 
 const ExhItemView: React.FC<SearchExhListProps> = ({
@@ -23,6 +24,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   exhPeriodStart,
   exhPeriodEnd,
   children,
+  noLine,
 }) => {
   const changeExhDateFormat = (
     exhPeriodStart: number[],
@@ -36,7 +38,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   };
 
   return (
-    <ExhView>
+    <ExhView noLine={noLine}>
       <Poster
         source={{uri: `data:image/png;base64,${poster}`}}
         resizeMode="contain"
@@ -54,11 +56,17 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
 export default ExhItemView;
 
 /** style */
-const ExhView = styled.View`
+
+interface ExhViewProps {
+  noLine: boolean;
+}
+
+const ExhView = styled.View<ExhViewProps>`
   flex-direction: row;
   padding: ${wp(10)}px;
   gap: ${wp(10)}px;
-  border-bottom-width: ${hp(0.5)}px;
+  border-bottom-width: ${(props: ExhViewProps) =>
+    props.noLine ? `0px` : `${hp(0.5)}px`};
   border-bottom-color: #d3d3d3;
 `;
 
