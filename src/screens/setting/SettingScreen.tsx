@@ -34,7 +34,7 @@ const SettingScreen = () => {
             onPress={() => navigation.navigate('FavoriteRoutes')}>
             <GreyNameTag content="좋아요 전시회 목록" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('AlarmSetting')}>
             <GreyNameTag content="알림 설정" />
           </TouchableOpacity>
           <TouchableOpacity>

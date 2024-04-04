@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {PrivateToggle} from '~/assets/images/index';
-import {PublicToggle} from '~/assets/images/index';
+import {PrivateToggle, PublicToggle} from '~/assets/images/index';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
@@ -41,7 +40,11 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 공개여부 */}
       <ContentView>
         <CategoryText>비공개/공개</CategoryText>
-        {diaryPrivate === false ? <PrivateToggle /> : <PublicToggle />}
+        {diaryPrivate === false ? (
+          <PrivateToggle width={43} />
+        ) : (
+          <PublicToggle width={43} />
+        )}
       </ContentView>
     </Container>
   );
