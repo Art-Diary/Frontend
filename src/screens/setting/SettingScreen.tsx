@@ -1,7 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
-import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
+import {
+  fontPercentage as fp,
+  widthPercentage as wp,
+  heightPercentage as hp,
+} from '~/components/common/ResponsiveSize';
+import GreyNameTag from './GreyNameTag';
+import ProfileNameTag from './ProfileNameTag';
+import {TouchableOpacity} from 'react-native';
 
 const SettingScreen = () => {
   return (
@@ -11,7 +18,34 @@ const SettingScreen = () => {
 
       {/* body */}
       <Contents>
-        <ContentText>설정</ContentText>
+        {/* 내 프로필 */}
+        <SettingWrapper>
+          <TitleText>내 프로필</TitleText>
+          <ProfileNameTag />
+        </SettingWrapper>
+        {/* 설정 */}
+        <SettingWrapper>
+          <TitleText>설정</TitleText>
+          <TouchableOpacity>
+            <GreyNameTag content="좋아요 전시회 목록" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <GreyNameTag content="알림 설정" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <GreyNameTag content="도움말" />
+          </TouchableOpacity>
+        </SettingWrapper>
+        {/* 회원정보 */}
+        <SettingWrapper>
+          <TitleText>회원정보</TitleText>
+          <TouchableOpacity>
+            <GreyNameTag content="로그아웃" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <GreyNameTag content="탈퇴" />
+          </TouchableOpacity>
+        </SettingWrapper>
       </Contents>
     </Container>
   );
@@ -28,10 +62,20 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: #f6f6f6;
+  padding-left: ${wp(15)}px;
+  padding-right: ${wp(15)}px;
+  padding-top: ${hp(10)}px;
+  padding-bottom: ${hp(10)}px;
+  gap: ${hp(30)}px;
 `;
 
-const ContentText = styled.Text`
-  font-size: ${fp(22)}px;
+const SettingWrapper = styled.View`
+  gap: ${hp(10)}px;
+  justify-content: start;
+`;
+
+const TitleText = styled.Text`
+  font-size: ${fp(17)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
 `;
