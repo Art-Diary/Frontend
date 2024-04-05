@@ -7,16 +7,15 @@ import {
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {ProfileUpdateIcon} from '~/assets/images';
-import {myExhListData} from '../mydiary/dataset';
 import {TouchableOpacity} from 'react-native';
+import {useUserInfo} from '~/zustand/auth/auth';
 
 const ProfileNameTag = () => {
   const tag = `<svg width="400" height="74" viewBox="0 0 400 74" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M376.451 37.1406L399.096 73.25H0.5V0.5H399.096L376.451 36.6094L376.285 36.875L376.451 37.1406Z" fill="white" stroke="#FF6F61"/>
   <rect width="11.25" height="73.75" fill="#FF6F61"/>
   </svg>`;
-
-  const p = myExhListData[0].poster;
+  const userInfo = useUserInfo();
 
   return (
     <Container>
@@ -28,19 +27,19 @@ const ProfileNameTag = () => {
         <Wrapper>
           <ProfileWrapper>
             <Propfile
-              source={{uri: `data:image/png;base64,${p}`}}
+              source={{uri: `data:image/png;base64,${userInfo.profile}`}}
               resizeMode="contain"
               alt={'이미지 읽기 실패'}
             />
           </ProfileWrapper>
           <UserInfoColumn>
             <UserInfoRow>
-              <NickName>아트다이어리</NickName>
+              <NickName>{userInfo.nickname}</NickName>
               <ArtWrapper>
-                <Art>조각</Art>
+                <Art>{userInfo.favoriteArt}</Art>
               </ArtWrapper>
             </UserInfoRow>
-            <Email>artdiary@naver.com</Email>
+            <Email>{userInfo.email}</Email>
           </UserInfoColumn>
           <TouchableOpacity>
             <ProfileUpdateIcon />
