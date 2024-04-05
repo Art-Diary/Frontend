@@ -22,7 +22,7 @@ const divideLines = (text: string): string[] => {
     newText = newText.slice(width, newText.length - 1);
   }
   if (newText.length > 0) {
-    textList.push(newText.slice(0, -1));
+    textList.push(newText);
   }
   return textList;
 };

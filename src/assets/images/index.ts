@@ -28,3 +28,4 @@ export {default as AnotherSearchIcon} from './another_search_icon.svg';
 export {default as ClassifyButton} from './classify_button.svg';
 export {default as EmptyHeart} from './empty_heart.svg';
 export {default as FullHeart} from './full_heart.svg';
+export {default as ProfileUpdateIcon} from './profile_update_icon.svg';
