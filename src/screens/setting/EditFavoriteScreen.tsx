@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {useDeleteFavoriteList} from '~/api/queries/exhibition';
+import {useDeleteLike} from '~/api/queries/exhibition';
 import {EmptyHeart, FullHeart} from '~/assets/images';
 import BackView from '~/components/common/BackView';
 import {
@@ -36,7 +36,7 @@ const EditFavoriteScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useDeleteFavoriteList(deleteList);
+  } = useDeleteLike(deleteList);
 
   useEffect(() => {
     var list: Like[] = [];

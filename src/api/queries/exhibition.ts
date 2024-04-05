@@ -9,8 +9,7 @@ import {
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
   fetchSearchExh: (searchName: string) => ['fetchSearchExh', searchName],
-  fetchFavoriteList: () => ['fetchFavoriteList'],
-  // fetchLikeList: () => ['fetchLikeList'],
+  fetchLikeList: () => ['fetchLikeList'],
 });
 
 export const useFetchSearchExh = (searchName: string) =>
@@ -51,7 +50,7 @@ export const useDeleteLike = (favoriteExhsList: number[]) => {
       console.log('[DeleteLikeExhibition] error fetch delete favorite');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(exhibitionQueryKeys.fetchFavoriteList());
+      queryClient.invalidateQueries(exhibitionQueryKeys.fetchLikeList());
       console.log('[DeleteLikeExhibition] success fetch delete favorite');
     },
   });
@@ -59,7 +58,7 @@ export const useDeleteLike = (favoriteExhsList: number[]) => {
 
 export const useFetchFavoriteList = () =>
   useQuery({
-    queryKey: exhibitionQueryKeys.fetchFavoriteList().queryKey,
+    queryKey: exhibitionQueryKeys.fetchLikeList().queryKey,
     queryFn: () => fetchLikeList(),
     staleTime: 500000,
     onError: err => {
