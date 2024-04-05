@@ -11,3 +11,8 @@ export const updateAlarm3 = (alarm3: boolean) =>
   client.patch(`/users/alarm3`, {alarm: alarm3});
 
 export const fetchUserInfo = () => client.get(`/users`);
+
+export const updateUserInfo = (info: FormData | null) =>
+  client.patch(`/users`, info, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  });

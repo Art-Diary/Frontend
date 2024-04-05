@@ -111,6 +111,8 @@ const Email = styled.Text`
 `;
 
 const ProfileWrapper = styled.View`
+  border-color: #ff6f61;
+  border-width: 1px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;

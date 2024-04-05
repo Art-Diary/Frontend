@@ -1,6 +1,13 @@
-import {useMutation, useQuery} from 'react-query';
-import {fetchUserInfo, updateAlarm1, updateAlarm2, updateAlarm3} from '../auth';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {
+  fetchUserInfo,
+  updateAlarm1,
+  updateAlarm2,
+  updateAlarm3,
+  updateUserInfo,
+} from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
+import {useUserActions} from '~/zustand/auth/auth';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -59,3 +66,23 @@ export const useFetchUserInfo = () =>
     },
     select: (res: any) => res.data,
   });
+
+export const useUpdateUserInfo = (info: FormData | null) => {
+  const queryClient = useQueryClient();
+  const {updateNickname, updateFavoriteArt, updateProfile} = useUserActions();
+
+  return useMutation({
+    mutationFn: () => updateUserInfo(info),
+    onError: err => {
+      console.log(err);
+      console.log('[EditProfileScreen] error update UserInfo');
+    },
+    onSuccess: res => {
+      const resData = res.data;
+      updateNickname(resData.nickname);
+      updateProfile(resData.profile);
+      updateFavoriteArt(resData.favoriteArt);
+      console.log('[EditProfileScreen] success fetch UserInfo');
+    },
+  });
+};
