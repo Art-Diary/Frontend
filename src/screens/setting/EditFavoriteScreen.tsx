@@ -60,6 +60,9 @@ const EditFavoriteScreen = () => {
     if (isLoading) {
       setIsLoadingOpen(true);
     }
+    if (!isLoading) {
+      setIsLoadingOpen(false);
+    }
     if (isSuccess) {
       updateFavoriteList([]);
       showToast('편집 완료!');
