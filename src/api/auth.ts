@@ -9,3 +9,5 @@ export const updateAlarm2 = (alarm2: boolean) =>
 
 export const updateAlarm3 = (alarm3: boolean) =>
   client.patch(`/users/alarm3`, {alarm: alarm3});
+
+export const fetchUserInfo = () => client.get(`/users`);

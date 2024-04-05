@@ -1,5 +1,10 @@
-import {useMutation} from 'react-query';
-import {updateAlarm1, updateAlarm2, updateAlarm3} from '../auth';
+import {useMutation, useQuery} from 'react-query';
+import {fetchUserInfo, updateAlarm1, updateAlarm2, updateAlarm3} from '../auth';
+import {createQueryKeys} from '@lukemorales/query-key-factory';
+
+const authQueryKeys = createQueryKeys('auth', {
+  fetchUserInfo: () => ['fetchUserInfo'],
+});
 
 export const useUpdateAlarm1 = (alarm1: boolean) => {
   return useMutation({
@@ -39,3 +44,18 @@ export const useUpdateAlarm3 = (alarm3: boolean) => {
     },
   });
 };
+
+export const useFetchUserInfo = () =>
+  useQuery({
+    queryKey: authQueryKeys.fetchUserInfo().queryKey,
+    queryFn: () => fetchUserInfo(),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[FetchUserInfo] error fetch UserInfo');
+    },
+    onSuccess: () => {
+      console.log('[FetchUserInfo] success fetch UserInfo');
+    },
+    select: (res: any) => res.data,
+  });
