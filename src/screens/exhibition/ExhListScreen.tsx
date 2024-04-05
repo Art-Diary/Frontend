@@ -20,6 +20,7 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
+import ExhSearchModal from './ExhSearchModal';
 
 interface Exhibition {
   exhId: number;
@@ -49,6 +50,7 @@ const ExhListScreen = () => {
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   //post
   const {
     mutate: addLike,
@@ -127,6 +129,10 @@ const ExhListScreen = () => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
+  const onPressSearchOption = () => {
+    setIsModalOpen(true);
+  };
+
   const onPressHeart = (exhId: number, index: number) => {
     const tmp: number[] = [];
     setfavExhId(exhId);
@@ -150,10 +156,15 @@ const ExhListScreen = () => {
       {/* header */}
       <Header title={'전시회'}>
         <IconsView>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressSearchOption()}>
             <ClassifyButton />
+            {isModalOpen && (
+              <ExhSearchModal title={'전시 분류 카테고리'} x={'X'} />
+            )}
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+          /* onPress={() => navigation.navigate('MyExhibitionSearch')}*/
+          >
             <AnotherSearchIcon />
           </TouchableOpacity>
           <TouchableOpacity>
