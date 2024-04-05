@@ -6,14 +6,14 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import GreyNameTag from './GreyNameTag';
-import ProfileNameTag from './ProfileNameTag';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchUserInfo} from '~/api/queries/auth';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useUserActions} from '~/zustand/auth/auth';
+import ProfileNameTag from './nameTag/ProfileNameTag';
+import GreyNameTag from './nameTag/GreyNameTag';
 
 const SettingScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
