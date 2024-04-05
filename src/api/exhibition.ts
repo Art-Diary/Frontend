@@ -6,6 +6,7 @@ export const fetchSearchExh = (searchName: string) =>
 
 export const fetchAllExh = () => client.get(`/exhibitions`);
 
+/** 전시회 좋아요 API */
 export const fetchLikeList = () => client.get(`/favorites`);
 
 export const fetchAddLike = (exhId: number) =>
@@ -13,5 +14,3 @@ export const fetchAddLike = (exhId: number) =>
 
 export const fetchDeleteLike = (favoriteExhsList: number[]) =>
   client.post(`/favorites/unlike`, {favoriteExhsList: favoriteExhsList});
-
-/** 전시회 좋아요 API */
