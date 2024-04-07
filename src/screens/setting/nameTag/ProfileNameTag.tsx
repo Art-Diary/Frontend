@@ -68,7 +68,7 @@ const WordContainer = styled.View`
 const Wrapper = styled.View`
   flex: 1;
   padding-left: ${wp(20)}px;
-  padding-right: ${wp(40)}px;
+  padding-right: ${wp(30)}px;
   flex-direction: row;
   align-items: center;
   gap: 10px;

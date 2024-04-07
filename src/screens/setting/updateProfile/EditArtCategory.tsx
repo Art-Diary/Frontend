@@ -15,7 +15,7 @@ interface IPicker {
 
 interface EditArtProps {
   getValue: string;
-  setValue: (value: string) => void;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
@@ -34,7 +34,7 @@ const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
       <SectionName>좋아하는 전시 분야</SectionName>
       <DropDownPicker
         style={pickerStyle.box}
-        textStyle={pickerStyle.gatherName}
+        textStyle={pickerStyle.artName}
         open={open}
         value={getValue}
         items={items}
@@ -71,8 +71,8 @@ const pickerStyle = StyleSheet.create({
     borderColor: '#ff6f61',
     backgroundColor: '#f6f6f6',
   },
-  gatherName: {
-    fontSize: 19,
+  artName: {
+    fontSize: 17,
     color: '#3c4045',
     fontFamily: 'omyu pretty',
   },

@@ -16,3 +16,6 @@ export const updateUserInfo = (info: FormData | null) =>
   client.patch(`/users`, info, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+
+export const verifyNickname = (nickname: string) =>
+  client.post(`/users/verify`, {nickname: nickname});

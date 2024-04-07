@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
 import {useUserInfo} from '~/zustand/auth/auth';
-import {NaverIcon} from '~/assets/images';
+import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
 import EditNickname from './EditNickname';
 import EditArtCategory from './EditArtCategory';
 import EditPicture from './EditPicture';
@@ -111,7 +111,13 @@ const EditProfileScreen = () => {
         <ContentColumn>
           <SectionName>이메일</SectionName>
           <BoxView color={true}>
-            <NaverIcon />
+            {userInfo.email.includes('naver') ? (
+              <NaverIcon width={20} />
+            ) : userInfo.email.includes('gmail') ? (
+              <GoogleIcon width={20} />
+            ) : (
+              <KakaoIcon width={20} />
+            )}
             <EmailText>{userInfo.email}</EmailText>
           </BoxView>
         </ContentColumn>
@@ -134,6 +140,8 @@ const Container = styled.View`
 
 const Contents = styled.View`
   flex: 1;
+  width: 100%;
+  height: 100%;
   flex-direction: column;
   background-color: #f6f6f6;
   padding-left: ${wp(15)}px;

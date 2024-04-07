@@ -59,7 +59,10 @@ const EditPicture: React.FC<EditNicknameProps> = ({imageUri, setImageUri}) => {
 
   return (
     <ContentColumn>
-      <SectionName>프로필</SectionName>
+      <SectionView>
+        <SectionName main={true}>프로필</SectionName>
+        <SectionName main={false}> (선택)</SectionName>
+      </SectionView>
       <ProfileSection>
         <PutProfile>
           {imageUri === undefined ? (
@@ -98,9 +101,19 @@ const ContentColumn = styled.View`
   gap: ${hp(10)}px;
 `;
 
-const SectionName = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
+const SectionView = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+interface SectionNameProps {
+  main: boolean;
+}
+
+const SectionName = styled.Text<SectionNameProps>`
+  font-size: ${(props: SectionNameProps) =>
+    props.main ? `${fp(19)}px` : `${fp(16)}px`};
+  color: ${(props: SectionNameProps) => (props.main ? '#3c4045' : '#D3D3D3')};
   font-family: 'omyu pretty';
 `;
 
