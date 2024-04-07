@@ -23,6 +23,7 @@ import {toastConfig} from './components/common/modal/toastConfig';
 import FavoriteRoutes from './routes/setting/FavoriteRoutes';
 import AlarmSettingScreen from './screens/setting/updateAlarm/AlarmSettingScreen';
 import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen';
+import LeaveScreen from './screens/setting/LeaveScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -42,6 +43,7 @@ type RootStackParamList = {
   EditFavorite: undefined;
   AlarmSetting: undefined;
   EditProfile: undefined;
+  LeaveArtDiary: undefined;
   // MyDiaries : {
   //     id: number;
   // };
@@ -86,6 +88,8 @@ export default function App() {
             <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen} />
             {/* [설정] 프로필 수정 화면 */}
             <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            {/* [설정] 회원 탈퇴 */}
+            <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
             {/* 로그인 회원가입 */}
           </Stack.Navigator>
           <Toast config={toastConfig} />
