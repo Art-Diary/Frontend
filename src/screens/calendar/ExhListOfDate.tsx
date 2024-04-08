@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Text} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
@@ -16,12 +16,14 @@ interface CalendarProps {
   changeMonth: string;
   selectedDate: string;
   setDatas: (datas: any[]) => void;
+  gatherId: number;
 }
 
 const ExhListOfDate: React.FC<CalendarProps> = ({
   changeMonth,
   selectedDate,
   setDatas,
+  gatherId,
 }) => {
   const {
     data: calendarData,
@@ -29,8 +31,8 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     isError,
     isSuccess,
   } = useFetchCalendar(
-    'alone',
-    null,
+    gatherId === -1 ? 'alone' : gatherId === -2 ? 'all' : 'gather',
+    gatherId > -1 ? gatherId : null,
     Number(changeMonth.split('.')[0]),
     Number(changeMonth.split('.')[1]),
   );
@@ -85,8 +87,9 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
                   1
                   ? true
                   : false
-              }
-            />
+              }>
+              <Text>aa</Text>
+            </ExhItemView>
           </ExhWrapper>
         )}
       />
