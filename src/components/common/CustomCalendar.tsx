@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
@@ -12,6 +12,8 @@ import {dateToString} from '~/utils/Date';
 interface CalendarProps {
   onSelectedDate: (selectedDate: string) => void;
   markedDates: string[];
+  setChangeMonth?: (changeMonth: string) => void;
+  children?: ReactNode;
 }
 
 interface Matrix {
@@ -39,6 +41,8 @@ const months = [
 const CustomCalendar: React.FC<CalendarProps> = ({
   onSelectedDate,
   markedDates,
+  setChangeMonth,
+  children,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 월
   const [selectedDate, setSelectedDate] = useState<string>(
@@ -49,12 +53,28 @@ const CustomCalendar: React.FC<CalendarProps> = ({
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
     );
+    if (setChangeMonth) {
+      const change = dateToString(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
+      );
+      setChangeMonth(change);
+      setSelectedDate(change);
+      onSelectedDate(change);
+    }
   };
 
   const goToPreviousMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
     );
+    if (setChangeMonth) {
+      const change = dateToString(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
+      );
+      setChangeMonth(change);
+      setSelectedDate(change);
+      onSelectedDate(change);
+    }
   };
 
   const handleDayPress = (item: Matrix) => {
@@ -155,24 +175,29 @@ const CustomCalendar: React.FC<CalendarProps> = ({
   return (
     <Container>
       <CalHeader>
-        <TouchableOpacity onPress={goToPreviousMonth}>
-          <ArrowLabel>&lt;</ArrowLabel>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
-          {currentDate.getFullYear() !== new Date().getFullYear() && (
-            <MonthLabel>{currentDate.getFullYear()}년 </MonthLabel>
-          )}
-          <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
-        </View>
-        <TouchableOpacity onPress={goToNextMonth}>
-          <ArrowLabel>&gt;</ArrowLabel>
-        </TouchableOpacity>
+        <DateWrapper>
+          <TouchableOpacity onPress={goToPreviousMonth}>
+            <ArrowLabel>&lt;</ArrowLabel>
+          </TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+            {currentDate.getFullYear() !== new Date().getFullYear() && (
+              <MonthLabel>{currentDate.getFullYear()}년 </MonthLabel>
+            )}
+            <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
+          </View>
+          <TouchableOpacity onPress={goToNextMonth}>
+            <ArrowLabel>&gt;</ArrowLabel>
+          </TouchableOpacity>
+        </DateWrapper>
+        {children}
       </CalHeader>
+      {/* 요일 */}
       <WeekDayView>
         {days.map((day, index) => (
           <CellText key={index}>{day}</CellText>
         ))}
       </WeekDayView>
+      {/* 날짜 */}
       <CalendarView>{renderCalendar()}</CalendarView>
     </Container>
   );
@@ -194,6 +219,12 @@ const Container = styled.View`
 `;
 
 const CalHeader = styled.View`
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const DateWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 10px;
