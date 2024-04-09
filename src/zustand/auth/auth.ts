@@ -4,7 +4,7 @@ interface AuthState {
   userId: number;
   nickname: string;
   email: string;
-  profile: string;
+  profile: string | undefined;
   favoriteArt: string;
   alarm1: boolean;
   alarm2: boolean;
@@ -13,7 +13,7 @@ interface AuthState {
     updateUserId: (userId: number) => void;
     updateNickname: (nickname: string) => void;
     updateEmail: (email: string) => void;
-    updateProfile: (profile: string) => void;
+    updateProfile: (profile: string | undefined) => void;
     updateFavoriteArt: (favoriteArt: string) => void;
     updateAlarm1: (alarm1: boolean) => void;
     updateAlarm2: (alarm2: boolean) => void;
@@ -25,7 +25,7 @@ const useAuth = create<AuthState>(set => ({
   userId: -1,
   nickname: '',
   email: '',
-  profile: '',
+  profile: undefined,
   favoriteArt: '',
   alarm1: false,
   alarm2: false,

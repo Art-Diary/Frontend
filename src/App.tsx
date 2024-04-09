@@ -22,6 +22,7 @@ import Toast from 'react-native-toast-message';
 import {toastConfig} from './components/common/modal/toastConfig';
 import FavoriteRoutes from './routes/setting/FavoriteRoutes';
 import AlarmSettingScreen from './screens/setting/updateAlarm/AlarmSettingScreen';
+import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -40,6 +41,7 @@ type RootStackParamList = {
   FavoriteList: undefined;
   EditFavorite: undefined;
   AlarmSetting: undefined;
+  EditProfile: undefined;
   // MyDiaries : {
   //     id: number;
   // };
@@ -82,6 +84,8 @@ export default function App() {
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
             {/* [설정] 알림 설정 화면 */}
             <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen} />
+            {/* [설정] 프로필 수정 화면 */}
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
             {/* 로그인 회원가입 */}
           </Stack.Navigator>
           <Toast config={toastConfig} />

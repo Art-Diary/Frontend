@@ -9,8 +9,11 @@ import {
 import {ProfileUpdateIcon} from '~/assets/images';
 import {TouchableOpacity} from 'react-native';
 import {useUserInfo} from '~/zustand/auth/auth';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 const ProfileNameTag = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const tag = `<svg width="400" height="74" viewBox="0 0 400 74" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path d="M376.451 37.1406L399.096 73.25H0.5V0.5H399.096L376.451 36.6094L376.285 36.875L376.451 37.1406Z" fill="white" stroke="#FF6F61"/>
   <rect width="11.25" height="73.75" fill="#FF6F61"/>
@@ -26,7 +29,7 @@ const ProfileNameTag = () => {
       <WordContainer>
         <Wrapper>
           <ProfileWrapper>
-            <Propfile
+            <Profile
               source={{uri: `data:image/png;base64,${userInfo.profile}`}}
               resizeMode="contain"
               alt={'이미지 읽기 실패'}
@@ -41,7 +44,7 @@ const ProfileNameTag = () => {
             </UserInfoRow>
             <Email>{userInfo.email}</Email>
           </UserInfoColumn>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <ProfileUpdateIcon />
           </TouchableOpacity>
         </Wrapper>
@@ -65,7 +68,7 @@ const WordContainer = styled.View`
 const Wrapper = styled.View`
   flex: 1;
   padding-left: ${wp(20)}px;
-  padding-right: ${wp(40)}px;
+  padding-right: ${wp(30)}px;
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -108,6 +111,8 @@ const Email = styled.Text`
 `;
 
 const ProfileWrapper = styled.View`
+  border-color: #ff6f61;
+  border-width: 1px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;
@@ -116,7 +121,7 @@ const ProfileWrapper = styled.View`
   overflow: hidden;
 `;
 
-const Propfile = styled.Image`
+const Profile = styled.Image`
   width: 100%;
   height: 100%;
   align-items: center;
