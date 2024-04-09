@@ -19,3 +19,6 @@ export const updateUserInfo = (info: FormData | null) =>
 
 export const verifyNickname = (nickname: string) =>
   client.post(`/users/verify`, {nickname: nickname});
+
+export const deleteUser = (reason: string) =>
+  client.post(`/users/leave`, {reason: reason});

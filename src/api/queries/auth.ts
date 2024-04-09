@@ -1,5 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
+  deleteUser,
   fetchUserInfo,
   updateAlarm1,
   updateAlarm2,
@@ -97,6 +98,19 @@ export const useVerifyNickname = (nickname: string) => {
     },
     onSuccess: res => {
       console.log('[EditProfileScreen] success verify VerifyNickname');
+    },
+  });
+};
+
+export const useDeleteUser = (reason: string) => {
+  return useMutation({
+    mutationFn: () => deleteUser(reason),
+    onError: err => {
+      console.log(err);
+      console.log('[LeaveScreen] error delete User');
+    },
+    onSuccess: res => {
+      console.log('[LeaveScreen] success delete User');
     },
   });
 };

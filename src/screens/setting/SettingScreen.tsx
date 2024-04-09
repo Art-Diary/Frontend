@@ -84,7 +84,8 @@ const SettingScreen = () => {
           <TouchableOpacity>
             <GreyNameTag content="로그아웃" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('LeaveArtDiary')}>
             <GreyNameTag content="탈퇴" />
           </TouchableOpacity>
         </SettingWrapper>
