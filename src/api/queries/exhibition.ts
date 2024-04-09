@@ -5,10 +5,16 @@ import {
   fetchAddLike,
   fetchLikeList,
   fetchDeleteLike,
+  fetchAllExh,
 } from '../exhibition';
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
-  fetchSearchExh: (searchName: string) => ['fetchSearchExh', searchName],
+  fetchSearchExh: (
+    searchName?: string,
+    price?: string,
+    field?: string,
+    state?: string,
+  ) => ['fetchSearchExh', price],
 });
 
 const favoriteQueryKeys = createQueryKeys('favorite', {
@@ -16,17 +22,28 @@ const favoriteQueryKeys = createQueryKeys('favorite', {
   // fetchDeleteLike: (exhId: number) => ['fetchMyDiaryList', exhId],
 });
 
-export const useFetchSearchExh = (searchName: string) =>
+export const useFetchSearchExh = (
+  searchName: string | null,
+  price: string | null,
+  field: string | null,
+  state: string | null,
+) =>
   useQuery({
-    queryKey: exhibitionQueryKeys.fetchSearchExh(searchName).queryKey,
-    queryFn: () => fetchSearchExh(searchName),
+    queryKey: [
+      exhibitionQueryKeys.fetchSearchExh().queryKey,
+      searchName,
+      price,
+      field,
+      state,
+    ],
+    queryFn: () => fetchSearchExh(searchName, price, field, state),
     staleTime: 500000,
     onError: err => {
       console.log(err);
-      console.log('[MyExhAddScreen] error fetch MyExhAdd');
+      console.log('error fetch SearchExh');
     },
     onSuccess: () => {
-      console.log('[MyExhAddScreen] success fetch MyExhAdd');
+      console.log('success fetch SearchExh');
     },
     select: (res: any) => res.data,
   });
