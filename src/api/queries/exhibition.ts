@@ -14,10 +14,7 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
     price?: string,
     field?: string,
     state?: string,
-  ) => ['fetchSearchExh', price],
-});
-
-const favoriteQueryKeys = createQueryKeys('favorite', {
+  ) => ['fetchSearchExh', searchName, price, field, state],
   fetchLikeList: () => ['fetchLikeList'],
 });
 

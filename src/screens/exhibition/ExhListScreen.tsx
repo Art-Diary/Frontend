@@ -32,6 +32,7 @@ interface Exhibition {
   poster: string;
   favoriteExh: boolean;
 }
+
 const ExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -180,7 +181,9 @@ const ExhListScreen = () => {
                 title={'전시 분류 카테고리'}
                 x={'X'}
                 isVisible={isModalVisible}
-                // manyOptions={['옵션 1', '옵션 2', '옵션 3']}
+                field={selectedField}
+                price={selectedPrice}
+                state={selectedState}
                 onClose={handleModalClose}
               />
             )}
