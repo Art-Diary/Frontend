@@ -14,12 +14,14 @@ import {EmptyHeart} from '~/assets/images/index';
 import {FullHeart} from '~/assets/images/index';
 import {useQuery} from 'react-query';
 import {fetchAddLike, fetchAllExh} from '~/api/exhibition';
+import {useFetchSearchExh} from '~/api/queries/exhibition';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
+import ExhSearchModal from './ExhSearchModal';
 
 interface Exhibition {
   exhId: number;
@@ -30,25 +32,26 @@ interface Exhibition {
   poster: string;
   favoriteExh: boolean;
 }
+
 const ExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-
-  const {data, isLoading, isError, isSuccess, refetch} = useQuery(
-    'AllExhList',
-    fetchAllExh,
-    {
-      onSuccess: data =>
-        console.log('[MyExhListScreen] success fetch AllExhLists'),
-      onError: error => console.error('Error fetching data:', error),
-      select: (res: any) => res.data,
-    },
-  );
 
   const [hearts, setHearts] = useState<Exhibition[]>([]);
   const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedField, setSelectedField] = useState<string | null>(null); //선택된 분야
+  const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
+  const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
+    null,
+    selectedPrice,
+    selectedField,
+    selectedState,
+  );
+
   //post
   const {
     mutate: addLike,
@@ -68,7 +71,7 @@ const ExhListScreen = () => {
     if (isSuccess) {
       setHearts(data);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   useEffect(() => {
     if (like) {
@@ -127,6 +130,27 @@ const ExhListScreen = () => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
+  //Modal
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleModalClose = (
+    selectedOption2: string | null,
+    selectedOption3: string | null,
+    selectedOption4: string | null,
+  ) => {
+    setSelectedField(selectedOption2);
+    setSelectedPrice(selectedOption3);
+    setSelectedState(selectedOption4);
+    closeModal();
+  };
+
   const onPressHeart = (exhId: number, index: number) => {
     const tmp: number[] = [];
     setfavExhId(exhId);
@@ -150,10 +174,23 @@ const ExhListScreen = () => {
       {/* header */}
       <Header title={'전시회'}>
         <IconsView>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openModal()}>
             <ClassifyButton />
+            {isModalVisible && (
+              <ExhSearchModal
+                title={'전시 분류 카테고리'}
+                x={'X'}
+                isVisible={isModalVisible}
+                field={selectedField}
+                price={selectedPrice}
+                state={selectedState}
+                onClose={handleModalClose}
+              />
+            )}
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+          /* onPress={() => navigation.navigate('MyExhibitionSearch')}*/
+          >
             <AnotherSearchIcon />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -165,25 +202,28 @@ const ExhListScreen = () => {
       {/* body */}
 
       <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
-        {data.map((item: any, index: number) => (
-          <Contents key={item.exhId}>
-            <TouchableOpacity>
-              <ExhItemView {...item}></ExhItemView>
-            </TouchableOpacity>
-            <EmptyHeartContent>
-              <HeartContent>
-                <TouchableOpacity
-                  onPress={() => onPressHeart(item.exhId, index)}>
-                  {hearts.length !== 0 && hearts[index].favoriteExh ? (
-                    <FullHeart />
-                  ) : (
-                    <EmptyHeart />
-                  )}
-                </TouchableOpacity>
-              </HeartContent>
-            </EmptyHeartContent>
-          </Contents>
-        ))}
+        {data &&
+          data.map((item: any, index: number) => (
+            <Contents key={item.exhId}>
+              <TouchableOpacity>
+                <ExhItemView {...item}></ExhItemView>
+              </TouchableOpacity>
+              <EmptyHeartContent>
+                <HeartContent>
+                  <TouchableOpacity
+                    onPress={() => onPressHeart(item.exhId, index)}>
+                    {hearts &&
+                    hearts.length === data.length &&
+                    hearts[index].favoriteExh ? (
+                      <FullHeart />
+                    ) : (
+                      <EmptyHeart />
+                    )}
+                  </TouchableOpacity>
+                </HeartContent>
+              </EmptyHeartContent>
+            </Contents>
+          ))}
       </ScrollView>
     </Container>
   );

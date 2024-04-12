@@ -1,8 +1,12 @@
 import {client} from './client';
 
 /** 전시회 API */
-export const fetchSearchExh = (searchName: string) =>
-  client.get(`/exhibitions`, {params: {searchName}});
+export const fetchSearchExh = (
+  searchName: string | null,
+  price: string | null,
+  field: string | null,
+  state: string | null,
+) => client.get(`/exhibitions`, {params: {searchName, price, field, state}});
 
 export const fetchAllExh = () => client.get(`/exhibitions`);
 
