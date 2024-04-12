@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
@@ -9,9 +9,16 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {dateToString} from '~/utils/Date';
 
+interface MarkedType {
+  date: string;
+  color: string[];
+}
+
 interface CalendarProps {
   onSelectedDate: (selectedDate: string) => void;
-  markedDates: string[];
+  markedDates: MarkedType[];
+  setChangeMonth?: (changeMonth: string) => void;
+  children?: ReactNode;
 }
 
 interface Matrix {
@@ -39,6 +46,8 @@ const months = [
 const CustomCalendar: React.FC<CalendarProps> = ({
   onSelectedDate,
   markedDates,
+  setChangeMonth,
+  children,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date()); // 현재 월
   const [selectedDate, setSelectedDate] = useState<string>(
@@ -49,12 +58,28 @@ const CustomCalendar: React.FC<CalendarProps> = ({
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
     );
+    if (setChangeMonth) {
+      const change = dateToString(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
+      );
+      setChangeMonth(change);
+      setSelectedDate(change);
+      onSelectedDate(change);
+    }
   };
 
   const goToPreviousMonth = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
     );
+    if (setChangeMonth) {
+      const change = dateToString(
+        new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
+      );
+      setChangeMonth(change);
+      setSelectedDate(change);
+      onSelectedDate(change);
+    }
   };
 
   const handleDayPress = (item: Matrix) => {
@@ -119,15 +144,17 @@ const CustomCalendar: React.FC<CalendarProps> = ({
           ('0' + (today.getMonth() + 1)).slice(-2) +
           '.' +
           ('0' + today.getDate()).slice(-2);
-        var itemDate;
+        var itemDate: string = '';
+        var dateNum = 0;
         var isToday = false;
         var isMarked = false;
 
-        if (item.day !== null) {
+        if (item.day !== null && markedDates !== undefined) {
           itemDate = makeFullDate(item.day);
           for (var marked = 0; marked < markedDates.length; marked++) {
-            if (itemDate === markedDates[marked]) {
+            if (itemDate === markedDates[marked].date) {
               isMarked = true;
+              dateNum = marked;
               break;
             }
           }
@@ -139,7 +166,25 @@ const CustomCalendar: React.FC<CalendarProps> = ({
               <CellText isTouched={itemDate === selectedDate}>
                 {item.day}
               </CellText>
-              {isMarked && <MarkedDot isTouched={itemDate === selectedDate} />}
+              {isMarked && (
+                <MarkedDotWrapper>
+                  {markedDates &&
+                    markedDates[dateNum].color.map((color, colorIndex) => {
+                      return (
+                        <MarkedDot
+                          key={colorIndex}
+                          color={
+                            itemDate === selectedDate && markedDates
+                              ? 'white'
+                              : markedDates
+                              ? color
+                              : 'white'
+                          }
+                        />
+                      );
+                    })}
+                </MarkedDotWrapper>
+              )}
             </Circle>
           </CellTouchable>
         );
@@ -155,24 +200,29 @@ const CustomCalendar: React.FC<CalendarProps> = ({
   return (
     <Container>
       <CalHeader>
-        <TouchableOpacity onPress={goToPreviousMonth}>
-          <ArrowLabel>&lt;</ArrowLabel>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
-          {currentDate.getFullYear() !== new Date().getFullYear() && (
-            <MonthLabel>{currentDate.getFullYear()}년 </MonthLabel>
-          )}
-          <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
-        </View>
-        <TouchableOpacity onPress={goToNextMonth}>
-          <ArrowLabel>&gt;</ArrowLabel>
-        </TouchableOpacity>
+        <DateWrapper>
+          <TouchableOpacity onPress={goToPreviousMonth}>
+            <ArrowLabel>&lt;</ArrowLabel>
+          </TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+            {currentDate.getFullYear() !== new Date().getFullYear() && (
+              <MonthLabel>{currentDate.getFullYear()}년 </MonthLabel>
+            )}
+            <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
+          </View>
+          <TouchableOpacity onPress={goToNextMonth}>
+            <ArrowLabel>&gt;</ArrowLabel>
+          </TouchableOpacity>
+        </DateWrapper>
+        {children}
       </CalHeader>
+      {/* 요일 */}
       <WeekDayView>
         {days.map((day, index) => (
           <CellText key={index}>{day}</CellText>
         ))}
       </WeekDayView>
+      {/* 날짜 */}
       <CalendarView>{renderCalendar()}</CalendarView>
     </Container>
   );
@@ -194,6 +244,12 @@ const Container = styled.View`
 `;
 
 const CalHeader = styled.View`
+  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const DateWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   gap: 10px;
@@ -240,6 +296,7 @@ const CellTouchable = styled.TouchableOpacity`
 interface CircleProps {
   isToday: boolean;
   isTouched: boolean;
+  color: string;
 }
 
 const CellText = styled.Text<CircleProps>`
@@ -248,13 +305,18 @@ const CellText = styled.Text<CircleProps>`
   font-family: 'omyu pretty';
 `;
 
+const MarkedDotWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
 const MarkedDot = styled.View<CircleProps>`
-  background-color: ${(props: CircleProps) =>
-    props.isTouched ? 'white' : '#ff6f61'};
+  background-color: ${(props: CircleProps) => props.color};
   width: 5px;
   height: 5px;
   border-radius: 50px;
 `;
+
 const Circle = styled.View<CircleProps>`
   gap: 3px;
   width: ${wp(31.28)}px;
