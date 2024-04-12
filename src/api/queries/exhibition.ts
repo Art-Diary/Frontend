@@ -19,7 +19,6 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
 
 const favoriteQueryKeys = createQueryKeys('favorite', {
   fetchLikeList: () => ['fetchLikeList'],
-  // fetchDeleteLike: (exhId: number) => ['fetchMyDiaryList', exhId],
 });
 
 export const useFetchSearchExh = (
@@ -62,6 +61,8 @@ export const useAddLike = (exhId: number) => {
 };
 
 export const useDeleteLike = (favoriteExhsList: number[]) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => fetchDeleteLike(favoriteExhsList),
     onError: err => {
@@ -69,7 +70,23 @@ export const useDeleteLike = (favoriteExhsList: number[]) => {
       console.log('[DeleteLikeExhibition] error fetch delete favorite');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(exhibitionQueryKeys.fetchLikeList());
       console.log('[DeleteLikeExhibition] success fetch delete favorite');
     },
   });
 };
+
+export const useFetchFavoriteList = () =>
+  useQuery({
+    queryKey: exhibitionQueryKeys.fetchLikeList().queryKey,
+    queryFn: () => fetchLikeList(),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[FavoriteListScreen] error fetch FavoriteList');
+    },
+    onSuccess: () => {
+      console.log('[FavoriteListScreen] success fetch FavoriteList');
+    },
+    select: (res: any) => res.data,
+  });

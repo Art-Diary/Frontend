@@ -29,3 +29,6 @@ export {default as ClassifyButton} from './classify_button.svg';
 export {default as EmptyHeart} from './empty_heart.svg';
 export {default as FullHeart} from './full_heart.svg';
 export {default as ProfileUpdateIcon} from './profile_update_icon.svg';
+export {default as NaverIcon} from './naver_icon.svg';
+export {default as GoogleIcon} from './google_icon.svg';
+export {default as KakaoIcon} from './kakao_icon.svg';

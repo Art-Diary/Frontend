@@ -13,7 +13,7 @@ import {
 interface BackProps {
   title?: string;
   line: boolean;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const BackView: React.FC<BackProps> = ({title, line, children}) => {

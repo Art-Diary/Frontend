@@ -20,9 +20,14 @@ import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
 import AddMyVisitDateRoutes from './routes/mydiary/AddMyVisitDateRoutes';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from './components/common/modal/toastConfig';
+import FavoriteRoutes from './routes/setting/FavoriteRoutes';
+import AlarmSettingScreen from './screens/setting/updateAlarm/AlarmSettingScreen';
+import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen';
+import LeaveScreen from './screens/setting/LeaveScreen';
 
 type RootStackParamList = {
   Main: undefined;
+  // mydiary
   MyExhibitionSearch: undefined;
   MyDiaryRoutes: undefined;
   MyDiaryBack: undefined;
@@ -32,6 +37,13 @@ type RootStackParamList = {
   AddSoloVisitDate: undefined;
   WriteMyDiaryInfo: undefined;
   WriteMyDiaryContents: undefined;
+  //setting
+  FavoriteRoutes: undefined;
+  FavoriteList: undefined;
+  EditFavorite: undefined;
+  AlarmSetting: undefined;
+  EditProfile: undefined;
+  LeaveArtDiary: undefined;
   // MyDiaries : {
   //     id: number;
   // };
@@ -55,7 +67,6 @@ export default function App() {
             screenOptions={{headerShown: false}}>
             {/* 홈 화면 = 내 기록 */}
             <Stack.Screen name="Main" component={BottomRoutes} />
-            {/* <Stack.Screen name="mydiary" component={MyDiaryRoutes} /> */}
             {/* [내 기록] 전시회 추가 화면 */}
             <Stack.Screen
               name="MyExhibitionSearch"
@@ -69,10 +80,17 @@ export default function App() {
             />
             {/* [전시회] 전시회 상세 정보 */}
             {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
-            {/* 로그인 회원가입 */}
             {/* 캘린더 화면 */}
             {/* 전시 메이트 화면 */}
-            {/* 설정 화면 */}
+            {/* [설정] 좋아요 전시회 목록 화면 */}
+            <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
+            {/* [설정] 알림 설정 화면 */}
+            <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen} />
+            {/* [설정] 프로필 수정 화면 */}
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+            {/* [설정] 회원 탈퇴 */}
+            <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
+            {/* 로그인 회원가입 */}
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>
