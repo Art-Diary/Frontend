@@ -45,7 +45,9 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
         alt={'이미지 읽기 실패'}
       />
       <ExhInfo>
-        <ExhName>{exhName}</ExhName>
+        <ExhName numberOfLines={1} ellipsizeMode="tail">
+          {exhName}
+        </ExhName>
         <ExhGallery>{gallery}</ExhGallery>
         <ExhDate>{changeExhDateFormat(exhPeriodStart, exhPeriodEnd)}</ExhDate>
       </ExhInfo>
@@ -63,16 +65,22 @@ interface ExhViewProps {
 
 const ExhView = styled.View<ExhViewProps>`
   flex-direction: row;
-  padding: ${wp(10)}px;
-  gap: ${wp(10)}px;
+  padding-left: ${wp(3)}px;
+  padding-right: ${wp(3)}px;
+  padding-top: ${hp(10)}px;
+  padding-bottom: ${hp(10)}px;
+  gap: ${wp(5)}px;
   border-bottom-width: ${(props: ExhViewProps) =>
     props.noLine ? `0px` : `${hp(0.5)}px`};
   border-bottom-color: #d3d3d3;
 `;
 
 const ExhInfo = styled.View`
+  width: 60%;
+  padding-top: ${hp(8)}px;
+  padding-bottom: ${hp(8)}px;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   gap: ${hp(7)}px;
 `;
 

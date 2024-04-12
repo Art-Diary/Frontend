@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList, Text} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
@@ -11,12 +11,20 @@ import {AddMyExhButton} from '~/assets/images';
 import {useFetchCalendar} from '~/api/queries/calendar';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
+import {calendarColor} from './calendarColor';
+
+interface IPicker {
+  label: string;
+  value: string;
+  image: {};
+}
 
 interface CalendarProps {
   changeMonth: string;
   selectedDate: string;
   setDatas: (datas: any[]) => void;
   gatherId: number;
+  items: IPicker[];
 }
 
 const ExhListOfDate: React.FC<CalendarProps> = ({
@@ -24,6 +32,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   selectedDate,
   setDatas,
   gatherId,
+  items,
 }) => {
   const {
     data: calendarData,
@@ -50,6 +59,15 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   if (isLoading) {
     return <LoadingModal message="일정 조회 중:)" />;
   }
+
+  const findGatherColor = (gatherId: number): string => {
+    for (let i = 0; i < items.length - 1; i++) {
+      if (Number(items[i].value) === gatherId) {
+        return calendarColor[i];
+      }
+    }
+    return 'black';
+  };
 
   return (
     <>
@@ -88,7 +106,13 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
                   ? true
                   : false
               }>
-              <Text>aa</Text>
+              {gatherId === -2 && item.gatherName && (
+                <GatherWrapper>
+                  <GatherName color={findGatherColor(item.gatherId)}>
+                    {item.gatherName}
+                  </GatherName>
+                </GatherWrapper>
+              )}
             </ExhItemView>
           </ExhWrapper>
         )}
@@ -126,4 +150,27 @@ const SelectedDateText = styled.Text`
 const ExhWrapper = styled.View`
   padding-left: ${wp(10)}px;
   padding-right: ${wp(10)}px;
+`;
+
+const GatherWrapper = styled.View`
+  padding-top: ${hp(5)}px;
+  align-items: center;
+`;
+
+interface GatherNameProps {
+  color: string;
+}
+
+const GatherName = styled.Text<GatherNameProps>`
+  font-size: ${fp(13)}px;
+  color: #3c4045;
+  font-family: 'omyu pretty';
+  border-width: 1px;
+  border-color: ${(props: GatherNameProps) => props.color}; //#ff6f61;
+  border-radius: 20px;
+  background-color: white;
+  padding-left: ${wp(10)}px;
+  padding-right: ${wp(10)}px;
+  padding-top: ${hp(5)}px;
+  padding-bottom: ${hp(5)}px;
 `;

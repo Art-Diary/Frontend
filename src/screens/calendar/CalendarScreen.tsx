@@ -10,14 +10,17 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {SelectCountry} from 'react-native-element-dropdown';
 import {imageDataset} from './imageDataset';
-// 1. 모임 리스트 가져오기 (O)
-// 2. 드롭 디자인 다시 생각하기 (O)
-// 3. 전체 선택일 경우 모임 별 색 구분 적용하기
+import {calendarColor} from './calendarColor';
 
 interface IPicker {
   label: string;
   value: string;
   image: {};
+}
+
+interface MarkedType {
+  date: string;
+  color: string[];
 }
 
 const CalendarScreen = () => {
@@ -26,7 +29,7 @@ const CalendarScreen = () => {
   // 월 변경 화살표 클릭 인식을 위한 상태 변화
   const [changeMonth, setChangeMonth] = useState(dateToString(new Date()));
   // 일정이 있는 날짜 리스트
-  const [markedDates, setMarkedDates] = useState<string[]>([]);
+  const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
   // api 요청에 대한 응답 데이터
   const [datas, setDatas] = useState<any[]>([]);
   // 모임 선택 selector - item
@@ -69,16 +72,33 @@ const CalendarScreen = () => {
   useEffect(() => {
     // 응답 데이터가 변경될 때마다
     if (datas.length !== 0) {
-      var list: string[] = [];
+      var list: MarkedType[] = [];
+
       for (let i = 0; i < datas.length; i++) {
         if (datas[i].scheduleInfoList !== undefined) {
-          list.push(
-            JoinDateWithDot([
+          var colorList: string[] = [];
+
+          if (value === '-2') {
+            const infoList = datas[i].scheduleInfoList;
+
+            for (let k = 0; k < infoList.length; k++) {
+              let findColor = findGatherColor(infoList[k].gatherId);
+
+              if (!colorList.includes(findColor)) {
+                colorList.push(findColor);
+              }
+            }
+          } else {
+            colorList.push(calendarColor[0]);
+          }
+          list.push({
+            date: JoinDateWithDot([
               Number(changeMonth.split('.')[0]),
               Number(changeMonth.split('.')[1]),
               datas[i].day,
             ]),
-          );
+            color: colorList,
+          });
         }
       }
       setMarkedDates(list);
@@ -92,6 +112,18 @@ const CalendarScreen = () => {
   if (isLoading) {
     return <LoadingModal message="모임 목록 조회 중:)" />;
   }
+
+  const findGatherColor = (gatherId: number): string => {
+    if (gatherId === null) {
+      return calendarColor[0];
+    }
+    for (let i = 0; i < items.length - 1; i++) {
+      if (Number(items[i].value) === gatherId) {
+        return calendarColor[i];
+      }
+    }
+    return 'black';
+  };
 
   return (
     <Container>
@@ -122,6 +154,7 @@ const CalendarScreen = () => {
         selectedDate={selectedDate}
         setDatas={setDatas}
         gatherId={Number(value)}
+        items={items}
       />
     </Container>
   );
@@ -150,7 +183,6 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 0,
     height: 0,
-    borderRadius: 12,
   },
   placeholderStyle: {
     fontSize: 16,
