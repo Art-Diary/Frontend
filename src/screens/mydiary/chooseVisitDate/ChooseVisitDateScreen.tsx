@@ -10,7 +10,7 @@ import {
 import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import DropDownPicker from 'react-native-dropdown-picker';
-import VisitDateList from './VisitDateList';
+import ChooseVisitDateList from './ChooseVisitDateList';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
@@ -97,7 +97,7 @@ const ChooseVisitDateScreen = () => {
           placeholder="모임을 선택해 주세요."
         />
         {/* 날짜 목록 */}
-        <VisitDateList
+        <ChooseVisitDateList
           myStoredDateListOfExh={myStoredDateListOfExh}
           value={value}
         />

@@ -7,20 +7,20 @@ import {RootStackNavigationProp} from '~/App';
 import {AddMyExhButton} from '~/assets/images/index';
 import MyExhList from './MyExhList';
 import {
-  useCalendarMydiaryActions,
-  useCalendarMydiaryInfo,
-} from '~/zustand/mydiary/calendarMydiary';
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 
 const MyExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
-  const {updateIsCalendar} = useCalendarMydiaryActions();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
 
   useEffect(() => {
     if (isFocused) {
-      if (calendarMydiaryInfo.isCalendar) {
-        updateIsCalendar(!calendarMydiaryInfo.isCalendar);
+      if (tabIdentifierInfo.tab === 'calendar') {
+        updateTab('mydiary');
       }
     }
   }, [isFocused]);

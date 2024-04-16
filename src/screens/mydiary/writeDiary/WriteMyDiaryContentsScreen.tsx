@@ -9,7 +9,6 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import {useMySoloInfo} from '~/zustand/mydiary/mySoloStoredDates';
 import {
   useWriteMyDiaryActions,
   useWriteMyDiaryInfo,
@@ -19,11 +18,14 @@ import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
+import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [contentsKeyword, setContentsKeyword] = useState<string>('');
-  const mySoloInfo = useMySoloInfo();
+  const visitedExhId = useVisitedExhIdInfo().exhId;
+  const tabIdentifier = useTabIdentifierInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
   const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
     useWriteMyDiaryActions();
@@ -35,14 +37,14 @@ const WriteMyDiaryContentsScreen = () => {
     isLoading: isLoadingCreate,
     isError: isErrorCreate,
     isSuccess: isSuccessCreate,
-  } = useCreateMyDiary(mySoloInfo.exhId, createFormData);
+  } = useCreateMyDiary(visitedExhId, createFormData);
   const {
     mutate: updateMyDiary,
     isLoading: isLoadingUpdate,
     isError: isErrorUpdate,
     isSuccess: isSuccessUpdate,
   } = useUpdateMyDiary(
-    mySoloInfo.exhId,
+    visitedExhId,
     writeMyDiaryInfo.diaryId ?? -1,
     createFormData,
   );
@@ -89,11 +91,16 @@ const WriteMyDiaryContentsScreen = () => {
       } else if (isSuccessUpdate) {
         showToast('다이어리 업데이트 완료!');
       }
-      navigation.reset({
-        // 기록 목록 화면으로 이동
-        index: 0,
-        routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
-      });
+      if (tabIdentifier.tab === 'mydiary') {
+        navigation.reset({
+          // [내 기록] 기록 목록 화면으로 이동
+          index: 0,
+          routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
+        });
+      } else {
+        // [캘린더] 기록 목록 화면으로 이동
+        navigation.navigate('CalendarDiaryRoutes');
+      }
     }
   }, [
     isErrorCreate,

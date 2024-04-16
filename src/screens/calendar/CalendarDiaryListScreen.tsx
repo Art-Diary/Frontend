@@ -50,7 +50,7 @@ const CalendarDiaryListScreen = () => {
       exhFromCalendarInfo.userExhId ?? -1,
       exhFromCalendarInfo.gatherExhId ?? -1,
     );
-    // navigation.navigate('WriteDiaryRoutes');
+    navigation.navigate('WriteMyDiaryRoutes');
   };
 
   return (
