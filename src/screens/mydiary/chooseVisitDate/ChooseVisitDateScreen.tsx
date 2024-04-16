@@ -55,8 +55,8 @@ const ChooseVisitDateScreen = () => {
 
           for (let dIndex = 0; dIndex < dateInfoList.length; dIndex++) {
             if (
-              writeMyDiaryInfo.gatheringExhId ===
-                dateInfoList[dIndex].gatheringExhId ||
+              writeMyDiaryInfo.gatherExhId ===
+                dateInfoList[dIndex].gatherExhId ||
               writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
             ) {
               setValue(index);

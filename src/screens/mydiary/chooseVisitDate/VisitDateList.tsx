@@ -8,7 +8,7 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
-import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
+import {useMySoloMarkedDatesActions} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
   useWriteMyDiaryActions,
   useWriteMyDiaryInfo,
@@ -17,14 +17,14 @@ import {
 interface DateValue {
   index: number;
   userExhId: number;
-  gatheringExhId: number;
+  gatherExhId: number;
   visitDate: number[];
   weekday: string | null;
 }
 
 interface DateIds {
   userExhId: number;
-  gatheringExhId: number;
+  gatherExhId: number;
 }
 
 interface VisitDatesProps {
@@ -43,9 +43,9 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
   ); // 아이템 선택
   const [selectedIds, setSelectedIds] = useState<DateIds>({
     userExhId: -1,
-    gatheringExhId: -1,
-  }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatheringExhId
-  const {updateVisitDates} = useMySoloActions();
+    gatherExhId: -1,
+  }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatherExhId
+  const {updateVisitDates} = useMySoloMarkedDatesActions();
   const {updateforIds} = useWriteMyDiaryActions();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
@@ -57,16 +57,16 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
         if (
           (writeMyDiaryInfo.userExhId !== -1 &&
             writeMyDiaryInfo.userExhId === infoList[info].userExhId) ||
-          (writeMyDiaryInfo.gatheringExhId !== -1 &&
-            writeMyDiaryInfo.gatheringExhId === infoList[info].gatheringExhId)
+          (writeMyDiaryInfo.gatherExhId !== -1 &&
+            writeMyDiaryInfo.gatherExhId === infoList[info].gatherExhId)
         ) {
           setSelectedItemIndex(info);
           setSelectedIds({
             userExhId: writeMyDiaryInfo.userExhId
               ? writeMyDiaryInfo.userExhId
               : -1,
-            gatheringExhId: writeMyDiaryInfo.gatheringExhId
-              ? writeMyDiaryInfo.gatheringExhId
+            gatherExhId: writeMyDiaryInfo.gatherExhId
+              ? writeMyDiaryInfo.gatherExhId
               : -1,
           });
         }
@@ -83,24 +83,24 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
       setSelectedItemIndex(item.index);
       setSelectedIds({
         userExhId: item.userExhId === null ? -1 : item.userExhId,
-        gatheringExhId: item.gatheringExhId === null ? -1 : item.gatheringExhId,
+        gatherExhId: item.gatherExhId === null ? -1 : item.gatherExhId,
       });
     } else {
       setSelectedItemIndex(null);
-      setSelectedIds({userExhId: -1, gatheringExhId: -1});
+      setSelectedIds({userExhId: -1, gatherExhId: -1});
     }
   };
 
   const onPressNextButton = () => {
     // 기록 작성 페이지로 이동
     if (
-      (selectedIds.userExhId !== -1 && selectedIds.gatheringExhId === -1) ||
-      (selectedIds.userExhId === -1 && selectedIds.gatheringExhId !== -1)
+      (selectedIds.userExhId !== -1 && selectedIds.gatherExhId === -1) ||
+      (selectedIds.userExhId === -1 && selectedIds.gatherExhId !== -1)
     ) {
       updateforIds(
         writeMyDiaryInfo.diaryId,
         selectedIds.userExhId,
-        selectedIds.gatheringExhId,
+        selectedIds.gatherExhId,
       );
       navigation.navigate('WriteMyDiaryInfo');
     }
@@ -143,7 +143,7 @@ const VisitDateList: React.FC<VisitDatesProps> = ({
       visitDateInfoList.push({
         index: index,
         userExhId: dateInfoList[index].userExhId,
-        gatheringExhId: dateInfoList[index].gatheringExhId,
+        gatherExhId: dateInfoList[index].gatherExhId,
         visitDate: dateInfoList[index].visitDate,
         weekday:
           dateInfoList[index].visitDate === null
