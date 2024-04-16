@@ -18,6 +18,16 @@ export const JoinDateWithDot = (dates: number[]) => {
   );
 };
 
+export const JoinDateWithHyphen = (dates: number[]) => {
+  return (
+    dates[0] +
+    '-' +
+    ('0' + dates[1]).slice(-2) +
+    '-' +
+    ('0' + dates[2]).slice(-2)
+  );
+};
+
 export const changeDotToHyphen = (date: string) => {
   return date.replace(/\./g, '-');
 };

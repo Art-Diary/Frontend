@@ -8,16 +8,12 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {
   useDeleteMyDiaryActions,
-  useMyExhIdInfo,
+  useVisitedExhIdInfo,
 } from '~/zustand/mydiary/mydiary';
 import {showToast} from '../common/modal/toastConfig';
-import {
-  useWriteMyDiaryActions,
-  useWriteMyDiaryInfo,
-} from '~/zustand/mydiary/writeMyDiary';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 
 interface TitleProps {
   diaryInfo: any;
@@ -26,16 +22,18 @@ interface TitleProps {
 const TitleInfo: React.FC<TitleProps> = ({diaryInfo}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
-  const myExhId = useMyExhIdInfo();
+  const visitedExhId = useVisitedExhIdInfo().exhId;
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
     useWriteMyDiaryActions();
-  const {updateSoloExhId} = useMySoloActions();
 
   const deleteModalOpen = () => {
     console.log('[MyDiaryDeleteModal] Opening my diary delete modal');
-    // updateDiaryId(diaryId);
-    updateforDeleteMyDiary(myExhId, diaryInfo.diaryId, diaryInfo.userExhId);
+    updateforDeleteMyDiary(
+      visitedExhId,
+      diaryInfo.diaryId,
+      diaryInfo.userExhId,
+    );
     setIsDeletePressed(true);
   };
 
@@ -64,7 +62,6 @@ const TitleInfo: React.FC<TitleProps> = ({diaryInfo}) => {
       diaryInfo.saying,
     );
     updateforContent(diaryInfo.contents);
-    updateSoloExhId(myExhId);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

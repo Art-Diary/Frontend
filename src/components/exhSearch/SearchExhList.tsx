@@ -5,11 +5,10 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
-import {useMySoloActions} from '~/zustand/mydiary/mySoloStoredDates';
 import ExhItemView from '../exhibition/ExhItemView';
 import LoadingModal from '../common/modal/LoadingModal';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
-import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 interface SearchExhListProps {
   searchKeyword: string;
@@ -27,9 +26,8 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     isError,
     isSuccess,
   } = useFetchSearchExh(searchKeyword, null, null, null);
-  const {updateSoloExhId} = useMySoloActions();
+  const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateIsUpdate} = useWriteMyDiaryActions();
-  const {updateMyExhIdInfo} = useMyExhIdActions();
 
   useEffect(() => {
     if (isSuccess) {
@@ -46,9 +44,8 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
   }
 
   const onPressExh = (exhId: number) => {
-    updateSoloExhId(exhId);
+    updateVisitedExhId(exhId);
     updateIsUpdate(false);
-    updateMyExhIdInfo(exhId);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

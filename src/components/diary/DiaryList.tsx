@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {ScrollView, Pressable} from 'react-native';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import ThumbnailInfo from '~/components/diary/ThumbnailInfo';
 import TitleInfo from '~/components/diary/TitleInfo';
 import styled from 'styled-components/native';
@@ -14,33 +13,25 @@ import SayingInfo from '~/components/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyDiaryBackActions, useMyExhIdInfo} from '~/zustand/mydiary/mydiary';
-import {useFetchMyDiaryList} from '~/api/queries/mydiary';
-import LoadingModal from '../common/modal/LoadingModal';
+import {useMyDiaryBackActions} from '~/zustand/mydiary/mydiary';
+import {useCalendarMydiaryInfo} from '~/zustand/mydiary/calendarMydiary';
 
-const DiaryList = () => {
+interface DiaryListProps {
+  diaryList: any[];
+}
+
+const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateforBackInfo} = useMyDiaryBackActions();
-  const myExhId = useMyExhIdInfo();
-  const {data: myDiaryList, isLoading, isError} = useFetchMyDiaryList(myExhId);
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'내 다이어리 목록 조회 중 :)'} />;
-  }
-
-  if (myDiaryList.length === 0) {
-    return (
-      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
-    );
-  }
+  const calendarMydiaryInfo = useCalendarMydiaryInfo();
 
   const onPressBack = (item: any) => {
     updateforBackInfo(item.contents, item.writeDate);
-    navigation.navigate('MyDiaryBack');
+    if (!calendarMydiaryInfo.isCalendar) {
+      navigation.navigate('MyDiaryBack');
+    } else {
+      navigation.navigate('CalendarDiaryBack');
+    }
   };
 
   return (
@@ -49,11 +40,11 @@ const DiaryList = () => {
         style={{flex: 1}}
         horizontal
         pagingEnabled
-        contentContainerStyle={{width: `${100 * myDiaryList.length}%`}}
+        contentContainerStyle={{width: `${100 * diaryList.length}%`}}
         scrollEventThrottle={200}
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}>
-        {myDiaryList.map((item: any, index: number) => {
+        {diaryList.map((item: any, index: number) => {
           return (
             <Pressable key={index} onPress={() => onPressBack(item)}>
               <CarouselItemContainer width={wp(360)}>

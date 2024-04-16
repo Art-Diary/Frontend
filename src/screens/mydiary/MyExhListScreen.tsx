@@ -1,14 +1,29 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Header from '~/components/common/Header';
 import {RootStackNavigationProp} from '~/App';
 import {AddMyExhButton} from '~/assets/images/index';
 import MyExhList from './MyExhList';
+import {
+  useCalendarMydiaryActions,
+  useCalendarMydiaryInfo,
+} from '~/zustand/mydiary/calendarMydiary';
 
 const MyExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
+  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const {updateIsCalendar} = useCalendarMydiaryActions();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (calendarMydiaryInfo.isCalendar) {
+        updateIsCalendar(!calendarMydiaryInfo.isCalendar);
+      }
+    }
+  }, [isFocused]);
 
   return (
     <Container>
