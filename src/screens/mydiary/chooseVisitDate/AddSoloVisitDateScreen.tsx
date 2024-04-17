@@ -9,14 +9,15 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/visitDate/AddVisitDate';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {
-  useMySoloActions,
-  useMySoloInfo,
-} from '~/zustand/mydiary/mySoloStoredDates';
+  useMySoloMarkedDatesActions,
+  useMySoloMarkedDatesInfo,
+} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {calendarColor} from '~/screens/calendar/calendarColor';
+import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 
 interface MarkedType {
   date: string;
@@ -27,18 +28,19 @@ const AddSoloVisitDateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   const [isForgot, setIsForgot] = useState(false);
-  const mySoloInfo = useMySoloInfo();
+  const visitedExhId = useVisitedExhIdInfo().exhId;
+  const mySoloMarkedDatesInfo = useMySoloMarkedDatesInfo();
   // 혼자 방문한 날짜 가져오기
-  const markedDates = mySoloInfo.visitDates;
+  const markedDates = mySoloMarkedDatesInfo.visitDates;
   // 내 기록의 전시회 방문 날짜 추가 API
-  const {updateOneVisitDate} = useMySoloActions();
+  const {updateOneVisitDate} = useMySoloMarkedDatesActions();
   const {
     mutate: addMyExhVisitDate,
     isLoading,
     isError,
     isSuccess,
   } = useAddMyExhVisitDate(
-    mySoloInfo.exhId,
+    visitedExhId,
     isForgot ? null : changeDotToHyphen(selectedDate),
   );
 
@@ -97,7 +99,7 @@ const AddSoloVisitDateScreen = () => {
         onClickNextButton={onClickNextButton}>
         <BodyView>
           <BodyText>방문 날짜가 기억 안 날 땐?</BodyText>
-          {mySoloInfo.haveForgot ? (
+          {mySoloMarkedDatesInfo.haveForgot ? (
             <ForgetText haveForgot={true}>기억 안 남</ForgetText>
           ) : (
             <TouchableOpacity onPress={onClickForgotButton}>

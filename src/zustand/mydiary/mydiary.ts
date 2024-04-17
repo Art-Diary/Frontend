@@ -4,19 +4,21 @@ import {create} from 'zustand';
 interface MyExhIdState {
   exhId: number;
   actions: {
-    updateMyExhIdInfo: (exhId: number) => void;
+    updateVisitedExhId: (exhId: number) => void;
   };
 }
 
-const useMyExhId = create<MyExhIdState>(set => ({
+const useVisitedExhId = create<MyExhIdState>(set => ({
   exhId: -1,
   actions: {
-    updateMyExhIdInfo: (exhId: number) => set(state => ({exhId: exhId})),
+    updateVisitedExhId: (exhId: number) => set(state => ({exhId: exhId})),
   },
 }));
 
-export const useMyExhIdInfo = () => useMyExhId(state => state.exhId);
-export const useMyExhIdActions = () => useMyExhId(state => state.actions);
+export const useVisitedExhIdInfo = () =>
+  useVisitedExhId(state => ({exhId: state.exhId}));
+export const useVisitedExhIdActions = () =>
+  useVisitedExhId(state => state.actions);
 
 /** 내가 작성한 기록의 뒷면에 들어갈 데이터 */
 interface MyDiaryBackInfoState {

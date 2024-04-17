@@ -1,18 +1,15 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyExhIdActions} from '~/zustand/mydiary/mydiary';
-import {useFetchMyExhList} from '~/api/queries/mydiary';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {LightStarIcon} from '~/assets/images/index';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-import LoadingModal from '../common/modal/LoadingModal';
 
 interface ExhProps {
   myExhList: any[];
@@ -20,10 +17,10 @@ interface ExhProps {
 
 const StoredExhList: React.FC<ExhProps> = ({myExhList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateMyExhIdInfo} = useMyExhIdActions();
+  const {updateVisitedExhId} = useVisitedExhIdActions();
 
   const onPress = (exhId: number) => {
-    updateMyExhIdInfo(exhId);
+    updateVisitedExhId(exhId);
     navigation.navigate('MyDiaryRoutes');
   };
 

@@ -2,7 +2,6 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import DiaryList from '../../../components/diary/DiaryList';
 import {WriteDiaryButton} from '~/assets/images/index';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -11,16 +10,24 @@ import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useFetchMyDiaryList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import DiaryList from '~/components/diary/DiaryList';
+import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 
-const MyDiaryListScreen = () => {
+const CalendarDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const visitedExhId = useVisitedExhIdInfo().exhId;
-  const {updateIsUpdate} = useWriteMyDiaryActions();
+  const exhFromCalendarInfo = useExhFromCalendarInfo();
+  const {updateIsUpdate, updateforIds} = useWriteMyDiaryActions();
   const {
-    data: myDiaryList,
+    data: diaryList,
     isLoading,
     isError,
-  } = useFetchMyDiaryList(visitedExhId, null, null, null);
+  } = useFetchMyDiaryList(
+    visitedExhId,
+    exhFromCalendarInfo.forget,
+    exhFromCalendarInfo.visitDate,
+    exhFromCalendarInfo.gatherId,
+  );
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
@@ -30,7 +37,7 @@ const MyDiaryListScreen = () => {
     return <LoadingModal message={'내 다이어리 목록 조회 중 :)'} />;
   }
 
-  if (myDiaryList.length === 0) {
+  if (diaryList.length === 0) {
     return (
       <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
     );
@@ -38,7 +45,12 @@ const MyDiaryListScreen = () => {
 
   const onPressButton = () => {
     updateIsUpdate(false);
-    navigation.navigate('AddMyVisitDateRoutes');
+    updateforIds(
+      null,
+      exhFromCalendarInfo.userExhId ?? -1,
+      exhFromCalendarInfo.gatherExhId ?? -1,
+    );
+    // navigation.navigate('WriteDiaryRoutes');
   };
 
   return (
@@ -51,12 +63,12 @@ const MyDiaryListScreen = () => {
       </BackView>
 
       {/* body */}
-      <DiaryList diaryList={myDiaryList} />
+      <DiaryList diaryList={diaryList} />
     </Container>
   );
 };
 
-export default MyDiaryListScreen;
+export default CalendarDiaryListScreen;
 
 /** style */
 const Container = styled.View`

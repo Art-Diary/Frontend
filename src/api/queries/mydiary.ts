@@ -9,10 +9,17 @@ import {
   fetchMyStoredDateListOfExh,
   updateMyDiary,
 } from '../mydiary';
+import {useCalendarMydiaryInfo} from '~/zustand/mydiary/calendarMydiary';
+import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 
 const mydiaryQueryKeys = createQueryKeys('mydiary', {
   fetchMyExhList: () => ['fetchMyExhList'],
-  fetchMyDiaryList: (exhId: number) => ['fetchMyDiaryList', exhId],
+  fetchMyDiaryList: (
+    exhId: number,
+    forget: boolean | null,
+    visitDate: string | null,
+    gatherId: number | null,
+  ) => ['fetchMyDiaryList', [exhId, forget, visitDate, gatherId]],
   fetchMyStoredDateListOfExh: (exhId: number) => [
     'fetchMyStoredDateListOfExh',
     exhId,
@@ -34,10 +41,20 @@ export const useFetchMyExhList = () =>
     select: (res: any) => res.data,
   });
 
-export const useFetchMyDiaryList = (exhId: number) => {
+export const useFetchMyDiaryList = (
+  exhId: number,
+  forget: boolean | null,
+  visitDate: string | null,
+  gatherId: number | null,
+) => {
   return useQuery({
-    queryKey: mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
-    queryFn: () => fetchMyDiaryList(exhId),
+    queryKey: mydiaryQueryKeys.fetchMyDiaryList(
+      exhId,
+      forget,
+      visitDate,
+      gatherId,
+    ).queryKey,
+    queryFn: () => fetchMyDiaryList(exhId, forget, visitDate, gatherId),
     staleTime: 500000,
     onError: err => {
       console.log(err);
@@ -56,6 +73,8 @@ export const useDeleteMyDiary = (
   solo: boolean,
 ) => {
   const queryClient = useQueryClient();
+  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
     mutationFn: () => deleteMyDiary(exhId, diaryId, solo),
@@ -64,8 +83,25 @@ export const useDeleteMyDiary = (
       console.log('[MyDiaryDeleteModal] error fetch MyDiaryDelete');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
-      console.log('[MyDiaryDeleteModal] success fetch MyDiaryDelete');
+      if (!calendarMydiaryInfo.isCalendar) {
+        console.log('[MyDiaryDeleteModal] success delete MyDiaryDelete');
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
+        );
+        queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      } else {
+        console.log(
+          '[MyDiaryDeleteModal] success delete MyDiaryDelete from Calendar',
+        );
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(
+            exhId,
+            exhFromCalendarInfo.forget,
+            exhFromCalendarInfo.visitDate,
+            exhFromCalendarInfo.gatherId,
+          ),
+        );
+      }
     },
   });
 };
@@ -114,17 +150,35 @@ export const useCreateMyDiary = (
   newMyDiary: FormData | null,
 ) => {
   const queryClient = useQueryClient();
+  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
     mutationFn: () => createMyDiary(exhId, newMyDiary),
     onError: err => {
       console.log(err);
-      console.log('[WriteMyDiaryScreen] error fetch WriteMyDiary');
+      console.log('[WriteMyDiaryScreen] error create WriteMyDiary');
     },
     onSuccess: () => {
-      console.log('[WriteMyDiaryScreen] success fetch WriteMyDiary');
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      if (!calendarMydiaryInfo.isCalendar) {
+        console.log('[WriteMyDiaryScreen] success create WriteMyDiary');
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
+        );
+        queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      } else {
+        console.log(
+          '[WriteMyDiaryScreen] success create WriteMyDiary From Calendar',
+        );
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(
+            exhId,
+            exhFromCalendarInfo.forget,
+            exhFromCalendarInfo.visitDate,
+            exhFromCalendarInfo.gatherId,
+          ),
+        );
+      }
     },
   });
 };
@@ -135,17 +189,36 @@ export const useUpdateMyDiary = (
   newMyDiary: FormData | null,
 ) => {
   const queryClient = useQueryClient();
+  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
     mutationFn: () => updateMyDiary(exhId, diaryId, newMyDiary),
     onError: err => {
       console.log(err);
-      console.log('[WriteMyDiaryScreen(Update)] error fetch WriteMyDiary');
+      console.log('[WriteMyDiaryScreen(Update)] error update WriteMyDiary');
     },
     onSuccess: () => {
-      console.log('[WriteMyDiaryScreen(Update)] success fetch WriteMyDiary');
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      if (!calendarMydiaryInfo.isCalendar) {
+        console.log(
+          '[WriteMyDiaryScreen(Update)] success update WriteMyDiary From Calendar',
+        );
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
+        );
+      } else {
+        console.log(
+          '[WriteMyDiaryScreen(Update)] success update WriteMyDiary From Calendar',
+        );
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(
+            exhId,
+            exhFromCalendarInfo.forget,
+            exhFromCalendarInfo.visitDate,
+            exhFromCalendarInfo.gatherId,
+          ),
+        );
+      }
     },
   });
 };

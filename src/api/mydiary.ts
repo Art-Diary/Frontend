@@ -4,8 +4,15 @@ import {client} from './client';
 
 export const fetchMyExhList = () => client.get(`/myexhs`);
 
-export const fetchMyDiaryList = (exhId: number) =>
-  client.get(`/myexhs/${exhId}/diaries`);
+export const fetchMyDiaryList = (
+  exhId: number,
+  forget: boolean | null,
+  visitDate: string | null,
+  gatherId: number | null,
+) =>
+  client.get(`/myexhs/${exhId}/diaries`, {
+    params: {forget, visitDate, gatherId},
+  });
 
 export const deleteMyDiary = (exhId: number, diaryId: number, solo: boolean) =>
   client.delete(`/myexhs/${exhId}/diaries/${diaryId}`, {params: {solo}});

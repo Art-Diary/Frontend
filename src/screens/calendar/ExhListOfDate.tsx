@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
@@ -12,6 +12,11 @@ import {useFetchCalendar} from '~/api/queries/calendar';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {calendarColor} from './calendarColor';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
+import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
+import {JoinDateWithHyphen} from '~/utils/Date';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 interface IPicker {
   label: string;
@@ -34,6 +39,15 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   gatherId,
   items,
 }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateVisitedExhId: updateMyExhIdInfo} = useVisitedExhIdActions();
+  const {
+    updateForget,
+    updateVisitDate,
+    updateGatherId,
+    updateUserExhId,
+    updateGatherExhId,
+  } = useExhFromCalendarActions();
   const {
     data: calendarData,
     isLoading,
@@ -69,6 +83,21 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     return 'black';
   };
 
+  const onPressExhItem = (exhItem: any) => {
+    {
+      /* 선택한 날짜의 기록들 */
+    }
+    updateMyExhIdInfo(exhItem.exhId);
+    updateForget(exhItem.visitDate ? false : true);
+    updateVisitDate(
+      exhItem.visitDate ? JoinDateWithHyphen(exhItem.visitDate) : null,
+    );
+    updateGatherId(exhItem.gatherId ?? null);
+    updateUserExhId(exhItem.userExhId ?? null);
+    updateGatherExhId(exhItem.gatherExhId ?? null);
+    navigation.navigate('CalendarDiaryRoutes');
+  };
+
   return (
     <>
       {/* 선택 날짜 */}
@@ -91,30 +120,32 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
             : []
         }
         renderItem={({item, index}) => (
-          <ExhWrapper>
-            <ExhItemView
-              poster={item.poster}
-              exhName={item.exhName}
-              gallery={item.gallery}
-              exhPeriodStart={item.exhPeriodStart}
-              exhPeriodEnd={item.exhPeriodEnd}
-              noLine={
-                index ===
-                calendarData[Number(selectedDate.split('.')[2]) - 1]
-                  .scheduleInfoList.length -
-                  1
-                  ? true
-                  : false
-              }>
-              {gatherId === -2 && item.gatherName && (
-                <GatherWrapper>
-                  <GatherName color={findGatherColor(item.gatherId)}>
-                    {item.gatherName}
-                  </GatherName>
-                </GatherWrapper>
-              )}
-            </ExhItemView>
-          </ExhWrapper>
+          <TouchableOpacity onPress={() => onPressExhItem(item)}>
+            <ExhWrapper>
+              <ExhItemView
+                poster={item.poster}
+                exhName={item.exhName}
+                gallery={item.gallery}
+                exhPeriodStart={item.exhPeriodStart}
+                exhPeriodEnd={item.exhPeriodEnd}
+                noLine={
+                  index ===
+                  calendarData[Number(selectedDate.split('.')[2]) - 1]
+                    .scheduleInfoList.length -
+                    1
+                    ? true
+                    : false
+                }>
+                {gatherId === -2 && item.gatherName && (
+                  <GatherWrapper>
+                    <GatherName color={findGatherColor(item.gatherId)}>
+                      {item.gatherName}
+                    </GatherName>
+                  </GatherWrapper>
+                )}
+              </ExhItemView>
+            </ExhWrapper>
+          </TouchableOpacity>
         )}
       />
     </>
