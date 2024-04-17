@@ -108,7 +108,7 @@ const WriteMyDiaryContentsScreen = () => {
     const formData = new FormData();
 
     formData.append('userExhId', writeMyDiaryInfo.userExhId);
-    formData.append('gatheringExhId', writeMyDiaryInfo.gatheringExhId);
+    formData.append('gatherExhId', writeMyDiaryInfo.gatherExhId);
     formData.append('title', writeMyDiaryInfo.title);
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);

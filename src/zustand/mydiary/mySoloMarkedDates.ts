@@ -2,12 +2,12 @@ import {create} from 'zustand';
 import {JoinDateWithDot} from '~/utils/Date';
 
 /** 혼자 방문한 날짜 목록 데이터 */
-interface MySoloStoredDatesState {
-  exhId: number;
+interface MySoloMarkedDatesState {
+  // exhId: number;
   visitDates: string[];
   haveForgot: boolean;
   actions: {
-    updateSoloExhId: (exhId: number) => void;
+    // updateSoloExhId: (exhId: number) => void;
     updateVisitDates: (visitDates: number[][]) => void;
     updateOneVisitDate: (visitDates: string) => void;
   };
@@ -34,12 +34,12 @@ const isForgot = (visitDates: number[][]): boolean => {
 };
 
 // create: 보관함(Store)을 만들어주는 유용한 함수
-const useMySoloStoredDates = create<MySoloStoredDatesState>(set => ({
-  exhId: -1,
+const useMySoloMarkedDates = create<MySoloMarkedDatesState>(set => ({
+  // exhId: -1,
   visitDates: [],
   haveForgot: false,
   actions: {
-    updateSoloExhId: (exhId: number) => set(state => ({exhId: exhId})),
+    // updateSoloExhId: (exhId: number) => set(state => ({exhId: exhId})),
     updateVisitDates: (visitDates: number[][]) =>
       set(state => ({
         visitDates: change(visitDates),
@@ -52,11 +52,11 @@ const useMySoloStoredDates = create<MySoloStoredDatesState>(set => ({
   },
 }));
 
-export const useMySoloInfo = () =>
-  useMySoloStoredDates(state => ({
-    exhId: state.exhId,
+export const useMySoloMarkedDatesInfo = () =>
+  useMySoloMarkedDates(state => ({
+    // exhId: state.exhId,
     haveForgot: state.haveForgot,
     visitDates: state.visitDates,
   }));
-export const useMySoloActions = () =>
-  useMySoloStoredDates(state => state.actions);
+export const useMySoloMarkedDatesActions = () =>
+  useMySoloMarkedDates(state => state.actions);

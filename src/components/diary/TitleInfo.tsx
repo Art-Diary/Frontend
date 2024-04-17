@@ -53,7 +53,7 @@ const TitleInfo: React.FC<TitleProps> = ({diaryInfo}) => {
     updateforIds(
       diaryInfo.diaryId ? diaryInfo.diaryId : null,
       diaryInfo.userExhId ?? -1,
-      diaryInfo.gatheringExhId ?? -1,
+      diaryInfo.gatherExhId ?? -1,
     );
     updateforDetailInfo(
       diaryInfo.title,

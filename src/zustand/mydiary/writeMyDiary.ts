@@ -5,7 +5,7 @@ interface WriteMyDiaryState {
   isUpdate: boolean | null;
   diaryId: number | null;
   userExhId: number | null;
-  gatheringExhId: number | null;
+  gatherExhId: number | null;
   title: string | null;
   rate: number | null;
   diaryPrivate: boolean | null;
@@ -18,7 +18,7 @@ interface WriteMyDiaryState {
     updateforIds: (
       diaryId: number | null,
       userExhId: number | null,
-      gatheringExhId: number | null,
+      gatherExhId: number | null,
     ) => void;
     updateforDetailInfo: (
       title: string | null,
@@ -36,7 +36,7 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
   isUpdate: null,
   diaryId: null,
   userExhId: null,
-  gatheringExhId: null,
+  gatherExhId: null,
   title: null,
   rate: null,
   diaryPrivate: null,
@@ -50,12 +50,12 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
     updateforIds: (
       diaryId: number | null,
       userExhId: number | null,
-      gatheringExhId: number | null,
+      gatherExhId: number | null,
     ) =>
       set(state => ({
         diaryId: diaryId,
         userExhId: userExhId,
-        gatheringExhId: gatheringExhId,
+        gatherExhId: gatherExhId,
       })),
     updateforDetailInfo: (
       title: string | null,
@@ -83,7 +83,7 @@ export const useWriteMyDiaryInfo = () =>
     isUpdate: state.isUpdate,
     diaryId: state.diaryId,
     userExhId: state.userExhId,
-    gatheringExhId: state.gatheringExhId,
+    gatherExhId: state.gatherExhId,
     title: state.title,
     rate: state.rate,
     diaryPrivate: state.diaryPrivate,
