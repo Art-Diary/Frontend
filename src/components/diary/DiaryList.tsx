@@ -14,7 +14,7 @@ import {Shadow} from 'react-native-shadow-2';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMyDiaryBackActions} from '~/zustand/mydiary/mydiary';
-import {useCalendarMydiaryInfo} from '~/zustand/mydiary/calendarMydiary';
+import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 
 interface DiaryListProps {
   diaryList: any[];
@@ -23,11 +23,11 @@ interface DiaryListProps {
 const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateforBackInfo} = useMyDiaryBackActions();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const tabIdentifierInfo = useTabIdentifierInfo();
 
   const onPressBack = (item: any) => {
     updateforBackInfo(item.contents, item.writeDate);
-    if (!calendarMydiaryInfo.isCalendar) {
+    if (tabIdentifierInfo.tab === 'mydiary') {
       navigation.navigate('MyDiaryBack');
     } else {
       navigation.navigate('CalendarDiaryBack');

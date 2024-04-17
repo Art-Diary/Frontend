@@ -12,9 +12,9 @@ import {SelectCountry} from 'react-native-element-dropdown';
 import {imageDataset} from './imageDataset';
 import {calendarColor} from './calendarColor';
 import {
-  useCalendarMydiaryActions,
-  useCalendarMydiaryInfo,
-} from '~/zustand/mydiary/calendarMydiary';
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 import {useIsFocused} from '@react-navigation/native';
 
 interface IPicker {
@@ -30,8 +30,8 @@ interface MarkedType {
 
 const CalendarScreen = () => {
   const isFocused = useIsFocused();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
-  const {updateIsCalendar} = useCalendarMydiaryActions();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   // 월 변경 화살표 클릭 인식을 위한 상태 변화
@@ -53,8 +53,8 @@ const CalendarScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      if (!calendarMydiaryInfo.isCalendar) {
-        updateIsCalendar(!calendarMydiaryInfo.isCalendar);
+      if (tabIdentifierInfo.tab === 'mydiary') {
+        updateTab('calendar');
       }
     }
   }, [isFocused]);

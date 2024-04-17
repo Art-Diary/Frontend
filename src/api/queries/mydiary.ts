@@ -9,7 +9,7 @@ import {
   fetchMyStoredDateListOfExh,
   updateMyDiary,
 } from '../mydiary';
-import {useCalendarMydiaryInfo} from '~/zustand/mydiary/calendarMydiary';
+import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 
 const mydiaryQueryKeys = createQueryKeys('mydiary', {
@@ -73,7 +73,7 @@ export const useDeleteMyDiary = (
   solo: boolean,
 ) => {
   const queryClient = useQueryClient();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
@@ -83,7 +83,7 @@ export const useDeleteMyDiary = (
       console.log('[MyDiaryDeleteModal] error fetch MyDiaryDelete');
     },
     onSuccess: () => {
-      if (!calendarMydiaryInfo.isCalendar) {
+      if (tabIdentifierInfo.tab === 'mydiary') {
         console.log('[MyDiaryDeleteModal] success delete MyDiaryDelete');
         queryClient.invalidateQueries(
           mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
@@ -150,7 +150,7 @@ export const useCreateMyDiary = (
   newMyDiary: FormData | null,
 ) => {
   const queryClient = useQueryClient();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
@@ -160,7 +160,7 @@ export const useCreateMyDiary = (
       console.log('[WriteMyDiaryScreen] error create WriteMyDiary');
     },
     onSuccess: () => {
-      if (!calendarMydiaryInfo.isCalendar) {
+      if (tabIdentifierInfo.tab === 'mydiary') {
         console.log('[WriteMyDiaryScreen] success create WriteMyDiary');
         queryClient.invalidateQueries(
           mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
@@ -189,7 +189,7 @@ export const useUpdateMyDiary = (
   newMyDiary: FormData | null,
 ) => {
   const queryClient = useQueryClient();
-  const calendarMydiaryInfo = useCalendarMydiaryInfo();
+  const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
@@ -199,10 +199,8 @@ export const useUpdateMyDiary = (
       console.log('[WriteMyDiaryScreen(Update)] error update WriteMyDiary');
     },
     onSuccess: () => {
-      if (!calendarMydiaryInfo.isCalendar) {
-        console.log(
-          '[WriteMyDiaryScreen(Update)] success update WriteMyDiary From Calendar',
-        );
+      if (tabIdentifierInfo.tab === 'mydiary') {
+        console.log('[WriteMyDiaryScreen(Update)] success update WriteMyDiary');
         queryClient.invalidateQueries(
           mydiaryQueryKeys.fetchMyDiaryList(exhId, null, null, null),
         );
