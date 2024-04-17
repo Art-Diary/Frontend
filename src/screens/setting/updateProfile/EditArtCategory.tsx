@@ -4,7 +4,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import styled from 'styled-components/native';
 import {
   fontPercentage as fp,
-  widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
 
@@ -26,7 +25,7 @@ const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
     {label: '조각', value: '조각'},
     {label: '공예', value: '공예'},
     {label: '미디어아트', value: '미디어아트'},
-    {label: '그외', value: '그외'}, // 안 보임.
+    {label: '그외', value: '그외'},
   ]);
 
   return (
@@ -34,6 +33,7 @@ const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
       <SectionName>좋아하는 전시 분야</SectionName>
       <DropDownPicker
         style={pickerStyle.box}
+        maxHeight={400} // 최대 높이 설정
         textStyle={pickerStyle.artName}
         open={open}
         value={getValue}

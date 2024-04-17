@@ -5,8 +5,8 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
-import ExhItemView from '../exhibition/ExhItemView';
-import LoadingModal from '../common/modal/LoadingModal';
+import ExhItemView from '../../components/exhibition/ExhItemView';
+import LoadingModal from '../../components/common/modal/LoadingModal';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
