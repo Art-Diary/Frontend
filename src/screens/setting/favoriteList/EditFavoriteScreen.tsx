@@ -108,12 +108,9 @@ const EditFavoriteScreen = () => {
           renderItem={({item, index}) => (
             <ExhWrapper>
               <ExhItemView
-                poster={item.poster}
-                exhName={item.exhName}
-                gallery={item.gallery}
-                exhPeriodStart={item.exhPeriodStart}
-                exhPeriodEnd={item.exhPeriodEnd}
-                noLine={index === exhList.length - 1 ? true : false}>
+                exhInfo={{...item}}
+                noLine={index === exhList.length - 1 ? true : false}
+                notTouchable={true}>
                 <HeartView>
                   <TouchableOpacity onPress={() => onPressHeart(index)}>
                     {likeList[index]?.like ? <FullHeart /> : <EmptyHeart />}
@@ -162,7 +159,6 @@ const EditText = styled.Text`
 const HeartView = styled.View`
   flex: 1;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  padding-right: ${wp(8)}px;
 `;

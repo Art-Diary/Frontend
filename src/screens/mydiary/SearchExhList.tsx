@@ -54,15 +54,11 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
       <FlatList
         data={exhList}
         renderItem={({item, index}) => (
-          <TouchableOpacity onPress={() => onPressExh(item.exhId)}>
-            <ExhItemView
-              poster={item.poster}
-              exhName={item.exhName}
-              gallery={item.gallery}
-              exhPeriodStart={item.exhPeriodStart}
-              exhPeriodEnd={item.exhPeriodEnd}
-            />
-          </TouchableOpacity>
+          <ExhItemView
+            exhInfo={{...item}}
+            notTouchable={false}
+            onTouch={() => onPressExh(item.exhId)}
+          />
         )}
       />
     </ExhListView>
