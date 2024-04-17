@@ -261,11 +261,11 @@ const ExhListScreen = () => {
         {data &&
           data.map((item: any, index: number) => (
             <Contents key={item.exhId}>
-              <TouchableOpacity>
-                <ExhItemView {...item}></ExhItemView>
-              </TouchableOpacity>
-              <EmptyHeartContent>
-                <HeartContent>
+              <ExhItemView
+                exhInfo={{...item}}
+                noLine={index === data.length - 1 ? true : false}
+                notTouchable={true}>
+                <EmptyHeartContent>
                   <TouchableOpacity
                     onPress={() => onPressHeart(item.exhId, index)}>
                     {hearts &&
@@ -276,8 +276,8 @@ const ExhListScreen = () => {
                       <EmptyHeart />
                     )}
                   </TouchableOpacity>
-                </HeartContent>
-              </EmptyHeartContent>
+                </EmptyHeartContent>
+              </ExhItemView>
             </Contents>
           ))}
       </ScrollView>
@@ -336,8 +336,8 @@ const IconsView = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: row;
-  margin-left: ${wp(15)}px;
-  margin-right: ${wp(15)}px;
+  padding-left: ${wp(10)}px;
+  padding-right: ${wp(10)}px;
   background-color: #f6f6f6;
 `;
 
@@ -345,9 +345,5 @@ const EmptyHeartContent = styled.View`
   flex: 1;
   flex-direction: row;
   align-items: center;
-  padding: ${wp(30)}px;
-  margin-left: ${wp(0)}px;
-  margin-right: ${wp(0)}px;
-  border-bottom-width: ${hp(0.5)}px;
-  border-bottom-color: #d3d3d3;
+  justify-content: center;
 `;

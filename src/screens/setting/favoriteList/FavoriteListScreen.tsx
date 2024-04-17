@@ -77,12 +77,9 @@ const FavoriteListScreen = () => {
           renderItem={({item, index}) => (
             <ExhWrapper>
               <ExhItemView
-                poster={item.poster}
-                exhName={item.exhName}
-                gallery={item.gallery}
-                exhPeriodStart={item.exhPeriodStart}
-                exhPeriodEnd={item.exhPeriodEnd}
+                exhInfo={{...item}}
                 noLine={index === favoriteList.length - 1 ? true : false}
+                notTouchable={true}
               />
             </ExhWrapper>
           )}
