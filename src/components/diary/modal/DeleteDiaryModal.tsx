@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity, Modal, TouchableWithoutFeedback} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
 import {
@@ -10,13 +10,15 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
+import {showToast} from '~/components/common/modal/toastConfig';
 
-interface DeleteModalProps {
-  handleCloseModal: (state: number) => void;
+interface DeleteDiaryModalProps {
+  handleCloseModal: () => void;
   message: string;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({
+const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   handleCloseModal,
   message,
 }) => {
@@ -30,56 +32,34 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   } = useDeleteMyDiary(
     deletemyDiaryInfo.exhId,
     deletemyDiaryInfo.diaryId,
-    deletemyDiaryInfo.userExhId === undefined ? false : true, // 모임 or 혼자
+    deletemyDiaryInfo.userExhId ? true : false, // 모임 or 혼자
   );
 
   useEffect(() => {
     if (isError) {
-      handleCloseModal(2);
+      handleCloseModal();
+      showToast('에러 발생 ;(');
     }
     if (isSuccess) {
       updateforDeleteMyDiary(-1, -1, -1);
-      handleCloseModal(1);
+      handleCloseModal();
+      showToast('기록을 삭제했습니다.');
     }
   }, [isError, isSuccess, handleCloseModal]);
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      onRequestClose={() => handleCloseModal(3)}>
-      <TouchableWithoutFeedback onPress={() => handleCloseModal(3)}>
-        <Container>
-          <Contents>
-            <Message>{message}</Message>
-            <TouchableOpacity onPress={() => deleteMyDiary()}>
-              <DeleteButton>삭제</DeleteButton>
-            </TouchableOpacity>
-          </Contents>
-        </Container>
-      </TouchableWithoutFeedback>
-    </Modal>
+    <ConfirmationModal handleCloseModal={handleCloseModal}>
+      <Message>{message}</Message>
+      <TouchableOpacity onPress={() => deleteMyDiary()}>
+        <DeleteButton>삭제</DeleteButton>
+      </TouchableOpacity>
+    </ConfirmationModal>
   );
 };
 
-export default DeleteModal;
+export default DeleteDiaryModal;
 
 /** style */
-const Container = styled.View`
-  flex: 1;
-  justify-content: flex-end;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-const Contents = styled.View`
-  background-color: white;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  padding: ${hp(14)}px;
-  width: 100%;
-`;
-
 const Message = styled.Text`
   text-align: center;
   font-size: ${fp(17.9)}px;

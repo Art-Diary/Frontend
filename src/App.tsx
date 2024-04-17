@@ -24,6 +24,8 @@ import FavoriteRoutes from './routes/setting/FavoriteRoutes';
 import AlarmSettingScreen from './screens/setting/updateAlarm/AlarmSettingScreen';
 import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen';
 import LeaveScreen from './screens/setting/LeaveScreen';
+import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
+import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 
 type RootStackParamList = {
   Main: undefined;
@@ -35,7 +37,7 @@ type RootStackParamList = {
   AddMyVisitDateRoutes: undefined;
   ChooseVisitDate: undefined;
   AddSoloVisitDate: undefined;
-  WriteMyDiaryInfo: undefined;
+  WriteMyDiaryRoutes: undefined;
   WriteMyDiaryContents: undefined;
   //setting
   FavoriteRoutes: undefined;
@@ -44,6 +46,9 @@ type RootStackParamList = {
   AlarmSetting: undefined;
   EditProfile: undefined;
   LeaveArtDiary: undefined;
+  // calendar
+  CalendarDiaryRoutes: undefined;
+  CalendarDiaryBack: undefined;
   // MyDiaries : {
   //     id: number;
   // };
@@ -78,9 +83,17 @@ export default function App() {
               name="AddMyVisitDateRoutes"
               component={AddMyVisitDateRoutes}
             />
+            <Stack.Screen
+              name="WriteMyDiaryRoutes"
+              component={WriteMyDiaryRoutes}
+            />
             {/* [전시회] 전시회 상세 정보 */}
             {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
-            {/* 캘린더 화면 */}
+            {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
+            <Stack.Screen
+              name="CalendarDiaryRoutes"
+              component={CalendarDiaryRoutes}
+            />
             {/* 전시 메이트 화면 */}
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
