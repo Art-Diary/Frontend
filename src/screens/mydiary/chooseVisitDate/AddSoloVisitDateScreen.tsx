@@ -16,6 +16,12 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
+import {calendarColor} from '~/screens/calendar/calendarColor';
+
+interface MarkedType {
+  date: string;
+  color: string[];
+}
 
 const AddSoloVisitDateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -66,11 +72,26 @@ const AddSoloVisitDateScreen = () => {
     setIsForgot(true);
   };
 
+  const markedDatesFormatChange = (markedDates: string[]): MarkedType[] => {
+    var list: MarkedType[] = [];
+
+    for (let i = 0; i < markedDates.length; i++) {
+      var firstColor: string[] = [];
+
+      firstColor.push(calendarColor[0]);
+      list.push({
+        date: markedDates[i],
+        color: firstColor,
+      });
+    }
+    return list;
+  };
+
   return (
     <Container>
       <BackView line={false} children={null} />
       <AddVisitDate
-        markedDates={markedDates}
+        markedDates={markedDatesFormatChange(markedDates)}
         selectedDate={selectedDate}
         onSelectedDate={onSelectedDate}
         onClickNextButton={onClickNextButton}>

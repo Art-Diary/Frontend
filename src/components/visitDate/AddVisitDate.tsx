@@ -8,8 +8,13 @@ import {
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 
+interface MarkedType {
+  date: string;
+  color: string[];
+}
+
 interface AddVisitDateProps {
-  markedDates: string[];
+  markedDates: MarkedType[];
   selectedDate: string;
   onSelectedDate: (selectedDate: string) => void;
   onClickNextButton: () => void;
@@ -25,7 +30,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
 }) => {
   const alreadyMarkedDate = () => {
     for (var marked = 0; marked < markedDates.length; marked++) {
-      if (markedDates[marked] === selectedDate) {
+      if (markedDates[marked].date === selectedDate) {
         return true;
       }
     }
