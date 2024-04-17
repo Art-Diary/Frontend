@@ -7,24 +7,28 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 
-interface SearchExhListProps {
+interface ExhInfo {
   poster: string;
   exhName: string;
   gallery: string;
   exhPeriodStart: number[];
   exhPeriodEnd: number[];
+}
+
+interface SearchExhListProps {
+  exhInfo: ExhInfo;
   children?: ReactNode;
   noLine?: boolean;
+  notTouchable: boolean;
+  onTouch?: (something: any) => void;
 }
 
 const ExhItemView: React.FC<SearchExhListProps> = ({
-  poster,
-  exhName,
-  gallery,
-  exhPeriodStart,
-  exhPeriodEnd,
+  exhInfo,
   children,
   noLine,
+  notTouchable,
+  onTouch,
 }) => {
   const changeExhDateFormat = (
     exhPeriodStart: number[],
@@ -39,18 +43,22 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
 
   return (
     <ExhView noLine={noLine}>
-      <Poster
-        source={{uri: `data:image/png;base64,${poster}`}}
-        resizeMode="contain"
-        alt={'이미지 읽기 실패'}
-      />
-      <ExhInfo>
-        <ExhName numberOfLines={1} ellipsizeMode="tail">
-          {exhName}
-        </ExhName>
-        <ExhGallery>{gallery}</ExhGallery>
-        <ExhDate>{changeExhDateFormat(exhPeriodStart, exhPeriodEnd)}</ExhDate>
-      </ExhInfo>
+      <TouchView disabled={notTouchable} activeOpacity={1.0} onPress={onTouch}>
+        <Poster
+          source={{uri: `data:image/png;base64,${exhInfo.poster}`}}
+          resizeMode="contain"
+          alt={'이미지 읽기 실패'}
+        />
+        <ExhInfo>
+          <ExhName numberOfLines={1} ellipsizeMode="tail">
+            {exhInfo.exhName}
+          </ExhName>
+          <ExhGallery>{exhInfo.gallery}</ExhGallery>
+          <ExhDate>
+            {changeExhDateFormat(exhInfo.exhPeriodStart, exhInfo.exhPeriodEnd)}
+          </ExhDate>
+        </ExhInfo>
+      </TouchView>
       {children}
     </ExhView>
   );
@@ -65,18 +73,23 @@ interface ExhViewProps {
 
 const ExhView = styled.View<ExhViewProps>`
   flex-direction: row;
+  border-bottom-width: ${(props: ExhViewProps) =>
+    props.noLine ? `0px` : `${hp(0.5)}px`};
+  border-bottom-color: #d3d3d3;
   padding-left: ${wp(3)}px;
   padding-right: ${wp(3)}px;
   padding-top: ${hp(10)}px;
   padding-bottom: ${hp(10)}px;
+  width: 100%;
+`;
+
+const TouchView = styled.TouchableOpacity`
+  flex-direction: row;
   gap: ${wp(5)}px;
-  border-bottom-width: ${(props: ExhViewProps) =>
-    props.noLine ? `0px` : `${hp(0.5)}px`};
-  border-bottom-color: #d3d3d3;
 `;
 
 const ExhInfo = styled.View`
-  width: 60%;
+  width: 63%;
   padding-top: ${hp(8)}px;
   padding-bottom: ${hp(8)}px;
   flex-direction: column;

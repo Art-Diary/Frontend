@@ -123,11 +123,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
           <TouchableOpacity onPress={() => onPressExhItem(item)}>
             <ExhWrapper>
               <ExhItemView
-                poster={item.poster}
-                exhName={item.exhName}
-                gallery={item.gallery}
-                exhPeriodStart={item.exhPeriodStart}
-                exhPeriodEnd={item.exhPeriodEnd}
+                exhInfo={{...item}}
                 noLine={
                   index ===
                   calendarData[Number(selectedDate.split('.')[2]) - 1]
@@ -135,7 +131,8 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
                     1
                     ? true
                     : false
-                }>
+                }
+                notTouchable={true}>
                 {gatherId === -2 && item.gatherName && (
                   <GatherWrapper>
                     <GatherName color={findGatherColor(item.gatherId)}>
