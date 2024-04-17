@@ -6,6 +6,7 @@ import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
+  fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {CalendarIcon} from '~/assets/images/index';
 import {AnotherSearchIcon} from '~/assets/images/index';
@@ -42,6 +43,9 @@ const ExhListScreen = () => {
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFieldVisible, setIsFieldVisible] = useState(false);
+  const [isPriceVisible, setIsPriceVisible] = useState(false);
+  const [isStateVisible, setIsStateVisible] = useState(false);
   const [selectedField, setSelectedField] = useState<string | null>(null); //선택된 분야
   const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
@@ -66,6 +70,25 @@ const ExhListScreen = () => {
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
   } = useDeleteLike(deleteList);
+
+  useEffect(() => {
+    if (selectedField) {
+      setIsFieldVisible(true);
+    }
+  }, [selectedField]);
+
+  //선택된 옵션 있으면 상단에 보여주기
+  useEffect(() => {
+    if (selectedPrice) {
+      setIsPriceVisible(true);
+    }
+  }, [selectedPrice]);
+
+  useEffect(() => {
+    if (selectedState) {
+      setIsStateVisible(true);
+    }
+  }, [selectedState]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -169,6 +192,22 @@ const ExhListScreen = () => {
     setHearts(updatedItems);
   };
 
+  //옵션 삭제
+  const deleteField = () => {
+    setSelectedField(null);
+    setIsFieldVisible(false);
+  };
+
+  const deletePrice = () => {
+    setSelectedPrice(null);
+    setIsPriceVisible(false);
+  };
+
+  const deleteState = () => {
+    setSelectedState(null);
+    setIsStateVisible(false);
+  };
+
   return (
     <Container>
       {/* header */}
@@ -202,6 +241,23 @@ const ExhListScreen = () => {
       {/* body */}
 
       <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
+        <OptionContainer>
+          {isFieldVisible && (
+            <TouchableOpacity onPress={() => deleteField()}>
+              <OptionView>{selectedField}X</OptionView>
+            </TouchableOpacity>
+          )}
+          {isPriceVisible && (
+            <TouchableOpacity onPress={() => deletePrice()}>
+              <OptionView>{selectedPrice}x</OptionView>
+            </TouchableOpacity>
+          )}
+          {isStateVisible && (
+            <TouchableOpacity onPress={() => deleteState()}>
+              <OptionView>{selectedState}X</OptionView>
+            </TouchableOpacity>
+          )}
+        </OptionContainer>
         {data &&
           data.map((item: any, index: number) => (
             <Contents key={item.exhId}>
@@ -240,6 +296,30 @@ const Container = styled.View`
 const HeartContent = styled.View`
   flex: 1;
   background-color: #f6f6f6;
+`;
+
+const OptionContainer = styled.View`
+  flex: 1;
+  background-color: #f6f6f6;
+  //flex-wrap: wrap;
+  flex-direction: row;
+  padding: ${wp(10)}px;
+  padding-left: ${wp(10)}px;
+  padding-bottom: ${wp(0)}px;
+  gap: 10px;
+`;
+const OptionView = styled.Text`
+  font-size: ${fp(15)}px;
+  color: #ff6f61;
+  font-family: 'omyu pretty';
+  text-align: center;
+  padding-bottom: ${wp(2)}px;
+  padding-top: ${wp(7)}px;
+  padding-left: ${wp(10)}px;
+  padding-right: ${wp(10)}px;
+  border-color: #ff6f61;
+  border-width: ${wp(1.3)}px;
+  border-radius: ${wp(20)}px;
 `;
 
 const IconsView = styled.View`
