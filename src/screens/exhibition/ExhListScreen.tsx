@@ -244,7 +244,7 @@ const ExhListScreen = () => {
         <OptionContainer>
           {isFieldVisible && (
             <TouchableOpacity onPress={() => deleteField()}>
-              <OptionView>{selectedField}X</OptionView>
+              <OptionView>{selectedField}x</OptionView>
             </TouchableOpacity>
           )}
           {isPriceVisible && (
@@ -254,7 +254,7 @@ const ExhListScreen = () => {
           )}
           {isStateVisible && (
             <TouchableOpacity onPress={() => deleteState()}>
-              <OptionView>{selectedState}X</OptionView>
+              <OptionView>{selectedState}x</OptionView>
             </TouchableOpacity>
           )}
         </OptionContainer>
