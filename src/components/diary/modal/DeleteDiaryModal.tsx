@@ -16,11 +16,13 @@ import {showToast} from '~/components/common/modal/toastConfig';
 interface DeleteDiaryModalProps {
   handleCloseModal: () => void;
   message: string;
+  handleIsDeleted: () => void;
 }
 
 const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   handleCloseModal,
   message,
+  handleIsDeleted,
 }) => {
   const deletemyDiaryInfo = useDeleteMyDiaryInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
@@ -44,6 +46,7 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       updateforDeleteMyDiary(-1, -1, -1);
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
+      handleIsDeleted();
     }
   }, [isError, isSuccess, handleCloseModal]);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {ScrollView, Pressable} from 'react-native';
 import ThumbnailInfo from '~/components/diary/ThumbnailInfo';
 import TitleInfo from '~/components/diary/TitleInfo';
@@ -24,6 +24,7 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateforBackInfo} = useMyDiaryBackActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const onPressBack = (item: any) => {
     updateforBackInfo(item.contents, item.writeDate);
@@ -34,9 +35,19 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
     }
   };
 
+  const handleIsDeleted = (isLastItem: boolean) => {
+    if (isLastItem) {
+      const itemWidth = wp(360);
+      const scrollToX = (diaryList.length - 2) * itemWidth;
+
+      scrollViewRef.current?.scrollTo({x: scrollToX, animated: true});
+    }
+  };
+
   return (
     <CarouselContainer style={{flex: 1}}>
       <ScrollView
+        ref={scrollViewRef}
         style={{flex: 1}}
         horizontal
         pagingEnabled
@@ -52,7 +63,12 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
                   <Shadow distance={5}>
                     <ThumbnailInfo thumbnail={item.thumbnail} />
                     <Contents>
-                      <TitleInfo diaryInfo={item} />
+                      <TitleInfo
+                        diaryInfo={item}
+                        handleIsDeleted={() =>
+                          handleIsDeleted(diaryList.length - 1 === index)
+                        }
+                      />
                       <WriterRateInfo
                         nickname={item.nickname}
                         rate={item.rate}
