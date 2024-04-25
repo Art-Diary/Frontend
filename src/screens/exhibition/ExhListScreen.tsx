@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, ScrollView} from 'react-native';
+import {Keyboard, TouchableOpacity, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -16,13 +16,14 @@ import {FullHeart} from '~/assets/images/index';
 import {useQuery} from 'react-query';
 import {fetchAddLike, fetchAllExh} from '~/api/exhibition';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
-import {useNavigation} from '@react-navigation/native';
+import {ServerContainer, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhSearchModal from './ExhSearchModal';
+import useSearchName from '~/zustand/exhibition/exhibition';
 
 interface Exhibition {
   exhId: number;
@@ -42,15 +43,17 @@ const ExhListScreen = () => {
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
   const [isFieldVisible, setIsFieldVisible] = useState(false);
   const [isPriceVisible, setIsPriceVisible] = useState(false);
   const [isStateVisible, setIsStateVisible] = useState(false);
   const [selectedField, setSelectedField] = useState<string | null>(null); //선택된 분야
   const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
+  const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
+  const {name, updateSearchName} = useSearchName();
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
-    null,
+    selectedName,
     selectedPrice,
     selectedField,
     selectedState,
@@ -76,6 +79,13 @@ const ExhListScreen = () => {
       setIsFieldVisible(true);
     }
   }, [selectedField]);
+
+  useEffect(() => {
+    //이름으로 검색시
+    if (name != '') {
+      setSelectedName(name);
+    }
+  }, [name]);
 
   //선택된 옵션 있으면 상단에 보여주기
   useEffect(() => {
@@ -174,6 +184,7 @@ const ExhListScreen = () => {
     closeModal();
   };
 
+  //하트 클릭
   const onPressHeart = (exhId: number, index: number) => {
     const tmp: number[] = [];
     setfavExhId(exhId);
@@ -228,8 +239,7 @@ const ExhListScreen = () => {
             )}
           </TouchableOpacity>
           <TouchableOpacity
-          /* onPress={() => navigation.navigate('MyExhibitionSearch')}*/
-          >
+            onPress={() => navigation.navigate('ExhibitionSearch')}>
             <AnotherSearchIcon />
           </TouchableOpacity>
           <TouchableOpacity>

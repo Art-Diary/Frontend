@@ -14,7 +14,8 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
     price?: string,
     field?: string,
     state?: string,
-  ) => ['fetchSearchExh', searchName, price, field, state],
+    // date?: Date,
+  ) => ['fetchSearchExh', searchName, price, field, state /*date*/],
   fetchLikeList: () => ['fetchLikeList'],
 });
 
@@ -23,6 +24,7 @@ export const useFetchSearchExh = (
   price: string | null,
   field: string | null,
   state: string | null,
+  // date: Date | null,
 ) =>
   useQuery({
     queryKey: [
@@ -32,7 +34,7 @@ export const useFetchSearchExh = (
       field,
       state,
     ],
-    queryFn: () => fetchSearchExh(searchName, price, field, state),
+    queryFn: () => fetchSearchExh(searchName, price, field, state), // date),
     staleTime: 500000,
     onError: err => {
       console.log(err);
