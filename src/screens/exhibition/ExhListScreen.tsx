@@ -26,6 +26,7 @@ import ExhSearchModal from './ExhSearchModal';
 import {
   useSearchNameActions,
   useSearchNameInfo,
+  useSearchDateInfo,
 } from '~/zustand/exhibition/exhibition';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -49,19 +50,24 @@ const ExhListScreen = () => {
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
   const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
   const [isNameVisible, setIsNameVisible] = useState(false);
+  const [isDateVisible, setIsDateVisible] = useState(false);
   const [isFieldVisible, setIsFieldVisible] = useState(false);
   const [isPriceVisible, setIsPriceVisible] = useState(false);
   const [isStateVisible, setIsStateVisible] = useState(false);
   const [selectedField, setSelectedField] = useState<string | null>(null); //선택된 분야
   const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
+  const [selectedDate, setSelectedDate] = useState<string | null>(null); //검색 날짜
   const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
   const searchExhName = useSearchNameInfo().name;
+  const searchExhDate = useSearchDateInfo().date;
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
     selectedPrice,
     selectedField,
     selectedState,
+    //'2024-04-03',
+    selectedDate,
   );
 
   //post
@@ -91,7 +97,7 @@ const ExhListScreen = () => {
       setIsPriceVisible(false);
       setIsStateVisible(false);
       console.log(
-        'name',
+        '다른 곳 갔다옴:name',
         selectedName,
         ' field: ',
         selectedField,
@@ -99,6 +105,8 @@ const ExhListScreen = () => {
         selectedPrice,
         ' state:',
         selectedState,
+        'date:',
+        selectedDate,
         '이름 상태',
         isNameVisible,
       );
@@ -115,7 +123,40 @@ const ExhListScreen = () => {
     }
   }, [searchExhName]);
 
+  useEffect(() => {
+    //이름으로 검색시
+    if (searchExhDate != null) {
+      if (isStateVisible) {
+        setSelectedState(null);
+        setIsStateVisible(false);
+      }
+      setSelectedDate(searchExhDate);
+      console.log('자, 날짜 알려줘:', searchExhDate);
+      // setIsNameVisible(true);
+    }
+  }, [searchExhDate]);
+
   //선택된 옵션 있으면 상단에 보여주기
+  useEffect(() => {
+    if (selectedDate) {
+      setIsDateVisible(true);
+    }
+    console.log(
+      'name',
+      selectedName,
+      ' field: ',
+      selectedField,
+      ' price: ',
+      selectedPrice,
+      ' state:',
+      selectedState,
+      'date:',
+      selectedDate,
+      '이름 상태',
+      isNameVisible,
+    );
+  }, [selectedDate]);
+
   useEffect(() => {
     if (selectedName) {
       setIsNameVisible(true);
@@ -129,6 +170,8 @@ const ExhListScreen = () => {
       selectedPrice,
       ' state:',
       selectedState,
+      'date:',
+      selectedDate,
       '이름 상태',
       isNameVisible,
     );
@@ -147,6 +190,8 @@ const ExhListScreen = () => {
       selectedPrice,
       ' state:',
       selectedState,
+      'date:',
+      selectedDate,
     );
   }, [selectedField]);
 
@@ -163,12 +208,19 @@ const ExhListScreen = () => {
       selectedPrice,
       ' state:',
       selectedState,
+      'date:',
+      selectedDate,
     );
   }, [selectedPrice]);
 
   useEffect(() => {
     if (selectedState) {
-      setIsStateVisible(true);
+      if (isDateVisible) {
+        setIsDateVisible(false);
+        setSelectedDate(null);
+      } else {
+        setIsStateVisible(true);
+      }
     }
     console.log(
       'name',
@@ -179,6 +231,8 @@ const ExhListScreen = () => {
       selectedPrice,
       ' state:',
       selectedState,
+      'date:',
+      selectedDate,
     );
   }, [selectedState]);
 
@@ -286,6 +340,11 @@ const ExhListScreen = () => {
   };
 
   //옵션 삭제
+  const deleteDate = () => {
+    setSelectedDate(null);
+    setIsDateVisible(false);
+  };
+
   const deleteName = () => {
     setSelectedName(null);
     setIsNameVisible(false);
@@ -340,6 +399,11 @@ const ExhListScreen = () => {
 
       <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
         <OptionContainer>
+          {isDateVisible && (
+            <TouchableOpacity onPress={() => deleteDate()}>
+              <OptionView>{selectedDate}x</OptionView>
+            </TouchableOpacity>
+          )}
           {isNameVisible && (
             <TouchableOpacity onPress={() => deleteName()}>
               <OptionView>{selectedName}x</OptionView>

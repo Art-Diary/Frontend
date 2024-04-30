@@ -19,14 +19,22 @@ export const useSearchNameInfo = () =>
   useSearchName(state => ({name: state.name}));
 export const useSearchNameActions = () => useSearchName(state => state.actions);
 
-/*전시회 날짜로 검색
+//전시회 날짜로 검색
 interface SearchDate {
-  date: Date | null;
-  updateSearchDate: (newDate: Date) => void;
+  date: string | null; // Date | null;
+  actions: {
+    updateSearchDate: (date: string) => void;
+  };
 }
 
 export const useSearchDate = create<SearchDate>(set => ({
-  date: null,
-  updateSearchDate: (newDate: Date) => set(state => ({date: newDate})),
+  date: null, //new Date(),
+  actions: {
+    updateSearchDate: (date: string) => set(state => ({date: date})),
+  },
 }));
+
+export const useSearchDateInfo = () =>
+  useSearchDate(state => ({date: state.date}));
+export const useSearchDateActions = () => useSearchDate(state => state.actions);
 //export default useSearchDate;*/
