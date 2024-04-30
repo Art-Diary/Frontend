@@ -39,7 +39,7 @@ const GatheringList = () => {
   };
 
   const pressEnterGathering = (item: GatherInfo) => {
-    // 새 모임 생성
+    // 모임 클릭
   };
 
   return (
@@ -75,8 +75,7 @@ export default GatheringList;
 /** style */
 const Container = styled.View`
   flex-direction: row;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(10)}px;
+  padding-bottom: ${hp(5)}px;
   gap: 10px;
 `;
 

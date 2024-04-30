@@ -11,6 +11,7 @@ import {
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import GatheringList from './GatheringList';
+import ExhMateList from './ExhMateList';
 
 const MateListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -31,6 +32,7 @@ const MateListScreen = () => {
         <GatheringList />
         <Dot />
         <ContentText>전시메이트 목록</ContentText>
+        <ExhMateList />
       </Contents>
     </Container>
   );
@@ -47,8 +49,10 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: #f6f6f6;
-  padding: ${hp(12)}px; //
-  gap: 5px;
+  padding-top: ${wp(12)}px;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
+  gap: 10px;
 `;
 
 const ContentText = styled.Text`
