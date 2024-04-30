@@ -12,13 +12,14 @@ import SearchExhFrame from '../../components/exhSearch/SearchExhFrame';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import useSearchName from '~/zustand/exhibition/exhibition';
+import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
-  const {name, updateSearchName} = useSearchName();
+  // const {name, updateSearchName} = useSearchName();
+  const {updateSearchName} = useSearchNameActions();
   const examples: string[] = ['요시다유니', '장욱진', '덕수궁']; //search_list에서 가져올 것.
 
   const onPressSearch = (name: string) => {

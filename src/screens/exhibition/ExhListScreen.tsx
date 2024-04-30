@@ -23,7 +23,11 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhSearchModal from './ExhSearchModal';
-import useSearchName from '~/zustand/exhibition/exhibition';
+import {
+  useSearchNameActions,
+  useSearchNameInfo,
+} from '~/zustand/exhibition/exhibition';
+import {useIsFocused} from '@react-navigation/native';
 
 interface Exhibition {
   exhId: number;
@@ -37,13 +41,14 @@ interface Exhibition {
 
 const ExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-
+  const isFocused = useIsFocused();
   const [hearts, setHearts] = useState<Exhibition[]>([]);
   const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
   const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
+  const [isNameVisible, setIsNameVisible] = useState(false);
   const [isFieldVisible, setIsFieldVisible] = useState(false);
   const [isPriceVisible, setIsPriceVisible] = useState(false);
   const [isStateVisible, setIsStateVisible] = useState(false);
@@ -51,7 +56,7 @@ const ExhListScreen = () => {
   const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
   const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
-  const {name, updateSearchName} = useSearchName();
+  const searchExhName = useSearchNameInfo().name;
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
     selectedPrice,
@@ -75,29 +80,106 @@ const ExhListScreen = () => {
   } = useDeleteLike(deleteList);
 
   useEffect(() => {
-    if (selectedField) {
-      setIsFieldVisible(true);
+    if (isFocused) {
+      // 다른 화면을 갔다왔을때 갱신
+      setSelectedName(null);
+      setSelectedField(null);
+      setSelectedPrice(null);
+      setSelectedState(null);
+      setIsNameVisible(false);
+      setIsFieldVisible(false);
+      setIsPriceVisible(false);
+      setIsStateVisible(false);
+      console.log(
+        'name',
+        selectedName,
+        ' field: ',
+        selectedField,
+        ' price: ',
+        selectedPrice,
+        ' state:',
+        selectedState,
+        '이름 상태',
+        isNameVisible,
+      );
+      refetch();
     }
-  }, [selectedField]);
+  }, [isFocused]);
 
   useEffect(() => {
     //이름으로 검색시
-    if (name != '') {
-      setSelectedName(name);
+    if (searchExhName != null) {
+      setSelectedName(searchExhName);
+      console.log('자, 이름을 알려줘:', searchExhName);
+      // setIsNameVisible(true);
     }
-  }, [name]);
+  }, [searchExhName]);
 
   //선택된 옵션 있으면 상단에 보여주기
+  useEffect(() => {
+    if (selectedName) {
+      setIsNameVisible(true);
+    }
+    console.log(
+      'name',
+      selectedName,
+      ' field: ',
+      selectedField,
+      ' price: ',
+      selectedPrice,
+      ' state:',
+      selectedState,
+      '이름 상태',
+      isNameVisible,
+    );
+  }, [selectedName]);
+
+  useEffect(() => {
+    if (selectedField) {
+      setIsFieldVisible(true);
+    }
+    console.log(
+      'name',
+      selectedName,
+      ' field: ',
+      selectedField,
+      ' price: ',
+      selectedPrice,
+      ' state:',
+      selectedState,
+    );
+  }, [selectedField]);
+
   useEffect(() => {
     if (selectedPrice) {
       setIsPriceVisible(true);
     }
+    console.log(
+      'name',
+      selectedName,
+      ' field: ',
+      selectedField,
+      ' price: ',
+      selectedPrice,
+      ' state:',
+      selectedState,
+    );
   }, [selectedPrice]);
 
   useEffect(() => {
     if (selectedState) {
       setIsStateVisible(true);
     }
+    console.log(
+      'name',
+      selectedName,
+      ' field: ',
+      selectedField,
+      ' price: ',
+      selectedPrice,
+      ' state:',
+      selectedState,
+    );
   }, [selectedState]);
 
   useEffect(() => {
@@ -204,6 +286,11 @@ const ExhListScreen = () => {
   };
 
   //옵션 삭제
+  const deleteName = () => {
+    setSelectedName(null);
+    setIsNameVisible(false);
+  };
+
   const deleteField = () => {
     setSelectedField(null);
     setIsFieldVisible(false);
@@ -242,7 +329,8 @@ const ExhListScreen = () => {
             onPress={() => navigation.navigate('ExhibitionSearch')}>
             <AnotherSearchIcon />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CalendarSearch')}>
             <CalendarIcon />
           </TouchableOpacity>
         </IconsView>
@@ -252,6 +340,11 @@ const ExhListScreen = () => {
 
       <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
         <OptionContainer>
+          {isNameVisible && (
+            <TouchableOpacity onPress={() => deleteName()}>
+              <OptionView>{selectedName}x</OptionView>
+            </TouchableOpacity>
+          )}
           {isFieldVisible && (
             <TouchableOpacity onPress={() => deleteField()}>
               <OptionView>{selectedField}x</OptionView>
