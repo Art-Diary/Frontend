@@ -26,6 +26,7 @@ import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen
 import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
+import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -49,9 +50,10 @@ type RootStackParamList = {
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;
-  // MyDiaries : {
-  //     id: number;
-  // };
+  GatheringInfo: {
+    gatherId: number;
+    gatherName: string;
+  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -94,7 +96,11 @@ export default function App() {
               name="CalendarDiaryRoutes"
               component={CalendarDiaryRoutes}
             />
-            {/* 전시 메이트 화면 */}
+            {/* [전시 메이트] 모임 정보 화면*/}
+            <Stack.Screen
+              name="GatheringInfo"
+              component={GatheringInfoScreen}
+            />
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
             {/* [설정] 알림 설정 화면 */}
