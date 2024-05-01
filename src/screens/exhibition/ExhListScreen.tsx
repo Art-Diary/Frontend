@@ -208,7 +208,7 @@ const ExhListScreen = () => {
               <ExhItemView
                 exhInfo={{...item}}
                 noLine={index === data.length - 1 ? true : false}
-                notTouchable={true}>
+                notTouchable={false}>
                 <EmptyHeartContent>
                   <TouchableOpacity
                     onPress={() => onPressHeart(item.exhId, index)}>
