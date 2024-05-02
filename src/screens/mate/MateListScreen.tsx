@@ -10,10 +10,44 @@ import {
   fontPercentage as fp,
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import GatheringList from './GatheringList';
+import ExhMateList from './ExhMateList';
+import NameList from '~/components/mate/NameList';
+import {useFetchGatheringList} from '~/api/queries/gathering';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+
+interface GatherInfo {
+  gatherId: number;
+  gatherName: string;
+}
 
 const MateListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {
+    data: gatheringList,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useFetchGatheringList();
+
+  if (isError) {
+    return <ErrorMessageView message="모임 목록 조회 실패:(" />;
+  }
+
+  if (isLoading) {
+    return <LoadingModal message="모임 목록 조회 중:)" />;
+  }
+
+  const pressCreateGathering = () => {
+    // 새 모임 생성
+  };
+
+  const pressEnterGathering = (item: GatherInfo) => {
+    navigation.navigate('GatheringInfo', {
+      gatherId: item.gatherId,
+      gatherName: item.gatherName,
+    });
+  };
 
   return (
     <Container>
@@ -28,9 +62,14 @@ const MateListScreen = () => {
       {/* body */}
       <Contents>
         <ContentText>모임 목록</ContentText>
-        <GatheringList />
+        <NameList
+          itemList={gatheringList}
+          handleCreate={pressCreateGathering}
+          handleClickItem={pressEnterGathering}
+        />
         <Dot />
         <ContentText>전시메이트 목록</ContentText>
+        <ExhMateList />
       </Contents>
     </Container>
   );
@@ -47,8 +86,10 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: #f6f6f6;
-  padding: ${hp(12)}px; //
-  gap: 5px;
+  padding-top: ${wp(12)}px;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
+  gap: 10px;
 `;
 
 const ContentText = styled.Text`
