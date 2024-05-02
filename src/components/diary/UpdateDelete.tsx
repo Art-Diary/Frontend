@@ -17,9 +17,10 @@ import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 
 interface TitleProps {
   diaryInfo: any;
+  handleIsDeleted: () => void;
 }
 
-const UpdateDelete: React.FC<TitleProps> = ({diaryInfo}) => {
+const UpdateDelete: React.FC<TitleProps> = ({diaryInfo, handleIsDeleted}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
   const visitedExhId = useVisitedExhIdInfo().exhId;
@@ -78,6 +79,7 @@ const UpdateDelete: React.FC<TitleProps> = ({diaryInfo}) => {
           <DeleteDiaryModal
             handleCloseModal={deleteModalClose}
             message="기록을 삭제하겠습니까?"
+            handleIsDeleted={handleIsDeleted}
           />
         )}
       </TouchableOpacity>
