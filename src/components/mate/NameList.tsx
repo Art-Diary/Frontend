@@ -48,8 +48,8 @@ const NameList: React.FC<NameListProps> = ({
       </TouchableOpacity>
       <ScrollView
         horizontal={true}
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}>
+        pagingEnabled={false}
+        showsHorizontalScrollIndicator={true}>
         {itemList.map((item: GatherInfo | ExhMateInfo, index: number) => {
           return (
             <TouchableOpacity

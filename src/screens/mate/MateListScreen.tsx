@@ -40,6 +40,7 @@ const MateListScreen = () => {
 
   const pressCreateGathering = () => {
     // 새 모임 생성
+    navigation.navigate('CreateGathering');
   };
 
   const pressEnterGathering = (item: GatherInfo) => {

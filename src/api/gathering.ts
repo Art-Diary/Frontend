@@ -5,3 +5,6 @@ export const fetchGatheringList = () => client.get(`/gatherings`);
 
 export const fetchGatheringInfo = (gatherId: number) =>
   client.get(`/gatherings/${gatherId}`);
+
+export const createGathering = (gatherName: string) =>
+  client.post(`/gatherings`, {gatherName: gatherName});
