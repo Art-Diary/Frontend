@@ -6,7 +6,9 @@ export const fetchSearchExh = (
   price: string | null,
   field: string | null,
   state: string | null,
-) => client.get(`/exhibitions`, {params: {searchName, price, field, state}});
+  date: string | null,
+) =>
+  client.get(`/exhibitions`, {params: {searchName, price, field, state, date}});
 
 export const fetchAllExh = () => client.get(`/exhibitions`);
 
