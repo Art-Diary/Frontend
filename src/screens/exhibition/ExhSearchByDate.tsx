@@ -1,50 +1,18 @@
-// import React, {useCallback, useEffect, useState} from 'react';
-import {Keyboard, TouchableOpacity} from 'react-native';
-// import styled from 'styled-components/native';
-// import {SearchIcon} from '~/assets/images';
-// import BackView from '~/components/common/BackView';
+import {Keyboard, TouchableOpacity, Modal} from 'react-native';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-// import SearchExhFrame from '../../components/exhSearch/SearchExhFrame';
-// import {showToast} from '~/components/common/modal/toastConfig';
-// import {useNavigation} from '@react-navigation/native';
-// import {RootStackNavigationProp} from '~/App';
-// import useSearchName from '~/zustand/exhibition/exhibition';
-// //import {Calendar} from 'react-native-calendars';
-// import CustomCalendar from '~/components/common/CustomCalendar';
-// import {JoinDateWithDot, dateToString} from '~/utils/Date';
-// //import ExhListOfDate from './ExhListOfDate';
-// import {useFetchGatheringList} from '~/api/queries/gathering';
-// import ErrorMessageView from '~/components/common/ErrorMessageView';
-// import LoadingModal from '~/components/common/modal/LoadingModal';
-// import {SelectCountry} from 'react-native-element-dropdown';
-// //import {imageDataset} from './imageDataset';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
-//import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
-import ExhListOfDate from '../calendar/ExhListOfDate';
-import {useFetchGatheringList} from '~/api/queries/gathering';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import {SelectCountry} from 'react-native-element-dropdown';
-import {imageDataset} from '~/screens/calendar/imageDataset';
-import {
-  useTabIdentifierActions,
-  useTabIdentifierInfo,
-} from '~/zustand/tabIdentifier';
-import {useIsFocused} from '@react-navigation/native';
-import {calendarColor} from '~/screens/calendar/calendarColor';
 import BackView from '~/components/common/BackView';
-import {Calendar} from 'react-native-calendars';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useSearchDateActions} from '~/zustand/exhibition/exhibition';
+import OptionsModal from '~/components/exhibition/OptionsModal';
 
 interface IPicker {
   label: string;
@@ -57,10 +25,22 @@ interface MarkedType {
   color: string[];
 }
 
-const ExhSearchByDate = () => {
-  // const isFocused = useIsFocused();
-  // const tabIdentifierInfo = useTabIdentifierInfo();
-  // const {updateTab} = useTabIdentifierActions();
+interface ExhSearchByDateProps {
+  isVisible: boolean;
+  state: string | null;
+  date: string | null;
+  onClose: (
+    selectedOption4: string | null, //state
+    selectedOption5: string | null, //date
+  ) => void;
+}
+
+const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
+  isVisible,
+  state,
+  date,
+  onClose,
+}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
@@ -69,181 +49,108 @@ const ExhSearchByDate = () => {
   // 일정이 있는 날짜 리스트
   const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
   // api 요청에 대한 응답 데이터
-  const [datas, setDatas] = useState<any[]>([]);
+  //const [datas, setDatas] = useState<any[]>([]);
   // 모임 선택 selector - item
-  const [items, setItems] = useState<IPicker[]>([]);
+  //const [items, setItems] = useState<IPicker[]>([]);
   // 날짜 선택 selector - value
-  const [value, setValue] = useState<string>('-1');
-  // const {
-  //   data: gatheringList,
-  //   isLoading,
-  //   isError,
-  //   isSuccess,
-  // } = useFetchGatheringList();
+  // const [value, setValue] = useState<string>('-1');
 
-  const {updateSearchDate} = useSearchDateActions();
+  //모달로 바꾸며 삭제
+  //const {updateSearchDate} = useSearchDateActions();
+  const [updateSearchDate, setUpdateSearchDate] = useState<string | null>(null);
+
   //const [isPossibleSearch, SetIsPossibleSearch] = useState<boolean>(false);
   const [options, SetOptions] = useState<boolean>(false); //버튼 색변화
+  const [isOptionsModalPressed, setIsOptionsModalPressed] =
+    useState<boolean>(false);
+  const [selectedOption4, setSelectedOption4] = useState<string | null>(state);
+  const [selectedOption5, setSelectedOption5] = useState<string | null>(date);
 
   useEffect(() => {
     console.log('날짜데이터:', selectedDate, ',', markedDates);
   }, [selectedDate]);
 
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     if (tabIdentifierInfo.tab === 'mydiary') {
-  //       updateTab('calendar');
-  //     }
-  //   }
-  // }, [isFocused]);
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     var list = [];
-  //     const image = {uri: imageDataset};
-
-  //     list.push({
-  //       label: '혼자',
-  //       value: '-1',
-  //       image: image,
-  //     });
-  //     for (let i = 0; i < gatheringList.length; i++) {
-  //       list.push({
-  //         label: gatheringList[i].gatherName,
-  //         value: gatheringList[i].gatherId,
-  //         image: image,
-  //       });
-  //     }
-  //     list.push({
-  //       label: '모두',
-  //       value: '-2',
-  //       image: image,
-  //     });
-  //     setItems(list);
-  //   }
-  // }, [isSuccess, setItems, gatheringList]);
-
-  // useEffect(() => {
-  //   // 응답 데이터가 변경될 때마다
-  //   if (datas.length !== 0) {
-  //     var list: MarkedType[] = [];
-
-  //     for (let i = 0; i < datas.length; i++) {
-  //       if (datas[i].scheduleInfoList !== undefined) {
-  //         var colorList: string[] = [];
-
-  //         if (value === '-2') {
-  //           const infoList = datas[i].scheduleInfoList;
-
-  //           for (let k = 0; k < infoList.length; k++) {
-  //             let findColor = findGatherColor(infoList[k].gatherId);
-
-  //             if (!colorList.includes(findColor)) {
-  //               colorList.push(findColor);
-  //             }
-  //           }
-  //         } else {
-  //           colorList.push(calendarColor[0]);
-  //         }
-  //         list.push({
-  //           date: JoinDateWithDot([
-  //             Number(changeMonth.split('.')[0]),
-  //             Number(changeMonth.split('.')[1]),
-  //             datas[i].day,
-  //           ]),
-  //           color: colorList,
-  //         });
-  //       }
-  //     }
-  //     setMarkedDates(list);
-  //   }
-  // }, [datas]);
-
-  // if (isError) {
-  //   return <ErrorMessageView message="모임 목록 조회 실패:(" />;
-  // }
-
-  // if (isLoading) {
-  //   return <LoadingModal message="모임 목록 조회 중:)" />;
-  // }
-
-  // const findGatherColor = (gatherId: number): string => {
-  //   if (gatherId === null) {
-  //     return calendarColor[0];
-  //   }
-  //   for (let i = 0; i < items.length - 1; i++) {
-  //     if (Number(items[i].value) === gatherId) {
-  //       return calendarColor[i];
-  //     }
-  //   }
-  //   return 'black';
-  // };
-
-  const onPressDate = () => {
-    //setKeyword(text);
-
+  const onPressDate = (selectedOption4: string | null) => {
     const parts = selectedDate.split('.');
     console.log('parts', parts[0], parts[1], parts[2], typeof parts[0]);
-    // const dateObject = new Date(
-    //   Number(parts[0]),
-    //   Number(parts[1]) - 1,
-    //   Number(parts[2]) + 1,
-    // );
+
     const dateObject =
       parts[0] +
       '-' +
       ('0' + parts[1]).slice(-2) +
       '-' +
       ('0' + parts[2]).slice(-2);
-    updateSearchDate(dateObject);
-    navigation.goBack();
+
+    console.log('dateObject', dateObject);
+    onClose(selectedOption4, dateObject);
+  };
+
+  //날짜 누를 때, 전시상태옵션이 지정되어 있으면 모달 오픈
+  // 모달을 열기 위한 함수
+  const optionsModalOpen = () => {
+    console.log('[OptionsModalOpen] Opening OptionsModal for Field and key:');
+    setIsOptionsModalPressed(true);
+    setSelectedOption5(selectedDate); // 선택한 값의 key 알려주는 용도
+  };
+
+  const optionsModalClose = () => {
+    //console.log('옵션4,', selectedOption4, selectedOption5);
+    setIsOptionsModalPressed(false);
+  };
+
+  const onPressYes = (key: string | null) => {
+    //console.log('key:', key);
+    setSelectedOption4(null);
+    //  pressExhState(key, isClickState.find(item => item.key === key)?.value);
+    optionsModalClose();
+  };
+
+  const onPressNo = () => {
+    //console.log('what?', isClickState.find(item => item.key === key)?.value);
+    //  setIsOptionsModalPressed(false);
+    setSelectedOption5(null);
+    optionsModalClose();
+    onClose(selectedOption4, selectedOption5);
   };
 
   return (
-    <Container>
-      <BackView line={false} children={null}></BackView>
-      <TextView>{'날짜 선택'}</TextView>
-      <CalendarView>
-        <CustomCalendar
-          onSelectedDate={setSelectedDate}
-          markedDates={markedDates}
-          setChangeMonth={setChangeMonth}>
-          {/* <SelectCountry
-          style={styles.dropdown}
-          selectedTextStyle={styles.selectedTextStyle}
-          placeholderStyle={styles.placeholderStyle}
-          imageStyle={styles.imageStyle}
-          iconStyle={styles.iconStyle}
-          maxHeight={200}
-          value={value}
-          data={items}
-          valueField="value"
-          labelField="label"
-          imageField="image"
-          placeholder="Select country"
-          onChange={e => {
-            setValue(e.value);
-          }}
-        /> */}
-        </CustomCalendar>
-      </CalendarView>
-      <DateView>
-        <TextView>{'선택한 날짜'}</TextView>
-        <TextView>{selectedDate}</TextView>
-      </DateView>
-      <ButtonSection>
-        <TouchableOpacity onPress={onPressDate}>
-          <CompleteButton>{'선택 완료'}</CompleteButton>
-        </TouchableOpacity>
-      </ButtonSection>
-      {/* <ExhListOfDate
-        changeMonth={changeMonth}
-        selectedDate={selectedDate}
-        setDatas={setDatas}
-        gatherId={Number(value)}
-        items={items}
-      /> */}
-    </Container>
+    <Modal animationType="fade" transparent={true} visible={isVisible}>
+      <Container>
+        <BackView line={false} children={null}></BackView>
+        <TextView>{'날짜 선택'}</TextView>
+        <CalendarView>
+          <CustomCalendar
+            onSelectedDate={setSelectedDate}
+            markedDates={markedDates}
+            setChangeMonth={setChangeMonth}></CustomCalendar>
+        </CalendarView>
+        <DateView>
+          <TextView>{'선택한 날짜'}</TextView>
+          <TextView>{selectedDate}</TextView>
+        </DateView>
+        <ButtonSection>
+          {/* {state ? (
+            <TouchableOpacity onPress={() => optionsModalOpen()}>
+              <CompleteButton>{'선택 완료'}</CompleteButton>
+            </TouchableOpacity>
+          ) : ( */}
+          <TouchableOpacity onPress={() => onPressDate(state)}>
+            <CompleteButton>{'선택 완료'}</CompleteButton>
+          </TouchableOpacity>
+          {/* )}
+          {isOptionsModalPressed && (
+            <OptionsModal
+              handleCloseModal={optionsModalClose}
+              // tkey={selectedOption4}
+              onPressYes={() => onPressYes(selectedDate)}
+              onPressNo={() => onPressNo()}
+              message="이미 지정된 전시 진행 상황은 삭제됩니다. 
+              그렇게 할까요?"
+            />
+          )} */}
+        </ButtonSection>
+      </Container>
+    </Modal>
   );
 };
 
@@ -253,7 +160,6 @@ export default ExhSearchByDate;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  //width: 100%;
   height: 100%;
   background-color: #f6f6f6;
   padding: ${hp(3)}px;
@@ -274,23 +180,15 @@ const CalendarView = styled.View`
 const DateView = styled.View`
   flex: 0.55;
   flex-direction: row;
-  //width: 100%;
   background-color: #f6f6f6;
   gap: 160px;
   padding-top: ${wp(10)}px;
-  /* padding-right: ${hp(5)}px;
-  padding-left: ${hp(5)}px; */
 `;
 
 const TextView = styled.Text`
   font-size: ${fp(17)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
-  // flex: 1;
-  /* flex-direction: column;
-  font-size: ${fp(17)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';*/
   padding-top: ${wp(7)}px;
   padding-bottom: ${wp(10)}px;
   padding-left: ${wp(20)}px;
@@ -323,10 +221,7 @@ const CompleteButton = styled.Text`
 `;
 
 const ButtonSection = styled.View`
-  //flex: 1;
-  // height: 100%;
   flex-direction: column;
-  //align-items: last baseline;
   padding: ${wp(10)}px;
 `;
 
