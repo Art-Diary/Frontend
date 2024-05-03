@@ -23,12 +23,13 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhSearchModal from './ExhSearchModal';
+import ExhSearchByDate from './ExhSearchByDate';
 import {
   useSearchNameActions,
   useSearchNameInfo,
-  useSearchDateInfo,
 } from '~/zustand/exhibition/exhibition';
 import {useIsFocused} from '@react-navigation/native';
+import OptionsModal from '~/components/exhibition/OptionsModal';
 
 interface Exhibition {
   exhId: number;
@@ -49,6 +50,7 @@ const ExhListScreen = () => {
   const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
   const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
   const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
+  const [isCalendarModalVisible, setIsCalendarModalVisible] = useState(false); //달력 모달
   const [isNameVisible, setIsNameVisible] = useState(false);
   const [isDateVisible, setIsDateVisible] = useState(false);
   const [isFieldVisible, setIsFieldVisible] = useState(false);
@@ -59,14 +61,14 @@ const ExhListScreen = () => {
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
   const [selectedDate, setSelectedDate] = useState<string | null>(null); //검색 날짜
   const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
+  const [isOptionsModalPressed, setIsOptionsModalPressed] =
+    useState<boolean>(false); //진행상황 선택된 상황에서 캘린더 누를시 뜨는 모달
   const searchExhName = useSearchNameInfo().name;
-  const searchExhDate = useSearchDateInfo().date;
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
     selectedPrice,
     selectedField,
     selectedState,
-    //'2024-04-03',
     selectedDate,
   );
 
@@ -124,22 +126,26 @@ const ExhListScreen = () => {
   }, [searchExhName]);
 
   useEffect(() => {
-    //이름으로 검색시
-    if (searchExhDate != null) {
+    //날짜로 검색시
+    if (selectedDate != null) {
+      //searchExhDate=>selectedDate
       if (isStateVisible) {
         setSelectedState(null);
         setIsStateVisible(false);
       }
-      setSelectedDate(searchExhDate);
-      console.log('자, 날짜 알려줘:', searchExhDate);
+      setSelectedDate(selectedDate); //searchExhDate=>selectedDate
+      //searchExhDate=>selectedDate
       // setIsNameVisible(true);
-    }
-  }, [searchExhDate]);
+    } //else setIsDateVisible(false);
+    console.log('자, 날짜 알려줘:', selectedDate);
+  }, [selectedDate]); //searchExhDate=>selectedDate
 
   //선택된 옵션 있으면 상단에 보여주기
   useEffect(() => {
     if (selectedDate) {
       setIsDateVisible(true);
+    } else {
+      setIsDateVisible(false);
     }
     console.log(
       'name',
@@ -215,12 +221,12 @@ const ExhListScreen = () => {
 
   useEffect(() => {
     if (selectedState) {
-      if (isDateVisible) {
-        setIsDateVisible(false);
-        setSelectedDate(null);
-      } else {
-        setIsStateVisible(true);
-      }
+      // if (isDateVisible) {
+      //   setIsDateVisible(false);
+      //   setSelectedDate(null);
+      // } else {
+      setIsStateVisible(true);
+      //}
     }
     console.log(
       'name',
@@ -299,7 +305,7 @@ const ExhListScreen = () => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
-  //Modal
+  //search Modal
 
   const openModal = () => {
     setIsModalVisible(true);
@@ -313,11 +319,31 @@ const ExhListScreen = () => {
     selectedOption2: string | null,
     selectedOption3: string | null,
     selectedOption4: string | null,
+    selectedOption5: string | null,
   ) => {
     setSelectedField(selectedOption2);
     setSelectedPrice(selectedOption3);
     setSelectedState(selectedOption4);
+    setSelectedDate(selectedOption5);
     closeModal();
+  };
+
+  //calendarModal
+  const openCalendarModal = () => {
+    setIsCalendarModalVisible(true);
+  };
+
+  const closeCalendarModal = () => {
+    setIsCalendarModalVisible(false);
+  };
+
+  const handleCalendarModalClose = (
+    selectedOption4: string | null,
+    selectedOption5: string | null,
+  ) => {
+    setSelectedState(selectedOption4);
+    setSelectedDate(selectedOption5);
+    closeCalendarModal();
   };
 
   //하트 클릭
@@ -365,6 +391,30 @@ const ExhListScreen = () => {
     setIsStateVisible(false);
   };
 
+  //날짜 누를 때, 전시상태옵션이 지정되어 있으면 모달 오픈
+  // 모달을 열기 위한 함수
+  const optionsModalOpen = () => {
+    console.log(
+      '[OptionsModalOpen] Opening OptionsModal for calendar, the state exits',
+    );
+    setIsOptionsModalPressed(true);
+    //setSelectedOption5(selectedDate); // 선택한 값의 key 알려주는 용도
+  };
+
+  const optionsModalClose = () => {
+    setIsOptionsModalPressed(false);
+  };
+
+  const onPressYes = () => {
+    setSelectedState(null);
+    optionsModalClose();
+    openCalendarModal();
+  };
+
+  const onPressNo = () => {
+    optionsModalClose();
+  };
+
   return (
     <Container>
       {/* header */}
@@ -380,6 +430,7 @@ const ExhListScreen = () => {
                 field={selectedField}
                 price={selectedPrice}
                 state={selectedState}
+                date={selectedDate}
                 onClose={handleModalClose}
               />
             )}
@@ -388,10 +439,46 @@ const ExhListScreen = () => {
             onPress={() => navigation.navigate('ExhibitionSearch')}>
             <AnotherSearchIcon />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CalendarSearch')}>
+          {selectedState ? (
+            <TouchableOpacity onPress={() => optionsModalOpen()}>
+              <CalendarIcon />
+              {isOptionsModalPressed && (
+                <OptionsModal
+                  handleCloseModal={optionsModalClose}
+                  // tkey={selectedOption4}
+                  onPressYes={() => onPressYes()}
+                  onPressNo={() => onPressNo()}
+                  message="이미 지정된 전시 진행 상황은 삭제됩니다. 
+              그렇게 할까요?"
+                />
+              )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={openCalendarModal}>
+              <CalendarIcon />
+              {isCalendarModalVisible && (
+                <ExhSearchByDate
+                  isVisible={isCalendarModalVisible}
+                  state={selectedState}
+                  date={selectedDate}
+                  onClose={handleCalendarModalClose}
+                />
+              )}
+            </TouchableOpacity>
+          )}
+
+          {/* <TouchableOpacity onPress={openCalendarModal}>
+            {/* // onPress={() => navigation.navigate('CalendarSearch')}> }
             <CalendarIcon />
-          </TouchableOpacity>
+            {isCalendarModalVisible && (
+              <ExhSearchByDate
+                isVisible={isCalendarModalVisible}
+                state={selectedState}
+                date={selectedDate}
+                onClose={handleCalendarModalClose}
+              />
+            )}
+          </TouchableOpacity> */}
         </IconsView>
       </Header>
 
