@@ -39,7 +39,7 @@ const StoredExhList: React.FC<ExhProps> = ({myExhList}) => {
               {item.exhName}
             </ExhTitle>
             <AvgRate>
-              <AvgRateText>{item.rate.toFixed(2)}</AvgRateText>
+              <AvgRateText>{item.rate.toFixed(1)}</AvgRateText>
               <LightStarIcon />
             </AvgRate>
           </Contents>

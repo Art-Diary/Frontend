@@ -1,5 +1,6 @@
 import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
+import {LightStarIcon} from '~/assets/images';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
@@ -13,6 +14,7 @@ interface ExhInfo {
   gallery: string;
   exhPeriodStart: number[];
   exhPeriodEnd: number[];
+  rate?: number;
 }
 
 interface SearchExhListProps {
@@ -21,6 +23,7 @@ interface SearchExhListProps {
   noLine?: boolean;
   notTouchable: boolean;
   onTouch?: (something: any) => void;
+  haveRate?: boolean;
 }
 
 const ExhItemView: React.FC<SearchExhListProps> = ({
@@ -29,6 +32,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   noLine,
   notTouchable,
   onTouch,
+  haveRate,
 }) => {
   const changeExhDateFormat = (
     exhPeriodStart: number[],
@@ -43,20 +47,32 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
 
   return (
     <ExhView noLine={noLine}>
-      <TouchView disabled={notTouchable} activeOpacity={1.0} onPress={onTouch}>
+      <TouchView disabled={notTouchable} onPress={onTouch}>
         <Poster
           source={{uri: `data:image/png;base64,${exhInfo.poster}`}}
           resizeMode="contain"
           alt={'이미지 읽기 실패'}
         />
-        <ExhInfo>
+        <ExhInfo haveRate={haveRate}>
           <ExhName numberOfLines={1} ellipsizeMode="tail">
             {exhInfo.exhName}
           </ExhName>
-          <ExhGallery>{exhInfo.gallery}</ExhGallery>
-          <ExhDate>
-            {changeExhDateFormat(exhInfo.exhPeriodStart, exhInfo.exhPeriodEnd)}
-          </ExhDate>
+          {!haveRate ? (
+            <>
+              <ExhGallery>{exhInfo.gallery}</ExhGallery>
+              <ExhDate>
+                {changeExhDateFormat(
+                  exhInfo.exhPeriodStart,
+                  exhInfo.exhPeriodEnd,
+                )}
+              </ExhDate>
+            </>
+          ) : (
+            <ExhRateWrapper>
+              <LightStarIcon />
+              <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
+            </ExhRateWrapper>
+          )}
         </ExhInfo>
       </TouchView>
       {children}
@@ -85,16 +101,22 @@ const ExhView = styled.View<ExhViewProps>`
 
 const TouchView = styled.TouchableOpacity`
   flex-direction: row;
-  gap: ${wp(5)}px;
+  gap: ${wp(8)}px;
 `;
 
-const ExhInfo = styled.View`
+interface ExhInfoProps {
+  haveRate: boolean;
+}
+
+const ExhInfo = styled.View<ExhInfoProps>`
   width: 63%;
   padding-top: ${hp(8)}px;
   padding-bottom: ${hp(8)}px;
   flex-direction: column;
-  justify-content: space-between;
-  gap: ${hp(7)}px;
+  justify-content: ${(props: ExhInfoProps) =>
+    props.haveRate ? `center` : `space-between`};
+  gap: ${(props: ExhInfoProps) =>
+    props.haveRate ? `${hp(10)}px` : `${hp(7)}px`};
 `;
 
 const ExhName = styled.Text`
@@ -119,4 +141,15 @@ const Poster = styled.Image`
   width: ${wp(70)}px;
   height: ${hp(70)}px;
   align-items: center;
+`;
+
+const ExhRateWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ExhRate = styled.Text`
+  font-size: ${fp(15.8)}px;
+  color: #d3d3d3;
+  font-family: 'omyu pretty';
 `;
