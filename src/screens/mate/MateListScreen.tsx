@@ -54,8 +54,7 @@ const MateListScreen = () => {
     <Container>
       {/* header */}
       <Header title={'전시메이트'}>
-        <TouchableOpacity>
-          {/* onPress={() => navigation.navigate('')} */}
+        <TouchableOpacity onPress={() => navigation.navigate('AddNewMate')}>
           <AddMyExhButton />
         </TouchableOpacity>
       </Header>

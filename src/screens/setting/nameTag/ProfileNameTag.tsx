@@ -31,7 +31,7 @@ const ProfileNameTag = () => {
           <ProfileWrapper>
             <Profile
               source={{uri: `data:image/png;base64,${userInfo.profile}`}}
-              resizeMode="contain"
+              resizeMode="cover"
               alt={'이미지 읽기 실패'}
             />
           </ProfileWrapper>
@@ -111,8 +111,6 @@ const Email = styled.Text`
 `;
 
 const ProfileWrapper = styled.View`
-  border-color: #ff6f61;
-  border-width: 1px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;

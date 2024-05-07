@@ -1,9 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useQuery} from 'react-query';
-import {fetchExhMateList} from '../mate';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {addNewMate, fetchExhMateList, fetchSearchMateList} from '../mate';
 
 const mateQueryKeys = createQueryKeys('mate', {
   fetchExhMateList: () => ['fetchExhMateList'],
+  fetchSearchMateList: (nickname: string) => ['fetchSearchMateList', nickname],
 });
 
 export const useFetchExhMateList = () =>
@@ -20,3 +21,34 @@ export const useFetchExhMateList = () =>
     },
     select: (res: any) => res.data,
   });
+
+export const useFetchSearchMateList = (nickname: string) =>
+  useQuery({
+    queryKey: mateQueryKeys.fetchSearchMateList(nickname).queryKey,
+    queryFn: () => fetchSearchMateList(nickname),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[SearchMateList] error fetch SearchMateList');
+    },
+    onSuccess: () => {
+      console.log('[SearchMateList] success fetch SearchMateList');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useAddNewMate = (userId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => addNewMate(userId),
+    onError: err => {
+      console.log(err);
+      console.log('[AddNewMate] error create AddNewMate');
+    },
+    onSuccess: res => {
+      console.log('[AddNewMate] success create AddNewMate');
+      queryClient.invalidateQueries(mateQueryKeys.fetchExhMateList());
+    },
+  });
+};
