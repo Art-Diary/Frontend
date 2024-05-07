@@ -56,14 +56,15 @@ const ExhListScreen = () => {
   const [isFieldVisible, setIsFieldVisible] = useState(false);
   const [isPriceVisible, setIsPriceVisible] = useState(false);
   const [isStateVisible, setIsStateVisible] = useState(false);
-  const [selectedField, setSelectedField] = useState<string | null>(null); //선택된 분야
-  const [selectedState, setSelectedState] = useState<string | null>(null); //선택된 전시 진행상황
+  const [selectedField, setSelectedField] = useState<string[] | null>(null); //선택된 분야
+  const [selectedState, setSelectedState] = useState<string[] | null>(null); //선택된 전시 진행상황
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
   const [selectedDate, setSelectedDate] = useState<string | null>(null); //검색 날짜
   const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
   const [isOptionsModalPressed, setIsOptionsModalPressed] =
     useState<boolean>(false); //진행상황 선택된 상황에서 캘린더 누를시 뜨는 모달
   const searchExhName = useSearchNameInfo().name;
+
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
     selectedPrice,
@@ -89,15 +90,17 @@ const ExhListScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      // 다른 화면을 갔다왔을때 갱신
+      // 다른 화면을 갔다왔을때 갱신 그냥 null을 사용해 다시 받는게 더 빠를 수도,,,
       setSelectedName(null);
       setSelectedField(null);
       setSelectedPrice(null);
       setSelectedState(null);
+      setSelectedDate(null);
       setIsNameVisible(false);
       setIsFieldVisible(false);
       setIsPriceVisible(false);
       setIsStateVisible(false);
+      setIsDateVisible(false);
       console.log(
         '다른 곳 갔다옴:name',
         selectedName,
@@ -166,6 +169,8 @@ const ExhListScreen = () => {
   useEffect(() => {
     if (selectedName) {
       setIsNameVisible(true);
+    } else {
+      setIsNameVisible(false);
     }
     console.log(
       'name',
@@ -186,6 +191,8 @@ const ExhListScreen = () => {
   useEffect(() => {
     if (selectedField) {
       setIsFieldVisible(true);
+    } else {
+      setIsFieldVisible(false);
     }
     console.log(
       'name',
@@ -204,6 +211,8 @@ const ExhListScreen = () => {
   useEffect(() => {
     if (selectedPrice) {
       setIsPriceVisible(true);
+    } else {
+      setIsPriceVisible(false);
     }
     console.log(
       'name',
@@ -221,12 +230,9 @@ const ExhListScreen = () => {
 
   useEffect(() => {
     if (selectedState) {
-      // if (isDateVisible) {
-      //   setIsDateVisible(false);
-      //   setSelectedDate(null);
-      // } else {
       setIsStateVisible(true);
-      //}
+    } else {
+      setIsStateVisible(false);
     }
     console.log(
       'name',
@@ -304,6 +310,9 @@ const ExhListScreen = () => {
   if (isLoading) {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
+  if (isSuccess) {
+    // console.log('석공:', selectedField, fieldString);
+  }
 
   //search Modal
 
@@ -316,9 +325,9 @@ const ExhListScreen = () => {
   };
 
   const handleModalClose = (
-    selectedOption2: string | null,
+    selectedOption2: string[] | null,
     selectedOption3: string | null,
-    selectedOption4: string | null,
+    selectedOption4: string[] | null,
     selectedOption5: string | null,
   ) => {
     setSelectedField(selectedOption2);
@@ -338,7 +347,7 @@ const ExhListScreen = () => {
   };
 
   const handleCalendarModalClose = (
-    selectedOption4: string | null,
+    selectedOption4: string[] | null,
     selectedOption5: string | null,
   ) => {
     setSelectedState(selectedOption4);
@@ -376,9 +385,15 @@ const ExhListScreen = () => {
     setIsNameVisible(false);
   };
 
-  const deleteField = () => {
-    setSelectedField(null);
-    setIsFieldVisible(false);
+  const deleteField = (deleteName: string) => {
+    if (selectedField != null) {
+      if (selectedField?.length > 1) {
+        setSelectedField(selectedField.filter(item => item !== deleteName));
+      } else {
+        setSelectedField(null);
+        setIsFieldVisible(false);
+      }
+    }
   };
 
   const deletePrice = () => {
@@ -386,9 +401,17 @@ const ExhListScreen = () => {
     setIsPriceVisible(false);
   };
 
-  const deleteState = () => {
-    setSelectedState(null);
-    setIsStateVisible(false);
+  const deleteState = (deleteName: string) => {
+    //setSelectedState(null);
+    //setIsStateVisible(false);
+    if (selectedState != null) {
+      if (selectedState?.length > 1) {
+        setSelectedState(selectedState.filter(item => item !== deleteName));
+      } else {
+        setSelectedState(null);
+        setIsStateVisible(false);
+      }
+    }
   };
 
   //날짜 누를 때, 전시상태옵션이 지정되어 있으면 모달 오픈
@@ -496,21 +519,33 @@ const ExhListScreen = () => {
               <OptionView>{selectedName}x</OptionView>
             </TouchableOpacity>
           )}
-          {isFieldVisible && (
+          {isFieldVisible &&
+            selectedField?.map((item: string) => (
+              <TouchableOpacity onPress={() => deleteField(item)}>
+                <OptionView>{item}x</OptionView>
+              </TouchableOpacity>
+            ))}
+          {/* {isFieldVisible && (
             <TouchableOpacity onPress={() => deleteField()}>
               <OptionView>{selectedField}x</OptionView>
             </TouchableOpacity>
-          )}
+          )} */}
           {isPriceVisible && (
             <TouchableOpacity onPress={() => deletePrice()}>
               <OptionView>{selectedPrice}x</OptionView>
             </TouchableOpacity>
           )}
-          {isStateVisible && (
+          {isStateVisible &&
+            selectedState?.map((item: string) => (
+              <TouchableOpacity onPress={() => deleteState(item)}>
+                <OptionView key={item}>{item}x</OptionView>
+              </TouchableOpacity>
+            ))}
+          {/* {isStateVisible && (
             <TouchableOpacity onPress={() => deleteState()}>
               <OptionView>{selectedState}x</OptionView>
             </TouchableOpacity>
-          )}
+          )} */}
         </OptionContainer>
         {data &&
           data.map((item: any, index: number) => (

@@ -12,8 +12,8 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
   fetchSearchExh: (
     searchName?: string,
     price?: string,
-    field?: string,
-    state?: string,
+    field?: string[],
+    state?: string[],
     date?: Date,
   ) => ['fetchSearchExh', searchName, price, field, state, date],
   fetchLikeList: () => ['fetchLikeList'],
@@ -22,8 +22,8 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
 export const useFetchSearchExh = (
   searchName: string | null,
   price: string | null,
-  field: string | null,
-  state: string | null,
+  field: string[] | null,
+  state: string[] | null,
   date: string | null,
 ) =>
   useQuery({
@@ -39,9 +39,11 @@ export const useFetchSearchExh = (
     staleTime: 500000,
     onError: err => {
       console.log(err);
+      console.log(state);
       console.log('error fetch SearchExh');
     },
     onSuccess: () => {
+      console.log(field);
       console.log('success fetch SearchExh');
     },
     select: (res: any) => res.data,
