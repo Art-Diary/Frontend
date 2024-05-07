@@ -22,3 +22,17 @@ export const verifyNickname = (nickname: string) =>
 
 export const deleteUser = (reason: string) =>
   client.post(`/users/leave`, {reason: reason});
+
+export const loginUser = (
+  email: string,
+  nickname: string,
+  profile: string,
+  providerType: string,
+  providerId: string,
+) =>
+  client.post(`/users?providerType=${providerType}`, {
+    email: email,
+    nickname: nickname,
+    profile: profile,
+    providerId: providerId,
+  });

@@ -1,7 +1,8 @@
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 import {
   deleteUser,
   fetchUserInfo,
+  loginUser,
   updateAlarm1,
   updateAlarm2,
   updateAlarm3,
@@ -70,7 +71,6 @@ export const useFetchUserInfo = () =>
   });
 
 export const useUpdateUserInfo = (info: FormData | null) => {
-  const queryClient = useQueryClient();
   const {updateNickname, updateFavoriteArt, updateProfile} = useUserActions();
 
   return useMutation({
@@ -111,6 +111,49 @@ export const useDeleteUser = (reason: string) => {
     },
     onSuccess: res => {
       console.log('[LeaveScreen] success delete User');
+    },
+  });
+};
+
+export const useLoginUser = (
+  email: string,
+  nickname: string,
+  profile: string,
+  providerType: string,
+  providerId: string,
+) => {
+  const {
+    updateUserId,
+    updateNickname,
+    updateEmail,
+    updateProfile,
+    updateFavoriteArt,
+    updateAlarm1,
+    updateAlarm2,
+    updateAlarm3,
+  } = useUserActions();
+  return useMutation({
+    mutationFn: () =>
+      loginUser(email, nickname, profile, providerType, providerId),
+    onError: err => {
+      console.log(err);
+      console.log('[Login] error Login +', providerType);
+    },
+    onSuccess: (res: any) => {
+      // 사용자 정보 저장
+      // 현재는 지정된 사용자로 사용 중이기 때문에 주석 처리
+      const resData = res.data;
+
+      // updateUserId(resData.userId);
+      // updateNickname(resData.nickname);
+      // updateEmail(resData.email);
+      // updateProfile(resData.profile);
+      // updateFavoriteArt(resData.favoriteArt);
+      // updateAlarm1(resData.alarm1);
+      // updateAlarm2(resData.alarm2);
+      // updateAlarm3(resData.Alarm3);
+      // AsyncStorage.setItem('userId', resData.userId);
+      console.log('[Login] success Login +', providerType);
     },
   });
 };
