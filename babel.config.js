@@ -15,7 +15,7 @@ module.exports = {
     [
       'module:react-native-dotenv',
       {
-        envName: 'APP_ENV',
+        // envName: 'APP_ENV',
         moduleName: '@env',
         path: '.env',
         blacklist: null,
