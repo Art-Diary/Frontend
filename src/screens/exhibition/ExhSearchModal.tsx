@@ -10,20 +10,26 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-import useModal from './ExhListScreen';
-import {copyFileAssets} from 'react-native-fs';
+import OptionsModal from '~/components/exhibition/OptionsModal';
+// import useModal from './ExhListScreen';
+// import {copyFileAssets} from 'react-native-fs';
+// import {useSearchDateInfo} from '~/zustand/exhibition/exhibition';
+
+// import {showToast} from '~/components/common/modal/toastConfig';
 
 interface ExhSearchProps {
   title: string; // title prop의 타입을 문자열로 지정
   x: string;
   isVisible: boolean;
-  field: string | null;
+  field: string[] | null;
   price: string | null;
-  state: string | null;
+  state: string[] | null;
+  date: string | null;
   onClose: (
-    selectedOption2: string | null,
+    selectedOption2: string[] | null,
     selectedOption3: string | null,
-    selectedOption4: string | null,
+    selectedOption4: string[] | null,
+    selectedOption5: string | null,
   ) => void;
 }
 
@@ -34,12 +40,19 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
   field,
   price,
   state,
+  date,
   onClose,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [selectedOption2, setSelectedOption2] = useState<string | null>(field);
-  const [selectedOption3, setSelectedOption3] = useState<string | null>(price);
-  const [selectedOption4, setSelectedOption4] = useState<string | null>(state);
+  const [selectedOption2, setSelectedOption2] = useState<string[] | null>(
+    field,
+  ); //전시 분야
+  const [selectedOption3, setSelectedOption3] = useState<string | null>(price); //전시 가격
+  const [selectedOption4, setSelectedOption4] = useState<string[] | null>(
+    state,
+  ); //전시 진행상황
+  const [selectedOption5, setSelectedOption5] = useState<string | null>(date); //전시 날짜
+  // const searchExhDate = useSearchDateInfo().date;
 
   //전시 지역 const exhLocation: string[] = ['서울', '부산', '대구'];
   const [isClickField, SetIsClickField] = useState([
@@ -62,27 +75,65 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
   ]);
   const [isPossibleSearch, SetIsPossibleSearch] = useState<boolean>(false);
   const [options, SetOptions] = useState<number>(0); //선택된 옵션 개수 -> 버튼 색변화
+  //모달
+  const [isOptionsModalPressed, setIsOptionsModalPressed] =
+    useState<boolean>(false);
+
+  const [selectedStatekey, setSelectedStateKey] = useState<string | null>(null); // 날짜 옵션 선택되어있는 경우, 선택된 state key알려주는 용도
 
   useEffect(() => {
+    //확인용
+    //  if(date!=null) setIsDate(true);
+    console.log(
+      '분류 선택 페이지>searchExhDate:',
+      selectedOption4,
+      selectedOption5,
+    );
+  }, [selectedOption4]);
+
+  useEffect(() => {
+    let tmp: number = 0;
+    if (selectedOption2 != null) {
+      tmp = tmp + selectedOption2.length;
+    }
+    if (selectedOption3 != null) {
+      tmp = tmp + selectedOption3.length;
+    }
+    if (selectedOption4 != null) {
+      tmp = tmp + selectedOption4.length;
+    }
+
+    SetOptions(tmp);
     if (options > 0) SetIsPossibleSearch(true);
     else SetIsPossibleSearch(false);
   }, [options]);
 
   useEffect(() => {
+    //선택된 값을 모달이 열릴 때, 다시 받아와야함.
     let tmp: number = options;
     //전시분야
     if (field != null) {
       tmp = tmp + 1;
       SetOptions(tmp);
     }
+
     SetIsClickField(
+      isClickField.map(item => {
+        if (field?.includes(item.key)) {
+          return {...item, value: true}; // 특정 키의 값을 수정
+        }
+        return item;
+      }),
+    );
+    //아래 다시 돌려놓기
+    /*  SetIsClickField(
       isClickField.map(item => {
         if (item.key === field) {
           return {...item, value: true}; // 특정 키의 값을 수정
         }
         return item;
       }),
-    );
+    );*/
 
     //가격
     if (price != null) {
@@ -105,7 +156,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
     }
     SetIsClickState(
       isClickState.map(item => {
-        if (item.key === state) {
+        if (state?.includes(item.key)) {
           return {...item, value: true}; // 특정 키의 값을 수정
         }
         return item;
@@ -118,11 +169,12 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
   }, [selectedOption2, selectedOption3, selectedOption4]);
 
   const handleConfirm = (
-    selectedOption2: string | null,
+    selectedOption2: string[] | null,
     selectedOption3: string | null,
-    selectedOption4: string | null,
+    selectedOption4: string[] | null,
+    selectedOption5: string | null,
   ) => {
-    onClose(selectedOption2, selectedOption3, selectedOption4);
+    onClose(selectedOption2, selectedOption3, selectedOption4, selectedOption5);
   };
 
   const pressExhField = (key: string, value: boolean) => {
@@ -133,11 +185,19 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
       //눌려져있는 상태
       tmp = tmp - 1;
       SetOptions(tmp);
-      setSelectedOption2(null);
+      if (selectedOption2 != null) {
+        setSelectedOption2(selectedOption2.filter(item => item !== key));
+      }
+      /*setSelectedOption2(null);*/
     } else {
       tmp = tmp + 1;
       SetOptions(tmp);
-      setSelectedOption2(key);
+      if (selectedOption2 != null) {
+        setSelectedOption2(selectedOption2.concat(key));
+      } else {
+        setSelectedOption2([key]);
+      }
+      /*setSelectedOption2(key);*/
     }
 
     SetIsClickField(
@@ -166,6 +226,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
     SetIsClickPrice(
       isClickPrice.map(item => {
         if (item.key === key) {
+          //|| (item.key != key && value === false)) {
           return {...item, value: !value}; // 특정 키의 값을 수정
         }
         return item;
@@ -173,19 +234,39 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
     );
   };
 
-  const pressExhState = (key: string, value: boolean) => {
+  const pressExhState = (key: string | null, value: any) => {
     //전시 진행상황 누를 때
-
     let tmp: number = options;
-    if (value) {
-      tmp = tmp - 1;
-      SetOptions(tmp);
-      setSelectedOption4(null);
-    } else {
-      tmp = tmp + 1;
-      SetOptions(tmp);
-      setSelectedOption4(key);
+
+    if (key) {
+      if (value) {
+        //눌려져있는 상태
+        tmp = tmp - 1;
+        SetOptions(tmp);
+        if (selectedOption4 != null) {
+          setSelectedOption4(selectedOption4.filter(item => item !== key));
+        }
+      } else {
+        tmp = tmp + 1;
+        SetOptions(tmp);
+        if (selectedOption4 != null) {
+          setSelectedOption4(selectedOption4.concat(key));
+        } else {
+          setSelectedOption4([key]);
+        }
+        /*setSelectedOption2(key);*/
+      }
     }
+
+    // if (value) {
+    //   tmp = tmp - 1;
+    //   SetOptions(tmp);
+    //   setSelectedOption4(null);
+    // } else {
+    //   tmp = tmp + 1;
+    //   SetOptions(tmp);
+    //   setSelectedOption4(key);
+    // }
 
     SetIsClickState(
       isClickState.map(item => {
@@ -197,13 +278,45 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
     );
   };
 
+  //전시 상태 누를 때, 날짜옵션이 지정되어 있으면 모달 오픈
+  // 모달을 열기 위한 함수
+  const optionsModalOpen = (key: string, value: boolean) => {
+    console.log(
+      '[OptionsModalOpen] Opening OptionsModal for Field and key:',
+      key,
+    );
+    setIsOptionsModalPressed(true);
+    setSelectedStateKey(key); // 선택한 값의 key 알려주는 용도
+    //setSelectedOption4([key]); // 선택한 값의 key 알려주는 용도
+  };
+
+  const optionsModalClose = () => {
+    //console.log('옵션4,', selectedOption4, selectedOption5);
+    setIsOptionsModalPressed(false);
+  };
+
+  const onPressYes = (key: string | null) => {
+    //console.log('key:', key);
+    setSelectedOption5(null);
+    pressExhState(key, isClickState.find(item => item.key === key)?.value);
+    optionsModalClose();
+  };
+
+  const onPressNo = () => {
+    //console.log('what?', isClickState.find(item => item.key === key)?.value);
+    //  setIsOptionsModalPressed(false);
+    setSelectedOption4(null);
+    optionsModalClose();
+  };
+
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       {/* onRequestClose={() => onClose}> */}
       <Container>
         <ModalHeader>
           <Title>{title}</Title>
-          <TouchableOpacity onPress={() => handleConfirm(field, price, state)}>
+          <TouchableOpacity
+            onPress={() => handleConfirm(field, price, state, date)}>
             <BackButton>{x}</BackButton>
           </TouchableOpacity>
         </ModalHeader>
@@ -221,7 +334,10 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
             </OptionContainer>
           </SubSection>
           <SubSection>
-            <SubTitle>{'전시 가격'}</SubTitle>
+            <SubTitlePrice>
+              <SubTitle>{'전시 가격'}</SubTitle>
+              <SubNoticeTitle>{'*하나만 선택 가능'}</SubNoticeTitle>
+            </SubTitlePrice>
             <OptionContainer>
               {isClickPrice.map(({key, value}) => (
                 <TouchableOpacity
@@ -235,13 +351,42 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
           <SubSection>
             <SubTitle>{'전시 진행상황'}</SubTitle>
             <OptionContainer>
-              {isClickState.map(({key, value}) => (
-                <TouchableOpacity
-                  key={key}
-                  onPress={() => pressExhState(key, value)}>
-                  {value ? <Option>{key}</Option> : <UnOption>{key}</UnOption>}
-                </TouchableOpacity>
-              ))}
+              {isClickState.map(
+                (
+                  {key, value}, //{
+                ) =>
+                  selectedOption5 ? (
+                    <TouchableOpacity
+                      key={key}
+                      onPress={() => optionsModalOpen(key, value)}>
+                      {value ? (
+                        <Option>{key}</Option>
+                      ) : (
+                        <UnOption>{key}</UnOption>
+                      )}
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      key={key}
+                      onPress={() => pressExhState(key, value)}>
+                      {value ? (
+                        <Option>{key}</Option>
+                      ) : (
+                        <UnOption>{key}</UnOption>
+                      )}
+                    </TouchableOpacity>
+                  ),
+              )}
+              {isOptionsModalPressed && (
+                <OptionsModal
+                  handleCloseModal={optionsModalClose}
+                  // tkey={selectedOption4}
+                  onPressYes={() => onPressYes(selectedStatekey)}
+                  onPressNo={() => onPressNo()}
+                  message="이미 지정된 날짜는 삭제됩니다.
+                  그렇게 할까요?"
+                />
+              )}
             </OptionContainer>
           </SubSection>
         </ModalBody>
@@ -249,7 +394,12 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
           {isPossibleSearch ? (
             <TouchableOpacity
               onPress={() =>
-                handleConfirm(selectedOption2, selectedOption3, selectedOption4)
+                handleConfirm(
+                  selectedOption2,
+                  selectedOption3,
+                  selectedOption4,
+                  selectedOption5,
+                )
               }>
               <CompleteButton>{'선택 완료'}</CompleteButton>
             </TouchableOpacity>
@@ -346,11 +496,28 @@ const ModalBody = styled.View`
   padding-top: ${wp(10)}px;
 `;
 
+const SubTitlePrice = styled.View`
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: ${wp(10)}px;
+  padding-left: ${wp(0)}px;
+  padding-bottom: ${wp(0)}px;
+  gap: 10px;
+`;
+
 const SubTitle = styled.Text`
   //  flex: 1;
   font-size: ${fp(17)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
+`;
+
+const SubNoticeTitle = styled.Text`
+  //  flex: 1;
+  font-size: ${fp(10)}px;
+  color: #979797;
+  font-family: 'omyu pretty';
+  text-align: center;
 `;
 
 const OptionContainer = styled.View`

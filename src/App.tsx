@@ -26,6 +26,8 @@ import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen
 import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
+import ExhSearchName from './screens/exhibition/ExhSearchName';
+import ExhSearchByDate from './screens/exhibition/ExhSearchByDate';
 import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
@@ -53,6 +55,9 @@ type RootStackParamList = {
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;
+  ExhibitionSearch: undefined;
+  //CalendarSearch: undefined;
+
   GatheringInfo: {
     gatherId: number;
     gatherName: string;
@@ -98,6 +103,8 @@ export default function App() {
               component={WriteMyDiaryRoutes}
             />
             {/* [전시회] 전시회 상세 정보 */}
+            <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
+            {/* <Stack.Screen name="CalendarSearch" component={ExhSearchByDate} /> */}
             {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
