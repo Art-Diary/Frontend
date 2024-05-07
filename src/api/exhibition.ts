@@ -4,12 +4,17 @@ import {client} from './client';
 export const fetchSearchExh = (
   searchName: string | null,
   price: string | null,
-  field: string | null,
-  state: string | null,
+  field: string[] | null,
+  state: string[] | null,
   date: string | null,
-) =>
-  client.get(`/exhibitions`, {params: {searchName, price, field, state, date}});
-
+) => {
+  const fieldString = Array.isArray(field) ? field.join(',') : field;
+  const stateString = Array.isArray(state) ? state.join(',') : state;
+  console.log('stateString', stateString);
+  return client.get(`/exhibitions`, {
+    params: {searchName, price, field: fieldString, state: stateString, date},
+  });
+};
 export const fetchAllExh = () => client.get(`/exhibitions`);
 
 /** 전시회 좋아요 API */

@@ -27,10 +27,10 @@ interface MarkedType {
 
 interface ExhSearchByDateProps {
   isVisible: boolean;
-  state: string | null;
+  state: string[] | null;
   date: string | null;
   onClose: (
-    selectedOption4: string | null, //state
+    selectedOption4: string[] | null, //state
     selectedOption5: string | null, //date
   ) => void;
 }
@@ -63,14 +63,16 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
   const [options, SetOptions] = useState<boolean>(false); //버튼 색변화
   const [isOptionsModalPressed, setIsOptionsModalPressed] =
     useState<boolean>(false);
-  const [selectedOption4, setSelectedOption4] = useState<string | null>(state);
+  const [selectedOption4, setSelectedOption4] = useState<string[] | null>(
+    state,
+  );
   const [selectedOption5, setSelectedOption5] = useState<string | null>(date);
 
   useEffect(() => {
     console.log('날짜데이터:', selectedDate, ',', markedDates);
   }, [selectedDate]);
 
-  const onPressDate = (selectedOption4: string | null) => {
+  const onPressDate = (selectedOption4: string[] | null) => {
     const parts = selectedDate.split('.');
     console.log('parts', parts[0], parts[1], parts[2], typeof parts[0]);
 
