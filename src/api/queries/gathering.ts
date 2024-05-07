@@ -1,6 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useQuery} from 'react-query';
-import {fetchGatheringInfo, fetchGatheringList} from '../gathering';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {
+  createGathering,
+  fetchGatheringInfo,
+  fetchGatheringList,
+} from '../gathering';
 
 const gatheringQueryKeys = createQueryKeys('gathering', {
   fetchGatheringList: () => ['fetchGatheringList'],
@@ -36,3 +40,19 @@ export const useFetchGatheringInfo = (gatherId: number) =>
     },
     select: (res: any) => res.data,
   });
+
+export const useCreateGathering = (gatherName: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => createGathering(gatherName),
+    onError: err => {
+      console.log(err);
+      console.log('[CreateGathering] error create CreateGathering');
+    },
+    onSuccess: () => {
+      console.log('[CreateGathering] success create CreateGathering');
+      queryClient.invalidateQueries(gatheringQueryKeys.fetchGatheringList());
+    },
+  });
+};

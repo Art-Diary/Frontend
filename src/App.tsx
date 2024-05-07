@@ -28,6 +28,7 @@ import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
+import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -57,6 +58,8 @@ type RootStackParamList = {
   };
   // login
   Login: undefined;
+  // mate
+  CreateGathering: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -103,6 +106,10 @@ export default function App() {
             <Stack.Screen
               name="GatheringInfo"
               component={GatheringInfoScreen}
+            />
+            <Stack.Screen
+              name="CreateGathering"
+              component={CreateGatheringScreen}
             />
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
