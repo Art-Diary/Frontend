@@ -13,7 +13,7 @@ import {useFetchUserInfo} from '~/api/queries/auth';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useUserActions} from '~/zustand/auth/auth';
 import ProfileNameTag from './nameTag/ProfileNameTag';
-import GreyNameTag from './nameTag/GreyNameTag';
+import GreyNameTag from '../../components/common/GreyNameTag';
 
 const SettingScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

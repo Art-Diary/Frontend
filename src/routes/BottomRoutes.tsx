@@ -1,5 +1,5 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {BackHandler, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 import MyExhListScreen from '~/screens/mydiary/MyExhListScreen';
@@ -22,10 +22,29 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 const Tab = createBottomTabNavigator();
 
 const BottomRoutes = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  const handlePressBack = () => {
+    if (navigation?.canGoBack()) {
+      BackHandler.exitApp(); //TODO 임시방편
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    };
+  }, [handlePressBack]);
+
   return (
     <Container>
       <Tab.Navigator

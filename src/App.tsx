@@ -27,6 +27,7 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
+import LoginScreen from './screens/login/LoginScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -54,6 +55,8 @@ type RootStackParamList = {
     gatherId: number;
     gatherName: string;
   };
+  // login
+  Login: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -70,7 +73,7 @@ export default function App() {
       <NavigationContainer>
         <RecoilRoot>
           <Stack.Navigator
-            initialRouteName={'Main'}
+            initialRouteName={'Login'}
             screenOptions={{headerShown: false}}>
             {/* 홈 화면 = 내 기록 */}
             <Stack.Screen name="Main" component={BottomRoutes} />
@@ -110,6 +113,7 @@ export default function App() {
             {/* [설정] 회원 탈퇴 */}
             <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
             {/* 로그인 회원가입 */}
+            <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>
