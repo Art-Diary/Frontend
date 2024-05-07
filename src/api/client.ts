@@ -1,7 +1,7 @@
 import axios from 'axios';
+// import {API_URL} from '@env';
 
 export const client = axios.create({
-  //   baseURL: process.env.PUBLIC_API_URL,
   baseURL: 'http://wifi ip 주소:8080',
   timeout: 2000,
 });

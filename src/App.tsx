@@ -28,6 +28,9 @@ import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
 import ExhSearchByDate from './screens/exhibition/ExhSearchByDate';
+import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
+import LoginScreen from './screens/login/LoginScreen';
+import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -51,11 +54,17 @@ type RootStackParamList = {
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;
-  // MyDiaries : {
-  //     id: number;
-  // };
   ExhibitionSearch: undefined;
-  CalendarSearch: undefined;
+  //CalendarSearch: undefined;
+
+  GatheringInfo: {
+    gatherId: number;
+    gatherName: string;
+  };
+  // login
+  Login: undefined;
+  // mate
+  CreateGathering: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -72,7 +81,7 @@ export default function App() {
       <NavigationContainer>
         <RecoilRoot>
           <Stack.Navigator
-            initialRouteName={'Main'}
+            initialRouteName={'Login'}
             screenOptions={{headerShown: false}}>
             {/* 홈 화면 = 내 기록 */}
             <Stack.Screen name="Main" component={BottomRoutes} />
@@ -93,14 +102,22 @@ export default function App() {
             />
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
-            <Stack.Screen name="CalendarSearch" component={ExhSearchByDate} />
+            {/* <Stack.Screen name="CalendarSearch" component={ExhSearchByDate} /> */}
             {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"
               component={CalendarDiaryRoutes}
             />
-            {/* 전시 메이트 화면 */}
+            {/* [전시 메이트] 모임 정보 화면*/}
+            <Stack.Screen
+              name="GatheringInfo"
+              component={GatheringInfoScreen}
+            />
+            <Stack.Screen
+              name="CreateGathering"
+              component={CreateGatheringScreen}
+            />
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
             {/* [설정] 알림 설정 화면 */}
@@ -110,6 +127,7 @@ export default function App() {
             {/* [설정] 회원 탈퇴 */}
             <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
             {/* 로그인 회원가입 */}
+            <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>

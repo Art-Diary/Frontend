@@ -54,7 +54,7 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
         contentContainerStyle={{width: `${100 * diaryList.length}%`}}
         scrollEventThrottle={200}
         decelerationRate="fast"
-        showsHorizontalScrollIndicator={false}>
+        showsHorizontalScrollIndicator={true}>
         {diaryList.map((item: any, index: number) => {
           return (
             <Pressable key={index} onPress={() => onPressBack(item)}>
