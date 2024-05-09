@@ -196,13 +196,13 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
     //전시 가격 누를 때
 
     let tmp: number = options;
+    let preoptions = isClickPrice;
     if (selectedOption3) {
-      const updatedClickPriceIndex = isClickPrice.findIndex(
+      const updatedClickPriceIndex = preoptions.findIndex(
         item => item.key === selectedOption3,
       );
       if (updatedClickPriceIndex !== -1) {
-        isClickPrice[updatedClickPriceIndex].value = false;
-        SetIsClickPrice([...isClickPrice]); // 배열의 변경을 감지하도록 새로운 배열로 업데이트
+        preoptions[updatedClickPriceIndex].value = false;
       }
     }
 
@@ -216,14 +216,13 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
       setSelectedOption3(key);
     }
 
-    SetIsClickPrice(
-      isClickPrice.map(item => {
-        if (item.key === key) {
-          return {...item, value: !kvalue};
-        }
-        return item;
-      }),
+    const updatedClickPriceIndex = preoptions.findIndex(
+      item => item.key === key,
     );
+    if (updatedClickPriceIndex !== -1) {
+      preoptions[updatedClickPriceIndex].value = !kvalue;
+    }
+    SetIsClickPrice(preoptions);
   };
 
   // const pressExhPrice = (key: string, kvalue: boolean) => {
