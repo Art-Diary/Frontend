@@ -12,6 +12,7 @@ import {
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameTag from './NameTag';
 import {useFetchExhMateList} from '~/api/queries/mate';
+import {useMateActions} from '~/zustand/mate/mate';
 
 interface ExhMateInfo {
   userId: number;
@@ -22,6 +23,7 @@ interface ExhMateInfo {
 
 const ExhMateList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateMate} = useMateActions();
   const {
     data: exhMateList,
     isLoading,
@@ -39,6 +41,16 @@ const ExhMateList = () => {
 
   const pressExhMate = (item: ExhMateInfo) => {
     // 메이트 클릭
+    updateMate({
+      userId: item.userId,
+      nickname: item.nickname,
+      profile: item.profile,
+      favoriteArt:
+        item.favoriteArt === '.' || !item.favoriteArt
+          ? '그외'
+          : item.favoriteArt,
+    });
+    navigation.navigate('MateExhList');
   };
 
   return (
@@ -47,11 +59,11 @@ const ExhMateList = () => {
       <FlatList
         data={exhMateList}
         renderItem={({item, index}) => (
-          <TouchItem
-            key={index}
-            isLast={exhMateList.length - 1 === index}
-            onPress={() => pressExhMate(item)}>
-            <NameTag isSelected={true}>
+          <NameTag isSelected={true}>
+            <TouchItem
+              key={index}
+              isLast={exhMateList.length - 1 === index}
+              onPress={() => pressExhMate(item)}>
               <UserInfo>
                 <ProfileWrapper>
                   <Profile
@@ -69,8 +81,8 @@ const ExhMateList = () => {
                   </Art>
                 </UserInfoColumn>
               </UserInfo>
-            </NameTag>
-          </TouchItem>
+            </TouchItem>
+          </NameTag>
         )}
       />
     </Container>
@@ -92,11 +104,13 @@ interface ExhMateItemProps {
 
 const TouchItem = styled.TouchableOpacity`
   margin-bottom: ${(props: ExhMateItemProps) => (props.isLast ? '0px' : '5px')};
+  width: 100%;
+  height: 100%;
+  justify-content: center;
 `;
 
 const UserInfo = styled.View`
   flex-direction: row;
-  justify-content: center;
   gap: 13px;
 `;
 

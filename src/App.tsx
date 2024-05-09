@@ -27,11 +27,11 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
-import ExhSearchByDate from './screens/exhibition/ExhSearchByDate';
 import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
+import MateExhListScreen from './screens/mate/mateExhList/MateExhListScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -57,7 +57,7 @@ type RootStackParamList = {
   CalendarDiaryBack: undefined;
   ExhibitionSearch: undefined;
   //CalendarSearch: undefined;
-
+  // gathering
   GatheringInfo: {
     gatherId: number;
     gatherName: string;
@@ -67,6 +67,7 @@ type RootStackParamList = {
   // mate
   CreateGathering: undefined;
   AddNewMate: undefined;
+  MateExhList: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -105,7 +106,6 @@ export default function App() {
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
             {/* <Stack.Screen name="CalendarSearch" component={ExhSearchByDate} /> */}
-            {/* <Stack.Screen name="exhibition" component={ExhibitionRoutes} /> */}
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"
@@ -120,6 +120,7 @@ export default function App() {
               name="CreateGathering"
               component={CreateGatheringScreen}
             />
+            <Stack.Screen name="MateExhList" component={MateExhListScreen} />
             <Stack.Screen name="AddNewMate" component={AddNewMateScreen} />
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />

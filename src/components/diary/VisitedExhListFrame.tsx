@@ -1,9 +1,6 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
-import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {LightStarIcon} from '~/assets/images/index';
 import {
   widthPercentage as wp,
@@ -12,23 +9,16 @@ import {
 } from '~/components/common/ResponsiveSize';
 
 interface ExhProps {
-  myExhList: any[];
+  exhList: any[];
+  handlePressExh: (exhId: number) => void;
 }
 
-const StoredExhList: React.FC<ExhProps> = ({myExhList}) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateVisitedExhId} = useVisitedExhIdActions();
-
-  const onPress = (exhId: number) => {
-    updateVisitedExhId(exhId);
-    navigation.navigate('MyDiaryRoutes');
-  };
-
+const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
   return (
     <FlatList
-      data={myExhList}
+      data={exhList}
       renderItem={({item}) => (
-        <RowView onPress={() => onPress(item.exhId)}>
+        <RowView onPress={() => handlePressExh(item.exhId)}>
           <Poster
             source={{uri: `data:image/png;base64,${item.poster}`}}
             alt={'이미지 읽기 실패'}
@@ -50,7 +40,7 @@ const StoredExhList: React.FC<ExhProps> = ({myExhList}) => {
   );
 };
 
-export default StoredExhList;
+export default VisitedExhListFrame;
 
 /** style */
 const RowView = styled.TouchableOpacity`
