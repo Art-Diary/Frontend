@@ -17,8 +17,15 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
   return (
     <FlatList
       data={exhList}
-      renderItem={({item}) => (
-        <RowView onPress={() => handlePressExh(item.exhId)}>
+      renderItem={({item, index}) => (
+        <RowView
+          onPress={() => handlePressExh(item.exhId)}
+          noLine={
+            exhList.length - 1 === index ||
+            (exhList.length / 2 === 0 && exhList.length - 2 === index)
+              ? true
+              : false
+          }>
           <Poster
             source={{uri: `data:image/png;base64,${item.poster}`}}
             alt={'이미지 읽기 실패'}
@@ -43,7 +50,11 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
 export default VisitedExhListFrame;
 
 /** style */
-const RowView = styled.TouchableOpacity`
+interface RowViewProps {
+  noLine: boolean;
+}
+
+const RowView = styled.TouchableOpacity<RowViewProps>`
   gap: ${hp(6.5)}px;
   flex-direction: column;
   align-items: center;
@@ -52,7 +63,8 @@ const RowView = styled.TouchableOpacity`
   padding-bottom: ${hp(10)}px;
   border-color: #d3d3d3;
   border-right-width: ${hp(0.3)}px; // 테두리 너비
-  border-bottom-width: ${hp(0.3)}px; // 테두리 너비
+  border-bottom-width: ${(props: RowViewProps) =>
+    props.noLine ? `0px` : `${hp(0.3)}px`};
 `;
 
 const Poster = styled.Image`
