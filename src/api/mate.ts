@@ -11,3 +11,6 @@ export const addNewMate = (userId: number) =>
 
 export const fetchMateExhList = (mateId: number) =>
   client.get(`/mates/${mateId}/exhibitions`);
+
+export const fetchMateDiaryList = (mateId: number, exhId: number) =>
+  client.get(`/mates/${mateId}/exhibitions/${exhId}/diaries`);

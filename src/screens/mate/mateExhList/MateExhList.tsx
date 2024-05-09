@@ -6,10 +6,12 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useFetchMateExhList} from '~/api/queries/mate';
 import {useMateInfo} from '~/zustand/mate/mate';
 import VisitedExhListFrame from '~/components/diary/VisitedExhListFrame';
+import {useQueryMateDiaryActions} from '~/zustand/mate/queryMateDiary';
 
 const MateExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const mateInfo = useMateInfo();
+  const {updateQueryInfo} = useQueryMateDiaryActions();
   const {
     data: mateExhList,
     isLoading,
@@ -33,8 +35,11 @@ const MateExhList = () => {
   }
 
   const onPress = (exhId: number) => {
-    // updateVisitedExhId(exhId);
-    // navigation.navigate('MyDiaryRoutes');
+    updateQueryInfo({
+      mateId: mateInfo.mateInfo.userId,
+      exhId: exhId,
+    });
+    navigation.navigate('MateDiaryList');
   };
 
   return <VisitedExhListFrame exhList={mateExhList} handlePressExh={onPress} />;

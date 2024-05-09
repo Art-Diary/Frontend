@@ -3,15 +3,21 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsInfo from '~/components/diary/ContentsInfo';
-import {useMyDiaryBackInfo} from '~/zustand/mydiary/mydiary';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
 
-const CalendarDiaryBackScreen = () => {
-  const myDiaryBackInfo = useMyDiaryBackInfo();
+type BackInfo = {
+  contents: string;
+  writeDate: number[];
+};
 
+interface DiaryBackFrameProps {
+  backInfo: BackInfo;
+}
+
+const DiaryBackFrame: React.FC<DiaryBackFrameProps> = ({backInfo}) => {
   return (
     <Container>
       <BackView line={false} children={null} />
@@ -19,8 +25,8 @@ const CalendarDiaryBackScreen = () => {
         <Shadow distance={5}>
           <Contents>
             <ContentsInfo
-              contents={myDiaryBackInfo.contents}
-              writeDate={myDiaryBackInfo.writeDate}
+              contents={backInfo.contents}
+              writeDate={backInfo.writeDate}
             />
           </Contents>
         </Shadow>
@@ -29,7 +35,7 @@ const CalendarDiaryBackScreen = () => {
   );
 };
 
-export default CalendarDiaryBackScreen;
+export default DiaryBackFrame;
 
 /** style */
 const Container = styled.View`

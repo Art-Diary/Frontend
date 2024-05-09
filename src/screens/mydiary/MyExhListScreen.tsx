@@ -19,7 +19,7 @@ const MyExhListScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      if (tabIdentifierInfo.tab === 'calendar') {
+      if (tabIdentifierInfo.tab !== 'mydiary') {
         updateTab('mydiary');
       }
     }

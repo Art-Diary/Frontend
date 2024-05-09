@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-type TabName = 'mydiary' | 'calendar';
+type TabName = 'mydiary' | 'calendar' | 'mate';
 
 /** 캘린더와 내 기록 구분 */
 interface TabIdentifierState {
