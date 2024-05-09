@@ -15,23 +15,33 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useMyDiaryBackActions} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
+import {useMateDiaryBackActions} from '~/zustand/mate/queryMateDiary';
 
 interface DiaryListProps {
   diaryList: any[];
+  isMateDiary: boolean;
 }
 
-const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
+const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMateDiary}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateforBackInfo} = useMyDiaryBackActions();
+  const {updateContents, updateWriteDate} = useMateDiaryBackActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const scrollViewRef = useRef<ScrollView>(null);
 
   const onPressBack = (item: any) => {
-    updateforBackInfo(item.contents, item.writeDate);
+    if (isMateDiary) {
+      updateContents(item.contents);
+      updateWriteDate(item.writeDate);
+    } else {
+      updateforBackInfo(item.contents, item.writeDate);
+    }
     if (tabIdentifierInfo.tab === 'mydiary') {
       navigation.navigate('MyDiaryBack');
-    } else {
+    } else if (tabIdentifierInfo.tab === 'calendar') {
       navigation.navigate('CalendarDiaryBack');
+    } else {
+      navigation.navigate('MateDiaryBack');
     }
   };
 
@@ -68,6 +78,7 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
                         handleIsDeleted={() =>
                           handleIsDeleted(diaryList.length - 1 === index)
                         }
+                        isMateDiary={isMateDiary}
                       />
                       <WriterRateInfo
                         nickname={item.nickname}

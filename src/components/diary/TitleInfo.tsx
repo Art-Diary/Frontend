@@ -6,15 +6,22 @@ import UpdateDelete from './UpdateDelete';
 interface TitleProps {
   diaryInfo: any;
   handleIsDeleted: () => void;
+  isMateDiary: boolean;
 }
 
-const TitleInfo: React.FC<TitleProps> = ({diaryInfo, handleIsDeleted}) => {
+const TitleInfo: React.FC<TitleProps> = ({
+  diaryInfo,
+  handleIsDeleted,
+  isMateDiary,
+}) => {
   return (
     <Container>
       {/* 기록 제목 */}
       <TitleText>{diaryInfo.title}</TitleText>
       {/* 수정 | 삭제 */}
-      <UpdateDelete diaryInfo={diaryInfo} handleIsDeleted={handleIsDeleted} />
+      {!isMateDiary && (
+        <UpdateDelete diaryInfo={diaryInfo} handleIsDeleted={handleIsDeleted} />
+      )}
     </Container>
   );
 };

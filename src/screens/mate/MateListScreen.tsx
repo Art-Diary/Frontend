@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -15,6 +15,10 @@ import NameList from '~/components/mate/NameList';
 import {useFetchGatheringList} from '~/api/queries/gathering';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 
 interface GatherInfo {
   gatherId: number;
@@ -23,12 +27,23 @@ interface GatherInfo {
 
 const MateListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
   const {
     data: gatheringList,
     isLoading,
     isError,
     isSuccess,
   } = useFetchGatheringList();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (tabIdentifierInfo.tab !== 'mate') {
+        updateTab('mate');
+      }
+    }
+  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message="모임 목록 조회 실패:(" />;
