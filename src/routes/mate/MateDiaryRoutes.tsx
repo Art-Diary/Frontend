@@ -1,6 +1,8 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MateExhListScreen from '~/screens/mate/mateExhList/MateExhListScreen';
+import MateDiaryListScreen from '~/screens/mate/mateDiary/MateDiaryListScreen';
+import MateDiaryBackScreen from '~/screens/mate/mateDiary/MateDiaryBackScreen';
 
 const MateDiary = createNativeStackNavigator();
 
@@ -18,17 +20,17 @@ const MateDiaryRoutes = () => {
         options={{headerShown: false}}
       />
       {/* 한 전시회에 대한 기록들 */}
-      {/* <MateDiary.Screen
+      <MateDiary.Screen
         name="MateDiaryList"
-        component={}
+        component={MateDiaryListScreen}
         options={{headerShown: false}}
-      /> */}
+      />
       {/* 전시회에 대한 기록의 뒷 페이지 */}
-      {/* <MateDiary.Screen
+      <MateDiary.Screen
         name="MateDiaryBack"
-        component={}
+        component={MateDiaryBackScreen}
         options={{headerShown: false, animation: 'fade'}}
-      /> */}
+      />
     </MateDiary.Navigator>
   );
 };

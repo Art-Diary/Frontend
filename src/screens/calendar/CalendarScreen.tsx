@@ -53,7 +53,7 @@ const CalendarScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      if (tabIdentifierInfo.tab === 'mydiary') {
+      if (tabIdentifierInfo.tab !== 'calendar') {
         updateTab('calendar');
       }
     }
