@@ -1,10 +1,16 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
-import {addNewMate, fetchExhMateList, fetchSearchMateList} from '../mate';
+import {
+  addNewMate,
+  fetchExhMateList,
+  fetchMateExhList,
+  fetchSearchMateList,
+} from '../mate';
 
 const mateQueryKeys = createQueryKeys('mate', {
   fetchExhMateList: () => ['fetchExhMateList'],
   fetchSearchMateList: (nickname: string) => ['fetchSearchMateList', nickname],
+  fetchMateExhList: (mateId: number) => ['fetchMateExhList', mateId],
 });
 
 export const useFetchExhMateList = () =>
@@ -52,3 +58,18 @@ export const useAddNewMate = (userId: number) => {
     },
   });
 };
+
+export const useFetchMateExhList = (mateId: number) =>
+  useQuery({
+    queryKey: mateQueryKeys.fetchMateExhList(mateId).queryKey,
+    queryFn: () => fetchMateExhList(mateId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[MateExhList] error fetch MateExhList');
+    },
+    onSuccess: () => {
+      console.log('[MateExhList] success fetch MateExhList');
+    },
+    select: (res: any) => res.data,
+  });

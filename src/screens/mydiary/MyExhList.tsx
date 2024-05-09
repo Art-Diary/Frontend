@@ -1,13 +1,17 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
-import {useIsFocused} from '@react-navigation/native';
-import StoredExhList from '../../components/diary/StoredExhList';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import VisitedExhListFrame from '~/components/diary/VisitedExhListFrame';
+import {RootStackNavigationProp} from '~/App';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 const MyExhList = () => {
   const isFocused = useIsFocused();
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateVisitedExhId} = useVisitedExhIdActions();
   const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
   // useEffect(() => { 새로고침에서 사용
@@ -30,15 +34,18 @@ const MyExhList = () => {
   }
 
   if (myExhList.length === 0) {
-    return (
-      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
-    );
+    return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다'} />;
   }
+
+  const onPress = (exhId: number) => {
+    updateVisitedExhId(exhId);
+    navigation.navigate('MyDiaryRoutes');
+  };
 
   return (
     <Contents>
       {/* body */}
-      <StoredExhList myExhList={myExhList} />
+      <VisitedExhListFrame exhList={myExhList} handlePressExh={onPress} />
     </Contents>
   );
 };

@@ -25,7 +25,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     isLoading,
     isError,
     isSuccess,
-  } = useFetchSearchExh(searchKeyword, null, null, null);
+  } = useFetchSearchExh(searchKeyword, null, null, null, null);
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateIsUpdate} = useWriteMyDiaryActions();
 

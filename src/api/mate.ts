@@ -8,3 +8,6 @@ export const fetchSearchMateList = (nickname: string) =>
 
 export const addNewMate = (userId: number) =>
   client.post(`/mates`, {userId: userId});
+
+export const fetchMateExhList = (mateId: number) =>
+  client.get(`/mates/${mateId}/exhibitions`);
