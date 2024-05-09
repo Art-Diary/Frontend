@@ -50,7 +50,7 @@ const ExhMateList = () => {
           ? '그외'
           : item.favoriteArt,
     });
-    navigation.navigate('MateExhList');
+    navigation.navigate('MateDiaryRoutes');
   };
 
   return (

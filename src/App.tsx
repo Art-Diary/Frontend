@@ -31,7 +31,7 @@ import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
-import MateExhListScreen from './screens/mate/mateExhList/MateExhListScreen';
+import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 
 type RootStackParamList = {
   Main: undefined;
@@ -67,7 +67,9 @@ type RootStackParamList = {
   // mate
   CreateGathering: undefined;
   AddNewMate: undefined;
-  MateExhList: undefined;
+  MateDiaryRoutes: undefined;
+  MateDiaryList: undefined;
+  MateDiaryBack: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -120,8 +122,8 @@ export default function App() {
               name="CreateGathering"
               component={CreateGatheringScreen}
             />
-            <Stack.Screen name="MateExhList" component={MateExhListScreen} />
             <Stack.Screen name="AddNewMate" component={AddNewMateScreen} />
+            <Stack.Screen name="MateDiaryRoutes" component={MateDiaryRoutes} />
             {/* [설정] 좋아요 전시회 목록 화면 */}
             <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
             {/* [설정] 알림 설정 화면 */}
