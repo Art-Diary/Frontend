@@ -13,6 +13,7 @@ interface SearchExhFrameProps {
   onPressSearch: () => void;
   handleSearchKeyword: (keyword: string) => void;
   children: ReactNode;
+  searchMessage?: string;
 }
 
 const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
@@ -20,6 +21,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
   onPressSearch,
   handleSearchKeyword,
   children,
+  searchMessage,
 }) => {
   const onChangeText = useCallback((text: string) => {
     handleSearchKeyword(text);
@@ -33,7 +35,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
           <SearchWord
             onSubmitEditing={onPressSearch}
             onChangeText={onChangeText}
-            placeholder={'전시회를 검색하세요'}
+            placeholder={searchMessage ?? '전시회를 검색하세요'}
             value={searchKeyword}
           />
           <TouchableOpacity onPress={onPressSearch}>

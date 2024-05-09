@@ -51,19 +51,21 @@ const ExhMateList = () => {
             key={index}
             isLast={exhMateList.length - 1 === index}
             onPress={() => pressExhMate(item)}>
-            <NameTag>
+            <NameTag isSelected={true}>
               <UserInfo>
                 <ProfileWrapper>
                   <Profile
                     source={{uri: `data:image/png;base64,${item.profile}`}}
-                    resizeMode="contain"
+                    resizeMode="cover"
                     alt={'이미지 읽기 실패'}
                   />
                 </ProfileWrapper>
                 <UserInfoColumn>
                   <NickName>{item.nickname}</NickName>
                   <Art>
-                    {item.favoriteArt === '.' ? '그외' : item.favoriteArt}
+                    {item.favoriteArt === '.' || !item.favoriteArt
+                      ? '그외'
+                      : item.favoriteArt}
                   </Art>
                 </UserInfoColumn>
               </UserInfo>
