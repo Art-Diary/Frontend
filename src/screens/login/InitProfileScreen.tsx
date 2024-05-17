@@ -8,29 +8,25 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
-import {useUserInfo} from '~/zustand/auth/auth';
 import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
-import EditNickname from './EditNickname';
-import EditArtCategory from './EditArtCategory';
-import EditPicture from './EditPicture';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {TouchableOpacity} from 'react-native';
 import {useUpdateUserInfo} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import EditNickname from '../setting/updateProfile/EditNickname';
+import EditArtCategory from '../setting/updateProfile/EditArtCategory';
+import EditPicture from '../setting/updateProfile/EditPicture';
+import {useUserLoginInfo} from '~/zustand/auth/authLogin';
 
-const EditProfileScreen = () => {
+const InitProfileScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const userInfo = useUserInfo();
-  const [art, setArt] = useState<string>(userInfo.favoriteArt);
-  const [nicknameKeyword, setNicknameKeyword] = useState<string>(
-    userInfo.nickname,
-  );
-  const [imageUri, setImageUri] = useState<string | undefined>(
-    `data:image/png;base64,${userInfo.profile}`,
-  );
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [art, setArt] = useState<string>('');
+  const [nicknameKeyword, setNicknameKeyword] = useState<string>('');
+  const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
+  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const userloginInfo = useUserLoginInfo();
   const {
     mutate: updateUserInfo,
     isLoading,
@@ -46,7 +42,7 @@ const EditProfileScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      showToast('정보 수정을 실패했습니다.');
+      showToast('정보 초기화를 실패했습니다.');
     }
     if (isLoading) {
       setIsLoadingOpen(true);
@@ -56,8 +52,8 @@ const EditProfileScreen = () => {
     }
     if (isSuccess) {
       setCreateFormData(null);
-      showToast('정보 수정 완료!');
-      navigation.goBack();
+      showToast('정보 초기화 완료!');
+      navigation.navigate('Main');
     }
   }, [isError, isLoading, isSuccess]);
 
@@ -66,7 +62,6 @@ const EditProfileScreen = () => {
 
     formData.append('nickname', nicknameKeyword);
     formData.append('favoriteArt', art);
-
     const isImage = imageUri?.search('file://');
     if (isImage && isImage !== -1) {
       const resizedImage = await ImageResizer.createResizedImage(
@@ -113,19 +108,23 @@ const EditProfileScreen = () => {
         <ContentColumn>
           <SectionName>이메일</SectionName>
           <BoxView color={true}>
-            {userInfo.email.includes('naver') ? (
+            {userloginInfo.providerType === 'naver' ? (
               <NaverIcon width={20} />
-            ) : userInfo.email.includes('gmail') ? (
+            ) : userloginInfo.providerType === 'gmail' ? (
               <GoogleIcon width={20} />
             ) : (
               <KakaoIcon width={20} />
             )}
-            <EmailText>{userInfo.email}</EmailText>
+            <EmailText>{userloginInfo.email}</EmailText>
           </BoxView>
         </ContentColumn>
         {/* 완료 버튼 */}
-        <TouchableOpacity onPress={onPressComplete}>
-          <CompleteButton moveNext={true}>완료</CompleteButton>
+        <TouchableOpacity
+          disabled={!(nicknameKeyword !== '' && art !== '')}
+          onPress={onPressComplete}>
+          <CompleteButton complete={nicknameKeyword !== '' && art !== ''}>
+            완료
+          </CompleteButton>
         </TouchableOpacity>
       </Contents>
       {isLoadingOpen && <LoadingModal message={'정보 수정 중 :)'} />}
@@ -133,7 +132,7 @@ const EditProfileScreen = () => {
   );
 };
 
-export default EditProfileScreen;
+export default InitProfileScreen;
 
 /** style */
 const Container = styled.View`
@@ -196,9 +195,8 @@ const CompleteButton = styled.Text<NextButtonProps>`
   padding: ${hp(10)}px;
   border-radius: 5px;
   text-align: center;
-  background-color: #ff6f61;
-  /* background-color: ${(props: NextButtonProps) =>
-    props.complete ? '#ff6f61' : '#D3D3D3'}; */
+  background-color: ${(props: NextButtonProps) =>
+    props.complete ? '#ff6f61' : '#D3D3D3'};
   color: white;
   font-size: ${fp(17)}px;
   font-family: 'omyu pretty';

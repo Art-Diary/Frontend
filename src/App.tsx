@@ -32,6 +32,7 @@ import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
+import InitProfileScreen from './screens/login/InitProfileScreen';
 
 type RootStackParamList = {
   Main: undefined;
@@ -64,6 +65,7 @@ type RootStackParamList = {
   };
   // login
   Login: undefined;
+  InitProfile: undefined;
   // mate
   CreateGathering: undefined;
   AddNewMate: undefined;
@@ -134,6 +136,7 @@ export default function App() {
             <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="InitProfile" component={InitProfileScreen} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>
