@@ -10,31 +10,25 @@ import {RootStackNavigationProp} from '~/App';
 import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
 import {TouchableOpacity} from 'react-native';
 import GreyNameTag from '../../components/common/GreyNameTag';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-import {GOOGLE_ID} from '@env';
-import {useLoginUser} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import {handleGoogleLogin} from './GoogleLogin';
+import {handleNaverLogin} from './NaverLogin';
+import {useUserLoginActions} from '~/zustand/auth/authLogin';
+import {useLoginUser} from '~/api/queries/auth';
 
-GoogleSignin.configure({
-  webClientId: GOOGLE_ID,
-});
-
-type GoogleUserInfo = {
+type LoginUserInfo = {
   email: string;
-  nickname: string;
-  profile: string;
   providerType: string;
   providerId: string;
 };
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [loginUserInfo, setLoginUserInfo] = useState<GoogleUserInfo>({
+  const {updateEmail, updateProviderId, updateProviderType} =
+    useUserLoginActions();
+  const [loginUserInfo, setLoginUserInfo] = useState<LoginUserInfo>({
     email: '',
-    nickname: '',
-    profile: '',
     providerType: '',
     providerId: '',
   });
@@ -44,16 +38,15 @@ const LoginScreen = () => {
     isLoading: isLoading,
     isError: isError,
     isSuccess: isSuccess,
+    data: responseData,
   } = useLoginUser(
     loginUserInfo.email,
-    loginUserInfo.nickname,
-    loginUserInfo.profile,
     loginUserInfo.providerType,
     loginUserInfo.providerId,
   );
 
   useEffect(() => {
-    if (loginUserInfo.email !== '') {
+    if (loginUserInfo.providerType !== '') {
       loginUser();
     }
   }, [loginUserInfo.email]);
@@ -66,33 +59,47 @@ const LoginScreen = () => {
       setIsLoadingOpen(false);
     }
     if (isSuccess) {
-      navigation.navigate('Main');
+      const data = responseData.data;
+
+      if (data.initInfo) {
+        navigation.navigate('Main');
+      } else {
+        navigation.navigate('InitProfile');
+      }
     }
   }, [isError, isLoading, isSuccess]);
 
-  const handleGoogleLogin = async () => {
+  const handleLogin = async (
+    type: string,
+  ): Promise<LoginUserInfo | undefined> => {
     setIsLoadingOpen(true);
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    const {idToken, user} = userInfo;
-    // Firebase Authentication에 Google ID 토큰을 제공하여 사용자를 인증하는 데 사용
-    var googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    await auth().signInWithCredential(googleCredential);
-    return {
-      email: user.email,
-      nickname: user.name ?? user.email,
-      profile: user.photo ?? '',
-      providerType: 'google',
-      providerId: user.id,
-    };
+    if (type === 'google') {
+      return await handleGoogleLogin();
+    } else if (type === 'naver') {
+      return await handleNaverLogin();
+    } else {
+      // kakao
+    }
+    return undefined;
   };
 
-  const loginWithIdToken = async (loginUserInfo: GoogleUserInfo) => {
-    if (loginUserInfo.email !== '') {
-      setLoginUserInfo(loginUserInfo);
-    } else {
-      showToast('로그인에 실패했습니다.');
+  const loginWithIdToken = async (loginUserInfo: LoginUserInfo | undefined) => {
+    if (!loginUserInfo || loginUserInfo.email === '') {
       setIsLoadingOpen(false);
+      showToast('로그인에 실패했습니다.');
+      return;
+    }
+    if (loginUserInfo.email !== '') {
+      updateEmail(loginUserInfo.email);
+      updateProviderId(loginUserInfo.providerId);
+      updateProviderType(loginUserInfo.providerType);
+      setLoginUserInfo({
+        email: loginUserInfo.email,
+        providerType: loginUserInfo.providerType,
+        providerId: loginUserInfo.providerId,
+      });
+      setIsLoadingOpen(false);
+      navigation.navigate('InitProfile');
     }
   };
 
@@ -103,14 +110,17 @@ const LoginScreen = () => {
         <LoginWrapper>
           <TouchableOpacity
             onPress={() =>
-              handleGoogleLogin().then(userInfo => loginWithIdToken(userInfo))
+              handleLogin('google').then(userInfo => loginWithIdToken(userInfo))
             }>
-            <GreyNameTag login={true} content="Google 로그인만 가능">
+            <GreyNameTag login={true} content="Google 로그인">
               <GoogleIcon />
             </GreyNameTag>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={move}> */}
-          <GreyNameTag login={true} content="Naver 로그인은 아직 불가능">
+          {/* <TouchableOpacity
+            onPress={() =>
+              handleLogin('naver').then(userInfo => loginWithIdToken(userInfo))
+            }> */}
+          <GreyNameTag login={true} content="Naver 로그인 아직 불가능">
             <NaverIcon />
           </GreyNameTag>
           {/* </TouchableOpacity> */}
