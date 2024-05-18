@@ -20,6 +20,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -156,17 +157,6 @@ const WriteMyDiaryContentsScreen = () => {
     setContentsKeyword(text);
   }, []);
 
-  const checkKeyword = (text: string): boolean => {
-    var blank = false;
-    if (text === '') {
-      blank = true;
-    }
-    if (text.trim() === '') {
-      blank = true;
-    }
-    return blank;
-  };
-
   return (
     <Container>
       <BackView title="기록 작성" line={true} children={null} />
@@ -181,7 +171,7 @@ const WriteMyDiaryContentsScreen = () => {
             align={'center'}
           />
         </ScrollContents>
-        {!checkKeyword(contentsKeyword) ? (
+        {!checkBlankInKeyword(contentsKeyword) ? (
           <TouchableOpacity onPress={onClickNextButton}>
             <NextButton moveNext={true}>완료</NextButton>
           </TouchableOpacity>

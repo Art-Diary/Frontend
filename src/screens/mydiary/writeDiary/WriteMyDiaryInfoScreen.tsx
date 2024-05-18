@@ -26,6 +26,7 @@ import {
   useWriteMyDiaryInfo,
 } from '~/zustand/mydiary/writeMyDiary';
 import {RootStackNavigationProp} from '~/App';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const WriteMyDiaryInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -107,17 +108,6 @@ const WriteMyDiaryInfoScreen = () => {
   const onChangeSaying = useCallback((text: string) => {
     setSayingKeyword(text);
   }, []);
-
-  const checkKeyword = (text: string): boolean => {
-    var blank = false;
-    if (text === '') {
-      blank = true;
-    }
-    if (text.trim() === '') {
-      blank = true;
-    }
-    return blank;
-  };
 
   const onClickNextButton = async () => {
     const today = new Date();
@@ -221,7 +211,7 @@ const WriteMyDiaryInfoScreen = () => {
           </PutThumbnail>
         </ThumbnailSection>
         {/* 다음 버튼 */}
-        {!checkKeyword(titleKeyword) &&
+        {!checkBlankInKeyword(titleKeyword) &&
         starNum > 0 &&
         imageUri !== undefined ? (
           <TouchableOpacity onPress={onClickNextButton}>

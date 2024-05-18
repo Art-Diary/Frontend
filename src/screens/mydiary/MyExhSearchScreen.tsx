@@ -5,29 +5,19 @@ import BackView from '~/components/common/BackView';
 import SearchExhList from './SearchExhList';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const MyExhSearchScreen = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
 
   const onPressSearch = () => {
-    if (checkKeyword(searchKeyword)) {
+    if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요');
     } else {
       setKeyword(searchKeyword);
     }
     Keyboard.dismiss();
-  };
-
-  const checkKeyword = (text: string): boolean => {
-    var blank = false;
-    if (text === '') {
-      blank = true;
-    }
-    if (text.trim() === '') {
-      blank = true;
-    }
-    return blank;
   };
 
   return (

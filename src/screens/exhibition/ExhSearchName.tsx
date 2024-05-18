@@ -13,6 +13,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -23,7 +24,7 @@ const ExhSearchName = () => {
   const examples: string[] = ['요시다유니', '장욱진', '덕수궁']; //search_list에서 가져올 것.
 
   const onPressSearch = (name: string) => {
-    if (checkKeyword(searchKeyword)) {
+    if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요');
     } else {
       setKeyword(searchKeyword);
@@ -33,17 +34,6 @@ const ExhSearchName = () => {
       navigation.goBack();
     }
     Keyboard.dismiss();
-  };
-
-  const checkKeyword = (text: string): boolean => {
-    var blank = false;
-    if (text === '') {
-      blank = true;
-    }
-    if (text.trim() === '') {
-      blank = true;
-    }
-    return blank;
   };
 
   const onPressPreSearch = (text: string) => {

@@ -6,18 +6,22 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {useUserInfo} from '~/zustand/auth/auth';
 
 interface EditNicknameProps {
   getNickname: string;
   setNickname: (nickname: string) => void;
+  setIsVerified: (isVerified: boolean) => void;
+  isVerified: boolean;
 }
 
 const EditNickname: React.FC<EditNicknameProps> = ({
   getNickname,
   setNickname,
+  setIsVerified,
+  isVerified,
 }) => {
-  const [isVerified, setIsVerified] = useState<boolean>(false);
   const userInfo = useUserInfo();
   const {
     mutate: verifyNickname,
@@ -32,6 +36,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   const onChangeNickname = useCallback((text: string) => {
     setNickname(text);
     setIsVerified(false);
+    setMessage(null);
   }, []);
 
   useEffect(() => {
@@ -55,7 +60,13 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   }, [isError, isLoading, isSuccess]);
 
   const onPressVerify = () => {
-    verifyNickname();
+    // check nickname
+    if (checkBlankInKeyword(getNickname)) {
+      setMessage(' 닉네임을 작성해주세요.');
+      setMessageColor('#FF6F61');
+    } else {
+      verifyNickname();
+    }
   };
 
   return (
