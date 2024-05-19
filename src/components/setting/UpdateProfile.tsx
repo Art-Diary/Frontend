@@ -17,6 +17,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import EditNickname from '~/screens/setting/updateProfile/EditNickname';
 import EditArtCategory from '~/screens/setting/updateProfile/EditArtCategory';
 import EditPicture from '~/screens/setting/updateProfile/EditPicture';
+import {useUserActions} from '~/zustand/auth/auth';
 
 type InitProfile = {
   favoriteArt: string;
@@ -45,6 +46,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
   navigateTo,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateAuthInfo} = useUserActions();
   const [art, setArt] = useState<string>(initProfile.favoriteArt);
   const [nicknameKeyword, setNicknameKeyword] = useState<string>(
     initProfile.nickname,
@@ -62,6 +64,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     isLoading,
     isError,
     isSuccess,
+    data: resData,
   } = useUpdateUserInfo(createFormData);
 
   useEffect(() => {
@@ -81,6 +84,18 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       setIsLoadingOpen(false);
     }
     if (isSuccess) {
+      const data = resData.data;
+
+      updateAuthInfo({
+        userId: data.userId,
+        nickname: data.nickname,
+        email: data.email,
+        profile: data.profile,
+        favoriteArt: data.favoriteArt,
+        alarm1: data.alarm1,
+        alarm2: data.alarm2,
+        alarm3: data.alarm3,
+      });
       setCreateFormData(null);
       showToast(messages.successMsg);
       if (navigateTo === 'back') {
@@ -92,13 +107,23 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
   }, [isError, isLoading, isSuccess]);
 
   const onPressComplete = async () => {
+    if (!(nicknameKeyword !== '' && art !== '' && isVerified)) {
+      if (nicknameKeyword === '') {
+        showToast('닉네임을 작성해주세요.');
+      } else if (art === '') {
+        showToast('좋아하는 전시 분야를 선택해주세요.');
+      } else if (!isVerified) {
+        showToast('닉네임 중복 확인을 해주세요.');
+      }
+      return;
+    }
     const formData = new FormData();
 
     formData.append('nickname', nicknameKeyword);
     formData.append('favoriteArt', art);
 
     const isImage = imageUri?.search('file://');
-    if (isImage && isImage !== -1) {
+    if (isImage !== undefined && isImage !== -1) {
       const resizedImage = await ImageResizer.createResizedImage(
         imageUri ?? '', // path
         300, // width
@@ -157,12 +182,9 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           </BoxView>
         </ContentColumn>
         {/* 완료 버튼 */}
-        <TouchableOpacity
-          disabled={!(nicknameKeyword !== '' && art !== '' && isVerified)}
-          onPress={onPressComplete}>
+        <TouchableOpacity onPress={onPressComplete}>
           <CompleteButton
             complete={nicknameKeyword !== '' && art !== '' && isVerified}>
-            {/* 중복 확인 완료도 검사 */}
             완료
           </CompleteButton>
         </TouchableOpacity>

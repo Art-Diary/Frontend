@@ -8,7 +8,7 @@ import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
 
 const UpdateAlarm1 = () => {
   const userInfo = useUserInfo();
-  const [getAlarm1, setAlarm1] = useState(userInfo.alarm1);
+  const [getAlarm1, setAlarm1] = useState(userInfo.authInfo.alarm1);
   const {updateAlarm1} = useUserActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {

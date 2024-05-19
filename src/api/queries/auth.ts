@@ -10,7 +10,7 @@ import {
   verifyNickname,
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useUserActions} from '~/zustand/auth/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -71,8 +71,6 @@ export const useFetchUserInfo = () =>
   });
 
 export const useUpdateUserInfo = (info: FormData | null) => {
-  const {updateNickname, updateFavoriteArt, updateProfile} = useUserActions();
-
   return useMutation({
     mutationFn: () => updateUserInfo(info),
     onError: err => {
@@ -80,10 +78,6 @@ export const useUpdateUserInfo = (info: FormData | null) => {
       console.log('[EditProfileScreen] error update UserInfo');
     },
     onSuccess: res => {
-      const resData = res.data;
-      updateNickname(resData.nickname);
-      updateProfile(resData.profile);
-      updateFavoriteArt(resData.favoriteArt);
       console.log('[EditProfileScreen] success update UserInfo');
     },
   });
@@ -126,11 +120,15 @@ export const useLoginUser = (
       console.log(err);
       console.log('[Login] error Login +', providerType);
     },
-    onSuccess: (res: any) => {
+    onSuccess: async (res: any) => {
       const resData = res.data;
       // TODO
-      // AsyncStorage.setItem('userId', resData.userId);
-      console.log('[Login] success Login +', providerType);
+      try {
+        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        console.log('[Login] success Login +', providerType);
+      } catch (error) {
+        console.log('[AsyncStorage] Error storing userId', error);
+      }
       return resData;
     },
   });

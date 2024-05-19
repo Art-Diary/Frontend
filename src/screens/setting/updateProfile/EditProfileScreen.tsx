@@ -9,11 +9,11 @@ const EditProfileScreen = () => {
     <UpdateProfile
       title={'프로필 수정'}
       initProfile={{
-        favoriteArt: userInfo.favoriteArt,
-        nickname: userInfo.nickname,
-        profile: userInfo.profile,
-        email: userInfo.email,
-        providerType: userInfo.email.split('@')[1].split('.')[0],
+        favoriteArt: userInfo.authInfo.favoriteArt,
+        nickname: userInfo.authInfo.nickname,
+        profile: userInfo.authInfo.profile,
+        email: userInfo.authInfo.email,
+        providerType: userInfo.authInfo.email.split('@')[1].split('.')[0],
       }}
       messages={{
         errorMsg: '정보 수정을 실패했습니다.',

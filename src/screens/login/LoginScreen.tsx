@@ -8,7 +8,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
-import {TouchableOpacity} from 'react-native';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -16,6 +15,8 @@ import {handleGoogleLogin} from './GoogleLogin';
 import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
 import {useLoginUser} from '~/api/queries/auth';
+import {useUserActions} from '~/zustand/auth/auth';
+import {TesterLogin} from './TesterLogin';
 
 type LoginUserInfo = {
   email: string;
@@ -25,6 +26,7 @@ type LoginUserInfo = {
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateAuthInfo} = useUserActions();
   const {updateEmail, updateProviderId, updateProviderType} =
     useUserLoginActions();
   const [loginUserInfo, setLoginUserInfo] = useState<LoginUserInfo>({
@@ -38,7 +40,7 @@ const LoginScreen = () => {
     isLoading: isLoading,
     isError: isError,
     isSuccess: isSuccess,
-    data: responseData,
+    data: resData,
   } = useLoginUser(
     loginUserInfo.email,
     loginUserInfo.providerType,
@@ -59,9 +61,21 @@ const LoginScreen = () => {
       setIsLoadingOpen(false);
     }
     if (isSuccess) {
-      const data = responseData.data;
+      const data = resData.data;
 
       if (data.initInfo) {
+        const data = resData.data;
+
+        updateAuthInfo({
+          userId: data.userId,
+          nickname: data.nickname,
+          email: data.email,
+          profile: data.profile,
+          favoriteArt: data.favoriteArt,
+          alarm1: data.alarm1,
+          alarm2: data.alarm2,
+          alarm3: data.alarm3,
+        });
         navigation.navigate('Main');
       } else {
         navigation.navigate('InitProfile');
@@ -107,33 +121,38 @@ const LoginScreen = () => {
       <Contents>
         <ArtDiary>Art Diary</ArtDiary>
         <LoginWrapper>
-          <TouchableOpacity
-            onPress={() =>
+          <GreyNameTag
+            login={true}
+            content="Google 로그인"
+            handleTouch={() =>
               handleLogin('google').then(userInfo => loginWithIdToken(userInfo))
             }>
-            <GreyNameTag login={true} content="Google 로그인">
-              <GoogleIcon />
-            </GreyNameTag>
-          </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={() =>
+            <GoogleIcon />
+          </GreyNameTag>
+          <GreyNameTag
+            login={true}
+            content="Naver 로그인"
+            handleTouch={() =>
               handleLogin('naver').then(userInfo => loginWithIdToken(userInfo))
-            }> */}
-          <GreyNameTag login={true} content="Naver 로그인 아직 불가능">
+            }>
             <NaverIcon />
           </GreyNameTag>
-          {/* </TouchableOpacity> */}
-          {/* <TouchableOpacity onPress={move}> */}
-          <GreyNameTag login={true} content="Kakao 로그인 아직 불가능">
+          <GreyNameTag
+            login={true}
+            content="Kakao 로그인 아직 불가능"
+            handleTouch={() =>
+              handleLogin('kakao').then(userInfo => loginWithIdToken(userInfo))
+            }>
             <KakaoIcon />
           </GreyNameTag>
-          {/* </TouchableOpacity> */}
+          {/* TODO 나중에 지우기 */}
+          <TesterLogin />
         </LoginWrapper>
       </Contents>
       <LineWrapper>
         <Line />
       </LineWrapper>
-      {isLoadingOpen && <LoadingModal message={'로그인 시동 중 :)'} />}
+      {isLoadingOpen && <LoadingModal message={'로그인 시도 중 :)'} />}
     </Container>
   );
 };
