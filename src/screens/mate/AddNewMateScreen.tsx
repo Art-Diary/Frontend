@@ -14,6 +14,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchNewMateList from './SearchNewMateList';
 import {useAddNewMate} from '~/api/queries/mate';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const AddNewMateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -54,19 +55,8 @@ const AddNewMateScreen = () => {
     }
   };
 
-  const checkKeyword = (text: string): boolean => {
-    var blank = false;
-    if (text === '') {
-      blank = true;
-    }
-    if (text.trim() === '') {
-      blank = true;
-    }
-    return blank;
-  };
-
   const onPressSearch = () => {
-    if (checkKeyword(nicknameKeyword)) {
+    if (checkBlankInKeyword(nicknameKeyword)) {
       showToast('다시 검색해 주세요');
     } else {
       setSelectedMate(-1);

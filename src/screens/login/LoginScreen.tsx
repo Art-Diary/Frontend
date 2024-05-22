@@ -99,7 +99,6 @@ const LoginScreen = () => {
         providerId: loginUserInfo.providerId,
       });
       setIsLoadingOpen(false);
-      navigation.navigate('InitProfile');
     }
   };
 
