@@ -139,7 +139,6 @@ export default function App() {
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
-            {/* TODO 지우기 */}
             <Stack.Screen name="UserInfo" component={UserInfo} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
