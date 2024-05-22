@@ -49,6 +49,19 @@ const LoginScreen = () => {
   );
 
   useEffect(() => {
+    const checkUserId = async () => {
+      const userId = await AsyncStorage.getItem('userId');
+      // TODO 출력 삭제
+      console.log(userId);
+      if (userId) {
+        navigation.navigate('UserInfo');
+      }
+    };
+
+    checkUserId();
+  }, [navigation]);
+
+  useEffect(() => {
     if (loginUserInfo.providerType !== '') {
       loginUser();
     }
@@ -124,7 +137,7 @@ const LoginScreen = () => {
     } catch (error) {
       console.log('[AsyncStorage] Error storing userId TESTER 3');
     }
-    navigation.navigate('TesterLogin');
+    navigation.navigate('UserInfo');
   };
 
   return (

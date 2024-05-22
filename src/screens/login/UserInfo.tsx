@@ -6,7 +6,7 @@ import {useUserActions} from '~/zustand/auth/auth';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {View} from 'react-native';
 
-export const TesterLogin = () => {
+export const UserInfo = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const {updateAuthInfo} = useUserActions();
