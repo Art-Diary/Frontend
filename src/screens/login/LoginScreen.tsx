@@ -16,8 +16,8 @@ import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
 import {useLoginUser} from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
-import {TesterLogin} from './TesterLogin';
 import {TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type LoginUserInfo = {
   email: string;
@@ -26,7 +26,6 @@ type LoginUserInfo = {
 };
 
 const LoginScreen = () => {
-  const [isTester, setIsTester] = useState<boolean>(false);
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateAuthInfo} = useUserActions();
   const {updateEmail, updateProviderId, updateProviderType} =
@@ -118,6 +117,16 @@ const LoginScreen = () => {
     }
   };
 
+  const handleTester = async () => {
+    try {
+      await AsyncStorage.setItem('userId', JSON.stringify(3));
+      console.log('[AsyncStorage] Success storing userId TESTER 3');
+    } catch (error) {
+      console.log('[AsyncStorage] Error storing userId TESTER 3');
+    }
+    navigation.navigate('TesterLogin');
+  };
+
   return (
     <Container>
       <Contents>
@@ -148,10 +157,9 @@ const LoginScreen = () => {
             <KakaoIcon />
           </GreyNameTag>
           {/* TODO 나중에 지우기 */}
-          <TouchableOpacity onPress={() => setIsTester(true)}>
+          <TouchableOpacity onPress={handleTester}>
             <Tester>테스터 3</Tester>
           </TouchableOpacity>
-          {isTester && <TesterLogin />}
         </LoginWrapper>
       </Contents>
       <LineWrapper>

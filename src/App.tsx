@@ -33,6 +33,7 @@ import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
+import {TesterLogin} from './screens/login/TesterLogin';
 
 type RootStackParamList = {
   Main: undefined;
@@ -72,6 +73,8 @@ type RootStackParamList = {
   MateDiaryRoutes: undefined;
   MateDiaryList: undefined;
   MateDiaryBack: undefined;
+  // TODO 지우기
+  TesterLogin: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -137,6 +140,8 @@ export default function App() {
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
+            {/* TODO 지우기 */}
+            <Stack.Screen name="TesterLogin" component={TesterLogin} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>
