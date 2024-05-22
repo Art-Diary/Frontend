@@ -17,6 +17,7 @@ import {useUserLoginActions} from '~/zustand/auth/authLogin';
 import {useLoginUser} from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
 import {TesterLogin} from './TesterLogin';
+import {TouchableOpacity} from 'react-native';
 
 type LoginUserInfo = {
   email: string;
@@ -25,6 +26,7 @@ type LoginUserInfo = {
 };
 
 const LoginScreen = () => {
+  const [isTester, setIsTester] = useState<boolean>(false);
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateAuthInfo} = useUserActions();
   const {updateEmail, updateProviderId, updateProviderType} =
@@ -146,7 +148,10 @@ const LoginScreen = () => {
             <KakaoIcon />
           </GreyNameTag>
           {/* TODO 나중에 지우기 */}
-          <TesterLogin />
+          <TouchableOpacity onPress={() => setIsTester(true)}>
+            <Tester>테스터 3</Tester>
+          </TouchableOpacity>
+          {isTester && <TesterLogin />}
         </LoginWrapper>
       </Contents>
       <LineWrapper>
@@ -200,4 +205,12 @@ const LoginWrapper = styled.View`
   padding-right: ${wp(18)}px;
   width: 100%;
   gap: ${hp(-10)}px;
+`;
+
+const Tester = styled.Text`
+  margin: 5px;
+  font-size: ${fp(15)}px;
+  color: white;
+  font-family: 'omyu pretty';
+  text-decoration: underline;
 `;

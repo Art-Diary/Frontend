@@ -16,8 +16,8 @@ interface AuthState {
   actions: {
     updateAuthInfo: (authInfo: AuthInfo) => void;
     updateAlarm1: (alarm1: boolean) => void;
-    updateAlarm2: (alarm1: boolean) => void;
-    updateAlarm3: (alarm1: boolean) => void;
+    updateAlarm2: (alarm2: boolean) => void;
+    updateAlarm3: (alarm3: boolean) => void;
   };
 }
 

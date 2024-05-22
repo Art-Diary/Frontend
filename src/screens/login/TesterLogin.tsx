@@ -35,22 +35,31 @@ export const TesterLogin = () => {
       alarm2: userInfo.alarm2,
       alarm3: userInfo.alarm3,
     });
-  }
-
-  const handleTester = async () => {
     try {
-      await AsyncStorage.setItem('userId', JSON.stringify(3));
+      AsyncStorage.setItem('userId', JSON.stringify(3));
       console.log('[AsyncStorage] Success storing userId TESTER 3');
     } catch (error) {
       console.log('[AsyncStorage] Error storing userId TESTER 3');
     }
 
     navigation.navigate('Main');
-  };
+  }
+
+  // const handleTester = async () => {
+  //   try {
+  //     await AsyncStorage.setItem('userId', JSON.stringify(3));
+  //     console.log('[AsyncStorage] Success storing userId TESTER 3');
+  //   } catch (error) {
+  //     console.log('[AsyncStorage] Error storing userId TESTER 3');
+  //   }
+
+  //   navigation.navigate('Main');
+  // };
   return (
-    <TouchableOpacity onPress={handleTester}>
-      <Tester>테스터 3</Tester>
-    </TouchableOpacity>
+    <></>
+    // <TouchableOpacity onPress={handleTester}>
+    //   <Tester>테스터 3</Tester>
+    // </TouchableOpacity>
   );
 };
 
