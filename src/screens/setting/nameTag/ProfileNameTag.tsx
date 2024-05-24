@@ -30,19 +30,35 @@ const ProfileNameTag = () => {
         <Wrapper>
           <ProfileWrapper>
             <Profile
-              source={{uri: `data:image/png;base64,${userInfo.profile}`}}
+              source={{
+                uri: `data:image/png;base64,${userInfo.authInfo.profile}`,
+              }}
               resizeMode="cover"
-              alt={'이미지 읽기 실패'}
+              alt={'이미지'}
             />
           </ProfileWrapper>
           <UserInfoColumn>
             <UserInfoRow>
-              <NickName>{userInfo.nickname}</NickName>
+              <NickName>
+                {!userInfo.authInfo.nickname ||
+                userInfo.authInfo.nickname === ''
+                  ? '홍길동'
+                  : userInfo.authInfo.nickname}
+              </NickName>
               <ArtWrapper>
-                <Art>{userInfo.favoriteArt}</Art>
+                <Art>
+                  {!userInfo.authInfo.favoriteArt ||
+                  userInfo.authInfo.favoriteArt === ''
+                    ? '좋아하는 전시 분야'
+                    : userInfo.authInfo.favoriteArt}
+                </Art>
               </ArtWrapper>
             </UserInfoRow>
-            <Email>{userInfo.email}</Email>
+            <Email>
+              {!userInfo.authInfo.email || userInfo.authInfo.email === ''
+                ? '이메일@이메일'
+                : userInfo.authInfo.email}
+            </Email>
           </UserInfoColumn>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <ProfileUpdateIcon />

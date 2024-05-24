@@ -6,16 +6,21 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {useUserInfo} from '~/zustand/auth/auth';
 
 interface EditNicknameProps {
   getNickname: string;
   setNickname: (nickname: string) => void;
+  setIsVerified: (isVerified: boolean) => void;
+  isVerified: boolean;
 }
 
 const EditNickname: React.FC<EditNicknameProps> = ({
   getNickname,
   setNickname,
+  setIsVerified,
+  isVerified,
 }) => {
   const userInfo = useUserInfo();
   const {
@@ -30,13 +35,16 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
   const onChangeNickname = useCallback((text: string) => {
     setNickname(text);
+    setIsVerified(false);
+    setMessage(null);
   }, []);
 
   useEffect(() => {
     if (isError) {
-      if (userInfo.nickname === getNickname) {
+      if (userInfo.authInfo.nickname === getNickname) {
         setMessage(' 사용 가능한 닉네임입니다.');
         setMessageColor('#34A853');
+        setIsVerified(true);
       } else {
         setMessage(' 이미 사용하고 있는 닉네임입니다.');
         setMessageColor('#FF6F61');
@@ -47,11 +55,18 @@ const EditNickname: React.FC<EditNicknameProps> = ({
     if (isSuccess) {
       setMessage(' 사용 가능한 닉네임입니다.');
       setMessageColor('#34A853');
+      setIsVerified(true);
     }
   }, [isError, isLoading, isSuccess]);
 
   const onPressVerify = () => {
-    verifyNickname();
+    // check nickname
+    if (checkBlankInKeyword(getNickname)) {
+      setMessage(' 닉네임을 작성해주세요.');
+      setMessageColor('#FF6F61');
+    } else {
+      verifyNickname();
+    }
   };
 
   return (
@@ -67,11 +82,16 @@ const EditNickname: React.FC<EditNicknameProps> = ({
       <ContentRow>
         <Nickname
           placeholderTextColor="#D3D3D3"
-          placeholder={getNickname}
+          placeholder={
+            getNickname === '' ? '닉네임을 입력해주세요.' : getNickname
+          }
           onChangeText={onChangeNickname}
           value={getNickname}
         />
-        <CheckButton onPress={onPressVerify}>
+        <CheckButton
+          isVerified={isVerified}
+          disabled={isVerified}
+          onPress={onPressVerify}>
           <CheckText>중복확인</CheckText>
         </CheckButton>
       </ContentRow>
@@ -124,13 +144,19 @@ const Nickname = styled.TextInput`
   width: 100%;
 `;
 
-const CheckButton = styled.TouchableOpacity`
+interface CheckButtonProps {
+  isVerified: boolean;
+}
+
+const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
   padding-top: ${hp(11)}px;
   padding-bottom: ${hp(11)}px;
   padding-left: ${wp(5)}px;
   padding-right: ${wp(5)}px;
   border-radius: 10px;
   background-color: #ff6f61;
+  background-color: ${(props: CheckButtonProps) =>
+    props.isVerified ? '#D3D3D3' : '#ff6f61'};
 `;
 
 const CheckText = styled.Text`

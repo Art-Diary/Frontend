@@ -10,7 +10,7 @@ import {
   verifyNickname,
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useUserActions} from '~/zustand/auth/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -71,8 +71,6 @@ export const useFetchUserInfo = () =>
   });
 
 export const useUpdateUserInfo = (info: FormData | null) => {
-  const {updateNickname, updateFavoriteArt, updateProfile} = useUserActions();
-
   return useMutation({
     mutationFn: () => updateUserInfo(info),
     onError: err => {
@@ -80,10 +78,6 @@ export const useUpdateUserInfo = (info: FormData | null) => {
       console.log('[EditProfileScreen] error update UserInfo');
     },
     onSuccess: res => {
-      const resData = res.data;
-      updateNickname(resData.nickname);
-      updateProfile(resData.profile);
-      updateFavoriteArt(resData.favoriteArt);
       console.log('[EditProfileScreen] success update UserInfo');
     },
   });
@@ -117,43 +111,25 @@ export const useDeleteUser = (reason: string) => {
 
 export const useLoginUser = (
   email: string,
-  nickname: string,
-  profile: string,
   providerType: string,
   providerId: string,
 ) => {
-  const {
-    updateUserId,
-    updateNickname,
-    updateEmail,
-    updateProfile,
-    updateFavoriteArt,
-    updateAlarm1,
-    updateAlarm2,
-    updateAlarm3,
-  } = useUserActions();
   return useMutation({
-    mutationFn: () =>
-      loginUser(email, nickname, profile, providerType, providerId),
+    mutationFn: () => loginUser(email, providerType, providerId),
     onError: err => {
       console.log(err);
       console.log('[Login] error Login +', providerType);
     },
-    onSuccess: (res: any) => {
-      // 사용자 정보 저장
-      // 현재는 지정된 사용자로 사용 중이기 때문에 주석 처리
+    onSuccess: async (res: any) => {
       const resData = res.data;
-
-      // updateUserId(resData.userId);
-      // updateNickname(resData.nickname);
-      // updateEmail(resData.email);
-      // updateProfile(resData.profile);
-      // updateFavoriteArt(resData.favoriteArt);
-      // updateAlarm1(resData.alarm1);
-      // updateAlarm2(resData.alarm2);
-      // updateAlarm3(resData.Alarm3);
-      // AsyncStorage.setItem('userId', resData.userId);
-      console.log('[Login] success Login +', providerType);
+      // TODO
+      try {
+        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        console.log('[Login] success Login +', providerType);
+      } catch (error) {
+        console.log('[AsyncStorage] Error storing userId', error);
+      }
+      return resData;
     },
   });
 };

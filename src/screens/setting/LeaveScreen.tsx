@@ -10,8 +10,12 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {TouchableOpacity} from 'react-native';
 import {useDeleteUser} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LeaveScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [reasonKeyword, setReasonKeyword] = useState<string>('');
   const {
@@ -33,7 +37,13 @@ const LeaveScreen = () => {
     }
     if (isSuccess) {
       showToast('탈퇴 성공 :(');
-      // TODO 로그인 페이지로 이동
+      // TODO 나중에 로그아웃 구체적으로 하기
+      AsyncStorage.removeItem('userId');
+      // 로그인 페이지로 이동
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Login'}],
+      });
     }
   }, [isError, isLoading, isSuccess]);
 

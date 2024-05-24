@@ -23,16 +23,13 @@ export const verifyNickname = (nickname: string) =>
 export const deleteUser = (reason: string) =>
   client.post(`/users/leave`, {reason: reason});
 
-export const loginUser = (
+export const loginUser = async (
   email: string,
-  nickname: string,
-  profile: string,
   providerType: string,
   providerId: string,
 ) =>
-  client.post(`/users?providerType=${providerType}`, {
+  client.post(`/users`, {
     email: email,
-    nickname: nickname,
-    profile: profile,
+    providerType: providerType,
     providerId: providerId,
   });
