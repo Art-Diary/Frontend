@@ -225,6 +225,7 @@ export const useUpdateMyDiary = (
             params.exhId,
           ),
         );
+        // [NEW] 추가
       }
     },
   });

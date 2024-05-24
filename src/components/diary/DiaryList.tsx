@@ -46,6 +46,7 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMyDiary}) => {
         params: undefined,
       });
     }
+    // [NEW] 추가
   };
 
   const handleIsDeleted = (isLastItem: boolean) => {

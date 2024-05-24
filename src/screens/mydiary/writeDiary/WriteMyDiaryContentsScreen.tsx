@@ -108,6 +108,7 @@ const WriteMyDiaryContentsScreen = () => {
           params: undefined,
         });
       }
+      // [NEW] 추가
     }
   }, [
     isErrorCreate,
