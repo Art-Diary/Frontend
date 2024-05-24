@@ -33,6 +33,7 @@ import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
+import {UserInfo} from './screens/login/UserInfo';
 
 type RootStackParamList = {
   Main: undefined;
@@ -66,6 +67,7 @@ type RootStackParamList = {
   // login
   Login: undefined;
   InitProfile: undefined;
+  UserInfo: undefined;
   // mate
   CreateGathering: undefined;
   AddNewMate: undefined;
@@ -137,6 +139,7 @@ export default function App() {
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
+            <Stack.Screen name="UserInfo" component={UserInfo} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>

@@ -10,9 +10,15 @@ interface TagProps {
   content: string;
   children?: ReactNode;
   login?: boolean;
+  handleTouch?: () => void;
 }
 
-const GreyNameTag: React.FC<TagProps> = ({content, children, login}) => {
+const GreyNameTag: React.FC<TagProps> = ({
+  content,
+  children,
+  login,
+  handleTouch,
+}) => {
   const tag = login
     ? `<svg width="504" height="86" viewBox="0 0 504 86" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0.4 0.4H468.724L503.209 43L468.724 85.6H0.4V0.4Z" fill="white" stroke="#D3D3D3" stroke-width="0.8"/>
@@ -31,10 +37,10 @@ const GreyNameTag: React.FC<TagProps> = ({content, children, login}) => {
         <SvgXml xml={tag} width="100%" />
       </Svg>
       <WordContainer>
-        <Wrapper>
+        <TouchView onPress={handleTouch}>
           {children}
           <TitleText>{content}</TitleText>
-        </Wrapper>
+        </TouchView>
       </WordContainer>
     </Container>
   );
@@ -52,7 +58,7 @@ const WordContainer = styled.View`
   height: 100%;
 `;
 
-const Wrapper = styled.View`
+const TouchView = styled.TouchableOpacity`
   flex: 1;
   padding-left: ${wp(20)}px;
   flex-direction: row;
