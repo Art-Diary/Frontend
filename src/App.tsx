@@ -34,6 +34,7 @@ import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
+import ExhToDiary from './screens/exhibition/ExhToDiary';
 import {UserInfo} from './screens/login/UserInfo';
 
 type RootStackParamList = {
@@ -62,6 +63,9 @@ type RootStackParamList = {
   ExhibitionSearch: undefined;
   ExhDetailInfo: {
     exhId: number;
+  };
+  ExhToDiary: {
+    diaryId: number;
   };
 
   GatheringInfo: {
@@ -116,6 +120,7 @@ export default function App() {
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
             <Stack.Screen name="ExhDetailInfo" component={ExhDetailInfo} />
+            <Stack.Screen name="ExhToDiary" component={ExhToDiary} />
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"
