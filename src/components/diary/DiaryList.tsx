@@ -13,35 +13,38 @@ import SayingInfo from '~/components/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {useMyDiaryBackActions} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
-import {useMateDiaryBackActions} from '~/zustand/mate/queryMateDiary';
+import {useDiaryBackActions} from '~/zustand/common/diaryBack';
+import {useUserInfo} from '~/zustand/auth/auth';
 
 interface DiaryListProps {
   diaryList: any[];
-  isMateDiary: boolean;
+  isMyDiary: boolean;
 }
 
-const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMateDiary}) => {
+const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMyDiary}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateforBackInfo} = useMyDiaryBackActions();
-  const {updateContents, updateWriteDate} = useMateDiaryBackActions();
+  const {updateBackInfo} = useDiaryBackActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const scrollViewRef = useRef<ScrollView>(null);
+  const {authInfo} = useUserInfo();
 
   const onPressBack = (item: any) => {
-    if (isMateDiary) {
-      updateContents(item.contents);
-      updateWriteDate(item.writeDate);
-    } else {
-      updateforBackInfo(item.contents, item.writeDate);
-    }
+    updateBackInfo({
+      contents: item.contents,
+      writeDate: item.writeDate,
+    });
     if (tabIdentifierInfo.tab === 'mydiary') {
       navigation.navigate('MyDiaryBack');
     } else if (tabIdentifierInfo.tab === 'calendar') {
       navigation.navigate('CalendarDiaryBack');
-    } else {
+    } else if (tabIdentifierInfo.tab === 'mate') {
       navigation.navigate('MateDiaryBack');
+    } else if (tabIdentifierInfo.tab === 'gathering') {
+      navigation.navigate('GatheringRoutes', {
+        screen: 'GatheringDiaryBack',
+        params: undefined,
+      });
     }
   };
 
@@ -78,7 +81,11 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMateDiary}) => {
                         handleIsDeleted={() =>
                           handleIsDeleted(diaryList.length - 1 === index)
                         }
-                        isMateDiary={isMateDiary}
+                        isMyDiary={
+                          item.userId
+                            ? item.userId === authInfo.userId
+                            : isMyDiary
+                        }
                       />
                       <WriterRateInfo
                         nickname={item.nickname}

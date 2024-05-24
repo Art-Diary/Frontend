@@ -20,33 +20,6 @@ export const useVisitedExhIdInfo = () =>
 export const useVisitedExhIdActions = () =>
   useVisitedExhId(state => state.actions);
 
-/** 내가 작성한 기록의 뒷면에 들어갈 데이터 */
-interface MyDiaryBackInfoState {
-  contents: string;
-  writeDate: number[];
-  actions: {
-    updateforBackInfo: (contents: string, writeDate: number[]) => void;
-  };
-}
-
-const useMyDiaryBack = create<MyDiaryBackInfoState>(set => ({
-  contents: '',
-  writeDate: [],
-  actions: {
-    updateforBackInfo: (contents: string, writeDate: number[]) => {
-      set(state => ({contents: contents, writeDate: writeDate}));
-    },
-  },
-}));
-
-export const useMyDiaryBackInfo = () =>
-  useMyDiaryBack(state => ({
-    contents: state.contents,
-    writeDate: state.writeDate,
-  }));
-export const useMyDiaryBackActions = () =>
-  useMyDiaryBack(state => state.actions);
-
 /** 내 기록 삭제하기 */
 interface DeleteMyDiaryState {
   exhId: number;
