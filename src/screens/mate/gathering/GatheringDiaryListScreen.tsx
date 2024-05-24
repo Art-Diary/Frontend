@@ -30,7 +30,7 @@ const GatheringDiaryListScreen = () => {
       <BackView line={false} />
 
       {/* body */}
-      <DiaryList diaryList={gatheringDiaryList} isMyDiary={false} />
+      <DiaryList diaryList={gatheringDiaryList} />
     </Container>
   );
 };

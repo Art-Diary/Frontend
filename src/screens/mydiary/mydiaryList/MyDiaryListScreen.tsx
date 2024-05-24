@@ -51,7 +51,7 @@ const MyDiaryListScreen = () => {
       </BackView>
 
       {/* body */}
-      <DiaryList diaryList={myDiaryList} isMyDiary={true} />
+      <DiaryList diaryList={myDiaryList} />
     </Container>
   );
 };

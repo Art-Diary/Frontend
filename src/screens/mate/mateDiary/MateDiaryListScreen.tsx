@@ -31,7 +31,7 @@ const MateDiaryListScreen = () => {
       <BackView line={false} />
 
       {/* body */}
-      <DiaryList diaryList={mateDiaryList} isMyDiary={false} />
+      <DiaryList diaryList={mateDiaryList} />
     </Container>
   );
 };

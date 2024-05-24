@@ -19,10 +19,9 @@ import {useUserInfo} from '~/zustand/auth/auth';
 
 interface DiaryListProps {
   diaryList: any[];
-  isMyDiary: boolean;
 }
 
-const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMyDiary}) => {
+const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateBackInfo} = useDiaryBackActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
@@ -82,11 +81,7 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList, isMyDiary}) => {
                         handleIsDeleted={() =>
                           handleIsDeleted(diaryList.length - 1 === index)
                         }
-                        isMyDiary={
-                          item.userId
-                            ? item.userId === authInfo.userId
-                            : isMyDiary
-                        }
+                        isMyDiary={item.userId === authInfo.userId}
                       />
                       <WriterRateInfo
                         nickname={item.nickname}
