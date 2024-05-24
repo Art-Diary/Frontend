@@ -98,10 +98,17 @@ const WriteMyDiaryContentsScreen = () => {
           index: 0,
           routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
         });
-      } else {
+      } else if (tabIdentifier.tab === 'calendar') {
         // [캘린더] 기록 목록 화면으로 이동
         navigation.navigate('CalendarDiaryRoutes');
+      } else if (tabIdentifier.tab === 'gathering') {
+        // [캘린더] 기록 목록 화면으로 이동
+        navigation.navigate('GatheringRoutes', {
+          screen: 'GatheringDiaryList',
+          params: undefined,
+        });
       }
+      // [NEW] 추가
     }
   }, [
     isErrorCreate,

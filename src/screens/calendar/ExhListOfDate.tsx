@@ -40,7 +40,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   items,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateVisitedExhId: updateMyExhIdInfo} = useVisitedExhIdActions();
+  const {updateVisitedExhId} = useVisitedExhIdActions();
   const {
     updateForget,
     updateVisitDate,
@@ -87,7 +87,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     {
       /* 선택한 날짜의 기록들 */
     }
-    updateMyExhIdInfo(exhItem.exhId);
+    updateVisitedExhId(exhItem.exhId);
     updateForget(exhItem.visitDate ? false : true);
     updateVisitDate(
       exhItem.visitDate ? JoinDateWithHyphen(exhItem.visitDate) : null,

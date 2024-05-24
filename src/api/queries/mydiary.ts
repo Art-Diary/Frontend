@@ -11,6 +11,8 @@ import {
 } from '../mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
+import {gatheringQueryKeys} from './gathering';
+import {useGatheringListParamsInfo} from '~/zustand/gathering/gathering';
 
 const mydiaryQueryKeys = createQueryKeys('mydiary', {
   fetchMyExhList: () => ['fetchMyExhList'],
@@ -191,6 +193,7 @@ export const useUpdateMyDiary = (
   const queryClient = useQueryClient();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
+  const {params} = useGatheringListParamsInfo();
 
   return useMutation({
     mutationFn: () => updateMyDiary(exhId, diaryId, newMyDiary),
@@ -216,6 +219,13 @@ export const useUpdateMyDiary = (
             exhFromCalendarInfo.gatherId,
           ),
         );
+        queryClient.invalidateQueries(
+          gatheringQueryKeys.fetchGatheringDiaryList(
+            params.gatherId,
+            params.exhId,
+          ),
+        );
+        // [NEW] 추가
       }
     },
   });

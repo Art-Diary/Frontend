@@ -7,17 +7,11 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {useDiaryBackInfo} from '~/zustand/common/diaryBack';
 
-type BackInfo = {
-  contents: string;
-  writeDate: number[];
-};
+const DiaryBackFrame = () => {
+  const {backInfo} = useDiaryBackInfo();
 
-interface DiaryBackFrameProps {
-  backInfo: BackInfo;
-}
-
-const DiaryBackFrame: React.FC<DiaryBackFrameProps> = ({backInfo}) => {
   return (
     <Container>
       <BackView line={false} children={null} />

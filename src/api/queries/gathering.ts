@@ -2,13 +2,19 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   createGathering,
+  fetchGatheringDiaryList,
   fetchGatheringInfo,
   fetchGatheringList,
 } from '../gathering';
 
-const gatheringQueryKeys = createQueryKeys('gathering', {
+export const gatheringQueryKeys = createQueryKeys('gathering', {
   fetchGatheringList: () => ['fetchGatheringList'],
   fetchGatheringInfo: (gatherId: number) => ['fetchGatheringInfo', gatherId],
+  fetchGatheringDiaryList: (gatherId: number, exhId: number) => [
+    'fetchGatheringDiaryList',
+    gatherId,
+    exhId,
+  ],
 });
 
 export const useFetchGatheringList = () =>
@@ -56,3 +62,19 @@ export const useCreateGathering = (gatherName: string) => {
     },
   });
 };
+
+export const useFetchGatheringDiaryList = (gatherId: number, exhId: number) =>
+  useQuery({
+    queryKey: gatheringQueryKeys.fetchGatheringDiaryList(gatherId, exhId)
+      .queryKey,
+    queryFn: () => fetchGatheringDiaryList(gatherId, exhId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[GatheringDiaryList] error fetch GatheringDiaryList');
+    },
+    onSuccess: () => {
+      console.log('[GatheringDiaryList] success fetch GatheringDiaryList');
+    },
+    select: (res: any) => res.data,
+  });

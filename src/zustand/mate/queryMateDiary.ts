@@ -30,32 +30,3 @@ export const useQueryMateDiaryInfo = () =>
 
 export const useQueryMateDiaryActions = () =>
   useQueryMateDiary(state => state.actions);
-
-// 다이어리 뒷면
-interface MateDiaryBackState {
-  contents: string;
-  writeDate: number[];
-  actions: {
-    updateContents: (contents: string) => void;
-    updateWriteDate: (writeDate: number[]) => void;
-  };
-}
-
-const useMateDiaryBack = create<MateDiaryBackState>(set => ({
-  contents: '',
-  writeDate: [],
-  actions: {
-    updateContents: (contents: string) => set(state => ({contents: contents})),
-    updateWriteDate: (writeDate: number[]) =>
-      set(state => ({writeDate: writeDate})),
-  },
-}));
-
-export const useMateDiaryBackInfo = () =>
-  useMateDiaryBack(state => ({
-    contents: state.contents,
-    writeDate: state.writeDate,
-  }));
-
-export const useMateDiaryBackActions = () =>
-  useMateDiaryBack(state => state.actions);

@@ -27,8 +27,11 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
+<<<<<<< HEAD
 import ExhDetailInfo from './screens/exhibition/ExhDetailInfo';
 import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
+=======
+>>>>>>> bdc907f99ca7617373f4237ee16eec4f497168b3
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
@@ -36,6 +39,7 @@ import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
 import ExhToDiary from './screens/exhibition/ExhToDiary';
 import {UserInfo} from './screens/login/UserInfo';
+<<<<<<< HEAD
 
 type RootStackParamList = {
   Main: undefined;
@@ -83,6 +87,10 @@ type RootStackParamList = {
   MateDiaryList: undefined;
   MateDiaryBack: undefined;
 };
+=======
+import GatheringRoutes from './routes/mate/GatheringRoutes';
+import {RootStackParamList} from './utils/types';
+>>>>>>> bdc907f99ca7617373f4237ee16eec4f497168b3
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
@@ -128,8 +136,8 @@ export default function App() {
             />
             {/* [전시 메이트] */}
             <Stack.Screen // 모임 정보 화면
-              name="GatheringInfo"
-              component={GatheringInfoScreen}
+              name="GatheringRoutes"
+              component={GatheringRoutes}
             />
             <Stack.Screen
               name="CreateGathering"
