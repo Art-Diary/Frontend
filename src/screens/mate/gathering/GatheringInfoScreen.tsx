@@ -1,5 +1,5 @@
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
@@ -17,21 +17,25 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import {AddMyExhButton} from '~/assets/images';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
-
-type RootStackParamList = {
-  GatheringInfo: {gatherId: number; gatherName: string};
-};
+import {GatheringStackParamList} from '~/utils/types';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import {useGatheringListParamsActions} from '~/zustand/gathering/gathering';
 
 type GatheringInfoScreenRouteProp = RouteProp<
-  RootStackParamList,
+  GatheringStackParamList,
   'GatheringInfo'
 >;
 
-interface Props {
+type Props = {
   route: GatheringInfoScreenRouteProp;
-}
+};
 
 interface ExhInfo {
+  exhId: number;
   poster: string;
   exhName: string;
   rate?: number;
@@ -39,6 +43,11 @@ interface ExhInfo {
 
 const GatheringInfoScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateVisitedExhId} = useVisitedExhIdActions();
+  const {updateTab} = useTabIdentifierActions();
+  const {updateGatheringListParams} = useGatheringListParamsActions();
   const {gatherId, gatherName} = route.params;
   const [isOpen, setIsOpen] = useState(false);
   const {
@@ -47,6 +56,14 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     isError,
     isSuccess,
   } = useFetchGatheringInfo(gatherId);
+
+  useEffect(() => {
+    if (isFocused) {
+      if (tabIdentifierInfo.tab !== 'gathering') {
+        updateTab('gathering');
+      }
+    }
+  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message="모임 정보 조회 실패:(" />;
@@ -67,6 +84,12 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
 
   const pressExh = (item: ExhInfo) => {
     // 모임의 기록으로 넘어가기
+    updateVisitedExhId(item.exhId);
+    updateGatheringListParams({gatherId: gatherId, exhId: item.exhId});
+    navigation.navigate('GatheringRoutes', {
+      screen: 'GatheringDiaryList',
+      params: undefined,
+    });
   };
 
   const pressGetOut = () => {
@@ -107,6 +130,7 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
             <AddMyExhButton />
           </TouchableOpacity>
         </ContentWrapper>
+        {/* 모임이 방문한 전시회 리스트 */}
         <FlatList
           data={gatheringInfo.exhibitions}
           renderItem={({item, index}) => (

@@ -59,9 +59,9 @@ const MateListScreen = () => {
   };
 
   const pressEnterGathering = (item: GatherInfo) => {
-    navigation.navigate('GatheringInfo', {
-      gatherId: item.gatherId,
-      gatherName: item.gatherName,
+    navigation.navigate('GatheringRoutes', {
+      screen: 'GatheringInfo',
+      params: {gatherId: item.gatherId, gatherName: item.gatherName},
     });
   };
 

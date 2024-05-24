@@ -32,7 +32,7 @@ const CalendarDiaryList = () => {
     return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다'} />;
   }
 
-  return <DiaryList diaryList={diaryList} isMateDiary={false} />;
+  return <DiaryList diaryList={diaryList} />;
 };
 
 export default CalendarDiaryList;

@@ -27,54 +27,14 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
-import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
 import {UserInfo} from './screens/login/UserInfo';
-
-type RootStackParamList = {
-  Main: undefined;
-  // mydiary
-  MyExhibitionSearch: undefined;
-  MyDiaryRoutes: undefined;
-  MyDiaryBack: undefined;
-  MyDiaryList: undefined;
-  AddMyVisitDateRoutes: undefined;
-  ChooseVisitDate: undefined;
-  AddSoloVisitDate: undefined;
-  WriteMyDiaryRoutes: undefined;
-  WriteMyDiaryContents: undefined;
-  //setting
-  FavoriteRoutes: undefined;
-  FavoriteList: undefined;
-  EditFavorite: undefined;
-  AlarmSetting: undefined;
-  EditProfile: undefined;
-  LeaveArtDiary: undefined;
-  // calendar
-  CalendarDiaryRoutes: undefined;
-  CalendarDiaryBack: undefined;
-  ExhibitionSearch: undefined;
-  //CalendarSearch: undefined;
-  // gathering
-  GatheringInfo: {
-    gatherId: number;
-    gatherName: string;
-  };
-  // login
-  Login: undefined;
-  InitProfile: undefined;
-  UserInfo: undefined;
-  // mate
-  CreateGathering: undefined;
-  AddNewMate: undefined;
-  MateDiaryRoutes: undefined;
-  MateDiaryList: undefined;
-  MateDiaryBack: undefined;
-};
+import GatheringRoutes from './routes/mate/GatheringRoutes';
+import {RootStackParamList} from './utils/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
@@ -119,8 +79,8 @@ export default function App() {
             />
             {/* [전시 메이트] */}
             <Stack.Screen // 모임 정보 화면
-              name="GatheringInfo"
-              component={GatheringInfoScreen}
+              name="GatheringRoutes"
+              component={GatheringRoutes}
             />
             <Stack.Screen
               name="CreateGathering"

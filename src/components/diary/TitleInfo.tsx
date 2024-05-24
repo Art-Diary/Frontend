@@ -6,20 +6,20 @@ import UpdateDelete from './UpdateDelete';
 interface TitleProps {
   diaryInfo: any;
   handleIsDeleted: () => void;
-  isMateDiary: boolean;
+  isMyDiary: boolean;
 }
 
 const TitleInfo: React.FC<TitleProps> = ({
   diaryInfo,
   handleIsDeleted,
-  isMateDiary,
+  isMyDiary,
 }) => {
   return (
     <Container>
       {/* 기록 제목 */}
       <TitleText>{diaryInfo.title}</TitleText>
       {/* 수정 | 삭제 */}
-      {!isMateDiary && (
+      {isMyDiary && (
         <UpdateDelete diaryInfo={diaryInfo} handleIsDeleted={handleIsDeleted} />
       )}
     </Container>

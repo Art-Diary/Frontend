@@ -8,3 +8,6 @@ export const fetchGatheringInfo = (gatherId: number) =>
 
 export const createGathering = (gatherName: string) =>
   client.post(`/gatherings`, {gatherName: gatherName});
+
+export const fetchGatheringDiaryList = (gatherId: number, exhId: number) =>
+  client.get(`/gatherings/${gatherId}/exhibitions/${exhId}`);
