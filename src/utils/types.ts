@@ -29,6 +29,12 @@ export type RootStackParamList = {
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;
   ExhibitionSearch: undefined;
+  ExhDetailInfo: {
+    exhId: number;
+  };
+  ExhToDiary: {
+    diaryId: number;
+  };
   //CalendarSearch: undefined;
   // login
   Login: undefined;

@@ -2,10 +2,12 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useQuery, useMutation, useQueryClient} from 'react-query';
 import {
   fetchSearchExh,
+  fetchExhDetailInfo,
   fetchAddLike,
   fetchLikeList,
   fetchDeleteLike,
   fetchAllExh,
+  fetchDiaryListForExh,
 } from '../exhibition';
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -17,6 +19,8 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
     date?: Date,
   ) => ['fetchSearchExh', searchName, price, field, state, date],
   fetchLikeList: () => ['fetchLikeList'],
+  fetchExhDetailInfo: (exhId: number) => ['fetchExhDetailInfo', exhId],
+  fetchDiaryListForExh: (exhId: number) => ['fetchDiaryListForExh', exhId],
 });
 
 export const useFetchSearchExh = (
@@ -38,13 +42,40 @@ export const useFetchSearchExh = (
     queryFn: () => fetchSearchExh(searchName, price, field, state, date),
     staleTime: 500000,
     onError: err => {
-      console.log(err);
-      console.log(state);
       console.log('error fetch SearchExh');
     },
     onSuccess: () => {
-      console.log(field);
       console.log('success fetch SearchExh');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchExhDetailInfo = (exhId: number) =>
+  useQuery({
+    queryKey: exhibitionQueryKeys.fetchExhDetailInfo(exhId).queryKey,
+    queryFn: () => fetchExhDetailInfo(exhId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[ExhDetailInfoScreen] error fetch ExhDetailInfo');
+    },
+    onSuccess: () => {
+      console.log(exhId, '[ExhDetailInfoScreen] success fetch ExhDetailInfo');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchDiaryListForExh = (exhId: number) =>
+  useQuery({
+    queryKey: exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
+    queryFn: () => fetchDiaryListForExh(exhId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[ExhDetailInfoScreen] error fetch DiaryList');
+    },
+    onSuccess: () => {
+      console.log(exhId, '[ExhDetailInfoScreen] success fetch DiaryList');
     },
     select: (res: any) => res.data,
   });

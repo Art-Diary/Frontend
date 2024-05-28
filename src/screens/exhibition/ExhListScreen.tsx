@@ -24,6 +24,7 @@ import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhSearchModal from './ExhSearchModal';
 import ExhSearchByDate from './ExhSearchByDate';
+import ExhDetailInfo from './ExhDetailInfo';
 import {
   useSearchNameActions,
   useSearchNameInfo,
@@ -311,7 +312,7 @@ const ExhListScreen = () => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
   if (isSuccess) {
-    // console.log('석공:', selectedField, fieldString);
+    //console.log('석공:', data[0].poster);
   }
 
   //search Modal
@@ -468,7 +469,6 @@ const ExhListScreen = () => {
               {isOptionsModalPressed && (
                 <OptionsModal
                   handleCloseModal={optionsModalClose}
-                  // tkey={selectedOption4}
                   onPressYes={() => onPressYes()}
                   onPressNo={() => onPressNo()}
                   message="이미 지정된 전시 진행 상황은 삭제됩니다. 
@@ -489,19 +489,6 @@ const ExhListScreen = () => {
               )}
             </TouchableOpacity>
           )}
-
-          {/* <TouchableOpacity onPress={openCalendarModal}>
-            {/* // onPress={() => navigation.navigate('CalendarSearch')}> }
-            <CalendarIcon />
-            {isCalendarModalVisible && (
-              <ExhSearchByDate
-                isVisible={isCalendarModalVisible}
-                state={selectedState}
-                date={selectedDate}
-                onClose={handleCalendarModalClose}
-              />
-            )}
-          </TouchableOpacity> */}
         </IconsView>
       </Header>
 
@@ -525,11 +512,6 @@ const ExhListScreen = () => {
                 <OptionView>{item}x</OptionView>
               </TouchableOpacity>
             ))}
-          {/* {isFieldVisible && (
-            <TouchableOpacity onPress={() => deleteField()}>
-              <OptionView>{selectedField}x</OptionView>
-            </TouchableOpacity>
-          )} */}
           {isPriceVisible && (
             <TouchableOpacity onPress={() => deletePrice()}>
               <OptionView>{selectedPrice}x</OptionView>
@@ -541,11 +523,6 @@ const ExhListScreen = () => {
                 <OptionView key={item}>{item}x</OptionView>
               </TouchableOpacity>
             ))}
-          {/* {isStateVisible && (
-            <TouchableOpacity onPress={() => deleteState()}>
-              <OptionView>{selectedState}x</OptionView>
-            </TouchableOpacity>
-          )} */}
         </OptionContainer>
         {data &&
           data.map((item: any, index: number) => (
@@ -553,7 +530,12 @@ const ExhListScreen = () => {
               <ExhItemView
                 exhInfo={{...item}}
                 noLine={index === data.length - 1 ? true : false}
-                notTouchable={false}>
+                notTouchable={false}
+                onTouch={() =>
+                  navigation.navigate('ExhDetailInfo', {
+                    exhId: item.exhId,
+                  })
+                }>
                 <EmptyHeartContent>
                   <TouchableOpacity
                     onPress={() => onPressHeart(item.exhId, index)}>

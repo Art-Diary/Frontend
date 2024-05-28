@@ -15,7 +15,14 @@ export const fetchSearchExh = (
     params: {searchName, price, field: fieldString, state: stateString, date},
   });
 };
+
+export const fetchExhDetailInfo = (exhId: number) =>
+  client.get(`/exhibitions/${exhId}`);
+
 export const fetchAllExh = () => client.get(`/exhibitions`);
+
+export const fetchDiaryListForExh = (exhId: number) =>
+  client.get(`/exhibitions/${exhId}/diaries`);
 
 /** 전시회 좋아요 API */
 export const fetchLikeList = () => client.get(`/favorites`);
