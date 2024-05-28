@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Modal, TouchableWithoutFeedback} from 'react-native';
+import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
 
@@ -17,11 +17,13 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       animationType="fade"
       transparent={true}
       onRequestClose={() => handleCloseModal()}>
-      <TouchableWithoutFeedback onPress={() => handleCloseModal()}>
-        <Container>
-          <Contents>{children}</Contents>
-        </Container>
-      </TouchableWithoutFeedback>
+      <Pressable
+        style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)'}}
+        onPress={() => handleCloseModal()}
+      />
+      <Container>
+        <Contents>{children}</Contents>
+      </Container>
     </Modal>
   );
 };
@@ -30,7 +32,6 @@ export default ConfirmationModal;
 
 /** style */
 const Container = styled.View`
-  flex: 1;
   justify-content: flex-end;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.3);
