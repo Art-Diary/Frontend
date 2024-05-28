@@ -27,6 +27,7 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
+import ExhDetailInfo from './screens/exhibition/ExhDetailInfo';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
@@ -71,7 +72,8 @@ export default function App() {
             />
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
-            {/* <Stack.Screen name="CalendarSearch" component={ExhSearchByDate} /> */}
+            <Stack.Screen name="ExhDetailInfo" component={ExhDetailInfo} />
+            <Stack.Screen name="ExhToDiary" component={ExhToDiary} />
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"
