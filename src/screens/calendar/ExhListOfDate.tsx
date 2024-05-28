@@ -17,6 +17,7 @@ import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {JoinDateWithHyphen} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 
 interface IPicker {
   label: string;
@@ -48,6 +49,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     updateUserExhId,
     updateGatherExhId,
   } = useExhFromCalendarActions();
+  const {updateAddDate} = useAddScheduleActions();
   const {
     data: calendarData,
     isLoading,
@@ -98,6 +100,26 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     navigation.navigate('CalendarDiaryRoutes');
   };
 
+  const onPressAddMyExh = () => {
+    updateAddDate(selectedDate);
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Main',
+          state: {
+            routes: [
+              {
+                name: 'Exhibition',
+                params: undefined,
+              },
+            ],
+          },
+        },
+      ],
+    });
+  };
+
   return (
     <>
       {/* 선택 날짜 */}
@@ -106,7 +128,9 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
           <SelectedDateText>
             {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
           </SelectedDateText>
-          <AddMyExhButton />
+          <AddExhButtonWrapper onPress={onPressAddMyExh}>
+            <AddMyExhButton />
+          </AddExhButtonWrapper>
         </SelectedDateView>
       </SelectedDateWrapper>
       {/* 전시회 리스트 */}
@@ -164,13 +188,13 @@ const SelectedDateView = styled.View`
   flex-direction: row;
   border-bottom-color: #d3d3d3;
   border-bottom-width: ${hp(0.5)}px;
-  padding-bottom: ${hp(2)}px;
+  padding-bottom: ${hp(5)}px;
   justify-content: space-between;
   align-items: center;
 `;
 
 const SelectedDateText = styled.Text`
-  font-size: ${fp(17)}px;
+  font-size: ${fp(17.5)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
 `;
@@ -201,4 +225,8 @@ const GatherName = styled.Text<GatherNameProps>`
   padding-right: ${wp(10)}px;
   padding-top: ${hp(5)}px;
   padding-bottom: ${hp(5)}px;
+`;
+
+const AddExhButtonWrapper = styled.TouchableOpacity`
+  margin: ${wp(2)}px;
 `;

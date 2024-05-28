@@ -51,16 +51,20 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
 
   return (
     <ExhListView>
-      <FlatList
-        data={exhList}
-        renderItem={({item, index}) => (
-          <ExhItemView
-            exhInfo={{...item}}
-            notTouchable={false}
-            onTouch={() => onPressExh(item.exhId)}
-          />
-        )}
-      />
+      {exhList.length === 0 ? (
+        <ErrorMessageView message="검색 결과가 없습니다." />
+      ) : (
+        <FlatList
+          data={exhList}
+          renderItem={({item, index}) => (
+            <ExhItemView
+              exhInfo={{...item}}
+              notTouchable={false}
+              onTouch={() => onPressExh(item.exhId)}
+            />
+          )}
+        />
+      )}
     </ExhListView>
   );
 };
