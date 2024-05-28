@@ -27,69 +27,16 @@ import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
-<<<<<<< HEAD
 import ExhDetailInfo from './screens/exhibition/ExhDetailInfo';
-import GatheringInfoScreen from './screens/mate/GatheringInfoScreen';
-=======
->>>>>>> bdc907f99ca7617373f4237ee16eec4f497168b3
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
+import ExhToDiary from './screens/exhibition/ExhToDiary';
 import {UserInfo} from './screens/login/UserInfo';
-<<<<<<< HEAD
-
-type RootStackParamList = {
-  Main: undefined;
-  // mydiary
-  MyExhibitionSearch: undefined;
-  MyDiaryRoutes: undefined;
-  MyDiaryBack: undefined;
-  MyDiaryList: undefined;
-  AddMyVisitDateRoutes: undefined;
-  ChooseVisitDate: undefined;
-  AddSoloVisitDate: undefined;
-  WriteMyDiaryRoutes: undefined;
-  WriteMyDiaryContents: undefined;
-  //setting
-  FavoriteRoutes: undefined;
-  FavoriteList: undefined;
-  EditFavorite: undefined;
-  AlarmSetting: undefined;
-  EditProfile: undefined;
-  LeaveArtDiary: undefined;
-  // calendar
-  CalendarDiaryRoutes: undefined;
-  CalendarDiaryBack: undefined;
-  //Exhibition
-  ExhibitionSearch: undefined;
-  ExhDetailInfo: {
-    exhId: number;
-  };
-  ExhToDiary: {
-    diaryId: number;
-  };
-
-  GatheringInfo: {
-    gatherId: number;
-    gatherName: string;
-  };
-  // login
-  Login: undefined;
-  InitProfile: undefined;
-  UserInfo: undefined;
-  // mate
-  CreateGathering: undefined;
-  AddNewMate: undefined;
-  MateDiaryRoutes: undefined;
-  MateDiaryList: undefined;
-  MateDiaryBack: undefined;
-};
-=======
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/types';
->>>>>>> bdc907f99ca7617373f4237ee16eec4f497168b3
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
