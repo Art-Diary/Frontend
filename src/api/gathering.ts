@@ -11,3 +11,6 @@ export const createGathering = (gatherName: string) =>
 
 export const fetchGatheringDiaryList = (gatherId: number, exhId: number) =>
   client.get(`/gatherings/${gatherId}/exhibitions/${exhId}`);
+
+export const deleteGathering = (gatherId: number) =>
+  client.delete(`/gatherings/${gatherId}`);
