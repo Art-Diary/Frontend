@@ -2,6 +2,7 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   createGathering,
+  deleteGathering,
   fetchGatheringDiaryList,
   fetchGatheringInfo,
   fetchGatheringList,
@@ -78,3 +79,19 @@ export const useFetchGatheringDiaryList = (gatherId: number, exhId: number) =>
     },
     select: (res: any) => res.data,
   });
+
+export const useDeleteGathering = (gatherId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deleteGathering(gatherId),
+    onError: err => {
+      console.log(err);
+      console.log('[DeleteGathering] error delete DeleteGathering');
+    },
+    onSuccess: () => {
+      console.log('[DeleteGathering] success delete DeleteGathering');
+      queryClient.invalidateQueries(gatheringQueryKeys.fetchGatheringList());
+    },
+  });
+};

@@ -30,7 +30,11 @@ const GatheringDiaryListScreen = () => {
       <BackView line={false} />
 
       {/* body */}
-      <DiaryList diaryList={gatheringDiaryList} />
+      {gatheringDiaryList.length === 0 ? (
+        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+      ) : (
+        <DiaryList diaryList={gatheringDiaryList} />
+      )}
     </Container>
   );
 };
