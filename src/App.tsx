@@ -37,7 +37,6 @@ import CreateGatheringScreen from './screens/mate/CreateGatheringScreen';
 import AddNewMateScreen from './screens/mate/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
-import ExhToDiary from './screens/exhibition/ExhToDiary';
 import {UserInfo} from './screens/login/UserInfo';
 <<<<<<< HEAD
 
