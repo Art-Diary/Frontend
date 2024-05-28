@@ -8,7 +8,10 @@ import {
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
-import {useFetchGatheringInfo} from '~/api/queries/gathering';
+import {
+  useDeleteGathering,
+  useFetchGatheringInfo,
+} from '~/api/queries/gathering';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
@@ -56,6 +59,12 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     isError,
     isSuccess,
   } = useFetchGatheringInfo(gatherId);
+  const {
+    mutate: deleteGathering,
+    isLoading: deleteLoading,
+    isError: deleteError,
+    isSuccess: deleteSuccess,
+  } = useDeleteGathering(gatherId);
 
   useEffect(() => {
     if (isFocused) {
@@ -65,6 +74,19 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    if (deleteError) {
+      handleCloseModal();
+      showToast('모임 탈퇴에 실패했습니다.');
+    }
+    if (deleteSuccess) {
+      handleCloseModal();
+      showToast('성공적으로 모임을 탈퇴했습니다.');
+      // 이전 페이지로 이동
+      navigation.goBack();
+    }
+  }, [deleteError, deleteSuccess]);
+
   if (isError) {
     return <ErrorMessageView message="모임 정보 조회 실패:(" />;
   }
@@ -73,10 +95,12 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     return <LoadingModal message="모임 정보 조회 중:)" />;
   }
 
+  // TODO
   const pressNewExhMate = () => {
     // 모임에 새로운 전시 메이트 추가
   };
 
+  // TODO
   const pressNewExh = () => {
     // 모임에 새로운 전시회 일정 추가
     // navigation.navigate('')
@@ -102,13 +126,9 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     setIsOpen(false);
   };
 
-  const deleteGathering = () => {
-    setIsOpen(false);
+  const handleDeleteGathering = () => {
     // 모임 나가기 api
-    // 알림 토스트
-    showToast('모임 탈퇴를 성공했습니다.');
-    // 이전 페이지로 이동
-    navigation.goBack();
+    deleteGathering();
   };
 
   return (
@@ -151,7 +171,7 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
         {isOpen && (
           <ConfirmationModal handleCloseModal={handleCloseModal}>
             <Message>모임을 나가겠습니까?</Message>
-            <TouchableOpacity onPress={deleteGathering}>
+            <TouchableOpacity onPress={handleDeleteGathering}>
               <DeleteButton>나가기</DeleteButton>
             </TouchableOpacity>
           </ConfirmationModal>
