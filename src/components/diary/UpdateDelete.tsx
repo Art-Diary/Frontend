@@ -25,8 +25,13 @@ const UpdateDelete: React.FC<TitleProps> = ({diaryInfo, handleIsDeleted}) => {
   const [isDeletePressed, setIsDeletePressed] = useState<boolean>(false);
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
-  const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
-    useWriteMyDiaryActions();
+  const {
+    updateIsUpdate,
+    updateforIds,
+    updateforDetailInfo,
+    updateforContent,
+    updateInGathering,
+  } = useWriteMyDiaryActions();
   const tabIdentifier = useTabIdentifierInfo();
 
   const deleteModalOpen = () => {
@@ -59,7 +64,8 @@ const UpdateDelete: React.FC<TitleProps> = ({diaryInfo, handleIsDeleted}) => {
       diaryInfo.saying,
     );
     updateforContent(diaryInfo.contents);
-    if (tabIdentifier.tab === 'mydiary') {
+    updateInGathering(false, null);
+    if (tabIdentifier.tab === 'mydiary' || tabIdentifier.tab === 'gathering') {
       navigation.navigate('AddMyVisitDateRoutes');
     } else {
       navigation.navigate('WriteMyDiaryRoutes');

@@ -154,6 +154,7 @@ export const useCreateMyDiary = (
   const queryClient = useQueryClient();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
+  const {params} = useGatheringListParamsInfo();
 
   return useMutation({
     mutationFn: () => createMyDiary(exhId, newMyDiary),
@@ -178,6 +179,12 @@ export const useCreateMyDiary = (
             exhFromCalendarInfo.forget,
             exhFromCalendarInfo.visitDate,
             exhFromCalendarInfo.gatherId,
+          ),
+        );
+        queryClient.invalidateQueries(
+          gatheringQueryKeys.fetchGatheringDiaryList(
+            params.gatherId,
+            params.exhId,
           ),
         );
       }

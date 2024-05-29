@@ -2,6 +2,8 @@ import {create} from 'zustand';
 
 /** 내 기록 작성하기 */
 interface WriteMyDiaryState {
+  isInGathering: boolean;
+  gatherId: number | null;
   isUpdate: boolean | null;
   diaryId: number | null;
   userExhId: number | null;
@@ -14,6 +16,10 @@ interface WriteMyDiaryState {
   writeDate: number[] | null;
   saying: string | null;
   actions: {
+    updateInGathering: (
+      isInGathering: boolean,
+      gatherId: number | null,
+    ) => void;
     updateIsUpdate: (isUpdate: boolean | null) => void;
     updateforIds: (
       diaryId: number | null,
@@ -33,6 +39,8 @@ interface WriteMyDiaryState {
 }
 
 const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
+  isInGathering: false,
+  gatherId: null,
   isUpdate: null,
   diaryId: null,
   userExhId: null,
@@ -45,6 +53,8 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
   saying: null,
   contents: null,
   actions: {
+    updateInGathering: (isInGathering: boolean, gatherId: number | null) =>
+      set(state => ({isInGathering: isInGathering, gatherId: gatherId})),
     updateIsUpdate: (isUpdate: boolean | null) =>
       set(state => ({isUpdate: isUpdate})),
     updateforIds: (
@@ -80,6 +90,8 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
 
 export const useWriteMyDiaryInfo = () =>
   useWriteMyDiary(state => ({
+    isInGathering: state.isInGathering,
+    gatherId: state.gatherId,
     isUpdate: state.isUpdate,
     diaryId: state.diaryId,
     userExhId: state.userExhId,

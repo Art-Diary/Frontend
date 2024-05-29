@@ -26,47 +26,90 @@ const ChooseVisitDateScreen = () => {
   const [value, setValue] = useState<number | null>(null);
   const [items, setItems] = useState<IPicker[]>([]);
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
+  const canNotOpen =
+    writeMyDiaryInfo.isUpdate || writeMyDiaryInfo.isInGathering;
 
+  // 모임과 개인 전시회 날짜
   const {
-    data: myStoredDateListOfExh,
+    data: storedDateListOfExh,
     isLoading,
     isError,
     isSuccess,
   } = useFetchMyStoredDateListOfExh(visitedExhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
 
-  useEffect(() => {
-    if (isSuccess) {
-      // {label: '', value: ''}
-      var gatherNameList: IPicker[] = [];
+  const handleSetItemsMyDiary = () => {
+    // {label: '', value: ''}
+    var gatherNameList: IPicker[] = [];
 
-      gatherNameList.push({label: '개인', value: -1});
-      for (let index = 0; index < myStoredDateListOfExh.length; index++) {
-        if (myStoredDateListOfExh[index].gatherName !== undefined) {
+    gatherNameList.push({label: '개인', value: -1});
+    for (let index = 0; index < storedDateListOfExh.length; index++) {
+      if (storedDateListOfExh[index].gatherName !== undefined) {
+        gatherNameList.push({
+          label: storedDateListOfExh[index].gatherName,
+          value: storedDateListOfExh[index].index,
+        });
+      } else {
+        gatherNameList[0].value = storedDateListOfExh[index].index;
+      }
+      setItems(gatherNameList);
+    }
+  };
+
+  // 기록 수정할 경우
+  const handleSetItemsWithUpdate = () => {
+    var gatherNameList: IPicker[] = [];
+
+    for (let index = 0; index < storedDateListOfExh.length; index++) {
+      var dateInfoList = storedDateListOfExh[index].dateInfoList;
+
+      for (let dIndex = 0; dIndex < dateInfoList.length; dIndex++) {
+        if (
+          writeMyDiaryInfo.gatherExhId === dateInfoList[dIndex].gatherExhId ||
+          writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
+        ) {
+          setValue(index);
           gatherNameList.push({
-            label: myStoredDateListOfExh[index].gatherName,
-            value: myStoredDateListOfExh[index].index,
+            label: storedDateListOfExh[index].gatherName ?? '개인',
+            value: storedDateListOfExh[index].index,
           });
-        } else {
-          gatherNameList[0].value = myStoredDateListOfExh[index].index;
-        }
-        // 기록 수정할 경우
-        if (writeMyDiaryInfo.isUpdate) {
-          var dateInfoList = myStoredDateListOfExh[index].dateInfoList;
-
-          for (let dIndex = 0; dIndex < dateInfoList.length; dIndex++) {
-            if (
-              writeMyDiaryInfo.gatherExhId ===
-                dateInfoList[dIndex].gatherExhId ||
-              writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
-            ) {
-              setValue(index);
-            }
-          }
         }
       }
       setItems(gatherNameList);
     }
-  }, [isSuccess, myStoredDateListOfExh]);
+  };
+
+  // 모임 내에서 기록 추가할 경우
+  const handleSetItemsWithInGathering = () => {
+    // {label: '', value: ''}
+    var gatherNameList: IPicker[] = [];
+
+    for (let index = 0; index < storedDateListOfExh.length; index++) {
+      var gatherId = storedDateListOfExh[index].gatherId;
+
+      if (gatherId === writeMyDiaryInfo.gatherId) {
+        setValue(index);
+        gatherNameList.push({
+          label: storedDateListOfExh[index].gatherName,
+          value: storedDateListOfExh[index].index,
+        });
+      }
+      setItems(gatherNameList);
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      if (writeMyDiaryInfo.isUpdate) {
+        // 기록 수정할 경우
+        handleSetItemsWithUpdate();
+      } else if (writeMyDiaryInfo.isInGathering) {
+        // 모임 내에서 기록 추가할 경우
+        handleSetItemsWithInGathering();
+      } else {
+        handleSetItemsMyDiary();
+      }
+    }
+  }, [isSuccess, storedDateListOfExh]);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
@@ -85,10 +128,10 @@ const ChooseVisitDateScreen = () => {
         <DropDownPicker
           style={{
             ...pickerStyle.box,
-            backgroundColor: writeMyDiaryInfo.isUpdate ? '#D3D3D3' : '#f6f6f6',
+            backgroundColor: canNotOpen ? '#D3D3D3' : '#f6f6f6',
           }}
           textStyle={pickerStyle.gatherName}
-          open={writeMyDiaryInfo.isUpdate ? false : open}
+          open={canNotOpen ? false : open}
           value={value}
           items={items}
           setOpen={setOpen}
@@ -98,7 +141,7 @@ const ChooseVisitDateScreen = () => {
         />
         {/* 날짜 목록 */}
         <ChooseVisitDateList
-          myStoredDateListOfExh={myStoredDateListOfExh}
+          myStoredDateListOfExh={storedDateListOfExh}
           value={value}
         />
       </ContentsContainer>
