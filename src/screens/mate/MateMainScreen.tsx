@@ -19,17 +19,19 @@ import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
+import {useEnterGatheringActions} from '~/zustand/gathering/enterGathering';
 
 interface GatherInfo {
   gatherId: number;
   gatherName: string;
 }
 
-const MateListScreen = () => {
+const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
+  const {updateEnterGatheringInfo} = useEnterGatheringActions();
   const {
     data: gatheringList,
     isLoading,
@@ -59,9 +61,13 @@ const MateListScreen = () => {
   };
 
   const pressEnterGathering = (item: GatherInfo) => {
+    updateEnterGatheringInfo({
+      gatherId: item.gatherId,
+      gatherName: item.gatherName,
+    });
     navigation.navigate('GatheringRoutes', {
       screen: 'GatheringInfo',
-      params: {gatherId: item.gatherId, gatherName: item.gatherName},
+      params: undefined,
     });
   };
 
@@ -76,21 +82,25 @@ const MateListScreen = () => {
 
       {/* body */}
       <Contents>
-        <ContentText>모임 목록</ContentText>
-        <NameList
-          itemList={gatheringList}
-          handleCreate={pressCreateGathering}
-          handleClickItem={pressEnterGathering}
-        />
+        <GatheringList>
+          <ContentText>모임 목록</ContentText>
+          <NameList
+            itemList={gatheringList}
+            handleCreate={pressCreateGathering}
+            handleClickItem={pressEnterGathering}
+          />
+        </GatheringList>
         <Dot />
-        <ContentText>전시메이트 목록</ContentText>
-        <ExhMateList />
+        <MateList>
+          <ContentText>전시메이트 목록</ContentText>
+          <ExhMateList />
+        </MateList>
       </Contents>
     </Container>
   );
 };
 
-export default MateListScreen;
+export default MateMainScreen;
 
 /** style */
 const Container = styled.View`
@@ -102,9 +112,15 @@ const Contents = styled.View`
   flex-direction: column;
   background-color: #f6f6f6;
   padding-top: ${wp(12)}px;
+  gap: ${wp(12)}px;
+`;
+
+const GatheringList = styled.View`
+  flex-direction: column;
+  background-color: #f6f6f6;
   padding-left: ${wp(12)}px;
   padding-right: ${wp(12)}px;
-  gap: 10px;
+  gap: ${wp(12)}px;
 `;
 
 const ContentText = styled.Text`
@@ -118,4 +134,12 @@ const Dot = styled.View`
   border-bottom-width: ${wp(1.3)}px;
   border-bottom-color: #d3d3d3;
   border-style: dashed;
+`;
+
+const MateList = styled.View`
+  flex: 1;
+  flex-direction: column;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
+  gap: ${wp(12)}px;
 `;

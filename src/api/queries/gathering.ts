@@ -1,12 +1,14 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
+  addNewDateOfExhGathering,
   createGathering,
   deleteGathering,
   fetchGatheringDiaryList,
   fetchGatheringInfo,
   fetchGatheringList,
 } from '../gathering';
+import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
 export const gatheringQueryKeys = createQueryKeys('gathering', {
   fetchGatheringList: () => ['fetchGatheringList'],
@@ -92,6 +94,33 @@ export const useDeleteGathering = (gatherId: number) => {
     onSuccess: () => {
       console.log('[DeleteGathering] success delete DeleteGathering');
       queryClient.invalidateQueries(gatheringQueryKeys.fetchGatheringList());
+    },
+  });
+};
+
+export const useAddNewDateOfExhGathering = (
+  gatherId: number,
+  exhId: number,
+  visitDate: string,
+) => {
+  const queryClient = useQueryClient();
+  const {enterGatheringInfo} = useEnterGatheringInfo();
+
+  return useMutation({
+    mutationFn: () => addNewDateOfExhGathering(gatherId, exhId, visitDate),
+    onError: err => {
+      console.log(err);
+      console.log(
+        '[AddNewDateOfExhGathering] error create AddNewDateOfExhGathering',
+      );
+    },
+    onSuccess: () => {
+      console.log(
+        '[AddNewDateOfExhGathering] success create AddNewDateOfExhGathering',
+      );
+      queryClient.invalidateQueries(
+        gatheringQueryKeys.fetchGatheringInfo(enterGatheringInfo.gatherId),
+      );
     },
   });
 };

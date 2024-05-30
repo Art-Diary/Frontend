@@ -2,12 +2,12 @@ import React, {useState} from 'react';
 import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import SearchExhList from './SearchExhList';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
+import SearchExhList from '~/screens/mydiary/SearchExhList';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
-const MyExhSearchScreen = () => {
+const SearchAddVisitExhInGatheringScreen = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
 
@@ -22,7 +22,11 @@ const MyExhSearchScreen = () => {
 
   return (
     <Container>
-      <BackView line={false} children={null} />
+      <BackView
+        line={true}
+        children={null}
+        title={'모임에 추가할 전시회 검색'}
+      />
       {/* 검색창 */}
       <SearchExhFrame
         searchKeyword={searchKeyword}
@@ -33,7 +37,7 @@ const MyExhSearchScreen = () => {
           <SearchExhList
             searchKeyword={keyword}
             changeIsPressed={onPressSearch}
-            forGathering={false}
+            forGathering={true}
           />
         )}
       </SearchExhFrame>
@@ -41,7 +45,7 @@ const MyExhSearchScreen = () => {
   );
 };
 
-export default MyExhSearchScreen;
+export default SearchAddVisitExhInGatheringScreen;
 
 /** style */
 const Container = styled.View`

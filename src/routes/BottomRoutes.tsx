@@ -5,7 +5,6 @@ import styled from 'styled-components/native';
 import MyExhListScreen from '~/screens/mydiary/MyExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
-import MateListScreen from '~/screens/mate/MateListScreen';
 import SettingScreen from '~/screens/setting/SettingScreen';
 import {
   OnExhibitionButton,
@@ -24,6 +23,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import MateMainScreen from '~/screens/mate/MateMainScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -87,7 +87,7 @@ const BottomRoutes = () => {
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
         <Tab.Screen name="Calender" component={CalendarScreen} />
         <Tab.Screen name="Diary" component={MyExhListScreen} />
-        <Tab.Screen name="Mate" component={MateListScreen} />
+        <Tab.Screen name="Mate" component={MateMainScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />
       </Tab.Navigator>
     </Container>

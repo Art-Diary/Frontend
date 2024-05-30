@@ -73,18 +73,17 @@ const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-top: ${hp(5)}px;
   padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
+  padding-left: ${wp(13)}px;
+  padding-right: ${wp(13)}px;
 `;
 
 const GroupText = styled.Text`
   font-size: ${fp(18)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(10)}px;
 `;
 
 const BodyView = styled.View`
