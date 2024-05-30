@@ -27,7 +27,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     isSuccess,
   } = useFetchSearchExh(searchKeyword, null, null, null, null);
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {updateIsUpdate} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
 
   useEffect(() => {
     if (isSuccess) {
@@ -46,6 +46,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
   const onPressExh = (exhId: number) => {
     updateVisitedExhId(exhId);
     updateIsUpdate(false);
+    updateInGathering(false, null);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

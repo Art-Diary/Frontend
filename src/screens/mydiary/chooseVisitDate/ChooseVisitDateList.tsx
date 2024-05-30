@@ -178,7 +178,10 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
                 <DateText>
                   {item.visitDate === null
                     ? '기억 안 남'
-                    : JoinDateWithDot(item.visitDate) + ' ' + item.weekday}
+                    : JoinDateWithDot(item.visitDate) +
+                      ' (' +
+                      item.weekday +
+                      ')'}
                 </DateText>
               </DateView>
             </TouchableOpacity>
