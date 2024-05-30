@@ -13,8 +13,6 @@ import {AnotherSearchIcon} from '~/assets/images/index';
 import {ClassifyButton} from '~/assets/images/index';
 import {EmptyHeart} from '~/assets/images/index';
 import {FullHeart} from '~/assets/images/index';
-import {useQuery} from 'react-query';
-import {fetchAddLike, fetchAllExh} from '~/api/exhibition';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
 import {ServerContainer, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -31,6 +29,10 @@ import {
 } from '~/zustand/exhibition/exhibition';
 import {useIsFocused} from '@react-navigation/native';
 import OptionsModal from '~/components/exhibition/OptionsModal';
+import {
+  useAddScheduleActions,
+  useAddScheduleInfo,
+} from '~/zustand/calendar/addSchedule';
 
 interface Exhibition {
   exhId: number;
@@ -65,6 +67,8 @@ const ExhListScreen = () => {
   const [isOptionsModalPressed, setIsOptionsModalPressed] =
     useState<boolean>(false); //진행상황 선택된 상황에서 캘린더 누를시 뜨는 모달
   const searchExhName = useSearchNameInfo().name;
+  const {addDate} = useAddScheduleInfo();
+  const {updateAddDate} = useAddScheduleActions();
 
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
@@ -128,6 +132,14 @@ const ExhListScreen = () => {
       // setIsNameVisible(true);
     }
   }, [searchExhName]);
+
+  useEffect(() => {
+    // 캘린더에서 특정 날짜에 전시회 추가할 때
+    if (addDate != null) {
+      setSelectedDate(addDate);
+      updateAddDate(null);
+    }
+  }, [addDate]);
 
   useEffect(() => {
     //날짜로 검색시

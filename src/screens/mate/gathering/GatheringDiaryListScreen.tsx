@@ -1,15 +1,21 @@
-import {RouteProp} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React from 'react';
+import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
+import {RootStackNavigationProp} from '~/App';
 import {useFetchGatheringDiaryList} from '~/api/queries/gathering';
+import {WriteDiaryButton} from '~/assets/images';
 import BackView from '~/components/common/BackView';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import DiaryList from '~/components/diary/DiaryList';
 import {useGatheringListParamsInfo} from '~/zustand/gathering/gathering';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 
 const GatheringDiaryListScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
   const {params} = useGatheringListParamsInfo();
+  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
   const {
     data: gatheringDiaryList,
     isLoading,
@@ -24,10 +30,20 @@ const GatheringDiaryListScreen = () => {
     return <LoadingModal message="전시 메이트 다이어리 조회 중:)" />;
   }
 
+  const onPressButton = () => {
+    updateIsUpdate(false);
+    updateInGathering(true, params.gatherId);
+    navigation.navigate('AddMyVisitDateRoutes');
+  };
+
   return (
     <Container>
       {/* header */}
-      <BackView line={false} />
+      <BackView line={false}>
+        <TouchableOpacity onPress={onPressButton}>
+          <WriteDiaryButton />
+        </TouchableOpacity>
+      </BackView>
 
       {/* body */}
       {gatheringDiaryList.length === 0 ? (

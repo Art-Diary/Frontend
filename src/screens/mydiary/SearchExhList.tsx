@@ -27,7 +27,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
     isSuccess,
   } = useFetchSearchExh(searchKeyword, null, null, null, null);
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {updateIsUpdate} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
 
   useEffect(() => {
     if (isSuccess) {
@@ -46,21 +46,26 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
   const onPressExh = (exhId: number) => {
     updateVisitedExhId(exhId);
     updateIsUpdate(false);
+    updateInGathering(false, null);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 
   return (
     <ExhListView>
-      <FlatList
-        data={exhList}
-        renderItem={({item, index}) => (
-          <ExhItemView
-            exhInfo={{...item}}
-            notTouchable={false}
-            onTouch={() => onPressExh(item.exhId)}
-          />
-        )}
-      />
+      {exhList.length === 0 ? (
+        <ErrorMessageView message="검색 결과가 없습니다." />
+      ) : (
+        <FlatList
+          data={exhList}
+          renderItem={({item, index}) => (
+            <ExhItemView
+              exhInfo={{...item}}
+              notTouchable={false}
+              onTouch={() => onPressExh(item.exhId)}
+            />
+          )}
+        />
+      )}
     </ExhListView>
   );
 };

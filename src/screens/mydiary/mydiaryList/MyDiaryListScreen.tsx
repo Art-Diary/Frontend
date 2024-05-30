@@ -15,7 +15,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 const MyDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const visitedExhId = useVisitedExhIdInfo().exhId;
-  const {updateIsUpdate} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
   const {
     data: myDiaryList,
     isLoading,
@@ -38,6 +38,7 @@ const MyDiaryListScreen = () => {
 
   const onPressButton = () => {
     updateIsUpdate(false);
+    updateInGathering(false, null);
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

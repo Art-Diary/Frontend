@@ -54,34 +54,38 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
 
   return (
     <MateListView>
-      <FlatList
-        data={mateList}
-        renderItem={({item, index}) => (
-          <TouchableOpacity onPress={() => pressItem(item)}>
-            <UserInfoWrapper>
-              <NameTag isSelected={item.userId === selectedMate}>
-                <UserInfo>
-                  <ProfileWrapper>
-                    <Profile
-                      source={{uri: `data:image/png;base64,${item.profile}`}}
-                      resizeMode="cover"
-                      alt={'이미지 읽기 실패'}
-                    />
-                  </ProfileWrapper>
-                  <UserInfoColumn>
-                    <NickName>{item.nickname}</NickName>
-                    <Art>
-                      {item.favoriteArt === '.' || !item.favoriteArt
-                        ? '그외'
-                        : item.favoriteArt}
-                    </Art>
-                  </UserInfoColumn>
-                </UserInfo>
-              </NameTag>
-            </UserInfoWrapper>
-          </TouchableOpacity>
-        )}
-      />
+      {mateList.length === 0 ? (
+        <ErrorMessageView message={'검색 결과가 없습니다.'} />
+      ) : (
+        <FlatList
+          data={mateList}
+          renderItem={({item, index}) => (
+            <TouchableOpacity onPress={() => pressItem(item)}>
+              <UserInfoWrapper>
+                <NameTag isSelected={item.userId === selectedMate}>
+                  <UserInfo>
+                    <ProfileWrapper>
+                      <Profile
+                        source={{uri: `data:image/png;base64,${item.profile}`}}
+                        resizeMode="cover"
+                        alt={'이미지 읽기 실패'}
+                      />
+                    </ProfileWrapper>
+                    <UserInfoColumn>
+                      <NickName>{item.nickname}</NickName>
+                      <Art>
+                        {item.favoriteArt === '.' || !item.favoriteArt
+                          ? '그외'
+                          : item.favoriteArt}
+                      </Art>
+                    </UserInfoColumn>
+                  </UserInfo>
+                </NameTag>
+              </UserInfoWrapper>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </MateListView>
   );
 };
