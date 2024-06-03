@@ -24,3 +24,11 @@ export const addNewDateOfExhGathering = (
     exhId: exhId,
     visitDate: visitDate,
   });
+
+export const addNewMateInGathering = (gatherId: number, mateId: number) =>
+  client.post(`/gatherings/${gatherId}`, {userId: mateId});
+
+export const fetchSearchNewMateInGathering = (
+  gatherId: number,
+  nickname: string,
+) => client.get(`/gatherings/${gatherId}/search`, {params: {nickname}});

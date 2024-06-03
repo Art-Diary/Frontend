@@ -12,12 +12,14 @@ import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
-import SearchNewMateList from './SearchNewMateList';
-import {useAddNewMate} from '~/api/queries/mate';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {useAddNewMateInGathering} from '~/api/queries/gathering';
+import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
+import SearchNewMateListInGathering from './SearchNewMateListInGathering';
 
-const AddNewMateScreen = () => {
+const AddNewMateInGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {enterGatheringInfo} = useEnterGatheringInfo();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [nicknameKeyword, setNicknameKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
@@ -27,7 +29,7 @@ const AddNewMateScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useAddNewMate(selectedMate);
+  } = useAddNewMateInGathering(enterGatheringInfo.gatherId, selectedMate);
 
   useEffect(() => {
     if (isError) {
@@ -68,20 +70,21 @@ const AddNewMateScreen = () => {
   return (
     <Container>
       {/* header */}
-      <BackView title="전시 메이트 추가" line={true} />
+      <BackView title="모임 메이트 추가" line={true} />
       {/* body */}
       <Contents>
         <AreaView>
-          <AreaText>전시 메이트 선택</AreaText>
+          <AreaText>모임 메이트 선택</AreaText>
+          <AreaText greyColor={true}>(내 전시 메이트만 가능)</AreaText>
         </AreaView>
         <SearchExhFrame
           searchKeyword={nicknameKeyword}
           onPressSearch={onPressSearch}
           handleSearchKeyword={setNicknameKeyword}
           searchMessage={'닉네임을 검색하세요'}>
-          {/* 전시회 메이트 목록 */}
+          {/* 모임 메이트 목록 */}
           {keyword !== '' && (
-            <SearchNewMateList
+            <SearchNewMateListInGathering
               searchKeyword={keyword}
               changeIsPressed={onPressSearch}
               selectedMate={selectedMate}
@@ -90,7 +93,7 @@ const AddNewMateScreen = () => {
           )}
         </SearchExhFrame>
       </Contents>
-      {/* 전시 메이트 추가 버튼 */}
+      {/* 모임 메이트 추가 버튼 */}
       <ButtonTouch
         onPress={onPressCreate}
         disabled={selectedMate === -1 ? true : false}>
@@ -98,22 +101,16 @@ const AddNewMateScreen = () => {
           추가
         </CreateButton>
       </ButtonTouch>
-      {isLoadingOpen && <LoadingModal message={'전시 메이트 추가 중'} />}
+      {isLoadingOpen && <LoadingModal message={'모임 메이트 추가 중'} />}
     </Container>
   );
 };
 
-export default AddNewMateScreen;
+export default AddNewMateInGatheringScreen;
 
 /** style */
 const Container = styled.View`
   flex: 1;
-`;
-
-const Contents = styled.View`
-  flex: 1;
-  flex-direction: column;
-  background-color: #f6f6f6;
 `;
 
 const AreaView = styled.View`
@@ -124,11 +121,22 @@ const AreaView = styled.View`
   align-items: flex-end;
 `;
 
-const AreaText = styled.Text`
-  font-size: ${fp(19)}px;
+interface AreaTextProps {
+  greyColor: boolean;
+}
+
+const AreaText = styled.Text<AreaTextProps>`
+  font-size: ${(props: AreaTextProps) =>
+    props.greyColor ? `${fp(15)}px` : `${fp(19)}px`};
   font-family: 'omyu pretty';
   color: #3c4045;
-  color: #3c4045;
+  color: ${(props: AreaTextProps) => (props.greyColor ? '#D3D3D3' : '#3c4045')};
+`;
+
+const Contents = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: #f6f6f6;
 `;
 
 const ButtonTouch = styled.TouchableOpacity`

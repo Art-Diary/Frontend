@@ -86,9 +86,12 @@ const GatheringInfoScreen = () => {
     return <LoadingModal message="모임 정보 조회 중:)" />;
   }
 
-  // TODO
   const pressNewExhMate = () => {
     // 모임에 새로운 전시 메이트 추가
+    navigation.navigate('GatheringRoutes', {
+      screen: 'AddNewMateInGathering',
+      params: undefined,
+    });
   };
 
   const pressNewExh = () => {
