@@ -5,6 +5,7 @@ export type GatheringStackParamList = {
   GatheringDiaryBack: undefined;
   SearchAddVisitExhInGathering: undefined;
   NewVisitDateOfExhInGathering: undefined;
+  AddNewMateInGathering: undefined;
   // 다른 스크린이 있다면 여기에 추가합니다.
 };
 

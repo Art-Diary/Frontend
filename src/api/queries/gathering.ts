@@ -2,11 +2,13 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   addNewDateOfExhGathering,
+  addNewMateInGathering,
   createGathering,
   deleteGathering,
   fetchGatheringDiaryList,
   fetchGatheringInfo,
   fetchGatheringList,
+  fetchSearchNewMateInGathering,
 } from '../gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
@@ -17,6 +19,11 @@ export const gatheringQueryKeys = createQueryKeys('gathering', {
     'fetchGatheringDiaryList',
     gatherId,
     exhId,
+  ],
+  fetchSearchNewMateInGathering: (gatherId: number, nickname: string) => [
+    'fetchSearchNewMateInGathering',
+    gatherId,
+    nickname,
   ],
 });
 
@@ -124,3 +131,49 @@ export const useAddNewDateOfExhGathering = (
     },
   });
 };
+
+export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
+  const queryClient = useQueryClient();
+  const {enterGatheringInfo} = useEnterGatheringInfo();
+
+  return useMutation({
+    mutationFn: () => addNewMateInGathering(gatherId, mateId),
+    onError: err => {
+      console.log(err);
+      console.log('[AddNewMateInGathering] error create AddNewMateInGathering');
+    },
+    onSuccess: () => {
+      console.log(
+        '[AddNewMateInGathering] success create AddNewMateInGathering',
+      );
+      queryClient.invalidateQueries(
+        gatheringQueryKeys.fetchGatheringInfo(enterGatheringInfo.gatherId),
+      );
+    },
+  });
+};
+
+export const useFetchSearchNewMateInGathering = (
+  gatherId: number,
+  nickname: string,
+) =>
+  useQuery({
+    queryKey: gatheringQueryKeys.fetchSearchNewMateInGathering(
+      gatherId,
+      nickname,
+    ).queryKey,
+    queryFn: () => fetchSearchNewMateInGathering(gatherId, nickname),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log(
+        '[SearchNewMateInGathering] error fetch SearchNewMateInGathering',
+      );
+    },
+    onSuccess: () => {
+      console.log(
+        '[SearchNewMateInGathering] success fetch SearchNewMateInGathering',
+      );
+    },
+    select: (res: any) => res.data,
+  });
