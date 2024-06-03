@@ -37,10 +37,8 @@ const ChooseVisitDateScreen = () => {
     isSuccess,
   } = useFetchMyStoredDateListOfExh(visitedExhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
 
-  const handleSetItemsMyDiary = () => {
-    // {label: '', value: ''}
-    var gatherNameList: IPicker[] = [];
-
+  // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
+  const handleSetItemsMyDiary = (gatherNameList: IPicker[]): IPicker[] => {
     gatherNameList.push({label: '개인', value: -1});
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       if (storedDateListOfExh[index].gatherName !== undefined) {
@@ -51,14 +49,12 @@ const ChooseVisitDateScreen = () => {
       } else {
         gatherNameList[0].value = storedDateListOfExh[index].index;
       }
-      setItems(gatherNameList);
     }
+    return gatherNameList;
   };
 
-  // 기록 수정할 경우
-  const handleSetItemsWithUpdate = () => {
-    var gatherNameList: IPicker[] = [];
-
+  // 기록 수정할 경우 (고정)
+  const handleSetItemsWithUpdate = (gatherNameList: IPicker[]): IPicker[] => {
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       var dateInfoList = storedDateListOfExh[index].dateInfoList;
 
@@ -74,15 +70,14 @@ const ChooseVisitDateScreen = () => {
           });
         }
       }
-      setItems(gatherNameList);
     }
+    return gatherNameList;
   };
 
-  // 모임 내에서 기록 추가할 경우
-  const handleSetItemsWithInGathering = () => {
-    // {label: '', value: ''}
-    var gatherNameList: IPicker[] = [];
-
+  // 모임 내에서 기록 추가할 경우 (고정)
+  const handleSetItemsWithInGathering = (
+    gatherNameList: IPicker[],
+  ): IPicker[] => {
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       var gatherId = storedDateListOfExh[index].gatherId;
 
@@ -93,21 +88,26 @@ const ChooseVisitDateScreen = () => {
           value: storedDateListOfExh[index].index,
         });
       }
-      setItems(gatherNameList);
     }
+    return gatherNameList;
   };
 
   useEffect(() => {
     if (isSuccess) {
+      // {label: '', value: ''}
+      var gatherNameList: IPicker[] = [];
+
       if (writeMyDiaryInfo.isUpdate) {
         // 기록 수정할 경우
-        handleSetItemsWithUpdate();
+        gatherNameList = handleSetItemsWithUpdate(gatherNameList);
       } else if (writeMyDiaryInfo.isInGathering) {
         // 모임 내에서 기록 추가할 경우
-        handleSetItemsWithInGathering();
+        gatherNameList = handleSetItemsWithInGathering(gatherNameList);
       } else {
-        handleSetItemsMyDiary();
+        // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
+        gatherNameList = handleSetItemsMyDiary(gatherNameList);
       }
+      setItems(gatherNameList);
     }
   }, [isSuccess, storedDateListOfExh]);
 
