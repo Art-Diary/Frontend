@@ -8,6 +8,7 @@ import {
   fetchDeleteLike,
   fetchAllExh,
   fetchDiaryListForExh,
+  fetchStoredDateOfExhInGroup,
 } from '../exhibition';
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -21,6 +22,11 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
   fetchLikeList: () => ['fetchLikeList'],
   fetchExhDetailInfo: (exhId: number) => ['fetchExhDetailInfo', exhId],
   fetchDiaryListForExh: (exhId: number) => ['fetchDiaryListForExh', exhId],
+  fetchStoredDateOfExhInGroup: (exhId: number, gatherId?: number) => [
+    'fetchStoredDateOfExhInGroup',
+    exhId,
+    gatherId,
+  ],
 });
 
 export const useFetchSearchExh = (
@@ -120,6 +126,31 @@ export const useFetchFavoriteList = () =>
     },
     onSuccess: () => {
       console.log('[FavoriteListScreen] success fetch FavoriteList');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchStoredDateOfExhInGroup = (
+  exhId: number,
+  gatherId: number | null,
+) =>
+  useQuery({
+    queryKey: [
+      exhibitionQueryKeys.fetchStoredDateOfExhInGroup(exhId).queryKey,
+      gatherId,
+    ],
+    queryFn: () => fetchStoredDateOfExhInGroup(exhId, gatherId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log(
+        '[StoredDateOfExhInGroup] error fetch StoredDateOfExhInGroup',
+      );
+    },
+    onSuccess: () => {
+      console.log(
+        '[StoredDateOfExhInGroup] success fetch StoredDateOfExhInGroup',
+      );
     },
     select: (res: any) => res.data,
   });

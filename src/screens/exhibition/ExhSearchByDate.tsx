@@ -103,11 +103,8 @@ export default ExhSearchByDate;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  height: 100%;
   background-color: #f6f6f6;
-  padding: ${hp(3)}px;
   padding-top: ${hp(10)}px;
-  justify-content: space-between; // 양 끝으로 버튼 배치
 `;
 
 const Backview = styled.View`
@@ -119,9 +116,7 @@ const Backview = styled.View`
 `;
 
 const CalendarView = styled.View`
-  flex: 1;
   flex-direction: column;
-  height: 100%;
   background-color: #f6f6f6;
   gap: 175px;
   padding-left: ${wp(13)}px;
@@ -129,10 +124,10 @@ const CalendarView = styled.View`
 `;
 
 const DateView = styled.View`
-  flex: 0.55;
+  flex: 1;
   flex-direction: row;
   background-color: #f6f6f6;
-  gap: 160px;
+  justify-content: space-between;
   padding-top: ${wp(10)}px;
 `;
 
@@ -143,6 +138,7 @@ const TextView = styled.Text`
   padding-top: ${wp(7)}px;
   padding-bottom: ${wp(10)}px;
   padding-left: ${wp(20)}px;
+  padding-right: ${wp(20)}px;
 `;
 
 const UnCompleteButton = styled.Text`
