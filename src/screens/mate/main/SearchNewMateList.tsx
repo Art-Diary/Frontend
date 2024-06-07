@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '../../components/common/modal/LoadingModal';
+import LoadingModal from '../../../components/common/modal/LoadingModal';
 import {useFetchSearchMateList} from '~/api/queries/mate';
-import NameTag from './NameTag';
+import NameTag from '../NameTag';
 import {
   fontPercentage as fp,
   widthPercentage as wp,
@@ -37,11 +37,11 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
   }, [isSuccess]);
 
   if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
+    return <ErrorMessageView message={'전시 메이트 검색 실패:('} />;
   }
 
   if (isLoading) {
-    return <LoadingModal message={'전시 메이트 조회 중 :)'} />;
+    return <LoadingModal message={'전시 메이트 검색 중 :)'} />;
   }
 
   const pressItem = (item: any) => {

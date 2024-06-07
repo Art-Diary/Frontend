@@ -19,15 +19,10 @@ interface ExhMateInfo {
 
 interface NameListProps {
   itemList: GatherInfo[] | ExhMateInfo[];
-  handleCreate: () => void;
   handleClickItem: ((item: GatherInfo) => void) | null;
 }
 
-const NameList: React.FC<NameListProps> = ({
-  itemList,
-  handleCreate,
-  handleClickItem,
-}) => {
+const NameList: React.FC<NameListProps> = ({itemList, handleClickItem}) => {
   function isGatherInfo(item: GatherInfo | ExhMateInfo): item is GatherInfo {
     return (item as GatherInfo).gatherName !== undefined;
   }
@@ -40,12 +35,6 @@ const NameList: React.FC<NameListProps> = ({
 
   return (
     <Container>
-      {/* 모임 리스트 */}
-      <TouchableOpacity onPress={handleCreate}>
-        <AddNewItem>
-          <NameText isAdd={true}>+</NameText>
-        </AddNewItem>
-      </TouchableOpacity>
       <ScrollView
         horizontal={true}
         pagingEnabled={false}
@@ -76,18 +65,6 @@ const Container = styled.View`
   flex-direction: row;
   padding-bottom: ${hp(5)}px;
   gap: 10px;
-`;
-
-const AddNewItem = styled.View`
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-width: 1.1px;
-  border-color: #979797;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  height: ${wp(40)}px;
-  align-items: center;
-  justify-content: center;
 `;
 
 interface ItemProps {

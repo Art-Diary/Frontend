@@ -10,7 +10,7 @@ import {
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import NameTag from './NameTag';
+import NameTag from '../NameTag';
 import {useFetchExhMateList} from '~/api/queries/mate';
 import {useMateActions} from '~/zustand/mate/mate';
 

@@ -140,11 +140,12 @@ const GatheringInfoScreen = () => {
       <Contents>
         <ExhMates>
           <ContentText>전시 메이트</ContentText>
-          <NameList
-            itemList={gatheringInfo.mates}
-            handleCreate={pressNewExhMate}
-            handleClickItem={null}
-          />
+          <RowView>
+            <AddNewItem onPress={pressNewExhMate}>
+              <NameText isAdd={true}>+</NameText>
+            </AddNewItem>
+            <NameList itemList={gatheringInfo.mates} handleClickItem={null} />
+          </RowView>
         </ExhMates>
         <Dot />
         <ExhListWrapper>
@@ -269,4 +270,32 @@ const DeleteButton = styled.Text`
   padding-top: ${hp(9.5)}px;
   padding-bottom: ${hp(9.5)}px;
   border-radius: 5px;
+`;
+
+const RowView = styled.View`
+  flex-direction: row;
+  padding-bottom: ${hp(3)}px;
+  gap: 10px;
+`;
+
+const AddNewItem = styled.TouchableOpacity`
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-width: 1.1px;
+  border-color: #979797;
+  padding-left: ${wp(15)}px;
+  padding-right: ${wp(15)}px;
+  height: ${wp(40)}px;
+  align-items: center;
+  justify-content: center;
+`;
+
+interface NameProps {
+  isAdd: boolean;
+}
+
+const NameText = styled.Text<NameProps>`
+  font-size: ${fp(19)}px;
+  color: ${(props: NameProps) => (props.isAdd ? '#979797' : 'white')};
+  font-family: 'omyu pretty';
 `;

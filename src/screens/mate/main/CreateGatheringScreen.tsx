@@ -12,6 +12,7 @@ import {Keyboard, TouchableOpacity} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const CreateGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -45,8 +46,12 @@ const CreateGatheringScreen = () => {
   }, []);
 
   const onPressCreate = () => {
+    if (checkBlankInKeyword(gahteringKeyword)) {
+      showToast('다시 검색해 주세요');
+    } else {
+      createGathering();
+    }
     Keyboard.dismiss();
-    createGathering();
   };
 
   return (
@@ -60,7 +65,7 @@ const CreateGatheringScreen = () => {
           <WriteView>
             <WriteScroll>
               <GatheringInput
-                multiline={true}
+                multiline={false}
                 placeholderTextColor="#D3D3D3"
                 placeholder={'새로운 모임 이름을 작성해주세요.'}
                 onChangeText={onChangeGathering}

@@ -11,66 +11,28 @@ import {
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import ExhMateList from './ExhMateList';
-import NameList from '~/components/mate/NameList';
-import {useFetchGatheringList} from '~/api/queries/gathering';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
-import {useEnterGatheringActions} from '~/zustand/gathering/enterGathering';
-
-interface GatherInfo {
-  gatherId: number;
-  gatherName: string;
-}
+import GatheringListRequest from './GatheringListRequest';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
-  const {updateEnterGatheringInfo} = useEnterGatheringActions();
-  const {
-    data: gatheringList,
-    isLoading,
-    isError,
-    isSuccess,
-    refetch,
-  } = useFetchGatheringList();
 
   useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'mate') {
         updateTab('mate');
       }
-      refetch();
     }
   }, [isFocused]);
-
-  if (isError) {
-    return <ErrorMessageView message="모임 목록 조회 실패:(" />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="모임 목록 조회 중:)" />;
-  }
-
   const pressCreateGathering = () => {
     // 새 모임 생성
     navigation.navigate('CreateGathering');
-  };
-
-  const pressEnterGathering = (item: GatherInfo) => {
-    updateEnterGatheringInfo({
-      gatherId: item.gatherId,
-      gatherName: item.gatherName,
-    });
-    navigation.navigate('GatheringRoutes', {
-      screen: 'GatheringInfo',
-      params: undefined,
-    });
   };
 
   return (
@@ -86,11 +48,12 @@ const MateMainScreen = () => {
       <Contents>
         <GatheringList>
           <ContentText>모임 목록</ContentText>
-          <NameList
-            itemList={gatheringList}
-            handleCreate={pressCreateGathering}
-            handleClickItem={pressEnterGathering}
-          />
+          <RowView>
+            <AddNewItem onPress={pressCreateGathering}>
+              <NameText isAdd={true}>+</NameText>
+            </AddNewItem>
+            <GatheringListRequest />
+          </RowView>
         </GatheringList>
         <Dot />
         <MateList>
@@ -125,6 +88,12 @@ const GatheringList = styled.View`
   gap: ${wp(12)}px;
 `;
 
+const RowView = styled.View`
+  flex-direction: row;
+  padding-bottom: ${hp(3)}px;
+  gap: 10px;
+`;
+
 const ContentText = styled.Text`
   font-size: ${fp(22)}px;
   color: #3c4045;
@@ -144,4 +113,26 @@ const MateList = styled.View`
   padding-left: ${wp(12)}px;
   padding-right: ${wp(12)}px;
   gap: ${wp(12)}px;
+`;
+
+const AddNewItem = styled.TouchableOpacity`
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-width: 1.1px;
+  border-color: #979797;
+  padding-left: ${wp(15)}px;
+  padding-right: ${wp(15)}px;
+  height: ${wp(40)}px;
+  align-items: center;
+  justify-content: center;
+`;
+
+interface NameProps {
+  isAdd: boolean;
+}
+
+const NameText = styled.Text<NameProps>`
+  font-size: ${fp(19)}px;
+  color: ${(props: NameProps) => (props.isAdd ? '#979797' : 'white')};
+  font-family: 'omyu pretty';
 `;

@@ -1,8 +1,8 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MateExhListScreen from '~/screens/mate/mateExhList/MateExhListScreen';
-import MateDiaryListScreen from '~/screens/mate/mateDiary/MateDiaryListScreen';
-import MateDiaryBackScreen from '~/screens/mate/mateDiary/MateDiaryBackScreen';
+import MateExhListScreen from '~/screens/mate/mate/mateExhList/MateExhListScreen';
+import MateDiaryListScreen from '~/screens/mate/mate/mateDiary/MateDiaryListScreen';
+import MateDiaryBackScreen from '~/screens/mate/mate/mateDiary/MateDiaryBackScreen';
 
 const MateDiary = createNativeStackNavigator();
 
