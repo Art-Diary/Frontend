@@ -38,6 +38,9 @@ export type RootStackParamList = {
   ExhToDiary: {
     diaryId: number;
   };
+  ExhToCal: {
+    exhId: number;
+  };
   //CalendarSearch: undefined;
   // login
   Login: undefined;

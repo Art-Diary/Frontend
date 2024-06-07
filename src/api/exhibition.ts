@@ -10,16 +10,17 @@ export const fetchSearchExh = (
 ) => {
   const fieldString = Array.isArray(field) ? field.join(',') : field;
   const stateString = Array.isArray(state) ? state.join(',') : state;
-  console.log('stateString', stateString);
+  console.log('date', date, fieldString, stateString);
   return client.get(`/exhibitions`, {
     params: {searchName, price, field: fieldString, state: stateString, date},
   });
 };
 
+export const fetchAllExh = () => client.get(`/exhibitions`);
+
+/* 전시회 상세 정보 */
 export const fetchExhDetailInfo = (exhId: number) =>
   client.get(`/exhibitions/${exhId}`);
-
-export const fetchAllExh = () => client.get(`/exhibitions`);
 
 export const fetchDiaryListForExh = (exhId: number) =>
   client.get(`/exhibitions/${exhId}/diaries`);
