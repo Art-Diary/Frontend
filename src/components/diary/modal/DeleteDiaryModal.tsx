@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {useDeleteMyDiary} from '~/api/queries/mydiary';
+import {mydiaryQueryKeys, useDeleteMyDiary} from '~/api/queries/mydiary';
 import {
   useDeleteMyDiaryActions,
   useDeleteMyDiaryInfo,
@@ -12,6 +12,11 @@ import {
 } from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {useQueryClient} from 'react-query';
+import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
+import {gatheringQueryKeys} from '~/api/queries/gathering';
+import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
+import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 
 interface DeleteDiaryModalProps {
   handleCloseModal: () => void;
@@ -24,6 +29,10 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   message,
   handleIsDeleted,
 }) => {
+  const queryClient = useQueryClient();
+  const {enterGatheringInfo} = useEnterGatheringInfo();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const exhFromCalendarInfo = useExhFromCalendarInfo();
   const deletemyDiaryInfo = useDeleteMyDiaryInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {
@@ -47,6 +56,29 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
       handleIsDeleted();
+
+      if (tabIdentifierInfo.tab === 'mydiary') {
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(deletemyDiaryInfo.exhId),
+        );
+        queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      } else if (tabIdentifierInfo.tab === 'gathering') {
+        queryClient.invalidateQueries(
+          gatheringQueryKeys.fetchGatheringDiaryList(
+            enterGatheringInfo.gatherId,
+            deletemyDiaryInfo.exhId,
+          ),
+        );
+      } else if (tabIdentifierInfo.tab === 'calendar') {
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryListInCalendar(
+            deletemyDiaryInfo.exhId,
+            exhFromCalendarInfo.forget,
+            exhFromCalendarInfo.visitDate,
+            exhFromCalendarInfo.gatherId,
+          ),
+        );
+      }
     }
   }, [isError, isSuccess, handleCloseModal]);
 

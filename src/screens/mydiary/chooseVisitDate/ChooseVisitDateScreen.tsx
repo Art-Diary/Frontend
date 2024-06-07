@@ -14,6 +14,7 @@ import ChooseVisitDateList from './ChooseVisitDateList';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
+import {useIsFocused} from '@react-navigation/native';
 
 interface IPicker {
   label: string;
@@ -21,6 +22,7 @@ interface IPicker {
 }
 
 const ChooseVisitDateScreen = () => {
+  const isFocused = useIsFocused();
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number | null>(null);
@@ -35,7 +37,14 @@ const ChooseVisitDateScreen = () => {
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchMyStoredDateListOfExh(visitedExhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
   const handleSetItemsMyDiary = (gatherNameList: IPicker[]): IPicker[] => {

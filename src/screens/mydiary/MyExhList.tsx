@@ -9,21 +9,9 @@ import {RootStackNavigationProp} from '~/App';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 const MyExhList = () => {
-  const isFocused = useIsFocused();
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
-
-  // useEffect(() => { 새로고침에서 사용
-  //   refetch(); // 데이터를 다시 가져오는 메서드를 사용하여 데이터를 다시 가져옴
-  // }, []); // 처음 렌더링 시에만 호출되도록 빈 배열 전달
-
-  useEffect(() => {
-    // 다른 화면을 갔다왔을때 갱신
-    if (isFocused) {
-      refetch();
-    }
-  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;

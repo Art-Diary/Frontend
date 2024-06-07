@@ -49,6 +49,7 @@ const GatheringInfoScreen = () => {
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchGatheringInfo(enterGatheringInfo.gatherId);
   const {
     mutate: deleteGathering,
@@ -62,6 +63,7 @@ const GatheringInfoScreen = () => {
       if (tabIdentifierInfo.tab !== 'gathering') {
         updateTab('gathering');
       }
+      refetch();
     }
   }, [isFocused]);
 

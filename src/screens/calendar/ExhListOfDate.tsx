@@ -12,7 +12,7 @@ import {useFetchCalendar} from '~/api/queries/calendar';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {calendarColor} from './calendarColor';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {JoinDateWithHyphen} from '~/utils/Date';
@@ -41,6 +41,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   items,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {
     updateForget,
@@ -55,12 +56,19 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchCalendar(
     gatherId === -1 ? 'alone' : gatherId === -2 ? 'all' : 'gather',
     gatherId > -1 ? gatherId : null,
     Number(changeMonth.split('.')[0]),
     Number(changeMonth.split('.')[1]),
   );
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (isSuccess) {

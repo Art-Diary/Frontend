@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {
   deleteUser,
   fetchUserInfo,
@@ -11,6 +11,8 @@ import {
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {mydiaryQueryKeys} from './mydiary';
+import {mateQueryKeys} from './mate';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -114,6 +116,8 @@ export const useLoginUser = (
   providerType: string,
   providerId: string,
 ) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => loginUser(email, providerType, providerId),
     onError: err => {
@@ -129,6 +133,9 @@ export const useLoginUser = (
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);
       }
+      // 초기 로딩
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      queryClient.invalidateQueries(mateQueryKeys.fetchExhMateList());
       return resData;
     },
   });

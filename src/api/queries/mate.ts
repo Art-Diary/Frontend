@@ -8,7 +8,7 @@ import {
   fetchSearchMateList,
 } from '../mate';
 
-const mateQueryKeys = createQueryKeys('mate', {
+export const mateQueryKeys = createQueryKeys('mate', {
   fetchExhMateList: () => ['fetchExhMateList'],
   fetchSearchMateList: (nickname: string) => ['fetchSearchMateList', nickname],
   fetchMateExhList: (mateId: number) => ['fetchMateExhList', mateId],

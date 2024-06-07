@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -14,13 +14,21 @@ import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 
 const GatheringDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
   const {params} = useGatheringListParamsInfo();
   const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
   const {
     data: gatheringDiaryList,
     isLoading,
     isError,
+    refetch,
   } = useFetchGatheringDiaryList(params.gatherId, params.exhId);
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message="전시 메이트 다이어리 조회 실패:(" />;
