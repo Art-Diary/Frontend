@@ -1,12 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {useFetchSearchExhInMyDiary} from '~/api/queries/exhibition';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import ExhItemView from '../../components/exhibition/ExhItemView';
-import LoadingModal from '../../components/common/modal/LoadingModal';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
