@@ -22,7 +22,7 @@ export default ErrorMessageView;
 /** style */
 const Container = styled.View`
   flex: 1;
-  padding-top: ${hp(15)}px;
+  padding-top: 2.5%;
   align-items: center;
   background-color: #f6f6f6;
 `;
