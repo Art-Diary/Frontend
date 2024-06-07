@@ -1,49 +1,25 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {useFetchSearchExh} from '~/api/queries/exhibition';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import ExhItemView from '../../components/exhibition/ExhItemView';
-import LoadingModal from '../../components/common/modal/LoadingModal';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 interface SearchExhListProps {
-  searchKeyword: string;
-  changeIsPressed: () => void;
+  exhList: any[];
   forGathering: boolean;
 }
 
 const SearchExhList: React.FC<SearchExhListProps> = ({
-  searchKeyword,
-  changeIsPressed,
+  exhList,
   forGathering,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {
-    data: exhList,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useFetchSearchExh(searchKeyword, null, null, null, null);
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
-
-  useEffect(() => {
-    if (isSuccess) {
-      changeIsPressed();
-    }
-  }, [isSuccess]);
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'전시회 조회 중 :)'} />;
-  }
 
   const onPressExh = (exhId: number) => {
     updateVisitedExhId(exhId);

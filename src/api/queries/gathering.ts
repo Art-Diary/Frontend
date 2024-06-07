@@ -1,5 +1,5 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 import {
   addNewDateOfExhGathering,
   addNewMateInGathering,
@@ -10,7 +10,6 @@ import {
   fetchGatheringList,
   fetchSearchNewMateInGathering,
 } from '../gathering';
-import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
 export const gatheringQueryKeys = createQueryKeys('gathering', {
   fetchGatheringList: () => ['fetchGatheringList'],
@@ -58,8 +57,6 @@ export const useFetchGatheringInfo = (gatherId: number) =>
   });
 
 export const useCreateGathering = (gatherName: string) => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: () => createGathering(gatherName),
     onError: err => {
@@ -68,7 +65,6 @@ export const useCreateGathering = (gatherName: string) => {
     },
     onSuccess: () => {
       console.log('[CreateGathering] success create CreateGathering');
-      queryClient.invalidateQueries(gatheringQueryKeys.fetchGatheringList());
     },
   });
 };
@@ -90,8 +86,6 @@ export const useFetchGatheringDiaryList = (gatherId: number, exhId: number) =>
   });
 
 export const useDeleteGathering = (gatherId: number) => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: () => deleteGathering(gatherId),
     onError: err => {
@@ -100,7 +94,6 @@ export const useDeleteGathering = (gatherId: number) => {
     },
     onSuccess: () => {
       console.log('[DeleteGathering] success delete DeleteGathering');
-      queryClient.invalidateQueries(gatheringQueryKeys.fetchGatheringList());
     },
   });
 };
@@ -110,9 +103,6 @@ export const useAddNewDateOfExhGathering = (
   exhId: number,
   visitDate: string,
 ) => {
-  const queryClient = useQueryClient();
-  const {enterGatheringInfo} = useEnterGatheringInfo();
-
   return useMutation({
     mutationFn: () => addNewDateOfExhGathering(gatherId, exhId, visitDate),
     onError: err => {
@@ -125,17 +115,11 @@ export const useAddNewDateOfExhGathering = (
       console.log(
         '[AddNewDateOfExhGathering] success create AddNewDateOfExhGathering',
       );
-      queryClient.invalidateQueries(
-        gatheringQueryKeys.fetchGatheringInfo(enterGatheringInfo.gatherId),
-      );
     },
   });
 };
 
 export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
-  const queryClient = useQueryClient();
-  const {enterGatheringInfo} = useEnterGatheringInfo();
-
   return useMutation({
     mutationFn: () => addNewMateInGathering(gatherId, mateId),
     onError: err => {
@@ -145,9 +129,6 @@ export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
     onSuccess: () => {
       console.log(
         '[AddNewMateInGathering] success create AddNewMateInGathering',
-      );
-      queryClient.invalidateQueries(
-        gatheringQueryKeys.fetchGatheringInfo(enterGatheringInfo.gatherId),
       );
     },
   });

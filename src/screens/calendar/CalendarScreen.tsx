@@ -49,6 +49,7 @@ const CalendarScreen = () => {
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchGatheringList();
 
   useEffect(() => {
@@ -56,6 +57,7 @@ const CalendarScreen = () => {
       if (tabIdentifierInfo.tab !== 'calendar') {
         updateTab('calendar');
       }
+      refetch();
     }
   }, [isFocused]);
 

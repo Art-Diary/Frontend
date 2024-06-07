@@ -103,6 +103,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   useEffect(() => {
     if (isFocused) {
       refetch();
+      refetchDiaryList();
     }
   }, [isFocused]);
 

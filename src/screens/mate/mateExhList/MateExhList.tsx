@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -10,13 +10,21 @@ import {useQueryMateDiaryActions} from '~/zustand/mate/queryMateDiary';
 
 const MateExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
   const mateInfo = useMateInfo();
   const {updateQueryInfo} = useQueryMateDiaryActions();
   const {
     data: mateExhList,
     isLoading,
     isError,
+    refetch,
   } = useFetchMateExhList(mateInfo.mateInfo.userId);
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message="전시 메이트 정보 조회 실패:(" />;

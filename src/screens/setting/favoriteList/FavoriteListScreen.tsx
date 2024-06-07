@@ -1,5 +1,5 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -16,22 +16,13 @@ import {useFavoriteListActions} from '~/zustand/setting/favoriteList';
 
 const FavoriteListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const isFocused = useIsFocused();
   const {updateFavoriteList} = useFavoriteListActions();
   const {
     data: favoriteList,
     isLoading,
     isError,
     isSuccess,
-    refetch,
   } = useFetchFavoriteList();
-
-  useEffect(() => {
-    // 다른 화면을 갔다왔을때 갱신
-    if (isFocused) {
-      refetch();
-    }
-  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;

@@ -1,24 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
-import {useFetchMyDiaryList} from '~/api/queries/mydiary';
+import {useFetchMyDiaryListInCalendar} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import DiaryList from '~/components/diary/DiaryList';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
+import {useIsFocused} from '@react-navigation/native';
 
 const CalendarDiaryList = () => {
+  const isFocused = useIsFocused();
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const exhFromCalendarInfo = useExhFromCalendarInfo();
   const {
     data: diaryList,
     isLoading,
     isError,
-  } = useFetchMyDiaryList(
+    refetch,
+  } = useFetchMyDiaryListInCalendar(
     visitedExhId,
     exhFromCalendarInfo.forget,
     exhFromCalendarInfo.visitDate,
     exhFromCalendarInfo.gatherId,
   );
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
