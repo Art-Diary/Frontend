@@ -39,6 +39,7 @@ import {
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
+import ExhToCal from './ExhToCal';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -312,7 +313,12 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         <NameView>
           <Title>{data.exhName}</Title>
           <IconView>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ExhToCal', {
+                  exhId: data.exhId,
+                })
+              }>
               <CalendarShare />
             </TouchableOpacity>
             <Bar>{'|'}</Bar>

@@ -19,6 +19,7 @@ interface AddVisitDateProps {
   onSelectedDate: (selectedDate: string) => void;
   onClickNextButton: () => void;
   children?: ReactNode;
+  selectedMssg?: string;
 }
 
 const AddVisitDate: React.FC<AddVisitDateProps> = ({
@@ -27,6 +28,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
   onSelectedDate,
   onClickNextButton,
   children,
+  selectedMssg,
 }) => {
   const alreadyMarkedDate = () => {
     for (var marked = 0; marked < markedDates.length; marked++) {
@@ -49,7 +51,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
       {/* 선택한 날짜 표시 */}
       <View style={{flex: 1}}>
         <BodyView>
-          <BodyText>추가할 날짜</BodyText>
+          <BodyText> {selectedMssg ?? '추가할 날짜'}</BodyText>
           <BodyText>{selectedDate}</BodyText>
         </BodyView>
         {children}

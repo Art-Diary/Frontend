@@ -8,6 +8,7 @@ import {
   fetchDeleteLike,
   fetchAllExh,
   fetchDiaryListForExh,
+  fetchDatesforExh,
 } from '../exhibition';
 
 const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -21,6 +22,11 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
   fetchLikeList: () => ['fetchLikeList'],
   fetchExhDetailInfo: (exhId: number) => ['fetchExhDetailInfo', exhId],
   fetchDiaryListForExh: (exhId: number) => ['fetchDiaryListForExh', exhId],
+  fetchDatesforExh: (exhId: number, gatherId?: number[]) => [
+    'fetchDatesforExh',
+    exhId,
+    gatherId,
+  ],
 });
 
 export const useFetchSearchExh = (
@@ -76,6 +82,21 @@ export const useFetchDiaryListForExh = (exhId: number) =>
     },
     onSuccess: () => {
       console.log(exhId, '[ExhDetailInfoScreen] success fetch DiaryList');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchDatesforExh = (exhId: number, gatherId: number[] | null) =>
+  useQuery({
+    queryKey: [exhibitionQueryKeys.fetchDatesforExh(exhId).queryKey, gatherId],
+    queryFn: () => fetchDatesforExh(exhId, gatherId),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[ExhDetailInfoScreen] error fetch Dates for exh');
+    },
+    onSuccess: () => {
+      console.log(exhId, '[ExhDetailInfoScreen] success fetch Dates for exh');
     },
     select: (res: any) => res.data,
   });
