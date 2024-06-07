@@ -37,6 +37,7 @@ const MateMainScreen = () => {
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchGatheringList();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const MateMainScreen = () => {
       if (tabIdentifierInfo.tab !== 'mate') {
         updateTab('mate');
       }
+      refetch();
     }
   }, [isFocused]);
 

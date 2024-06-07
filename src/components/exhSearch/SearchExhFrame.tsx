@@ -33,7 +33,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
       <SearchContainer>
         <SearchView>
           <SearchWord
-            onSubmitEditing={onPressSearch}
+            onSubmitEditing={onPressSearch} // 키보드 상에서 엔터 누르면 확인 버튼 누르는 것과 같음.
             onChangeText={onChangeText}
             placeholder={searchMessage ?? '전시회를 검색하세요'}
             value={searchKeyword}

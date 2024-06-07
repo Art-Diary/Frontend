@@ -20,7 +20,7 @@ const MyDiaryListScreen = () => {
     data: myDiaryList,
     isLoading,
     isError,
-  } = useFetchMyDiaryList(visitedExhId, null, null, null);
+  } = useFetchMyDiaryList(visitedExhId);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;

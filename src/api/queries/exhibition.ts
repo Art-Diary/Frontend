@@ -6,12 +6,15 @@ import {
   fetchAddLike,
   fetchLikeList,
   fetchDeleteLike,
-  fetchAllExh,
   fetchDiaryListForExh,
   fetchStoredDateOfExhInGroup,
 } from '../exhibition';
 
-const exhibitionQueryKeys = createQueryKeys('exhibition', {
+export const exhibitionQueryKeys = createQueryKeys('exhibition', {
+  fetchSearchExhInMyDiary: (searchName: string) => [
+    'fetchSearchExhInMyDiary',
+    searchName,
+  ],
   fetchSearchExh: (
     searchName?: string,
     price?: string,
@@ -28,6 +31,21 @@ const exhibitionQueryKeys = createQueryKeys('exhibition', {
     gatherId,
   ],
 });
+
+export const useFetchSearchExhInMyDiary = (searchName: string) =>
+  useQuery({
+    enabled: false,
+    queryKey: exhibitionQueryKeys.fetchSearchExhInMyDiary(searchName).queryKey,
+    queryFn: () => fetchSearchExh(searchName, null, null, null, null),
+    staleTime: 500000,
+    onError: err => {
+      console.log('error fetch SearchExh');
+    },
+    onSuccess: () => {
+      console.log('success fetch SearchExh');
+    },
+    select: (res: any) => res.data,
+  });
 
 export const useFetchSearchExh = (
   searchName: string | null,
@@ -87,6 +105,8 @@ export const useFetchDiaryListForExh = (exhId: number) =>
   });
 
 export const useAddLike = (exhId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => fetchAddLike(exhId),
     onError: err => {
@@ -94,6 +114,7 @@ export const useAddLike = (exhId: number) => {
       console.log('[AddLikeExhibition] error fetch favorite');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(exhibitionQueryKeys.fetchLikeList());
       console.log('[AddLikeExhibition] success fetch favorite');
     },
   });
