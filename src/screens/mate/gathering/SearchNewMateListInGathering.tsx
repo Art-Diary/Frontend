@@ -1,34 +1,36 @@
 import React, {useEffect} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '../../components/common/modal/LoadingModal';
-import {useFetchSearchMateList} from '~/api/queries/mate';
-import NameTag from './NameTag';
 import {
   fontPercentage as fp,
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import NameTag from '../NameTag';
+import {useFetchSearchNewMateInGathering} from '~/api/queries/gathering';
+import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
-interface SearchNewMateListProps {
+interface SearchNewMateListInGatheringProps {
   searchKeyword: string;
   changeIsPressed: () => void;
   selectedMate: number;
   handleSelectedMate: (userId: number) => void;
 }
 
-const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
-  searchKeyword,
-  changeIsPressed,
-  selectedMate,
-  handleSelectedMate,
-}) => {
+const SearchNewMateListInGathering: React.FC<
+  SearchNewMateListInGatheringProps
+> = ({searchKeyword, changeIsPressed, selectedMate, handleSelectedMate}) => {
+  const {enterGatheringInfo} = useEnterGatheringInfo();
   const {
-    data: mateList,
+    data: searchNewMateInGathering,
     isLoading,
     isError,
     isSuccess,
-  } = useFetchSearchMateList(searchKeyword);
+  } = useFetchSearchNewMateInGathering(
+    enterGatheringInfo.gatherId,
+    searchKeyword,
+  );
 
   useEffect(() => {
     if (isSuccess) {
@@ -41,7 +43,7 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
   }
 
   if (isLoading) {
-    return <LoadingModal message={'전시 메이트 조회 중 :)'} />;
+    return <LoadingModal message={'모임 메이트 조회 중 :)'} />;
   }
 
   const pressItem = (item: any) => {
@@ -54,11 +56,11 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
 
   return (
     <MateListView>
-      {mateList.length === 0 ? (
+      {searchNewMateInGathering.length === 0 ? (
         <ErrorMessageView message={'검색 결과가 없습니다.'} />
       ) : (
         <FlatList
-          data={mateList}
+          data={searchNewMateInGathering}
           renderItem={({item, index}) => (
             <TouchNewMate onPress={() => pressItem(item)}>
               <UserInfoWrapper>
@@ -90,7 +92,7 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
   );
 };
 
-export default SearchNewMateList;
+export default SearchNewMateListInGathering;
 
 /** style */
 const MateListView = styled.View`

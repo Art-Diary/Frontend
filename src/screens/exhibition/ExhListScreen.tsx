@@ -619,8 +619,6 @@ const IconsView = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: row;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
   background-color: #f6f6f6;
 `;
 

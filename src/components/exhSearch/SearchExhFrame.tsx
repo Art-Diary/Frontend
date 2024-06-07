@@ -57,18 +57,15 @@ const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-top: ${hp(5)}px;
   padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
 `;
 
 const SearchContainer = styled.View`
   flex-direction: column;
-  padding-top: ${hp(5)}px;
+  padding-top: ${hp(7)}px;
   padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  padding-left: ${wp(18)}px;
+  padding-right: ${wp(18)}px;
 `;
 
 const UnderLine = styled.View`

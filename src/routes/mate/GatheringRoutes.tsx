@@ -4,6 +4,9 @@ import GatheringInfoScreen from '~/screens/mate/gathering/GatheringInfoScreen';
 import {GatheringStackParamList} from '~/utils/types';
 import GatheringDiaryListScreen from '~/screens/mate/gathering/GatheringDiaryListScreen';
 import GatheringDiaryBackScreen from '~/screens/mate/gathering/GatheringDiaryBackScreen';
+import SearchAddVisitExhInGatheringScreen from '~/screens/mate/gathering/addVisitExhibition/SearchAddVisitExhInGatheringScreen';
+import NewVisitDateOfExhInGatheringScreen from '~/screens/mate/gathering/addVisitExhibition/NewVisitDateOfExhInGatheringScreen';
+import AddNewMateInGatheringScreen from '~/screens/mate/gathering/AddNewMateInGatheringScreen';
 
 const Gathering = createNativeStackNavigator<GatheringStackParamList>();
 
@@ -30,6 +33,21 @@ const GatheringRoutes = () => {
       <Gathering.Screen
         name="GatheringDiaryBack"
         component={GatheringDiaryBackScreen}
+        options={{headerShown: false, animation: 'fade'}}
+      />
+      <Gathering.Screen
+        name="SearchAddVisitExhInGathering"
+        component={SearchAddVisitExhInGatheringScreen}
+        options={{headerShown: false, animation: 'fade'}}
+      />
+      <Gathering.Screen
+        name="NewVisitDateOfExhInGathering"
+        component={NewVisitDateOfExhInGatheringScreen}
+        options={{headerShown: false, animation: 'fade'}}
+      />
+      <Gathering.Screen
+        name="AddNewMateInGathering"
+        component={AddNewMateInGatheringScreen}
         options={{headerShown: false, animation: 'fade'}}
       />
     </Gathering.Navigator>

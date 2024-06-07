@@ -145,27 +145,25 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
         }
         renderItem={({item, index}) => (
           <TouchableOpacity onPress={() => onPressExhItem(item)}>
-            <ExhWrapper>
-              <ExhItemView
-                exhInfo={{...item}}
-                noLine={
-                  index ===
-                  calendarData[Number(selectedDate.split('.')[2]) - 1]
-                    .scheduleInfoList.length -
-                    1
-                    ? true
-                    : false
-                }
-                notTouchable={true}>
-                {gatherId === -2 && item.gatherName && (
-                  <GatherWrapper>
-                    <GatherName color={findGatherColor(item.gatherId)}>
-                      {item.gatherName}
-                    </GatherName>
-                  </GatherWrapper>
-                )}
-              </ExhItemView>
-            </ExhWrapper>
+            <ExhItemView
+              exhInfo={{...item}}
+              noLine={
+                index ===
+                calendarData[Number(selectedDate.split('.')[2]) - 1]
+                  .scheduleInfoList.length -
+                  1
+                  ? true
+                  : false
+              }
+              notTouchable={true}>
+              {gatherId === -2 && item.gatherName && (
+                <GatherWrapper>
+                  <GatherName color={findGatherColor(item.gatherId)}>
+                    {item.gatherName}
+                  </GatherName>
+                </GatherWrapper>
+              )}
+            </ExhItemView>
           </TouchableOpacity>
         )}
       />
@@ -197,11 +195,6 @@ const SelectedDateText = styled.Text`
   font-size: ${fp(17.5)}px;
   color: #3c4045;
   font-family: 'omyu pretty';
-`;
-
-const ExhWrapper = styled.View`
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
 `;
 
 const GatherWrapper = styled.View`

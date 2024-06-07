@@ -46,37 +46,39 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   };
 
   return (
-    <ExhView noLine={noLine}>
-      <TouchView disabled={notTouchable} onPress={onTouch}>
-        <Poster
-          source={{uri: `data:image/png;base64,${exhInfo.poster}`}}
-          resizeMode="contain"
-          alt={'이미지 읽기 실패'}
-        />
-        <ExhInfo haveRate={haveRate}>
-          <ExhName numberOfLines={1} ellipsizeMode="tail">
-            {exhInfo.exhName}
-          </ExhName>
-          {!haveRate ? (
-            <>
-              <ExhGallery>{exhInfo.gallery}</ExhGallery>
-              <ExhDate>
-                {changeExhDateFormat(
-                  exhInfo.exhPeriodStart,
-                  exhInfo.exhPeriodEnd,
-                )}
-              </ExhDate>
-            </>
-          ) : (
-            <ExhRateWrapper>
-              <LightStarIcon />
-              <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
-            </ExhRateWrapper>
-          )}
-        </ExhInfo>
-      </TouchView>
-      {children}
-    </ExhView>
+    <Wrapper>
+      <ExhView noLine={noLine}>
+        <TouchView disabled={notTouchable} onPress={onTouch}>
+          <Poster
+            source={{uri: `data:image/png;base64,${exhInfo.poster}`}}
+            resizeMode="contain"
+            alt={'이미지 읽기 실패'}
+          />
+          <ExhInfo haveRate={haveRate}>
+            <ExhName numberOfLines={1} ellipsizeMode="tail">
+              {exhInfo.exhName}
+            </ExhName>
+            {!haveRate ? (
+              <>
+                <ExhGallery>{exhInfo.gallery}</ExhGallery>
+                <ExhDate>
+                  {changeExhDateFormat(
+                    exhInfo.exhPeriodStart,
+                    exhInfo.exhPeriodEnd,
+                  )}
+                </ExhDate>
+              </>
+            ) : (
+              <ExhRateWrapper>
+                <LightStarIcon />
+                <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
+              </ExhRateWrapper>
+            )}
+          </ExhInfo>
+        </TouchView>
+        {children}
+      </ExhView>
+    </Wrapper>
   );
 };
 export default ExhItemView;
@@ -87,13 +89,17 @@ interface ExhViewProps {
   noLine: boolean;
 }
 
+const Wrapper = styled.View`
+  flex-direction: row;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
+`;
+
 const ExhView = styled.View<ExhViewProps>`
   flex-direction: row;
   border-bottom-width: ${(props: ExhViewProps) =>
     props.noLine ? `0px` : `${hp(0.5)}px`};
   border-bottom-color: #d3d3d3;
-  padding-left: ${wp(3)}px;
-  padding-right: ${wp(3)}px;
   padding-top: ${hp(10)}px;
   padding-bottom: ${hp(10)}px;
   width: 100%;

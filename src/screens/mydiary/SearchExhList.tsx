@@ -13,11 +13,13 @@ import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 interface SearchExhListProps {
   searchKeyword: string;
   changeIsPressed: () => void;
+  forGathering: boolean;
 }
 
 const SearchExhList: React.FC<SearchExhListProps> = ({
   searchKeyword,
   changeIsPressed,
+  forGathering,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {
@@ -45,9 +47,16 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
 
   const onPressExh = (exhId: number) => {
     updateVisitedExhId(exhId);
-    updateIsUpdate(false);
-    updateInGathering(false, null);
-    navigation.navigate('AddMyVisitDateRoutes');
+    if (forGathering) {
+      navigation.navigate('GatheringRoutes', {
+        screen: 'NewVisitDateOfExhInGathering',
+        params: undefined,
+      });
+    } else {
+      updateIsUpdate(false);
+      updateInGathering(false, null);
+      navigation.navigate('AddMyVisitDateRoutes');
+    }
   };
 
   return (
@@ -62,6 +71,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
               exhInfo={{...item}}
               notTouchable={false}
               onTouch={() => onPressExh(item.exhId)}
+              noLine={index === exhList.length - 1 ? true : false}
             />
           )}
         />

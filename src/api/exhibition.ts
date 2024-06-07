@@ -25,8 +25,10 @@ export const fetchExhDetailInfo = (exhId: number) =>
 export const fetchDiaryListForExh = (exhId: number) =>
   client.get(`/exhibitions/${exhId}/diaries`);
 
-export const fetchDatesforExh = (exhId: number, gatherId: number[] | null) =>
-  client.get(`exhibitions/${exhId}/date`, {params: {gatherId}});
+export const fetchStoredDateOfExhInGroup = (
+  exhId: number,
+  gatherId: number | null,
+) => client.get(`/exhibitions/${exhId}/date`, {params: {gatherId}});
 
 /** 전시회 좋아요 API */
 export const fetchLikeList = () => client.get(`/favorites`);

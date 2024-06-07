@@ -14,3 +14,21 @@ export const fetchGatheringDiaryList = (gatherId: number, exhId: number) =>
 
 export const deleteGathering = (gatherId: number) =>
   client.delete(`/gatherings/${gatherId}`);
+
+export const addNewDateOfExhGathering = (
+  gatherId: number,
+  exhId: number,
+  visitDate: string,
+) =>
+  client.post(`/gatherings/${gatherId}/exhibitions`, {
+    exhId: exhId,
+    visitDate: visitDate,
+  });
+
+export const addNewMateInGathering = (gatherId: number, mateId: number) =>
+  client.post(`/gatherings/${gatherId}`, {userId: mateId});
+
+export const fetchSearchNewMateInGathering = (
+  gatherId: number,
+  nickname: string,
+) => client.get(`/gatherings/${gatherId}/search`, {params: {nickname}});

@@ -236,14 +236,17 @@ const Container = styled.View`
   background-color: white;
   border-radius: 8px;
   width: 100%;
-  padding-top: ${hp(15)}px;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
+  padding-top: ${hp(10)}px;
+  padding-bottom: ${hp(13)}px;
+  padding-left: ${wp(10)}px;
+  padding-right: ${wp(10)}px;
   gap: ${hp(7.36)}px;
 `;
 
 const CalHeader = styled.View`
+  padding-left: ${wp(1)}px;
+  padding-top: ${hp(3)}px;
+  padding-bottom: ${hp(3)}px;
   align-items: flex-start;
   flex-direction: row;
   justify-content: space-between;

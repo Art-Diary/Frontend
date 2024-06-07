@@ -1,4 +1,4 @@
-import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -20,22 +20,13 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import {AddMyExhButton} from '~/assets/images';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {GatheringStackParamList} from '~/utils/types';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useGatheringListParamsActions} from '~/zustand/gathering/gathering';
-
-type GatheringInfoScreenRouteProp = RouteProp<
-  GatheringStackParamList,
-  'GatheringInfo'
->;
-
-type Props = {
-  route: GatheringInfoScreenRouteProp;
-};
+import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
 interface ExhInfo {
   exhId: number;
@@ -44,27 +35,27 @@ interface ExhInfo {
   rate?: number;
 }
 
-const GatheringInfoScreen: React.FC<Props> = ({route}) => {
+const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateTab} = useTabIdentifierActions();
   const {updateGatheringListParams} = useGatheringListParamsActions();
-  const {gatherId, gatherName} = route.params;
+  const {enterGatheringInfo} = useEnterGatheringInfo();
   const [isOpen, setIsOpen] = useState(false);
   const {
     data: gatheringInfo,
     isLoading,
     isError,
     isSuccess,
-  } = useFetchGatheringInfo(gatherId);
+  } = useFetchGatheringInfo(enterGatheringInfo.gatherId);
   const {
     mutate: deleteGathering,
     isLoading: deleteLoading,
     isError: deleteError,
     isSuccess: deleteSuccess,
-  } = useDeleteGathering(gatherId);
+  } = useDeleteGathering(enterGatheringInfo.gatherId);
 
   useEffect(() => {
     if (isFocused) {
@@ -95,21 +86,29 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     return <LoadingModal message="모임 정보 조회 중:)" />;
   }
 
-  // TODO
   const pressNewExhMate = () => {
     // 모임에 새로운 전시 메이트 추가
+    navigation.navigate('GatheringRoutes', {
+      screen: 'AddNewMateInGathering',
+      params: undefined,
+    });
   };
 
-  // TODO
   const pressNewExh = () => {
     // 모임에 새로운 전시회 일정 추가
-    // navigation.navigate('')
+    navigation.navigate('GatheringRoutes', {
+      screen: 'SearchAddVisitExhInGathering',
+      params: undefined,
+    });
   };
 
   const pressExh = (item: ExhInfo) => {
     // 모임의 기록으로 넘어가기
     updateVisitedExhId(item.exhId);
-    updateGatheringListParams({gatherId: gatherId, exhId: item.exhId});
+    updateGatheringListParams({
+      gatherId: enterGatheringInfo.gatherId,
+      exhId: item.exhId,
+    });
     navigation.navigate('GatheringRoutes', {
       screen: 'GatheringDiaryList',
       params: undefined,
@@ -134,40 +133,44 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
   return (
     <Container>
       {/* header */}
-      <BackView title={gatherName} line={true} />
+      <BackView title={enterGatheringInfo.gatherName} line={true} />
       {/* body */}
       <Contents>
-        <ContentText>전시 메이트</ContentText>
-        <NameList
-          itemList={gatheringInfo.mates}
-          handleCreate={pressNewExhMate}
-          handleClickItem={null}
-        />
+        <ExhMates>
+          <ContentText>전시 메이트</ContentText>
+          <NameList
+            itemList={gatheringInfo.mates}
+            handleCreate={pressNewExhMate}
+            handleClickItem={null}
+          />
+        </ExhMates>
         <Dot />
-        <ContentWrapper>
-          <ContentText>함께 한 전시 리스트</ContentText>
-          <TouchableOpacity onPress={pressNewExh}>
-            <AddMyExhButton />
-          </TouchableOpacity>
-        </ContentWrapper>
-        {/* 모임이 방문한 전시회 리스트 */}
-        <FlatList
-          data={gatheringInfo.exhibitions}
-          renderItem={({item, index}) => (
-            <ExhItemView
-              key={index}
-              exhInfo={item}
-              noLine={gatheringInfo.exhibitions.length - 1 === index}
-              notTouchable={false}
-              onTouch={() => pressExh(item)}
-              haveRate={true}
-            />
-          )}
-        />
+        <ExhListWrapper>
+          <ExhListTitle>
+            <ContentText>함께 한 전시 리스트</ContentText>
+            <TouchableOpacity onPress={pressNewExh}>
+              <AddMyExhButton />
+            </TouchableOpacity>
+          </ExhListTitle>
+          {/* 모임이 방문한 전시회 리스트 */}
+          <FlatList
+            data={gatheringInfo.exhibitions}
+            renderItem={({item, index}) => (
+              <ExhItemView
+                key={index}
+                exhInfo={item}
+                noLine={gatheringInfo.exhibitions.length - 1 === index}
+                notTouchable={false}
+                onTouch={() => pressExh(item)}
+                haveRate={true}
+              />
+            )}
+          />
+        </ExhListWrapper>
         {/* 모임 나가기 버튼 */}
-        <TouchableOpacity onPress={pressGetOut}>
+        <DeleteTouch onPress={pressGetOut}>
           <OutButton>모임 나가기</OutButton>
-        </TouchableOpacity>
+        </DeleteTouch>
         {isOpen && (
           <ConfirmationModal handleCloseModal={handleCloseModal}>
             <Message>모임을 나가겠습니까?</Message>
@@ -193,16 +196,28 @@ const Contents = styled.View`
   flex-direction: column;
   background-color: #f6f6f6;
   padding-top: ${wp(12)}px;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-  gap: 10px;
+  gap: ${wp(12)}px;
 `;
 
-const ContentWrapper = styled.View`
+const ExhMates = styled.View`
+  flex-direction: column;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
+  gap: ${wp(12)}px;
+`;
+
+const ExhListWrapper = styled.View`
+  flex: 1;
+  flex-direction: column;
+  gap: ${wp(5)}px;
+`;
+
+const ExhListTitle = styled.View`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  padding-right: ${wp(2)}px;
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(13)}px;
 `;
 
 const ContentText = styled.Text`
@@ -235,6 +250,11 @@ const Message = styled.Text`
   font-family: 'omyu pretty';
   padding-top: ${hp(45)}px;
   padding-bottom: ${hp(45)}px;
+`;
+
+const DeleteTouch = styled.TouchableOpacity`
+  padding-left: ${wp(12)}px;
+  padding-right: ${wp(12)}px;
 `;
 
 const DeleteButton = styled.Text`
