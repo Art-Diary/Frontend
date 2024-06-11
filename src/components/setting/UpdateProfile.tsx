@@ -175,8 +175,10 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
             ) : initProfile.providerType === 'gmail' ||
               initProfile.providerType === 'google' ? (
               <GoogleIcon width={20} />
-            ) : (
+            ) : initProfile.providerType === 'kakao' ? (
               <KakaoIcon width={20} />
+            ) : (
+              <></>
             )}
             <EmailText>{initProfile.email}</EmailText>
           </BoxView>

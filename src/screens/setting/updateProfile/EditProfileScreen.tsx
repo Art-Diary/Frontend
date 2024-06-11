@@ -3,18 +3,20 @@ import {useUserInfo} from '~/zustand/auth/auth';
 import UpdateProfile from '~/components/setting/UpdateProfile';
 
 const EditProfileScreen = () => {
-  const userInfo = useUserInfo();
+  const {authInfo} = useUserInfo();
+  const user = {
+    favoriteArt: authInfo.favoriteArt === '' ? '없음' : authInfo.favoriteArt,
+    nickname: authInfo.nickname === '' ? '전시 메이트' : authInfo.nickname,
+    profile: authInfo.profile,
+    email: authInfo.email === '' ? '이메일' : authInfo.nickname,
+    providerType:
+      authInfo.email === '' ? '' : authInfo.email.split('@')[1].split('.')[0],
+  };
 
   return (
     <UpdateProfile
       title={'프로필 수정'}
-      initProfile={{
-        favoriteArt: userInfo.authInfo.favoriteArt,
-        nickname: userInfo.authInfo.nickname,
-        profile: userInfo.authInfo.profile,
-        email: userInfo.authInfo.email,
-        providerType: userInfo.authInfo.email.split('@')[1].split('.')[0],
-      }}
+      initProfile={user}
       messages={{
         errorMsg: '정보 수정을 실패했습니다.',
         successMsg: '정보 수정 완료!',

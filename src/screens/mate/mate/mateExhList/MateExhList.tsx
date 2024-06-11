@@ -27,7 +27,7 @@ const MateExhList = () => {
   }, [isFocused]);
 
   if (isError) {
-    return <ErrorMessageView message="전시 메이트 정보 조회 실패:(" />;
+    return <ErrorMessageView message="전시 메이트 정보 조회 실패 ;(" />;
   }
 
   if (isLoading) {
@@ -37,7 +37,7 @@ const MateExhList = () => {
   if (mateExhList.length === 0) {
     return (
       <ErrorMessageView
-        message={'아직 전시 메이트의 전시회에 대한 기록이 없습니다'}
+        message={'아직 전시 메이트의 전시회에 대한 기록이 없습니다.'}
       />
     );
   }

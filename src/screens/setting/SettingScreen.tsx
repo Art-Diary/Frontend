@@ -11,6 +11,7 @@ import {RootStackNavigationProp} from '~/App';
 import ProfileNameTag from './nameTag/ProfileNameTag';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {SettingStackParamList} from '~/utils/types';
 
 const SettingScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -22,6 +23,13 @@ const SettingScreen = () => {
     navigation.reset({
       index: 0,
       routes: [{name: 'Login'}],
+    });
+  };
+
+  const handleMoveTo = (moveTo: string) => {
+    navigation.navigate('SettingRoutes', {
+      screen: moveTo as keyof SettingStackParamList,
+      params: undefined,
     });
   };
 
@@ -42,11 +50,11 @@ const SettingScreen = () => {
           <TitleText>설정</TitleText>
           <GreyNameTag
             content="좋아요 전시회 목록"
-            handleTouch={() => navigation.navigate('FavoriteRoutes')}
+            handleTouch={() => handleMoveTo('FavoriteList')}
           />
           <GreyNameTag
             content="알림 설정"
-            handleTouch={() => navigation.navigate('AlarmSetting')}
+            handleTouch={() => handleMoveTo('AlarmSetting')}
           />
           <GreyNameTag content="도움말" />
         </SettingWrapper>
@@ -56,7 +64,7 @@ const SettingScreen = () => {
           <GreyNameTag content="로그아웃" handleTouch={handleLogout} />
           <GreyNameTag
             content="탈퇴"
-            handleTouch={() => navigation.navigate('LeaveArtDiary')}
+            handleTouch={() => handleMoveTo('LeaveArtDiary')}
           />
         </SettingWrapper>
       </Contents>

@@ -6,7 +6,14 @@ export type GatheringStackParamList = {
   SearchAddVisitExhInGathering: undefined;
   NewVisitDateOfExhInGathering: undefined;
   AddNewMateInGathering: undefined;
-  // 다른 스크린이 있다면 여기에 추가합니다.
+};
+
+export type SettingStackParamList = {
+  EditProfile: undefined;
+  FavoriteList: undefined;
+  EditFavorite: undefined;
+  AlarmSetting: undefined;
+  LeaveArtDiary: undefined;
 };
 
 export type RootStackParamList = {
@@ -22,12 +29,10 @@ export type RootStackParamList = {
   WriteMyDiaryRoutes: undefined;
   WriteMyDiaryContents: undefined;
   //setting
-  FavoriteRoutes: undefined;
-  FavoriteList: undefined;
-  EditFavorite: undefined;
-  AlarmSetting: undefined;
-  EditProfile: undefined;
-  LeaveArtDiary: undefined;
+  SettingRoutes: {
+    screen: keyof SettingStackParamList;
+    params: SettingStackParamList[keyof SettingStackParamList];
+  };
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;

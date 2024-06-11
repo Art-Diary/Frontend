@@ -12,7 +12,6 @@ import {
   useDeleteGathering,
   useFetchGatheringInfo,
 } from '~/api/queries/gathering';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -81,7 +80,7 @@ const GatheringInfoScreen = () => {
   }, [deleteError, deleteSuccess]);
 
   if (isError) {
-    return <ErrorMessageView message="모임 정보 조회 실패:(" />;
+    showToast('모임 정보 조회 실패:(');
   }
 
   if (isLoading) {
@@ -135,29 +134,43 @@ const GatheringInfoScreen = () => {
   return (
     <Container>
       {/* header */}
-      <BackView title={enterGatheringInfo.gatherName} line={true} />
+      <BackView
+        title={
+          enterGatheringInfo.gatherName === ''
+            ? '이전 페이지로 이동해주세요.'
+            : enterGatheringInfo.gatherName
+        }
+        line={true}
+      />
       {/* body */}
       <Contents>
         <ExhMates>
           <ContentText>전시 메이트</ContentText>
           <RowView>
-            <AddNewItem onPress={pressNewExhMate}>
+            <AddNewItem
+              onPress={pressNewExhMate}
+              disabled={enterGatheringInfo.gatherName === ''}>
               <NameText isAdd={true}>+</NameText>
             </AddNewItem>
-            <NameList itemList={gatheringInfo.mates} handleClickItem={null} />
+            <NameList
+              itemList={gatheringInfo ? gatheringInfo.mates : []}
+              handleClickItem={null}
+            />
           </RowView>
         </ExhMates>
         <Dot />
         <ExhListWrapper>
           <ExhListTitle>
             <ContentText>함께 한 전시 리스트</ContentText>
-            <TouchableOpacity onPress={pressNewExh}>
+            <TouchableOpacity
+              onPress={pressNewExh}
+              disabled={enterGatheringInfo.gatherName === ''}>
               <AddMyExhButton />
             </TouchableOpacity>
           </ExhListTitle>
           {/* 모임이 방문한 전시회 리스트 */}
           <FlatList
-            data={gatheringInfo.exhibitions}
+            data={gatheringInfo ? gatheringInfo.exhibitions : []}
             renderItem={({item, index}) => (
               <ExhItemView
                 key={index}
@@ -171,7 +184,9 @@ const GatheringInfoScreen = () => {
           />
         </ExhListWrapper>
         {/* 모임 나가기 버튼 */}
-        <DeleteTouch onPress={pressGetOut}>
+        <DeleteTouch
+          onPress={pressGetOut}
+          disabled={enterGatheringInfo.gatherName === ''}>
           <OutButton>모임 나가기</OutButton>
         </DeleteTouch>
         {isOpen && (
