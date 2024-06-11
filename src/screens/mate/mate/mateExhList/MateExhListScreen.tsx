@@ -14,13 +14,20 @@ const MateExhListScreen = () => {
   return (
     <Container>
       {/* header */}
-      <BackView title={mateInfo.mateInfo.nickname + '의 기록'} line={true} />
+      <BackView
+        title={
+          mateInfo.mateInfo.nickname === ''
+            ? '전시 메이트의 기록'
+            : mateInfo.mateInfo.nickname + '의 기록'
+        }
+        line={true}
+      />
       {/* body */}
       <Contents>
         {/* 메이트 정보 */}
         <UserWrapper>
           <UserInfo>
-            <ProfileWrapper>
+            <ProfileWrapper isPresent={mateInfo.mateInfo.profile}>
               <Profile
                 source={{
                   uri: `data:image/png;base64,${mateInfo.mateInfo.profile}`,
@@ -30,8 +37,16 @@ const MateExhListScreen = () => {
               />
             </ProfileWrapper>
             <UserInfoColumn>
-              <NickName>{mateInfo.mateInfo.nickname}</NickName>
-              <Art>{mateInfo.mateInfo.favoriteArt}</Art>
+              <NickName>
+                {mateInfo.mateInfo.nickname === ''
+                  ? '전시 메이트'
+                  : mateInfo.mateInfo.nickname}
+              </NickName>
+              <Art>
+                {mateInfo.mateInfo.favoriteArt === ''
+                  ? '없음'
+                  : mateInfo.mateInfo.favoriteArt}
+              </Art>
             </UserInfoColumn>
           </UserInfo>
         </UserWrapper>
@@ -69,7 +84,11 @@ const UserInfo = styled.View`
   gap: 13px;
 `;
 
-const ProfileWrapper = styled.View`
+interface ProfileWrapperProps {
+  isPresent: boolean;
+}
+
+const ProfileWrapper = styled.View<ProfileWrapperProps>`
   border-color: #ff6f61;
   border-radius: 50px;
   align-items: center;
@@ -77,6 +96,8 @@ const ProfileWrapper = styled.View`
   width: ${wp(35)}px;
   height: ${wp(35)}px;
   overflow: hidden;
+  border-width: ${(props: ProfileWrapperProps) =>
+    props.isPresent ? `0px` : `1px`};
 `;
 
 const Profile = styled.Image`

@@ -28,7 +28,7 @@ const SearchAddVisitExhInGatheringScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      showToast('에러 발생 ;(');
+      showToast('모임에 추가할 전시회 조회 실패 ;(');
     }
     if (isLoading) {
       setOpenLoading(true);

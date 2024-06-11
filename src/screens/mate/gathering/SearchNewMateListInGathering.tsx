@@ -39,11 +39,13 @@ const SearchNewMateListInGathering: React.FC<
   }, [isSuccess]);
 
   if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
+    return (
+      <ErrorMessageView message={'모임에 추가할 전시 메이트 조회 실패 ;('} />
+    );
   }
 
   if (isLoading) {
-    return <LoadingModal message={'모임 메이트 조회 중 :)'} />;
+    return <LoadingModal message={'추가할 전시 메이트 조회 중 :)'} />;
   }
 
   const pressItem = (item: any) => {
