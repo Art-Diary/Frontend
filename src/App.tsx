@@ -20,10 +20,6 @@ import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
 import AddMyVisitDateRoutes from './routes/mydiary/AddMyVisitDateRoutes';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from './components/common/modal/toastConfig';
-import FavoriteRoutes from './routes/setting/FavoriteRoutes';
-import AlarmSettingScreen from './screens/setting/updateAlarm/AlarmSettingScreen';
-import EditProfileScreen from './screens/setting/updateProfile/EditProfileScreen';
-import LeaveScreen from './screens/setting/LeaveScreen';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
@@ -38,6 +34,7 @@ import ExhToCal from './screens/exhibition/ExhToCal';
 import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/types';
+import SettingRoutes from './routes/setting/SettingRoutes';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
@@ -93,14 +90,8 @@ export default function App() {
             />
             <Stack.Screen name="AddNewMate" component={AddNewMateScreen} />
             <Stack.Screen name="MateDiaryRoutes" component={MateDiaryRoutes} />
-            {/* [설정] 좋아요 전시회 목록 화면 */}
-            <Stack.Screen name="FavoriteRoutes" component={FavoriteRoutes} />
-            {/* [설정] 알림 설정 화면 */}
-            <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen} />
-            {/* [설정] 프로필 수정 화면 */}
-            <Stack.Screen name="EditProfile" component={EditProfileScreen} />
-            {/* [설정] 회원 탈퇴 */}
-            <Stack.Screen name="LeaveArtDiary" component={LeaveScreen} />
+            {/* [설정] 프로필 수정, 좋아요, 알림 설정, 회원 탈퇴 */}
+            <Stack.Screen name="SettingRoutes" component={SettingRoutes} />
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />

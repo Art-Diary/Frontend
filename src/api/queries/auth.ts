@@ -1,4 +1,9 @@
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {
+  UseMutationResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import {
   deleteUser,
   fetchUserInfo,
@@ -85,8 +90,10 @@ export const useUpdateUserInfo = (info: FormData | null) => {
   });
 };
 
-export const useVerifyNickname = (nickname: string) => {
-  return useMutation({
+export const useVerifyNickname = (
+  nickname: string,
+): UseMutationResult<unknown, any, void, unknown> => {
+  return useMutation<unknown, any, void, unknown>({
     mutationFn: () => verifyNickname(nickname),
     onError: err => {
       console.log(err);

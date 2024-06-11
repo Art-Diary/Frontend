@@ -28,6 +28,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
     isLoading,
     isError,
     isSuccess,
+    error,
   } = useVerifyNickname(getNickname);
 
   const [message, setMessage] = useState<string | null>(null);
@@ -41,16 +42,22 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
   useEffect(() => {
     if (isError) {
-      if (userInfo.authInfo.nickname === getNickname) {
-        setMessage(' 사용 가능한 닉네임입니다.');
-        setMessageColor('#34A853');
-        setIsVerified(true);
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        // 상태 코드를 체크 (예: 409 Conflict)
+        if (userInfo.authInfo.nickname === getNickname) {
+          setMessage(' 사용 가능한 닉네임입니다.');
+          setMessageColor('#34A853');
+          setIsVerified(true);
+        } else {
+          setMessage(' 이미 사용하고 있는 닉네임입니다.');
+          setMessageColor('#FF6F61');
+        }
       } else {
-        setMessage(' 이미 사용하고 있는 닉네임입니다.');
+        setMessage(' 닉네임 확인 중 오류가 발생했습니다.');
         setMessageColor('#FF6F61');
       }
-    }
-    if (isLoading) {
     }
     if (isSuccess) {
       setMessage(' 사용 가능한 닉네임입니다.');
