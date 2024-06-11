@@ -28,7 +28,7 @@ const ProfileNameTag = () => {
 
       <WordContainer>
         <Wrapper>
-          <ProfileWrapper>
+          <ProfileWrapper isPresent={userInfo.authInfo.profile}>
             <Profile
               source={{
                 uri: `data:image/png;base64,${userInfo.authInfo.profile}`,
@@ -60,7 +60,13 @@ const ProfileNameTag = () => {
                 : userInfo.authInfo.email}
             </Email>
           </UserInfoColumn>
-          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('SettingRoutes', {
+                screen: 'EditProfile',
+                params: undefined,
+              })
+            }>
             <ProfileUpdateIcon />
           </TouchableOpacity>
         </Wrapper>
@@ -126,13 +132,20 @@ const Email = styled.Text`
   text-decoration-line: underline;
 `;
 
-const ProfileWrapper = styled.View`
+interface ProfileWrapperProps {
+  isPresent: boolean;
+}
+
+const ProfileWrapper = styled.View<ProfileWrapperProps>`
   border-radius: 50px;
   align-items: center;
   justify-content: center;
   width: ${wp(45)}px;
   height: ${wp(45)}px;
   overflow: hidden;
+  border-color: #ff6f61;
+  border-width: ${(props: ProfileWrapperProps) =>
+    props.isPresent ? `0px` : `1px`};
 `;
 
 const Profile = styled.Image`

@@ -14,10 +14,7 @@ import {
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhItemView from '~/components/exhibition/ExhItemView';
-import {
-  useFavoriteInfoList,
-  useFavoriteListActions,
-} from '~/zustand/setting/favoriteList';
+import {useFavoriteInfoList} from '~/zustand/setting/favoriteList';
 
 interface Like {
   exhId: number;
@@ -29,7 +26,6 @@ const EditFavoriteScreen = () => {
   const [deleteList, setDeleteList] = useState<number[]>([]);
   const [likeList, setLikeList] = useState<Like[]>([]);
   const exhList = useFavoriteInfoList();
-  const {updateFavoriteList} = useFavoriteListActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {
     mutate: deleteFavoriteList,
@@ -64,11 +60,19 @@ const EditFavoriteScreen = () => {
       setIsLoadingOpen(false);
     }
     if (isSuccess) {
-      updateFavoriteList([]);
-      showToast('편집 완료!');
-      navigation.navigate('FavoriteList');
+      handleSuccess(false);
     }
   }, [isSuccess, isError, isLoading]);
+
+  const handleSuccess = (isZeroLength: boolean) => {
+    if (!isZeroLength) {
+      showToast('편집 완료했습니다.');
+    }
+    navigation.navigate('SettingRoutes', {
+      screen: 'FavoriteList',
+      params: undefined,
+    });
+  };
 
   const onPressHeart = (index: number) => {
     var changeList: Like[] = [];
@@ -91,6 +95,9 @@ const EditFavoriteScreen = () => {
       }
     }
     setDeleteList(result);
+    if (result.length === 0) {
+      handleSuccess(true);
+    }
   };
 
   return (
@@ -106,18 +113,16 @@ const EditFavoriteScreen = () => {
         <FlatList
           data={exhList}
           renderItem={({item, index}) => (
-            <ExhWrapper>
-              <ExhItemView
-                exhInfo={{...item}}
-                noLine={index === exhList.length - 1 ? true : false}
-                notTouchable={true}>
-                <HeartView>
-                  <TouchableOpacity onPress={() => onPressHeart(index)}>
-                    {likeList[index]?.like ? <FullHeart /> : <EmptyHeart />}
-                  </TouchableOpacity>
-                </HeartView>
-              </ExhItemView>
-            </ExhWrapper>
+            <ExhItemView
+              exhInfo={{...item}}
+              noLine={index === exhList.length - 1 ? true : false}
+              notTouchable={true}>
+              <HeartView>
+                <TouchableOpacity onPress={() => onPressHeart(index)}>
+                  {likeList[index]?.like ? <FullHeart /> : <EmptyHeart />}
+                </TouchableOpacity>
+              </HeartView>
+            </ExhItemView>
           )}
         />
       </Contents>
@@ -137,11 +142,6 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: #f6f6f6;
-`;
-
-const ExhWrapper = styled.View`
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
 `;
 
 const EditText = styled.Text`

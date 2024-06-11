@@ -1,56 +1,23 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {useFetchFavoriteList} from '~/api/queries/exhibition';
 import BackView from '~/components/common/BackView';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {
   fontPercentage as fp,
   widthPercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import ExhItemView from '~/components/exhibition/ExhItemView';
-import {useFavoriteListActions} from '~/zustand/setting/favoriteList';
+import FetchFavoriteList from './FetchFavoriteList';
 
 const FavoriteListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const {updateFavoriteList} = useFavoriteListActions();
-  const {
-    data: favoriteList,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useFetchFavoriteList();
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'좋아요 전시회 조회 중 :)'} />;
-  }
-
-  if (favoriteList.length === 0) {
-    return <ErrorMessageView message={'좋아요 누른 전시회가 없습니다 >_<'} />;
-  }
 
   const onPressEditButton = () => {
-    var list = [];
-
-    for (let i = 0; i < favoriteList.length; i++) {
-      list.push({
-        exhId: favoriteList[i].exhId,
-        poster: favoriteList[i].poster,
-        exhName: favoriteList[i].exhName,
-        gallery: favoriteList[i].gallery,
-        exhPeriodStart: favoriteList[i].exhPeriodStart,
-        exhPeriodEnd: favoriteList[i].exhPeriodEnd,
-      });
-    }
-    updateFavoriteList(list);
-    navigation.navigate('EditFavorite');
+    navigation.navigate('SettingRoutes', {
+      screen: 'EditFavorite',
+      params: undefined,
+    });
   };
 
   return (
@@ -62,20 +29,7 @@ const FavoriteListScreen = () => {
       </BackView>
 
       {/* body */}
-      <Contents>
-        <FlatList
-          data={favoriteList}
-          renderItem={({item, index}) => (
-            <ExhWrapper>
-              <ExhItemView
-                exhInfo={{...item}}
-                noLine={index === favoriteList.length - 1 ? true : false}
-                notTouchable={true}
-              />
-            </ExhWrapper>
-          )}
-        />
-      </Contents>
+      <FetchFavoriteList />
     </Container>
   );
 };
@@ -85,17 +39,6 @@ export default FavoriteListScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
-`;
-
-const Contents = styled.View`
-  flex: 1;
-  flex-direction: column;
-  background-color: #f6f6f6;
-`;
-
-const ExhWrapper = styled.View`
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
 `;
 
 const EditText = styled.Text`
