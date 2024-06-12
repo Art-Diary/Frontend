@@ -5,6 +5,8 @@ import {
   ScrollView,
   BackHandler,
   StyleSheet,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
 import styled, {css} from 'styled-components/native';
 import BackView from '~/components/common/BackView';
@@ -35,11 +37,15 @@ import {
   FillStarSmall,
   EmptyStarSmall,
   FillStarIcon,
+  KakaoIconBig,
+  Instagram,
+  Copy,
 } from '~/assets/images/index';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
-import ExhToCal from './ExhToCal';
+import ExhShareModal from './ExhShareModal';
+import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -85,6 +91,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const [isMoreContent, setIsMoreContent] = useState<boolean>(false);
   const [avgRate, setAvgRate] = useState<string>();
   const [avgNumber, setAvgNumber] = useState<number>(0);
+  const [sharedModal, setSharedModal] = useState<boolean>(false);
 
   const {
     mutate: addLike,
@@ -285,6 +292,27 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     // };
   };
 
+  const onPressSharedModal = () => {
+    setSharedModal(true);
+  };
+
+  const closeSharedModal = () => {
+    setSharedModal(false);
+  };
+
+  const shareWithInsta = async () => {
+    // const url = window.location.href;
+    // try {
+    //   await navigator.clipboard.writeText(url);
+    //   alert('URL이 클립보드에 복사되었습니다. 인스타그램을 열고 게시물에 붙여넣기 하세요.');
+    //   // 인스타그램 앱을 여는 URL (모바일에서만 작동)
+    //   window.location.href = 'instagram://';
+    // } catch (error) {
+    //   console.error('URL 복사 실패', error);
+    //   alert('URL 복사에 실패했습니다.');
+    // }
+  };
+
   return (
     <Container>
       <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
@@ -323,9 +351,15 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               <CalendarShare />
             </TouchableOpacity>
             <Bar>{'|'}</Bar>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => onPressSharedModal()}>
               <Share />
             </TouchableOpacity>
+            {sharedModal && (
+              <ExhShareModal
+                handleCloseModal={closeSharedModal}
+                shareWithInsta={shareWithInsta}
+              />
+            )}
             <Bar>{'|'}</Bar>
             <TouchableOpacity>
               <Homepage />
@@ -445,7 +479,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                           <ReviewRate>{showRate(item.rate)}</ReviewRate>
                         </SubTextView>
                         <ReviewDate>
-                          {changeDateType(item.visitDate)}
+                          {changeDateType(item.writeDate)}
                         </ReviewDate>
                       </TextView>
                     </ReviewTextView>
@@ -783,3 +817,46 @@ const MoreReview = styled.View`
   padding-top: ${wp(10)}px;
   justify-content: flex-end;
 `;
+
+// const ModalContainer = styled.View`
+//   // flex: 1;
+//   justify-content: center;
+//   align-items: center;
+//   padding-top: ${wp(15)}px;
+//   // background-color: rgba(0, 0, 0, 0.3);
+// `;
+
+// const ModalContentView = styled.View`
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: center;
+//   /* background-color: white;
+//   border-radius: 20px;
+//   justify-content: center;
+//   align-items: center;
+//   width: 70%;
+//   height: 20%;*/
+//   padding: ${wp(10)}px;
+//   gap: 35px;
+// `;
+
+// const Message = styled.Text`
+//   text-align: start;
+//   font-size: ${fp(17.9)}px;
+//   color: #3c4045;
+//   font-family: 'omyu pretty';
+// `;
+
+// const SnsView = styled.View`
+//   flex-direction: column;
+//   align-items: center;
+//   padding-top: ${wp(15)}px;
+// `;
+
+// const Sns = styled.Text`
+//   text-align: center;
+//   font-size: ${fp(11.9)}px;
+//   color: #3c4045;
+//   font-family: 'omyu pretty';
+//   padding: ${wp(10)}px;
+// `;

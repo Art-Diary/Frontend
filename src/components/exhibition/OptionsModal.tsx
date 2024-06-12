@@ -26,7 +26,7 @@ interface OptionsModalProps {
   onPressNo: () => void;
 }
 
-const DeleteDiaryModal: React.FC<OptionsModalProps> = ({
+const OptionsModal: React.FC<OptionsModalProps> = ({
   handleCloseModal,
   message,
   //  tkey,
@@ -73,7 +73,7 @@ const DeleteDiaryModal: React.FC<OptionsModalProps> = ({
   );
 };
 
-export default DeleteDiaryModal;
+export default OptionsModal;
 
 /** style */
 const Message = styled.Text`
