@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -14,11 +14,13 @@ const MyExhList = () => {
   const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
   if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
+    return (
+      <ErrorMessageView message={'기록이 있는 전시회 목록 조회 실패 ;('} />
+    );
   }
 
   if (isLoading) {
-    return <LoadingModal message={'내가 기록한 전시회 목록 조회 중 :)'} />;
+    return <LoadingModal message={'기록이 있는 전시회 목록 조회 중 :)'} />;
   }
 
   if (myExhList.length === 0) {
