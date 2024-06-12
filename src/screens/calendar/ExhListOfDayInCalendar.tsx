@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -8,40 +8,29 @@ import {
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {AddMyExhButton} from '~/assets/images';
-import {useFetchCalendar} from '~/api/queries/calendar';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {calendarColor} from './calendarColor';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {JoinDateWithHyphen} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
-
-interface IPicker {
-  label: string;
-  value: string;
-  image: {};
-}
+import { IPicker } from './CalendarScreen';
 
 interface CalendarProps {
-  changeMonth: string;
   selectedDate: string;
-  setDatas: (datas: any[]) => void;
   gatherId: number;
-  items: IPicker[];
+  selectorItems: IPicker[];
+  exhListOfDay: any[];
 }
 
-const ExhListOfDate: React.FC<CalendarProps> = ({
-  changeMonth,
+const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   selectedDate,
-  setDatas,
   gatherId,
-  items,
+  selectorItems,
+  exhListOfDay,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const isFocused = useIsFocused();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {
     updateForget,
@@ -51,42 +40,10 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
     updateGatherExhId,
   } = useExhFromCalendarActions();
   const {updateAddDate} = useAddScheduleActions();
-  const {
-    data: calendarData,
-    isLoading,
-    isError,
-    isSuccess,
-    refetch,
-  } = useFetchCalendar(
-    gatherId === -1 ? 'alone' : gatherId === -2 ? 'all' : 'gather',
-    gatherId > -1 ? gatherId : null,
-    Number(changeMonth.split('.')[0]),
-    Number(changeMonth.split('.')[1]),
-  );
-
-  useEffect(() => {
-    if (isFocused) {
-      refetch();
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setDatas(calendarData);
-    }
-  }, [isSuccess, calendarData, setDatas]);
-
-  if (isError) {
-    return <ErrorMessageView message="일정 조회 실패:(" />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="일정 조회 중:)" />;
-  }
 
   const findGatherColor = (gatherId: number): string => {
-    for (let i = 0; i < items.length - 1; i++) {
-      if (Number(items[i].value) === gatherId) {
+    for (let i = 0; i < selectorItems.length - 1; i++) {
+      if (Number(selectorItems[i].value) === gatherId) {
         return calendarColor[i];
       }
     }
@@ -94,9 +51,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   };
 
   const onPressExhItem = (exhItem: any) => {
-    {
-      /* 선택한 날짜의 기록들 */
-    }
+    /* 선택한 날짜의 기록들 */
     updateVisitedExhId(exhItem.exhId);
     updateForget(exhItem.visitDate ? false : true);
     updateVisitDate(
@@ -144,10 +99,10 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
       {/* 전시회 리스트 */}
       <FlatList
         data={
-          calendarData !== undefined &&
-          calendarData[Number(selectedDate.split('.')[2]) - 1]
+          exhListOfDay !== undefined &&
+          exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
             .scheduleInfoList !== undefined
-            ? calendarData[Number(selectedDate.split('.')[2]) - 1]
+            ? exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
                 .scheduleInfoList
             : []
         }
@@ -157,7 +112,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
               exhInfo={{...item}}
               noLine={
                 index ===
-                calendarData[Number(selectedDate.split('.')[2]) - 1]
+                exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
                   .scheduleInfoList.length -
                   1
                   ? true
@@ -179,7 +134,7 @@ const ExhListOfDate: React.FC<CalendarProps> = ({
   );
 };
 
-export default ExhListOfDate;
+export default ExhListOfDayInCalendar;
 
 /** style */
 const SelectedDateWrapper = styled.View`
