@@ -107,6 +107,14 @@ const WriteMyDiaryContentsScreen = () => {
           screen: 'GatheringDiaryList',
           params: undefined,
         });
+      } else if (tabIdentifier.tab === 'exhibition') {
+        //[캘린더] 전시회 기록 목록 화면으로 이동
+        // queryClient.invalidateQueries(
+        //   exhibitionQueryKeys.fetchDiaryListForExh(visitedExhId),
+        // );
+        navigation.navigate('ExhToDiary', {
+          diary: writeMyDiaryInfo, //수정필요ㅜ
+        });
       }
       // [NEW] 추가
     }

@@ -11,7 +11,7 @@ import {create} from 'zustand';
 //     params: undefined,
 //   });
 // };
-type TabName = 'mydiary' | 'calendar' | 'mate' | 'gathering';
+type TabName = 'mydiary' | 'calendar' | 'mate' | 'gathering' | 'exhibition';
 
 /** 캘린더와 내 기록 구분 */
 interface TabIdentifierState {

@@ -44,6 +44,8 @@ const DiaryList: React.FC<DiaryListProps> = ({diaryList}) => {
         screen: 'GatheringDiaryBack',
         params: undefined,
       });
+    } else if (tabIdentifierInfo.tab === 'exhibition') {
+      navigation.navigate('ExhToDiaryBack');
     }
     // [NEW] 추가
   };

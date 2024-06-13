@@ -46,6 +46,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
 import ExhShareModal from './ExhShareModal';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
+import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -76,6 +77,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   } = useFetchDiaryListForExh(exhId);
 
   const isFocused = useIsFocused();
+  const {updateVisitedExhId} = useVisitedExhIdActions(); //exhId 넘겨주기
   const [currentDate, setCurrentDate] = useState(dateToString(new Date())); //현재 날짜
   const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
   const [deleteList, setDeleteList] = useState<number[]>([]);
@@ -160,6 +162,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         var avg: string = tmp.toFixed(2);
         setAvgRate(avg);
       }
+      updateVisitedExhId(exhId);
     }
   }, [isDiaryListSuccess, diaryData]);
 
@@ -447,7 +450,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           </TitleView>
 
           {diaryData &&
-            diaryData.slice(0, 5).map(
+            diaryData.slice(0, 3).map(
               (
                 item: any,
                 index: number, //slice(0,n) 해당 개수 넣기
@@ -456,7 +459,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                   key={index}
                   onPress={() =>
                     navigation.navigate('ExhToDiary', {
-                      diaryId: item.diaryId,
+                      diary: item,
                     })
                   }>
                   <ReViewList>
@@ -487,7 +490,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                 </TouchableOpacity>
               ),
             )}
-          {avgNumber > 5 && ( //제한 개수 수정
+          {avgNumber > 3 && ( //제한 개수 수정 slice(0,n)이랑 같은 수
             <MoreReview>
               <TouchableOpacity>
                 <MoreReviewTitle>{'기록들 더보기>'}</MoreReviewTitle>
@@ -521,7 +524,7 @@ const NameView = styled.View`
 `;
 const IconView = styled.View`
   flex-direction: row;
-  gap: 10;
+  gap: 10px;
   align-items: center;
   background-color: #ffffff;
 `;
@@ -541,7 +544,7 @@ const InfoListView = styled.View`
   padding-top: ${wp(20)}px;
   padding-left: ${wp(20)}px;
   padding-bottom: ${wp(20)}px;
-  gap: 10;
+  gap: 10px;
   background-color: #ffffff;
   border-style: dashed;
   border-bottom-width: ${wp(1)}px;
@@ -551,7 +554,7 @@ const InfoListView = styled.View`
 const InfoView = styled.View`
   flex: 1;
   flex-direction: row;
-  gap: 20;
+  gap: 20px;
   background-color: #ffffff;
 `;
 

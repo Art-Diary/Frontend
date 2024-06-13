@@ -41,8 +41,9 @@ export type RootStackParamList = {
     exhId: number;
   };
   ExhToDiary: {
-    diaryId: number;
+    diary: any;
   };
+  ExhToDiaryBack: undefined;
   ExhToCal: {
     exhId: number;
   };
