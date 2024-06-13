@@ -26,8 +26,8 @@ type DateInfo = {
 export type StoredDateListOfExh = {
   index: number;
   exhId: number;
-  gatherId: number | null; // 개인일 경우엔 null
-  gatherName: string | null; // 개인일 경우엔 null
+  gatherId: number; // 개인일 경우엔 null
+  gatherName: string; // 개인일 경우엔 null
   dateInfoList: DateInfo[];
 };
 
@@ -39,8 +39,8 @@ const ChooseVisitDateScreen = () => {
   const canNotOpen =
     writeMyDiaryInfo.isUpdate || writeMyDiaryInfo.isInGathering;
   const [storedDateListOfExh, setStoredDateListOfExh] = useState<
-    StoredDateListOfExh[] | null
-  >(null);
+    StoredDateListOfExh[]
+  >([]);
 
   // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
   const handleSetItemsMyDiary = (gatherNameList: IPicker[]): IPicker[] => {
@@ -66,6 +66,7 @@ const ChooseVisitDateScreen = () => {
     if (!storedDateListOfExh) {
       return [];
     }
+    gatherNameList.push({label: '개인', value: -1});
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       var dateInfoList = storedDateListOfExh[index].dateInfoList;
 
@@ -74,9 +75,16 @@ const ChooseVisitDateScreen = () => {
           writeMyDiaryInfo.gatherExhId === dateInfoList[dIndex].gatherExhId ||
           writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
         ) {
+          const labelName: string =
+            writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
+              ? '개인'
+              : writeMyDiaryInfo.gatherExhId ===
+                dateInfoList[dIndex].gatherExhId
+              ? storedDateListOfExh[index].gatherName
+              : '--';
           setValue(index);
           gatherNameList.push({
-            label: storedDateListOfExh[index].gatherName ?? '--',
+            label: labelName,
             value: storedDateListOfExh[index].index,
           });
         }
@@ -98,7 +106,7 @@ const ChooseVisitDateScreen = () => {
       if (gatherId === writeMyDiaryInfo.gatherId) {
         setValue(index);
         gatherNameList.push({
-          label: storedDateListOfExh[index].gatherName ?? '없음',
+          label: storedDateListOfExh[index].gatherName ?? '--',
           value: storedDateListOfExh[index].index,
         });
       }
