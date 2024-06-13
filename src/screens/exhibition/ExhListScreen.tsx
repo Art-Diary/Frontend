@@ -33,6 +33,10 @@ import {
   useAddScheduleActions,
   useAddScheduleInfo,
 } from '~/zustand/calendar/addSchedule';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 
 interface Exhibition {
   exhId: number;
@@ -69,6 +73,8 @@ const ExhListScreen = () => {
   const searchExhName = useSearchNameInfo().name;
   const {addDate} = useAddScheduleInfo();
   const {updateAddDate} = useAddScheduleActions();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
 
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
@@ -106,20 +112,7 @@ const ExhListScreen = () => {
       setIsPriceVisible(false);
       setIsStateVisible(false);
       setIsDateVisible(false);
-      console.log(
-        '다른 곳 갔다옴:name',
-        selectedName,
-        ' field: ',
-        selectedField,
-        ' price: ',
-        selectedPrice,
-        ' state:',
-        selectedState,
-        'date:',
-        selectedDate,
-        '이름 상태',
-        isNameVisible,
-      );
+
       refetch();
     }
   }, [isFocused]);
@@ -128,7 +121,7 @@ const ExhListScreen = () => {
     //이름으로 검색시
     if (searchExhName != null) {
       setSelectedName(searchExhName);
-      console.log('자, 이름을 알려줘:', searchExhName);
+      //console.log('자, 이름을 알려줘:', searchExhName);
       // setIsNameVisible(true);
     }
   }, [searchExhName]);
@@ -163,20 +156,20 @@ const ExhListScreen = () => {
     } else {
       setIsDateVisible(false);
     }
-    console.log(
-      'name',
-      selectedName,
-      ' field: ',
-      selectedField,
-      ' price: ',
-      selectedPrice,
-      ' state:',
-      selectedState,
-      'date:',
-      selectedDate,
-      '이름 상태',
-      isNameVisible,
-    );
+    // console.log(
+    //   'name',
+    //   selectedName,
+    //   ' field: ',
+    //   selectedField,
+    //   ' price: ',
+    //   selectedPrice,
+    //   ' state:',
+    //   selectedState,
+    //   'date:',
+    //   selectedDate,
+    //   '이름 상태',
+    //   isNameVisible,
+    // );
   }, [selectedDate]);
 
   useEffect(() => {
@@ -185,20 +178,6 @@ const ExhListScreen = () => {
     } else {
       setIsNameVisible(false);
     }
-    console.log(
-      'name',
-      selectedName,
-      ' field: ',
-      selectedField,
-      ' price: ',
-      selectedPrice,
-      ' state:',
-      selectedState,
-      'date:',
-      selectedDate,
-      '이름 상태',
-      isNameVisible,
-    );
   }, [selectedName]);
 
   useEffect(() => {
@@ -207,18 +186,6 @@ const ExhListScreen = () => {
     } else {
       setIsFieldVisible(false);
     }
-    console.log(
-      'name',
-      selectedName,
-      ' field: ',
-      selectedField,
-      ' price: ',
-      selectedPrice,
-      ' state:',
-      selectedState,
-      'date:',
-      selectedDate,
-    );
   }, [selectedField]);
 
   useEffect(() => {
@@ -227,18 +194,6 @@ const ExhListScreen = () => {
     } else {
       setIsPriceVisible(false);
     }
-    console.log(
-      'name',
-      selectedName,
-      ' field: ',
-      selectedField,
-      ' price: ',
-      selectedPrice,
-      ' state:',
-      selectedState,
-      'date:',
-      selectedDate,
-    );
   }, [selectedPrice]);
 
   useEffect(() => {
@@ -247,24 +202,21 @@ const ExhListScreen = () => {
     } else {
       setIsStateVisible(false);
     }
-    console.log(
-      'name',
-      selectedName,
-      ' field: ',
-      selectedField,
-      ' price: ',
-      selectedPrice,
-      ' state:',
-      selectedState,
-      'date:',
-      selectedDate,
-    );
   }, [selectedState]);
 
   useEffect(() => {
     if (isSuccess) {
       setHearts(data);
+      // }
+
+      // useEffect(() => {
+      //   if (isFocused) {
+      if (tabIdentifierInfo.tab !== 'exhibition') {
+        updateTab('exhibition');
+      }
+      // refetch();
     }
+    // }, [isFocused, changeMonth, selectedValue]);
   }, [isSuccess, data]);
 
   useEffect(() => {
