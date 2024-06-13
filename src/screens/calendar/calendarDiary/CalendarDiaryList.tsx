@@ -30,7 +30,9 @@ const CalendarDiaryList = () => {
   }, [isFocused]);
 
   if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
+    return (
+      <ErrorMessageView message={'특정 날짜의 내 다이어리 목록 조회 실패 ;('} />
+    );
   }
 
   if (isLoading) {
@@ -38,7 +40,7 @@ const CalendarDiaryList = () => {
   }
 
   if (diaryList.length === 0) {
-    return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다'} />;
+    return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />;
   }
 
   return <DiaryList diaryList={diaryList} />;
