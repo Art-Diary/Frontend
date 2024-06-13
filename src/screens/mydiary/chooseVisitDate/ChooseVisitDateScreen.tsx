@@ -7,52 +7,51 @@ import {
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ChooseVisitDateList from './ChooseVisitDateList';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
-import {useIsFocused} from '@react-navigation/native';
+import FetchMyStoredDateListOfExh from './FetchMyStoredDateListOfExh';
 
 interface IPicker {
   label: string;
   value: number;
 }
 
+type DateInfo = {
+  gatherExhId: number | null; // 개인일 경우엔 null
+  userExhId: number | null; // 모임일 경우엔 null
+  visitDate: number[];
+};
+
+export type StoredDateListOfExh = {
+  index: number;
+  exhId: number;
+  gatherId: number | null; // 개인일 경우엔 null
+  gatherName: string | null; // 개인일 경우엔 null
+  dateInfoList: DateInfo[];
+};
+
 const ChooseVisitDateScreen = () => {
-  const isFocused = useIsFocused();
-  const visitedExhId = useVisitedExhIdInfo().exhId;
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<number | null>(null);
   const [items, setItems] = useState<IPicker[]>([]);
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
   const canNotOpen =
     writeMyDiaryInfo.isUpdate || writeMyDiaryInfo.isInGathering;
-
-  // 모임과 개인 전시회 날짜
-  const {
-    data: storedDateListOfExh,
-    isLoading,
-    isError,
-    isSuccess,
-    refetch,
-  } = useFetchMyStoredDateListOfExh(visitedExhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
-
-  useEffect(() => {
-    if (isFocused) {
-      refetch();
-    }
-  }, [isFocused]);
+  const [storedDateListOfExh, setStoredDateListOfExh] = useState<
+    StoredDateListOfExh[] | null
+  >(null);
 
   // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
   const handleSetItemsMyDiary = (gatherNameList: IPicker[]): IPicker[] => {
+    if (!storedDateListOfExh) {
+      return [];
+    }
     gatherNameList.push({label: '개인', value: -1});
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       if (storedDateListOfExh[index].gatherName !== undefined) {
         gatherNameList.push({
-          label: storedDateListOfExh[index].gatherName,
+          label: storedDateListOfExh[index].gatherName ?? '--',
           value: storedDateListOfExh[index].index,
         });
       } else {
@@ -64,6 +63,9 @@ const ChooseVisitDateScreen = () => {
 
   // 기록 수정할 경우 (고정)
   const handleSetItemsWithUpdate = (gatherNameList: IPicker[]): IPicker[] => {
+    if (!storedDateListOfExh) {
+      return [];
+    }
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       var dateInfoList = storedDateListOfExh[index].dateInfoList;
 
@@ -74,7 +76,7 @@ const ChooseVisitDateScreen = () => {
         ) {
           setValue(index);
           gatherNameList.push({
-            label: storedDateListOfExh[index].gatherName ?? '개인',
+            label: storedDateListOfExh[index].gatherName ?? '--',
             value: storedDateListOfExh[index].index,
           });
         }
@@ -87,13 +89,16 @@ const ChooseVisitDateScreen = () => {
   const handleSetItemsWithInGathering = (
     gatherNameList: IPicker[],
   ): IPicker[] => {
+    if (!storedDateListOfExh) {
+      return [];
+    }
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       var gatherId = storedDateListOfExh[index].gatherId;
 
       if (gatherId === writeMyDiaryInfo.gatherId) {
         setValue(index);
         gatherNameList.push({
-          label: storedDateListOfExh[index].gatherName,
+          label: storedDateListOfExh[index].gatherName ?? '없음',
           value: storedDateListOfExh[index].index,
         });
       }
@@ -102,7 +107,7 @@ const ChooseVisitDateScreen = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
+    if (storedDateListOfExh) {
       // {label: '', value: ''}
       var gatherNameList: IPicker[] = [];
 
@@ -118,19 +123,14 @@ const ChooseVisitDateScreen = () => {
       }
       setItems(gatherNameList);
     }
-  }, [isSuccess, storedDateListOfExh]);
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'방문 날짜 조회 중 :)'} />;
-  }
+  }, [storedDateListOfExh]);
 
   return (
     <Container>
       <BackView line={false} children={null} />
+      <FetchMyStoredDateListOfExh
+        handleStoredDateList={setStoredDateListOfExh}
+      />
       <ContentsContainer>
         {/* 모임선택 */}
         <GroupText>모임 선택</GroupText>

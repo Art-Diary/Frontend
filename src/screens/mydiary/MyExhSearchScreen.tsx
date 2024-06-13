@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import SearchExhList from './SearchExhList';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
@@ -12,6 +11,7 @@ import {
 } from '~/api/queries/exhibition';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useQueryClient} from 'react-query';
+import SearchExhResult from '~/components/exhSearch/SearchExhResult';
 
 const MyExhSearchScreen = () => {
   const queryClient = useQueryClient();
@@ -28,7 +28,7 @@ const MyExhSearchScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      showToast('에러 발생 ;(');
+      showToast('전시회 조회 실패 ;(');
     }
     if (isLoading) {
       setOpenLoading(true);
@@ -61,7 +61,7 @@ const MyExhSearchScreen = () => {
         onPressSearch={onPressSearch}
         handleSearchKeyword={setSearchKeyword}>
         {/* 전시회 목록 */}
-        <SearchExhList exhList={exhibitionList} forGathering={false} />
+        <SearchExhResult exhList={exhibitionList} forGathering={false} />
       </SearchExhFrame>
       {openLoading && <LoadingModal message={'전시회 조회 중 :)'} />}
     </Container>

@@ -10,7 +10,7 @@ import BackView from '~/components/common/BackView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
-import SearchExhList from '~/screens/mydiary/SearchExhList';
+import SearchExhResult from '~/components/exhSearch/SearchExhResult';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 
 const SearchAddVisitExhInGatheringScreen = () => {
@@ -65,7 +65,7 @@ const SearchAddVisitExhInGatheringScreen = () => {
         onPressSearch={onPressSearch}
         handleSearchKeyword={setSearchKeyword}>
         {/* 전시회 목록 */}
-        <SearchExhList exhList={exhibitionList} forGathering={false} />
+        <SearchExhResult exhList={exhibitionList} forGathering={true} />
       </SearchExhFrame>
       {openLoading && <LoadingModal message={'전시회 조회 중 :)'} />}
     </Container>

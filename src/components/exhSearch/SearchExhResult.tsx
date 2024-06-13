@@ -4,16 +4,16 @@ import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
-import ExhItemView from '../../components/exhibition/ExhItemView';
+import ExhItemView from '../exhibition/ExhItemView';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 
-interface SearchExhListProps {
+interface SearchExhResultFrameProps {
   exhList: any[];
   forGathering: boolean;
 }
 
-const SearchExhList: React.FC<SearchExhListProps> = ({
+const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
   exhList,
   forGathering,
 }) => {
@@ -56,7 +56,7 @@ const SearchExhList: React.FC<SearchExhListProps> = ({
   );
 };
 
-export default SearchExhList;
+export default SearchExhResult;
 
 /** style */
 const ExhListView = styled.View`
