@@ -1,3 +1,4 @@
+import {PROJECT_PACKAGE_NAME, SHARE_DOMAIN_URI_PREFIX, SHARE_LINK} from '@env';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import storage from '@react-native-firebase/storage';
 
@@ -39,14 +40,14 @@ export const createDynamicLink = async (
     // 2. Dynamic Link 생성
     const link = await dynamicLinks().buildShortLink(
       {
-        link: `https://artdiary.page.link/Fc4u?exhId=${exhId}`,
-        domainUriPrefix: 'https://artdiary.page.link',
+        link: `${SHARE_LINK}?exhId=${exhId}`,
+        domainUriPrefix: `${SHARE_DOMAIN_URI_PREFIX}`,
         android: {
-          packageName: 'com.testappd',
+          packageName: `${PROJECT_PACKAGE_NAME}`,
           minimumVersion: '1',
         },
         ios: {
-          bundleId: 'com.testappd',
+          bundleId: `${PROJECT_PACKAGE_NAME}`,
           appStoreId: '123456789',
         },
         social: {
