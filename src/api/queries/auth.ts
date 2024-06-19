@@ -136,6 +136,10 @@ export const useLoginUser = (
       // TODO
       try {
         await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem(
+          'initInfo',
+          JSON.stringify(resData.initInfo),
+        );
         console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);

@@ -95,6 +95,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
         alarm1: data.alarm1,
         alarm2: data.alarm2,
         alarm3: data.alarm3,
+        providerType: data.providerType,
       });
       setCreateFormData(null);
       showToast(messages.successMsg);

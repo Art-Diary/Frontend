@@ -8,9 +8,8 @@ const EditProfileScreen = () => {
     favoriteArt: authInfo.favoriteArt === '' ? '없음' : authInfo.favoriteArt,
     nickname: authInfo.nickname === '' ? '전시 메이트' : authInfo.nickname,
     profile: authInfo.profile,
-    email: authInfo.email === '' ? '이메일' : authInfo.nickname,
-    providerType:
-      authInfo.email === '' ? '' : authInfo.email.split('@')[1].split('.')[0],
+    email: authInfo.email === '' ? '이메일' : authInfo.email,
+    providerType: authInfo.providerType === '' ? '' : authInfo.providerType,
   };
 
   return (
