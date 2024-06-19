@@ -24,11 +24,40 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MateMainScreen from '~/screens/mate/main/MateMainScreen';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 
 const Tab = createBottomTabNavigator();
 
 const BottomRoutes = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+
+  useEffect(() => {
+    // 앱이 백그라운드에서 포그라운드로 전환될 때 링크를 처리
+    const unsubscribe = dynamicLinks().onLink(handleDynamicLink);
+    // 앱이 처음 시작할 때 링크를 처리
+    dynamicLinks()
+      .getInitialLink()
+      .then(link => {
+        if (link) {
+          handleDynamicLink(link);
+        }
+      });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleDynamicLink = (link: any) => {
+    // 링크의 URL에서 필요한 매개변수 추출
+    if (link.url) {
+      const url = link.url;
+      const exhId = Number(url.split('?')[1].split('=')[1]);
+
+      if (exhId) {
+        // 네비게이션을 사용하여 해당 페이지로 이동
+        navigation.navigate('ExhDetailInfo', {exhId});
+      }
+    }
+  };
 
   const handlePressBack = () => {
     if (navigation?.canGoBack()) {

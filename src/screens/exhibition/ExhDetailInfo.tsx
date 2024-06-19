@@ -47,6 +47,7 @@ import {JoinDateWithDot, dateToString} from '~/utils/Date';
 import ExhShareModal from './ExhShareModal';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import ExhShare from './ExhShare';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -354,15 +355,20 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               <CalendarShare />
             </TouchableOpacity>
             <Bar>{'|'}</Bar>
-            <TouchableOpacity onPress={() => onPressSharedModal()}>
+            {/* <TouchableOpacity onPress={() => onPressSharedModal()}>
               <Share />
-            </TouchableOpacity>
-            {sharedModal && (
+            </TouchableOpacity> */}
+            <ExhShare
+              poster={data.poster}
+              exhId={data.exhId}
+              exhName={data.exhName}
+            />
+            {/* {sharedModal && (
               <ExhShareModal
                 handleCloseModal={closeSharedModal}
                 shareWithInsta={shareWithInsta}
               />
-            )}
+            )} */}
             <Bar>{'|'}</Bar>
             <TouchableOpacity>
               <Homepage />
