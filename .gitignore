@@ -68,3 +68,5 @@ yarn-error.log
 /.env
 
 /android/app/google-services.json
+
+/ios/TestAppD/GoogleService-Info.plist
