@@ -23,13 +23,15 @@ export const verifyNickname = (nickname: string) =>
 export const deleteUser = (reason: string) =>
   client.post(`/users/leave`, {reason: reason});
 
-export const loginUser = async (
-  email: string,
-  providerType: string,
-  providerId: string,
-) =>
-  client.post(`/users`, {
-    email: email,
-    providerType: providerType,
-    providerId: providerId,
-  });
+export const loginUser = async (loginInfo: LoginUserParams) =>
+  client.post(`/users`, {...loginInfo});
+
+export const updateAlarmToken = (alarmToken: string | null) =>
+  client.patch(`/users/alarm-token`, {alarmToken: alarmToken});
+
+export type LoginUserParams = {
+  email: string;
+  providerType: string;
+  providerId: string;
+  alarmToken: string | null;
+};
