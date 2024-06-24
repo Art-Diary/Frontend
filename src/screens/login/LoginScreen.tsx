@@ -18,6 +18,7 @@ import {useLoginUser} from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
 import {TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {handleKakaoLogin} from './KakaoLogin';
 
 type LoginUserInfo = {
   email: string;
@@ -36,6 +37,7 @@ const LoginScreen = () => {
     providerId: '',
   });
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [sendRequest, setSendRequest] = useState<boolean>(false);
   const {
     mutate: loginUser,
     isLoading: isLoading,
@@ -51,9 +53,10 @@ const LoginScreen = () => {
   useEffect(() => {
     const checkUserId = async () => {
       const userId = await AsyncStorage.getItem('userId');
+      const initInfo = await AsyncStorage.getItem('initInfo');
       // TODO 출력 삭제
-      console.log(userId);
-      if (userId) {
+      console.log(userId, initInfo);
+      if (userId && initInfo === 'true') {
         navigation.navigate('UserInfo');
       }
     };
@@ -62,10 +65,10 @@ const LoginScreen = () => {
   }, [navigation]);
 
   useEffect(() => {
-    if (loginUserInfo.providerType !== '') {
+    if (sendRequest) {
       loginUser();
     }
-  }, [loginUserInfo.email]);
+  }, [sendRequest]);
 
   useEffect(() => {
     if (isError) {
@@ -89,12 +92,14 @@ const LoginScreen = () => {
           alarm1: data.alarm1,
           alarm2: data.alarm2,
           alarm3: data.alarm3,
+          providerType: data.providerType,
         });
         navigation.navigate('Main');
       } else {
         navigation.navigate('InitProfile');
       }
     }
+    setSendRequest(false);
   }, [isError, isLoading, isSuccess]);
 
   const handleLogin = async (
@@ -106,12 +111,11 @@ const LoginScreen = () => {
     } else if (type === 'naver') {
       return await handleNaverLogin();
     } else {
-      // kakao
+      return await handleKakaoLogin();
     }
-    return undefined;
   };
 
-  const loginWithIdToken = async (loginUserInfo: LoginUserInfo | undefined) => {
+  const loginWithProfile = async (loginUserInfo: LoginUserInfo | undefined) => {
     if (!loginUserInfo || loginUserInfo.email === '') {
       setIsLoadingOpen(false);
       showToast('로그인에 실패했습니다.');
@@ -127,12 +131,14 @@ const LoginScreen = () => {
         providerId: loginUserInfo.providerId,
       });
       setIsLoadingOpen(false);
+      setSendRequest(true);
     }
   };
 
   const handleTester = async () => {
     try {
       await AsyncStorage.setItem('userId', JSON.stringify(3));
+      await AsyncStorage.setItem('initInfo', 'true');
       console.log('[AsyncStorage] Success storing userId TESTER 3');
     } catch (error) {
       console.log('[AsyncStorage] Error storing userId TESTER 3');
@@ -149,7 +155,7 @@ const LoginScreen = () => {
             login={true}
             content="Google 로그인"
             handleTouch={() =>
-              handleLogin('google').then(userInfo => loginWithIdToken(userInfo))
+              handleLogin('google').then(userInfo => loginWithProfile(userInfo))
             }>
             <GoogleIcon />
           </GreyNameTag>
@@ -157,15 +163,15 @@ const LoginScreen = () => {
             login={true}
             content="Naver 로그인"
             handleTouch={() =>
-              handleLogin('naver').then(userInfo => loginWithIdToken(userInfo))
+              handleLogin('naver').then(userInfo => loginWithProfile(userInfo))
             }>
             <NaverIcon />
           </GreyNameTag>
           <GreyNameTag
             login={true}
-            content="Kakao 로그인 아직 불가능"
+            content="Kakao 로그인"
             handleTouch={() =>
-              handleLogin('kakao').then(userInfo => loginWithIdToken(userInfo))
+              handleLogin('kakao').then(userInfo => loginWithProfile(userInfo))
             }>
             <KakaoIcon />
           </GreyNameTag>

@@ -35,6 +35,7 @@ export const UserInfo = () => {
         alarm1: userInfo.alarm1,
         alarm2: userInfo.alarm2,
         alarm3: userInfo.alarm3,
+        providerType: userInfo.providerType,
       });
       navigation.navigate('Main');
     }

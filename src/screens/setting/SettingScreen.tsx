@@ -18,6 +18,7 @@ const SettingScreen = () => {
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userId');
+    await AsyncStorage.setItem('initInfo', 'false');
     // TODO 나중에 로그아웃 구체적으로 하기
     // 로그인 페이지로 이동
     navigation.reset({
