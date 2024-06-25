@@ -12,14 +12,24 @@ import ProfileNameTag from './nameTag/ProfileNameTag';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SettingStackParamList} from '~/utils/types';
+import notifee, {AndroidNotificationSetting} from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import {Linking} from 'react-native';
+import {useQueryClient} from 'react-query';
+import {mydiaryQueryKeys} from '~/api/queries/mydiary';
+import {mateQueryKeys} from '~/api/queries/mate';
 
 const SettingScreen = () => {
+  const queryClient = useQueryClient();
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userId');
     await AsyncStorage.setItem('initInfo', 'false');
-    // TODO 나중에 로그아웃 구체적으로 하기
+    // TODO 나중에 로그아웃 구체적으로 하기 + 푸시 알림도 변경
+    // 쿼리 제거
+    queryClient.removeQueries(mydiaryQueryKeys.fetchMyExhList());
+    queryClient.removeQueries(mateQueryKeys.fetchExhMateList());
     // 로그인 페이지로 이동
     navigation.reset({
       index: 0,
@@ -27,11 +37,26 @@ const SettingScreen = () => {
     });
   };
 
-  const handleMoveTo = (moveTo: string) => {
-    navigation.navigate('SettingRoutes', {
-      screen: moveTo as keyof SettingStackParamList,
-      params: undefined,
-    });
+  const handleMoveTo = async (moveTo: string) => {
+    // 알림 허용되어있는지 체크 후 알림 허용 페이지로 이동 또는 알림 설정 페이지로 이동
+    const enabled = await messaging().hasPermission();
+    const settings = await notifee.getNotificationSettings();
+
+    if (!enabled) {
+      Linking.openSettings();
+    }
+    if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
+      await notifee.openAlarmPermissionSettings();
+    }
+    if (
+      enabled &&
+      settings.android.alarm === AndroidNotificationSetting.ENABLED
+    ) {
+      navigation.navigate('SettingRoutes', {
+        screen: moveTo as keyof SettingStackParamList,
+        params: undefined,
+      });
+    }
   };
 
   return (
@@ -54,7 +79,7 @@ const SettingScreen = () => {
             handleTouch={() => handleMoveTo('FavoriteList')}
           />
           <GreyNameTag
-            content="알림 설정"
+            content="푸시 알림 설정"
             handleTouch={() => handleMoveTo('AlarmSetting')}
           />
           <GreyNameTag content="도움말" />

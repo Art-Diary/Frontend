@@ -10,9 +10,7 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import React from 'react';
-import {LogBox} from 'react-native';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import React, {useCallback, useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
 import MyExhSearchScreen from './screens/mydiary/MyExhSearchScreen';
@@ -36,19 +34,43 @@ import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/types';
 import SettingRoutes from './routes/setting/SettingRoutes';
+import messaging from '@react-native-firebase/messaging';
+import pushNoti from './utils/pushNoti';
+import notifee from '@notifee/react-native';
+import {linking} from './utils/deeplinkConfig';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {LogBox} from 'react-native';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const queryClient = new QueryClient();
 
 export type RootStackNavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
 
+const queryClient = new QueryClient();
+
 LogBox.ignoreAllLogs();
 
 export default function App() {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      pushNoti.displayNoti(remoteMessage);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    requestAboutAlarm();
+  }, []);
+
+  const requestAboutAlarm = useCallback(async () => {
+    const settings = await notifee.requestPermission();
+    const enabled = await messaging().hasPermission();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
+      <NavigationContainer linking={linking}>
         <RecoilRoot>
           <Stack.Navigator
             initialRouteName={'Login'}

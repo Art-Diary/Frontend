@@ -1,23 +1,18 @@
+import {UseMutationResult, useMutation, useQuery} from 'react-query';
 import {
-  UseMutationResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from 'react-query';
-import {
+  LoginUserParams,
   deleteUser,
   fetchUserInfo,
   loginUser,
   updateAlarm1,
   updateAlarm2,
   updateAlarm3,
+  updateAlarmToken,
   updateUserInfo,
   verifyNickname,
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {mydiaryQueryKeys} from './mydiary';
-import {mateQueryKeys} from './mate';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -118,18 +113,13 @@ export const useDeleteUser = (reason: string) => {
   });
 };
 
-export const useLoginUser = (
-  email: string,
-  providerType: string,
-  providerId: string,
-) => {
-  const queryClient = useQueryClient();
-
+export const useLoginUser = () => {
   return useMutation({
-    mutationFn: () => loginUser(email, providerType, providerId),
+    mutationFn: (loginInfo: LoginUserParams) => loginUser(loginInfo),
     onError: err => {
       console.log(err);
-      console.log('[Login] error Login +', providerType);
+      console.log('[Login] error Login');
+      // console.log('[Login] error Login +', providerType);
     },
     onSuccess: async (res: any) => {
       const resData = res.data;
@@ -140,14 +130,25 @@ export const useLoginUser = (
           'initInfo',
           JSON.stringify(resData.initInfo),
         );
-        console.log('[Login] success Login +', providerType);
+        console.log('[Login] success Login');
+        // console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);
       }
-      // 초기 로딩
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
-      queryClient.invalidateQueries(mateQueryKeys.fetchExhMateList());
       return resData;
+    },
+  });
+};
+
+export const useUpdateAlarmToken = () => {
+  return useMutation({
+    mutationFn: (alarmToken: string | null) => updateAlarmToken(alarmToken),
+    onError: err => {
+      console.log(err);
+      console.log('[AlarmToken] error udpate AlarmToken');
+    },
+    onSuccess: () => {
+      console.log('[AlarmToken] success udpate AlarmToken');
     },
   });
 };
