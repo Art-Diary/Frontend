@@ -1,5 +1,7 @@
 import React from 'react';
+import {RichEditor} from 'react-native-pell-rich-editor';
 import styled from 'styled-components/native';
+import FontFamilyStylesheet from '~/assets/fonts/stylesheet';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
@@ -12,38 +14,23 @@ interface ContentsProps {
   writeDate: number[];
 }
 
-const divideLines = (text: string): string[] => {
-  const width = Math.floor(wp(420) / fp(15));
-  var textList: string[] = [];
-  let newText = text;
-
-  while (newText.length > width) {
-    textList.push(newText.slice(0, width));
-    newText = newText.slice(width, newText.length - 1);
-  }
-  if (newText.length > 0) {
-    textList.push(newText);
-  }
-  return textList;
-};
-
 const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
-  const longWord =
-    contents +
-    'sonjdnlfkjenwsonj해리퐅터숫다dnlfkjenwㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜㅜsonjdnlfkjenwso해리퐅터숫다njdnlfkjenwsonjdnlfkjenws해리퐅터숫다onjdnlf해리퐅터숫다kjenwsonjdnlfkjenwsonjdn해리퐅터숫다lfkjenwsonjdnlfkjenw';
-  const sentences = divideLines(contents); // 나중에 기록 추가할 때 줄바꿈 데이터 넣으면 바꾸기.
+  const initialCSSText = {
+    initialCSSText: `${FontFamilyStylesheet}`,
+    backgroundColor: 'white',
+    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: #3c4045; height: 100%;`,
+  };
 
   return (
     <Container>
       {/* 내용 */}
       <ContentWrapper>
         <ContentScroll>
-          {sentences.map((sentence, index) => (
-            <ContentsView key={index}>
-              <ContentsText>{sentence}</ContentsText>
-              {sentences.length - 1 !== index && <DotLine />}
-            </ContentsView>
-          ))}
+          <RichEditor
+            editorStyle={initialCSSText}
+            initialContentHTML={contents} // 저장된 내용을 설정하여 출력
+            disabled // 수정 불가능하도록 설정
+          />
         </ContentScroll>
       </ContentWrapper>
 
@@ -69,7 +56,7 @@ const Container = styled.View`
 const ContentWrapper = styled.View`
   height: 100%;
   width: 100%;
-  padding-bottom: ${hp(28)}px;
+  padding-bottom: ${hp(10)}px;
 `;
 
 const ContentScroll = styled.ScrollView`
@@ -77,34 +64,17 @@ const ContentScroll = styled.ScrollView`
   width: 100%;
 `;
 
-const ContentsView = styled.View`
-  width: 100%;
-  padding-top: 10px;
-  gap: 10px;
-`;
-
-const ContentsText = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  text-align: center;
-`;
-
 const WriteDateView = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding-left: ${wp(20)}px;
+  padding-right: ${wp(20)}px;
 `;
 
 const WriteDateText = styled.Text`
   font-size: ${fp(16.8)}px;
   color: #d3d3d3;
   font-family: 'omyu pretty';
-`;
-
-const DotLine = styled.View`
-  width: 100%;
-  border-bottom-width: 1px;
-  border-bottom-color: #d3d3d3;
 `;
