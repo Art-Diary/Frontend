@@ -48,6 +48,7 @@ import ExhShareModal from './ExhShareModal';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';
+import ExhToMoreReview from './ExhToMoreReview';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -304,17 +305,11 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     setSharedModal(false);
   };
 
-  const shareWithInsta = async () => {
-    // const url = window.location.href;
-    // try {
-    //   await navigator.clipboard.writeText(url);
-    //   alert('URL이 클립보드에 복사되었습니다. 인스타그램을 열고 게시물에 붙여넣기 하세요.');
-    //   // 인스타그램 앱을 여는 URL (모바일에서만 작동)
-    //   window.location.href = 'instagram://';
-    // } catch (error) {
-    //   console.error('URL 복사 실패', error);
-    //   alert('URL 복사에 실패했습니다.');
-    // }
+  const clickMoreReview = () => {
+    console.log('더 많은 리뷰', exhId);
+    navigation.navigate('ExhToMoreReview', {
+      exhId: exhId,
+    });
   };
 
   return (
@@ -456,7 +451,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           </TitleView>
 
           {diaryData &&
-            diaryData.slice(0, 3).map(
+            diaryData.slice(0, 2).map(
               (
                 item: any,
                 index: number, //slice(0,n) 해당 개수 넣기
@@ -496,9 +491,9 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                 </TouchableOpacity>
               ),
             )}
-          {avgNumber > 3 && ( //제한 개수 수정 slice(0,n)이랑 같은 수
+          {avgNumber > 2 && ( //제한 개수 수정 slice(0,n)이랑 같은 수
             <MoreReview>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={clickMoreReview}>
                 <MoreReviewTitle>{'기록들 더보기>'}</MoreReviewTitle>
               </TouchableOpacity>
             </MoreReview>

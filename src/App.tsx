@@ -32,6 +32,7 @@ import InitProfileScreen from './screens/login/InitProfileScreen';
 import ExhToDiary from './screens/exhibition/ExhToDiary';
 import ExhToDiaryBack from './screens/exhibition/ExhToDiaryBack';
 import ExhToCal from './screens/exhibition/ExhToCal';
+import ExhToMoreReview from './screens/exhibition/ExhToMoreReview';
 import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/types';
@@ -76,6 +77,7 @@ export default function App() {
             <Stack.Screen name="ExhToDiary" component={ExhToDiary} />
             <Stack.Screen name="ExhToDiaryBack" component={ExhToDiaryBack} />
             <Stack.Screen name="ExhToCal" component={ExhToCal} />
+            <Stack.Screen name="ExhToMoreReview" component={ExhToMoreReview} />
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"
