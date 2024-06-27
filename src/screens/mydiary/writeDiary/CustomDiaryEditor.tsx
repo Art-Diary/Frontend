@@ -42,6 +42,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   const [colorVisible, setColorVisible] = useState(false);
 
   const handleContentChange = (content: string) => {
+    // console.log(content);
     handleEditorContent(content);
   };
 
