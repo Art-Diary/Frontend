@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import BackView from '~/components/common/BackView';
@@ -21,10 +21,11 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import CustomDiaryEditor from './CustomDiaryEditor';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [contentsKeyword, setContentsKeyword] = useState<string>('');
+  const [editorContent, setEditorContent] = useState('');
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const tabIdentifier = useTabIdentifierInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
@@ -52,9 +53,9 @@ const WriteMyDiaryContentsScreen = () => {
 
   useEffect(() => {
     if (writeMyDiaryInfo.isUpdate) {
-      setContentsKeyword(writeMyDiaryInfo.contents ?? '');
+      setEditorContent(writeMyDiaryInfo.contents ?? '');
     } else {
-      setContentsKeyword('');
+      setEditorContent('');
     }
   }, []);
 
@@ -135,11 +136,14 @@ const WriteMyDiaryContentsScreen = () => {
     formData.append('title', writeMyDiaryInfo.title);
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
-    formData.append('contents', contentsKeyword);
+    formData.append('contents', editorContent);
 
     // 기록 생성에만 추가
-
-    if (writeMyDiaryInfo.thumbnail?.search('file://') !== -1) {
+    if (
+      writeMyDiaryInfo.thumbnail?.search('file://') !== undefined &&
+      writeMyDiaryInfo.thumbnail?.search('file://') !== null &&
+      writeMyDiaryInfo.thumbnail?.search('file://') !== -1
+    ) {
       const resizedImage = await ImageResizer.createResizedImage(
         writeMyDiaryInfo.thumbnail ?? '', // path
         300, // width
@@ -168,25 +172,15 @@ const WriteMyDiaryContentsScreen = () => {
     setCreateFormData(formData);
   };
 
-  const onChangeContents = useCallback((text: string) => {
-    setContentsKeyword(text);
-  }, []);
-
   return (
     <Container>
       <BackView title="기록 작성" line={true} children={null} />
       <ContentsContainer>
-        <ScrollContents>
-          <WriteContents
-            multiline={true}
-            placeholderTextColor="#D3D3D3"
-            placeholder={'전시회 감상을 기록해보세요!'}
-            onChangeText={onChangeContents}
-            value={contentsKeyword}
-            align={'center'}
-          />
-        </ScrollContents>
-        {!checkBlankInKeyword(contentsKeyword) ? (
+        <CustomDiaryEditor
+          handleEditorContent={setEditorContent}
+          editorContent={editorContent}
+        />
+        {!checkBlankInKeyword(editorContent) ? (
           <TouchableOpacity onPress={onClickNextButton}>
             <NextButton moveNext={true}>완료</NextButton>
           </TouchableOpacity>
@@ -218,28 +212,6 @@ const ContentsContainer = styled.View`
   padding-left: ${wp(10)}px;
   padding-right: ${wp(10)}px;
   gap: ${hp(10)}px;
-`;
-
-const ScrollContents = styled.ScrollView`
-  flex: 1;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
-`;
-
-interface WriteTypeProps {
-  align: string;
-  color: string;
-}
-
-const WriteContents = styled.TextInput<WriteTypeProps>`
-  width: 100%;
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  text-align: ${(props: WriteTypeProps) => props.align};
 `;
 
 interface NextButtonProps {

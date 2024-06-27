@@ -44,3 +44,5 @@ export {default as ReduceContents} from './reduce_contents.svg';
 export {default as BackButtonShort} from './back_button_short.svg';
 export {default as FillStarSmall} from './fullstar_small.svg';
 export {default as EmptyStarSmall} from './emptystar_small.svg';
+export {default as AlignIcon} from './align_icon.svg';
+export {default as ColorChangeIcon} from './color_change_icon.svg';
