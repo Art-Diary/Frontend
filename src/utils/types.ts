@@ -47,6 +47,9 @@ export type RootStackParamList = {
   ExhToCal: {
     exhId: number;
   };
+  ExhToMoreReview: {
+    exhId: number;
+  };
   //CalendarSearch: undefined;
   // login
   Login: undefined;
