@@ -113,6 +113,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0' // google
     implementation "com.google.firebase:firebase-dynamic-links:19.0.0"
     implementation "com.google.firebase:firebase-invites:17.0.0" // 이 코드를 추가하지 않으면 링크 리스너 실행시 앱이 죽는다.
+    implementation 'com.google.firebase:firebase-messaging:21.1.0' // fcm
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

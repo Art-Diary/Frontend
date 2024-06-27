@@ -221,9 +221,33 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     if (navigation?.canGoBack()) {
       navigation.goBack();
       return true;
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Main',
+            state: {
+              routes: [
+                {
+                  name: 'Exhibition',
+                  params: undefined,
+                },
+              ],
+            },
+          },
+        ],
+      });
+      return true;
     }
-    return false;
   };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    };
+  }, [handlePressBack]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handlePressBack);

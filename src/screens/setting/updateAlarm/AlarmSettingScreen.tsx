@@ -13,7 +13,7 @@ import UpdateAlarm3 from './UpdateAlarm3';
 const AlarmSettingScreen = () => {
   return (
     <Container>
-      <BackView title="알림 설정" line={true} />
+      <BackView title="푸시 알림 설정" line={true} />
 
       {/* body */}
       <Contents>
