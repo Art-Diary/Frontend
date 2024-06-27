@@ -1,21 +1,18 @@
-import React, {useEffect, ReactNode, useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  Keyboard,
   TouchableOpacity,
   ScrollView,
   BackHandler,
   StyleSheet,
-  Modal,
-  ActivityIndicator,
 } from 'react-native';
 import styled, {css} from 'styled-components/native';
-import BackView from '~/components/common/BackView';
+//import BackView from '~/components/common/BackView';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
-import SearchExhFrame from '../../components/exhSearch/SearchExhFrame';
+//import SearchExhFrame from '../../components/exhSearch/SearchExhFrame';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -29,7 +26,6 @@ import {
   EmptyHeart,
   FullHeart,
   CalendarShare,
-  Share,
   Homepage,
   MoreContents,
   ReduceContents,
@@ -37,15 +33,12 @@ import {
   FillStarSmall,
   EmptyStarSmall,
   FillStarIcon,
-  KakaoIconBig,
-  Instagram,
-  Copy,
 } from '~/assets/images/index';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
-import ExhShareModal from './ExhShareModal';
-import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
+//import ExhShareModal from './ExhShareModal';
+//import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';
 import ExhToMoreReview from './ExhToMoreReview';
@@ -89,13 +82,14 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const [exhState, setExhState] = useState<string>();
   const [hearts, setHearts] = useState<boolean>();
   const [intro, setIntro] = useState<string>();
-  const [tmp, setTmp] = useState<string>(
+  const [tmp, setTmp] = useState<string>( // 소개 부분 [변경 예정]
     'The Page Gallery is pleased to announce a solo exhibition by German artist André Butzer from November 9 to December 30. This will be the first solo exhibition in Asia in three years and the first for Korean audiences since Yuz Museum in Shanghai in 2020. The exhibition, which will be held at The Page Gallery East, consists of 15 major new works that span the artist"s oeuvre over the past 30 years. At the end of the 20th century, with the end of the Cold War and the sweep of industrialization.',
   );
   const [isMoreContent, setIsMoreContent] = useState<boolean>(false);
   const [avgRate, setAvgRate] = useState<string>();
   const [avgNumber, setAvgNumber] = useState<number>(0);
-  const [sharedModal, setSharedModal] = useState<boolean>(false);
+  //const [sharedModal, setSharedModal] = useState<boolean>(false);
+  const limit = 2; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
 
   const {
     mutate: addLike,
@@ -135,7 +129,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
       }
 
       if (tmp.length > 300) {
-        //소개글 200자 이상일시 tmp.length ->data.intro.length로 바꿔야함
+        //소개글 200자 이상일시 tmp.length ->data.intro.length로 바꿔야함 [변경 예정]
         setIsReadable(true);
         //let str: string[];
         setIntro(tmp.substring(0, 300));
@@ -184,11 +178,9 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     if (isErrorLike) {
-      //showToast('좋아요 실패했습니다.');
       console.log('좋아요 실패');
     }
     if (isLoadingLike) {
-      // setIsLoadingOpen(true);
       console.log('좋아요 로딩중');
     }
     if (isSuccessLike) {
@@ -198,10 +190,8 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
     if (isErrorDislike) {
       showToast('좋아요 삭제 실패했습니다.');
-      //console.log('좋아요 실패');
     }
     if (isLoadingDislike) {
-      // setIsLoadingOpen(true);
       console.log('좋아요 삭제 로딩중');
     }
     if (isSuccessDislike) {
@@ -256,7 +246,6 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
       BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
     };
   }, [handlePressBack]);
-  // useEffect(()=>{},[data.e]);
 
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
@@ -264,10 +253,6 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
   if (isLoading) {
     return <LoadingModal message={'로딩 중 :)'} />;
-  }
-  if (isSuccess) {
-    // console.log(data.painter);
-    // console.log('불러오기성공:', exhId, data);
   }
 
   if (isDiaryListSuccess) {
@@ -307,7 +292,6 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   };
 
   const showRate = (rate: string) => {
-    //const renderingRate = (rate: string) => {
     const result = [];
     const rateInt = parseInt(rate);
     let num = 0;
@@ -318,16 +302,15 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
       result.push(<EmptyStarSmall key={`${num++}`} />);
     }
     return result;
-    // };
   };
 
-  const onPressSharedModal = () => {
-    setSharedModal(true);
-  };
+  // const onPressSharedModal = () => {
+  //   setSharedModal(true);
+  // };
 
-  const closeSharedModal = () => {
-    setSharedModal(false);
-  };
+  // const closeSharedModal = () => {
+  //   setSharedModal(false);
+  // };
 
   const clickMoreReview = () => {
     console.log('더 많은 리뷰', exhId);
@@ -374,20 +357,13 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               <CalendarShare />
             </TouchableOpacity>
             <Bar>{'|'}</Bar>
-            {/* <TouchableOpacity onPress={() => onPressSharedModal()}>
-              <Share />
-            </TouchableOpacity> */}
+
             <ExhShare
               poster={data.poster}
               exhId={data.exhId}
               exhName={data.exhName}
             />
-            {/* {sharedModal && (
-              <ExhShareModal
-                handleCloseModal={closeSharedModal}
-                shareWithInsta={shareWithInsta}
-              />
-            )} */}
+
             <Bar>{'|'}</Bar>
             <TouchableOpacity>
               <Homepage />
@@ -395,7 +371,6 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           </IconView>
         </NameView>
         <StateView>
-          {/* <State>{exhState}</State> */}
           {exhState === '진행중' ? (
             <StateIng>{exhState}</StateIng>
           ) : exhState === '종료' ? (
@@ -438,7 +413,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           <Content>
             {'"'}
             {intro}
-            {/* {data.intro} */}
+            {/* {data.intro} [변경 예정] */}
             {'"'}
           </Content>
           {isReadable && (
@@ -475,47 +450,42 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           </TitleView>
 
           {diaryData &&
-            diaryData.slice(0, 2).map(
-              (
-                item: any,
-                index: number, //slice(0,n) 해당 개수 넣기
-              ) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate('ExhToDiary', {
-                      diary: item,
-                    })
-                  }>
-                  <ReViewList>
-                    <ReviewImage
-                      source={{uri: `data:image/png;base64,${data.poster}`}}
-                      resizeMode="cover"
-                      alt={'이미지 읽기 실패'}
-                    />
-                    <ReviewTextView>
-                      <TextView>
-                        <ReviewTitle>
-                          {'"'}
-                          {item.title}
-                          {'"'}
-                        </ReviewTitle>
-                      </TextView>
-                      <TextView>
-                        <SubTextView key={index}>
-                          <ReviewName>{item.nickname}</ReviewName>
-                          <ReviewRate>{showRate(item.rate)}</ReviewRate>
-                        </SubTextView>
-                        <ReviewDate>
-                          {changeDateType(item.writeDate)}
-                        </ReviewDate>
-                      </TextView>
-                    </ReviewTextView>
-                  </ReViewList>
-                </TouchableOpacity>
-              ),
-            )}
-          {avgNumber > 2 && ( //제한 개수 수정 slice(0,n)이랑 같은 수
+            diaryData.slice(0, limit).map((item: any, index: number) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  navigation.navigate('ExhToDiary', {
+                    diary: item,
+                  })
+                }>
+                <ReViewList>
+                  <ReviewImage
+                    source={{
+                      uri: `data:image/png;base64,${item.thumbnail}`,
+                    }}
+                    resizeMode="cover"
+                    alt={'이미지 읽기 실패'}
+                  />
+                  <ReviewTextView>
+                    <TextView>
+                      <ReviewTitle>
+                        {'"'}
+                        {item.title}
+                        {'"'}
+                      </ReviewTitle>
+                    </TextView>
+                    <TextView>
+                      <SubTextView key={index}>
+                        <ReviewName>{item.nickname}</ReviewName>
+                        <ReviewRate>{showRate(item.rate)}</ReviewRate>
+                      </SubTextView>
+                      <ReviewDate>{changeDateType(item.writeDate)}</ReviewDate>
+                    </TextView>
+                  </ReviewTextView>
+                </ReViewList>
+              </TouchableOpacity>
+            ))}
+          {avgNumber > limit && (
             <MoreReview>
               <TouchableOpacity onPress={clickMoreReview}>
                 <MoreReviewTitle>{'기록들 더보기>'}</MoreReviewTitle>
@@ -604,9 +574,7 @@ const TopLayer = styled.View`
   flex: 1;
   flex-direction: row;
   padding: ${wp(10)}px;
-  //align-items: center;
   width: 100%;
-  // background-color: #f6f6f6;
   position: absolute;
   z-index: 2;
   justify-content: space-between;
@@ -688,9 +656,7 @@ const Info = styled.Text`
 
 const Poster = styled.Image`
   width: ${wp(137)}px;
-  //  width: 100%;
   height: ${hp(169)}px;
-  //align-items: center;
 `;
 
 const BackgroundImage = styled.Image`
@@ -743,7 +709,6 @@ const TitleTopView = styled.View`
 `;
 
 const AvgRateView = styled.View`
-  //flex: 1;
   flex-direction: row;
   align-items: center;
   padding: ${wp(5)}px;
@@ -845,46 +810,3 @@ const MoreReview = styled.View`
   padding-top: ${wp(10)}px;
   justify-content: flex-end;
 `;
-
-// const ModalContainer = styled.View`
-//   // flex: 1;
-//   justify-content: center;
-//   align-items: center;
-//   padding-top: ${wp(15)}px;
-//   // background-color: rgba(0, 0, 0, 0.3);
-// `;
-
-// const ModalContentView = styled.View`
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: center;
-//   /* background-color: white;
-//   border-radius: 20px;
-//   justify-content: center;
-//   align-items: center;
-//   width: 70%;
-//   height: 20%;*/
-//   padding: ${wp(10)}px;
-//   gap: 35px;
-// `;
-
-// const Message = styled.Text`
-//   text-align: start;
-//   font-size: ${fp(17.9)}px;
-//   color: #3c4045;
-//   font-family: 'omyu pretty';
-// `;
-
-// const SnsView = styled.View`
-//   flex-direction: column;
-//   align-items: center;
-//   padding-top: ${wp(15)}px;
-// `;
-
-// const Sns = styled.Text`
-//   text-align: center;
-//   font-size: ${fp(11.9)}px;
-//   color: #3c4045;
-//   font-family: 'omyu pretty';
-//   padding: ${wp(10)}px;
-// `;
