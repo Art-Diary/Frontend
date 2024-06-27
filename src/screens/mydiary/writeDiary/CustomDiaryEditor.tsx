@@ -12,10 +12,6 @@ import {showPhoto} from './GetPhoto';
 
 /**
  * TODO
- * - 사진 크기 조절 (X)
- * - 색상 선택 좀 더 동적으로 (X)
- * - 폰트 적용 (O)
- * - 정렬 아이콘 추가 (X)
  * - 초기 로딩에는 사진 추가 시 스크롤이 안되고, 재로딩하면 스크롤이 된다. => 화면 높이 문제?
  * - 사진 첨부하고 위치 이런거 저장하고 표시했다가 보여주기. (일단 디비 저장)
  * - 색상이 제대로 적용되도록 수정
@@ -56,9 +52,10 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   );
 
   const changeFontColor = (color: string) => {
+    // editorRef.current?.focusContentEditor();
     editorRef.current?.setForeColor(color);
-    setColorVisible(false);
     setFontColor(color);
+    setColorVisible(false);
   };
 
   const handleFontColor = () => (
@@ -68,7 +65,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
     backgroundColor: '#f6f6f6',
-    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: #3c4045; height: 100%;`,
+    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: ${fontColor}; height: 100%;`,
   };
 
   return (
