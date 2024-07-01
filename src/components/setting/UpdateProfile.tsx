@@ -64,7 +64,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       : initProfile.profile,
   );
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
-  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isVerified, setIsVerified] = useState<boolean>(true);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {
     mutate: updateUserInfo,
