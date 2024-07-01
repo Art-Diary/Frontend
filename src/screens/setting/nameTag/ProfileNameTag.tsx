@@ -4,33 +4,25 @@ import {
   responseFont as rf,
   sizePercentage as sp,
 } from '~/components/common/ResponsiveSize';
-import {ProfileUpdateIcon} from '~/assets/images';
 import {TouchableOpacity} from 'react-native';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {FONT_NAME} from '~/components/common/style';
-import ProfileTag from '../../../assets/name_tag/profile_tag.svg';
-import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
   DEFAULT_TEXT,
   MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
+import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
 
 const ProfileNameTag = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const userInfo = useUserInfo();
 
-  const height = rw(16.5);
-  const updateIconHeight = rw(6.5);
-
   return (
     <Container>
-      <ProfileTag
-        width={2800 * (height / 500)} // Adjust width according to height ratio
-        height={height}
-      />
+      <ProfileTagIcon />
 
       <WordContainer>
         <Wrapper>
@@ -73,10 +65,7 @@ const ProfileNameTag = () => {
                 params: undefined,
               })
             }>
-            <ProfileUpdateIcon
-              width={100 * (updateIconHeight / 101)}
-              height={updateIconHeight}
-            />
+            <ProfileUpdateIcon />
           </TouchableOpacity>
         </Wrapper>
       </WordContainer>

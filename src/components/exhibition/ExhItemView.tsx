@@ -2,11 +2,12 @@ import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
 import {LightStarIcon} from '~/assets/images';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  sizePercentage as sp,
+  responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
+import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 
 interface ExhInfo {
   poster: string;
@@ -91,23 +92,25 @@ interface ExhViewProps {
 
 const Wrapper = styled.View`
   flex-direction: row;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
+  padding-left: ${sp(14)}px;
+  padding-right: ${sp(14)}px;
 `;
 
 const ExhView = styled.View<ExhViewProps>`
+  justify-content: space-between;
   flex-direction: row;
   border-bottom-width: ${(props: ExhViewProps) =>
-    props.noLine ? `0px` : `${hp(0.5)}px`};
-  border-bottom-color: #d3d3d3;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
+    props.noLine ? `0px` : `${ITEM_BORDER_WIDTH}px`};
+  border-bottom-color: ${LIGHT_GREY};
+  padding-top: ${sp(14)}px;
+  padding-bottom: ${sp(14)}px;
+  padding-right: ${sp(14)}px;
   width: 100%;
 `;
 
 const TouchView = styled.TouchableOpacity`
   flex-direction: row;
-  gap: ${wp(8)}px;
+  gap: ${sp(13)}px;
 `;
 
 interface ExhInfoProps {
@@ -115,37 +118,37 @@ interface ExhInfoProps {
 }
 
 const ExhInfo = styled.View<ExhInfoProps>`
-  width: 63%;
-  padding-top: ${hp(8)}px;
-  padding-bottom: ${hp(8)}px;
+  /* width: 85%; */
+  padding-top: ${sp(14)}px;
+  padding-bottom: ${sp(14)}px;
   flex-direction: column;
   justify-content: ${(props: ExhInfoProps) =>
     props.haveRate ? `center` : `space-between`};
   gap: ${(props: ExhInfoProps) =>
-    props.haveRate ? `${hp(10)}px` : `${hp(7)}px`};
+    props.haveRate ? `${sp(14)}px;` : `${sp(12.5)}px;`};
 `;
 
 const ExhName = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const ExhGallery = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19.2)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const ExhDate = styled.Text`
-  font-size: ${fp(13)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(18.6)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const Poster = styled.Image`
-  width: ${wp(70)}px;
-  height: ${hp(70)}px;
+  width: ${sp(30)}px;
+  height: ${sp(35)}px;
   align-items: center;
 `;
 
@@ -155,7 +158,7 @@ const ExhRateWrapper = styled.View`
 `;
 
 const ExhRate = styled.Text`
-  font-size: ${fp(15.8)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19.35)}px;
+  color: ${LIGHT_GREY};
+  font-family: ${FONT_NAME};
 `;

@@ -23,13 +23,10 @@ import {
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {
-  EmptyHeart,
-  FullHeart,
   CalendarShare,
   Homepage,
   MoreContents,
   ReduceContents,
-  BackButton,
   FillStarSmall,
   EmptyStarSmall,
   FillStarIcon,
@@ -42,6 +39,11 @@ import {JoinDateWithDot, dateToString} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';
 import ExhToMoreReview from './ExhToMoreReview';
+import {
+  BackButtonIcon,
+  EmptyHeartIcon,
+  FullHeartIcon,
+} from '~/components/common/icon';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -336,11 +338,11 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           />
           <TopLayer>
             <TouchableOpacity onPress={handlePressBack}>
-              <BackButton />
+              <BackButtonIcon />
             </TouchableOpacity>
             <EmptyHeartContent>
               <TouchableOpacity onPress={() => onPressHeart(exhId)}>
-                {hearts ? <FullHeart /> : <EmptyHeart />}
+                {hearts ? <FullHeartIcon /> : <EmptyHeartIcon />}
               </TouchableOpacity>
             </EmptyHeartContent>
           </TopLayer>

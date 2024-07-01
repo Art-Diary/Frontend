@@ -4,17 +4,18 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useDeleteLike} from '~/api/queries/exhibition';
-import {EmptyHeart, FullHeart} from '~/assets/images';
 import BackView from '~/components/common/BackView';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  sizePercentage as sp,
+  responseFont as rf,
 } from '~/components/common/ResponsiveSize';
+import {BACK_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {FONT_NAME} from '~/components/common/style';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useFavoriteInfoList} from '~/zustand/setting/favoriteList';
+import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 
 interface Like {
   exhId: number;
@@ -119,7 +120,11 @@ const EditFavoriteScreen = () => {
               notTouchable={true}>
               <HeartView>
                 <TouchableOpacity onPress={() => onPressHeart(index)}>
-                  {likeList[index]?.like ? <FullHeart /> : <EmptyHeart />}
+                  {likeList[index]?.like ? (
+                    <FullHeartIcon />
+                  ) : (
+                    <EmptyHeartIcon />
+                  )}
                 </TouchableOpacity>
               </HeartView>
             </ExhItemView>
@@ -141,23 +146,22 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const EditText = styled.Text`
-  font-size: ${fp(16)}px;
+  font-size: ${rf(19.4)}px;
   color: white;
-  background-color: #ff6f61;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(3)}px;
-  padding-bottom: ${hp(3)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  border-radius: 5px;
+  background-color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
+  padding-top: ${sp(11.9)}px;
+  padding-bottom: ${sp(11.9)}px;
+  padding-left: ${sp(13.9)}px;
+  padding-right: ${sp(13.9)}px;
+  border-radius: ${sp(10)}px;
 `;
 
 const HeartView = styled.View`
-  flex: 1;
   flex-direction: row;
   justify-content: center;
   align-items: center;
