@@ -19,6 +19,7 @@ import {
   MAIN_COLOR,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const LeaveScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -128,7 +129,7 @@ const ReasonView = styled.View`
   border-width: ${sp(11.3)}px;
   border-color: ${LIGHT_GREY};
   border-radius: ${sp(12.5)}px;
-  height: ${sp(70)}px;
+  height: ${hp(40)}px;
 `;
 
 const ReasonScroll = styled.ScrollView``;
