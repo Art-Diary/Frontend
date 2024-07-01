@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {useUpdateAlarm2} from '~/api/queries/auth';
-import {PrivateToggle, PublicToggle} from '~/assets/images';
+import {PrivateToggleIcon, PublicToggleIcon} from '~/components/common/icon';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
@@ -41,7 +41,7 @@ const UpdateAlarm2 = () => {
   return (
     <>
       <TouchableOpacity onPress={onPressAlarm}>
-        {getAlarm2 ? <PublicToggle /> : <PrivateToggle />}
+        {getAlarm2 ? <PublicToggleIcon /> : <PrivateToggleIcon />}
       </TouchableOpacity>
       {isLoadingOpen && <LoadingModal message={'알림 설정 중 :)'} />}
     </>

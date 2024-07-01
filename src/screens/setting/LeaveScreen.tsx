@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  sizePercentage as sp,
+  responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -13,6 +12,13 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+} from '~/components/common/colors';
+import {FONT_NAME} from '~/components/common/style';
 
 const LeaveScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -101,43 +107,38 @@ const Contents = styled.View`
   width: 100%;
   height: 100%;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
+  background-color: ${BACK_COLOR};
+  padding: ${sp(15)}px;
 `;
 
 const ContentColumn = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  gap: ${hp(10)}px;
+  gap: ${sp(15)}px;
 `;
 
 const SectionName = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const ReasonView = styled.View`
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
-  height: 30%;
+  border-width: ${sp(11.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${sp(12.5)}px;
+  height: ${sp(70)}px;
 `;
 
 const ReasonScroll = styled.ScrollView``;
 
 const ReasonInput = styled.TextInput`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  border-color: #d3d3d3;
-  border-radius: 10px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-left: ${sp(13.9)}px;
+  padding-right: ${sp(13.9)}px;
 `;
 
 interface LeaveButtonProps {
@@ -145,12 +146,12 @@ interface LeaveButtonProps {
 }
 
 const LeaveButton = styled.Text<LeaveButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${sp(14.4)}px;
+  border-radius: ${sp(12.5)}px;
   text-align: center;
   background-color: ${(props: LeaveButtonProps) =>
-    props.leave ? '#ff6f61' : '#D3D3D3'};
+    props.leave ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19.7)}px;
+  font-family: ${FONT_NAME};
 `;

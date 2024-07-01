@@ -2,7 +2,9 @@ import {
   BackButton,
   EmptyHeart,
   FullHeart,
+  PrivateToggle,
   ProfileUpdate,
+  PublicToggle,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import ProfileTag from '~/assets/name_tag/profile_tag.svg';
@@ -45,11 +47,16 @@ export const ProfileTagIcon = () => {
 };
 
 export const ProfileUpdateIcon = () => {
-  const updateIconHeight = rw(6.5);
-  return (
-    <ProfileUpdate
-      width={100 * (updateIconHeight / 101)}
-      height={updateIconHeight}
-    />
-  );
+  const height = rw(6.5);
+  return <ProfileUpdate width={100 * (height / 101)} height={height} />;
+};
+
+export const PublicToggleIcon = () => {
+  const height = rw(6);
+  return <PublicToggle width={193 * (height / 100)} height={height} />;
+};
+
+export const PrivateToggleIcon = () => {
+  const height = rw(6);
+  return <PrivateToggle width={193 * (height / 100)} height={height} />;
 };
