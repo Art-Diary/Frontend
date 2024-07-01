@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackHandler, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
@@ -25,11 +25,15 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MateMainScreen from '~/screens/mate/main/MateMainScreen';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+// import {DASH_WIDTH} from '~/components/common/style';
+// import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 const Tab = createBottomTabNavigator();
 
 const BottomRoutes = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const [backPressedOnce, setBackPressedOnce] = useState(false);
 
   useEffect(() => {
     // 앱이 백그라운드에서 포그라운드로 전환될 때 링크를 처리
@@ -59,20 +63,28 @@ const BottomRoutes = () => {
     }
   };
 
-  const handlePressBack = () => {
-    if (navigation?.canGoBack()) {
-      BackHandler.exitApp(); //TODO 임시방편
-      return true;
-    }
-    return false;
-  };
-
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    const backAction = () => {
+      if (backPressedOnce) {
+        BackHandler.exitApp();
+      } else {
+        setBackPressedOnce(true);
+        showToast('뒤로 버튼을 한번 더 누르시면 종료됩니다.');
+        setTimeout(() => {
+          setBackPressedOnce(false);
+        }, 2000);
+
+        return true;
+      }
     };
-  }, [handlePressBack]);
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [backPressedOnce]);
 
   return (
     <Container>
