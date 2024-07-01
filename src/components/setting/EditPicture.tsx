@@ -9,10 +9,12 @@ import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import styled from 'styled-components/native';
 import {CameraIcon} from '~/assets/images';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {FONT_NAME} from '../common/style';
 
 interface EditNicknameProps {
   imageUri: string | undefined;
@@ -98,7 +100,7 @@ const ContentColumn = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  gap: ${hp(10)}px;
+  gap: ${hp(1.7)}px;
 `;
 
 const SectionView = styled.View`
@@ -112,9 +114,10 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${fp(19)}px` : `${fp(16)}px`};
-  color: ${(props: SectionNameProps) => (props.main ? '#3c4045' : '#D3D3D3')};
-  font-family: 'omyu pretty';
+    props.main ? `${rf(20.3)}px` : `${rf(19.5)}px`};
+  color: ${(props: SectionNameProps) =>
+    props.main ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
+  font-family: ${FONT_NAME};
 `;
 
 const ProfileSection = styled.View`
@@ -122,14 +125,10 @@ const ProfileSection = styled.View`
   width: 100%;
   height: 100%;
   flex-direction: column;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 10px;
-  padding-top: ${wp(10)}px;
-  padding-bottom: ${wp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(10)}px;
+  border-width: ${wp(0.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${wp(2)}px;
+  padding: ${wp(2.7)}px;
 `;
 
 const PutProfile = styled.View`

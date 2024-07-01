@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -14,10 +14,17 @@ import {TouchableOpacity} from 'react-native';
 import {useUpdateUserInfo} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import EditNickname from '~/screens/setting/updateProfile/EditNickname';
-import EditArtCategory from '~/screens/setting/updateProfile/EditArtCategory';
-import EditPicture from '~/screens/setting/updateProfile/EditPicture';
+import EditNickname from '~/components/setting/EditNickname';
+import EditArtCategory from '~/components/setting/EditArtCategory';
+import EditPicture from '~/components/setting/EditPicture';
 import {useUserActions} from '~/zustand/auth/auth';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+} from '../common/colors';
+import {FONT_NAME} from '../common/style';
 
 type InitProfile = {
   favoriteArt: string;
@@ -209,24 +216,21 @@ const Contents = styled.View`
   width: 100%;
   height: 100%;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  gap: ${hp(15)}px;
+  background-color: ${BACK_COLOR};
+  padding: ${hp(1.8)}px;
+  gap: ${hp(2.6)}px;
 `;
 
 const ContentColumn = styled.View`
   flex-direction: column;
   width: 100%;
-  gap: ${hp(10)}px;
+  gap: ${hp(1.8)}px;
 `;
 
 const SectionName = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 interface ContentProps {
@@ -234,21 +238,21 @@ interface ContentProps {
 }
 
 const BoxView = styled.View<ContentProps>`
-  border-width: 1.5px;
-  border-color: #d3d3d3;
-  border-radius: 10px;
+  border-width: ${wp(0.4)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${wp(1.5)}px;
   flex-direction: row;
   background-color: ${(props: ContentProps) =>
-    props.color ? '#d9d9d9' : '#f6f6f6'};
-  padding: ${hp(10)}px;
-  gap: 6.5px;
+    props.color ? '#d9d9d9' : `${BACK_COLOR}`};
+  padding: ${wp(3)}px;
+  gap: ${wp(1.5)}px;
   align-items: center;
 `;
 
 const EmailText = styled.Text`
-  font-size: ${fp(18)}px;
+  font-size: ${rf(20)}px;
   color: white;
-  font-family: 'omyu pretty';
+  font-family: ${FONT_NAME};
   text-align: center;
 `;
 
@@ -257,12 +261,12 @@ interface CompleteButtonProps {
 }
 
 const CompleteButton = styled.Text<CompleteButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${hp(1.8)}px;
+  border-radius: ${wp(1.5)}px;
   text-align: center;
   background-color: ${(props: CompleteButtonProps) =>
-    props.complete ? '#ff6f61' : '#D3D3D3'};
+    props.complete ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19.7)}px;
+  font-family: ${FONT_NAME};
 `;

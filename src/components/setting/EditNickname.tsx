@@ -2,12 +2,14 @@ import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {useVerifyNickname} from '~/api/queries/auth';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {useUserInfo} from '~/zustand/auth/auth';
+import {FONT_NAME} from '../common/style';
+import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 
 interface EditNicknameProps {
   getNickname: string;
@@ -111,13 +113,13 @@ export default EditNickname;
 const ContentColumn = styled.View`
   flex-direction: column;
   width: 100%;
-  gap: ${hp(10)}px;
+  gap: ${hp(1.7)}px;
 `;
 
 const ContentRow = styled.View`
   flex-direction: row;
   width: 100%;
-  gap: ${hp(5)}px;
+  gap: ${wp(1.7)}px;
   align-items: center;
 `;
 
@@ -133,21 +135,21 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${fp(19)}px` : `${fp(13)}px`};
+    props.main ? `${rf(20.3)}px` : `${rf(18.6)}px`};
   color: ${(props: SectionNameProps) => props.color};
-  font-family: 'omyu pretty';
+  font-family: ${FONT_NAME};
 `;
 
 const Nickname = styled.TextInput`
   flex: 1;
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 10px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  border-width: ${wp(0.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${wp(2)}px;
+  padding-left: ${wp(2.8)}px;
+  padding-right: ${wp(2.8)}px;
   width: 100%;
 `;
 
@@ -156,19 +158,19 @@ interface CheckButtonProps {
 }
 
 const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
-  padding-top: ${hp(11)}px;
-  padding-bottom: ${hp(11)}px;
-  padding-left: ${wp(5)}px;
-  padding-right: ${wp(5)}px;
-  border-radius: 10px;
-  background-color: #ff6f61;
+  padding-top: ${hp(1.9)}px;
+  padding-bottom: ${hp(1.9)}px;
+  padding-left: ${wp(1.5)}px;
+  padding-right: ${wp(1.5)}px;
+  border-radius: ${wp(2)}px;
+  background-color: ${MAIN_COLOR};
   background-color: ${(props: CheckButtonProps) =>
-    props.isVerified ? '#D3D3D3' : '#ff6f61'};
+    props.isVerified ? `${LIGHT_GREY}` : `${MAIN_COLOR}`};
 `;
 
 const CheckText = styled.Text`
   text-align: center;
   color: white;
-  font-size: ${fp(18)}px;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20)}px;
+  font-family: ${FONT_NAME};
 `;

@@ -3,9 +3,12 @@ import {StyleSheet} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {FONT_NAME} from '../common/style';
+import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 
 interface IPicker {
   label: string;
@@ -52,13 +55,13 @@ export default EditArtCategory;
 const ContentColumn = styled.View`
   flex-direction: column;
   width: 100%;
-  gap: ${hp(10)}px;
+  gap: ${hp(1.7)}px;
 `;
 
 const SectionName = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const pickerStyle = StyleSheet.create({
@@ -66,14 +69,15 @@ const pickerStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#ff6f61',
-    backgroundColor: '#f6f6f6',
+    borderRadius: wp(2),
+    borderWidth: wp(0.3),
+    borderColor: MAIN_COLOR,
+    backgroundColor: BACK_COLOR,
   },
   artName: {
-    fontSize: 17,
-    color: '#3c4045',
-    fontFamily: 'omyu pretty',
+    paddingLeft: wp(2),
+    fontSize: rf(19.2),
+    color: DEFAULT_TEXT,
+    fontFamily: FONT_NAME,
   },
 });
