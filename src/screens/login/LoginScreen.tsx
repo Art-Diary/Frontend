@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  sizePercentage as sp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -196,40 +195,38 @@ const Contents = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 80px;
+  gap: ${sp(25)}px;
 `;
 
 const LineWrapper = styled.View`
   height: 100%;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  padding-right: ${sp(18)}px;
   align-items: center;
 `;
 
 const Line = styled.View`
   height: 100%;
   background-color: #f6f6f6;
-  width: 28px;
+  width: ${sp(17)}px;
 `;
 
 const ArtDiary = styled.Text`
-  font-size: ${fp(120)}px;
+  font-size: ${rf(44)}px;
   color: white;
   font-family: 'omyu pretty';
   text-align: center;
 `;
 
 const LoginWrapper = styled.View`
-  justify-content: center;
-  padding-left: ${wp(35)}px;
-  padding-right: ${wp(18)}px;
+  align-items: center;
+  padding-left: ${sp(12)}px;
   width: 100%;
-  gap: ${hp(-10)}px;
+  gap: ${sp(15.5)}px;
 `;
 
 const Tester = styled.Text`
   margin: 5px;
-  font-size: ${fp(15)}px;
+  font-size: ${rf(20)}px;
   color: white;
   font-family: 'omyu pretty';
   text-decoration: underline;

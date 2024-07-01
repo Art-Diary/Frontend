@@ -17,16 +17,13 @@ import {
   OnSettingButton,
   OffSettingButton,
 } from '~/assets/images/index';
-import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-} from '~/components/common/ResponsiveSize';
+import {sizePercentage as sp} from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MateMainScreen from '~/screens/mate/main/MateMainScreen';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-// import {DASH_WIDTH} from '~/components/common/style';
-// import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
+import {DASH_WIDTH} from '~/components/common/style';
+import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
 import {showToast} from '~/components/common/modal/toastConfig';
 
 const Tab = createBottomTabNavigator();
@@ -117,12 +114,7 @@ const BottomRoutes = () => {
           },
           tabBarShowLabel: false,
           headerShown: false,
-          tabBarStyle: {
-            ...footerStyles.view,
-            paddingTop: wp(8),
-            height: hp(41),
-            borderTopWidth: wp(1.3), // 테두리 너비
-          },
+          tabBarStyle: {...footerStyles.view},
         })}
         backBehavior="none">
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
@@ -145,11 +137,17 @@ const Container = styled.SafeAreaView`
 
 const footerStyles = StyleSheet.create({
   view: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    // borderWidth: 1,
+    // flexDirection: 'row',
+    // justifyContent: 'space-evenly',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderStyle: 'dashed',
-    borderColor: '#D3D3D3',
-    backgroundColor: '#F6F6F6',
+    borderColor: BORDER_COLOR,
+    backgroundColor: BACK_COLOR,
     elevation: 0, // 상단 테두리의 음영 효과를 없애기 위해 elevation 속성을 0으로 설정
+    paddingTop: sp(12.5),
+    height: sp(24),
+    borderTopWidth: DASH_WIDTH, // 테두리 너비
   },
 });
