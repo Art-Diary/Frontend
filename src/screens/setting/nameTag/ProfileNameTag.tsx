@@ -1,30 +1,36 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {Svg, SvgXml} from 'react-native-svg';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  sizePercentage as sp,
 } from '~/components/common/ResponsiveSize';
 import {ProfileUpdateIcon} from '~/assets/images';
 import {TouchableOpacity} from 'react-native';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import {FONT_NAME} from '~/components/common/style';
+import ProfileTag from '../../../assets/name_tag/profile_tag.svg';
+import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
+import {
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
 
 const ProfileNameTag = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const tag = `<svg width="400" height="74" viewBox="0 0 400 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M376.451 37.1406L399.096 73.25H0.5V0.5H399.096L376.451 36.6094L376.285 36.875L376.451 37.1406Z" fill="white" stroke="#FF6F61"/>
-  <rect width="11.25" height="73.75" fill="#FF6F61"/>
-  </svg>`;
   const userInfo = useUserInfo();
+
+  const height = rw(16.5);
+  const updateIconHeight = rw(6.5);
 
   return (
     <Container>
-      <Svg height="200">
-        <SvgXml xml={tag} width="100%" />
-      </Svg>
+      <ProfileTag
+        width={2800 * (height / 500)} // Adjust width according to height ratio
+        height={height}
+      />
 
       <WordContainer>
         <Wrapper>
@@ -67,7 +73,10 @@ const ProfileNameTag = () => {
                 params: undefined,
               })
             }>
-            <ProfileUpdateIcon />
+            <ProfileUpdateIcon
+              width={100 * (updateIconHeight / 101)}
+              height={updateIconHeight}
+            />
           </TouchableOpacity>
         </Wrapper>
       </WordContainer>
@@ -77,6 +86,7 @@ const ProfileNameTag = () => {
 
 export default ProfileNameTag;
 
+/** style */
 const Container = styled.View`
   position: relative;
 `;
@@ -89,46 +99,45 @@ const WordContainer = styled.View`
 
 const Wrapper = styled.View`
   flex: 1;
-  padding-left: ${wp(20)}px;
-  padding-right: ${wp(30)}px;
+  padding-left: ${sp(17)}px;
+  padding-right: ${sp(19)}px;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: ${sp(14)}px;
 `;
 
 const UserInfoRow = styled.View`
   flex-direction: row;
-  gap: 5px;
+  gap: ${sp(12)}px;
 `;
 
 const UserInfoColumn = styled.View`
   flex: 1;
   flex-direction: column;
+  gap: ${sp(11.5)}px;
 `;
 
 const NickName = styled.Text`
-  font-size: ${fp(20)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
   text-align: center;
 `;
 const ArtWrapper = styled.View`
-  flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 2px;
 `;
 
 const Art = styled.Text`
-  font-size: ${fp(12)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(18.5)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
   text-align: center;
 `;
 
 const Email = styled.Text`
-  font-size: ${fp(16)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
   text-decoration-line: underline;
 `;
 
@@ -137,13 +146,13 @@ interface ProfileWrapperProps {
 }
 
 const ProfileWrapper = styled.View<ProfileWrapperProps>`
-  border-radius: 50px;
+  border-radius: ${sp(50)}px;
   align-items: center;
   justify-content: center;
-  width: ${wp(45)}px;
-  height: ${wp(45)}px;
+  width: ${sp(23)}px;
+  height: ${sp(23)}px;
   overflow: hidden;
-  border-color: #ff6f61;
+  border-color: ${MAIN_COLOR};
   border-width: ${(props: ProfileWrapperProps) =>
     props.isPresent ? `0px` : `1px`};
 `;

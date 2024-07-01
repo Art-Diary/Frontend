@@ -1,10 +1,14 @@
 import React, {ReactNode} from 'react';
-import {Svg, SvgXml} from 'react-native-svg';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  sizePercentage as sp,
 } from '~/components/common/ResponsiveSize';
+import {FONT_NAME} from './style';
+import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
+import GreyTag from '../../assets/name_tag/grey_tag.svg';
+import LoginTag from '../../assets/name_tag/login_tag.svg';
+import {DEFAULT_TEXT} from '~/components/common/colors';
 
 interface TagProps {
   content: string;
@@ -19,23 +23,23 @@ const GreyNameTag: React.FC<TagProps> = ({
   login,
   handleTouch,
 }) => {
-  const tag = login
-    ? `<svg width="504" height="86" viewBox="0 0 504 86" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.4 0.4H468.724L503.209 43L468.724 85.6H0.4V0.4Z" fill="white" stroke="#D3D3D3" stroke-width="0.8"/>
-    <rect width="23.6596" height="86" fill="#D3D3D3"/>
-    </svg>    
-  `
-    : `<svg width="400" height="59" viewBox="0 0 400 59" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0.4 0.4H372.186L399.452 29.5L372.186 58.6H0.4V0.4Z" fill="white" stroke="#D3D3D3" stroke-width="0.8"/>
-  <rect width="11.25" height="59" fill="#D3D3D3"/>
-  </svg>
-  `;
-
+  var height = rw(13.2);
+  if (login) {
+    height = rw(12);
+  }
   return (
     <Container>
-      <Svg height="200">
-        <SvgXml xml={tag} width="100%" />
-      </Svg>
+      {login ? (
+        <LoginTag
+          width={504 * (height / 86)} // Adjust width according to height ratio
+          height={height}
+        />
+      ) : (
+        <GreyTag
+          width={2800 * (height / 400)} // Adjust width according to height ratio
+          height={height}
+        />
+      )}
       <WordContainer>
         <TouchView onPress={handleTouch}>
           {children}
@@ -48,6 +52,7 @@ const GreyNameTag: React.FC<TagProps> = ({
 
 export default GreyNameTag;
 
+/** style */
 const Container = styled.View`
   position: relative;
 `;
@@ -60,14 +65,14 @@ const WordContainer = styled.View`
 
 const TouchView = styled.TouchableOpacity`
   flex: 1;
-  padding-left: ${wp(20)}px;
+  padding-left: ${sp(17)}px;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: ${sp(14)}px;
 `;
 
 const TitleText = styled.Text`
-  font-size: ${fp(16)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  sizePercentage as sp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -14,10 +13,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {SettingStackParamList} from '~/utils/types';
 import notifee, {AndroidNotificationSetting} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
-import {Linking} from 'react-native';
+import {Linking, ScrollView} from 'react-native';
 import {useQueryClient} from 'react-query';
 import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
+import {FONT_NAME} from '~/components/common/style';
+import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
 
 const SettingScreen = () => {
   const queryClient = useQueryClient();
@@ -65,35 +66,37 @@ const SettingScreen = () => {
       <Header title={'설정'} children={null} />
 
       {/* body */}
-      <Contents>
-        {/* 내 프로필 */}
-        <SettingWrapper>
-          <TitleText>내 프로필</TitleText>
-          <ProfileNameTag />
-        </SettingWrapper>
-        {/* 설정 */}
-        <SettingWrapper>
-          <TitleText>설정</TitleText>
-          <GreyNameTag
-            content="좋아요 전시회 목록"
-            handleTouch={() => handleMoveTo('FavoriteList')}
-          />
-          <GreyNameTag
-            content="푸시 알림 설정"
-            handleTouch={() => handleMoveTo('AlarmSetting')}
-          />
-          <GreyNameTag content="도움말" />
-        </SettingWrapper>
-        {/* 회원정보 */}
-        <SettingWrapper>
-          <TitleText>회원정보</TitleText>
-          <GreyNameTag content="로그아웃" handleTouch={handleLogout} />
-          <GreyNameTag
-            content="탈퇴"
-            handleTouch={() => handleMoveTo('LeaveArtDiary')}
-          />
-        </SettingWrapper>
-      </Contents>
+      <ScrollView>
+        <Contents>
+          {/* 내 프로필 */}
+          <SettingWrapper>
+            <TitleText>내 프로필</TitleText>
+            <ProfileNameTag />
+          </SettingWrapper>
+          {/* 설정 */}
+          <SettingWrapper>
+            <TitleText>설정</TitleText>
+            <GreyNameTag
+              content="좋아요 전시회 목록"
+              handleTouch={() => handleMoveTo('FavoriteList')}
+            />
+            <GreyNameTag
+              content="푸시 알림 설정"
+              handleTouch={() => handleMoveTo('AlarmSetting')}
+            />
+            <GreyNameTag content="도움말" />
+          </SettingWrapper>
+          {/* 회원정보 */}
+          <SettingWrapper>
+            <TitleText>회원정보</TitleText>
+            <GreyNameTag content="로그아웃" handleTouch={handleLogout} />
+            <GreyNameTag
+              content="탈퇴"
+              handleTouch={() => handleMoveTo('LeaveArtDiary')}
+            />
+          </SettingWrapper>
+        </Contents>
+      </ScrollView>
     </Container>
   );
 };
@@ -103,26 +106,26 @@ export default SettingScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
+  background-color: ${BACK_COLOR};
 `;
 
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  gap: ${hp(30)}px;
+  padding-left: ${sp(15)}px;
+  padding-right: ${sp(15)}px;
+  padding-top: ${sp(15)}px;
+  padding-bottom: ${sp(15)}px;
+  gap: ${sp(20)}px;
 `;
 
 const SettingWrapper = styled.View`
-  gap: ${hp(10)}px;
+  gap: ${sp(14)}px;
   justify-content: start;
 `;
 
 const TitleText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
