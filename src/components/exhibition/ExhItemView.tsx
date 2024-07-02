@@ -2,8 +2,9 @@ import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
 import {LightStarIcon} from '~/assets/images';
 import {
-  sizePercentage as sp,
   responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
@@ -92,8 +93,8 @@ interface ExhViewProps {
 
 const Wrapper = styled.View`
   flex-direction: row;
-  padding-left: ${sp(14)}px;
-  padding-right: ${sp(14)}px;
+  padding-left: ${wp(3)}px;
+  padding-right: ${wp(3)}px;
 `;
 
 const ExhView = styled.View<ExhViewProps>`
@@ -102,15 +103,15 @@ const ExhView = styled.View<ExhViewProps>`
   border-bottom-width: ${(props: ExhViewProps) =>
     props.noLine ? `0px` : `${ITEM_BORDER_WIDTH}px`};
   border-bottom-color: ${LIGHT_GREY};
-  padding-top: ${sp(14)}px;
-  padding-bottom: ${sp(14)}px;
-  padding-right: ${sp(14)}px;
+  padding-top: ${wp(3)}px;
+  padding-bottom: ${wp(3)}px;
+  padding-right: ${wp(3)}px;
   width: 100%;
 `;
 
 const TouchView = styled.TouchableOpacity`
   flex-direction: row;
-  gap: ${sp(13)}px;
+  gap: ${wp(2)}px;
 `;
 
 interface ExhInfoProps {
@@ -119,36 +120,36 @@ interface ExhInfoProps {
 
 const ExhInfo = styled.View<ExhInfoProps>`
   /* width: 85%; */
-  padding-top: ${sp(14)}px;
-  padding-bottom: ${sp(14)}px;
+  padding-top: ${wp(3)}px;
+  padding-bottom: ${wp(3)}px;
   flex-direction: column;
   justify-content: ${(props: ExhInfoProps) =>
     props.haveRate ? `center` : `space-between`};
   gap: ${(props: ExhInfoProps) =>
-    props.haveRate ? `${sp(14)}px;` : `${sp(12.5)}px;`};
+    props.haveRate ? `${wp(3)}px;` : `${wp(1.5)}px;`};
 `;
 
 const ExhName = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
 const ExhGallery = styled.Text`
-  font-size: ${rf(19.2)}px;
+  font-size: ${rf(14.2)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
 const ExhDate = styled.Text`
-  font-size: ${rf(18.6)}px;
+  font-size: ${rf(12.2)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
 const Poster = styled.Image`
-  width: ${sp(30)}px;
-  height: ${sp(35)}px;
+  width: ${wp(19)}px;
+  height: ${wp(24)}px;
   align-items: center;
 `;
 
@@ -158,7 +159,7 @@ const ExhRateWrapper = styled.View`
 `;
 
 const ExhRate = styled.Text`
-  font-size: ${rf(19.35)}px;
+  font-size: ${rf(15)}px;
   color: ${LIGHT_GREY};
   font-family: ${FONT_NAME};
 `;

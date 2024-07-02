@@ -114,7 +114,7 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${rf(20.3)}px` : `${rf(19.5)}px`};
+    props.main ? `${rf(17)}px` : `${rf(14.5)}px`};
   color: ${(props: SectionNameProps) =>
     props.main ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};

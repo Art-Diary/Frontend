@@ -6,8 +6,9 @@ import {RootStackNavigationProp} from '~/App';
 import {useDeleteLike} from '~/api/queries/exhibition';
 import BackView from '~/components/common/BackView';
 import {
-  sizePercentage as sp,
   responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {BACK_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -150,15 +151,15 @@ const Contents = styled.View`
 `;
 
 const EditText = styled.Text`
-  font-size: ${rf(19.4)}px;
+  font-size: ${rf(15.2)}px;
   color: white;
   background-color: ${MAIN_COLOR};
   font-family: ${FONT_NAME};
-  padding-top: ${sp(11.9)}px;
-  padding-bottom: ${sp(11.9)}px;
-  padding-left: ${sp(13.9)}px;
-  padding-right: ${sp(13.9)}px;
-  border-radius: ${sp(10)}px;
+  padding-top: ${wp(0.9)}px;
+  padding-bottom: ${wp(0.9)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  border-radius: ${wp(1)}px;
 `;
 
 const HeartView = styled.View`

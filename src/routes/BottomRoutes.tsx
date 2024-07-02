@@ -17,7 +17,7 @@ import {
   OnSettingButton,
   OffSettingButton,
 } from '~/assets/images/index';
-import {sizePercentage as sp} from '~/components/common/ResponsiveSize';
+import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MateMainScreen from '~/screens/mate/main/MateMainScreen';
@@ -146,8 +146,8 @@ const footerStyles = StyleSheet.create({
     borderColor: BORDER_COLOR,
     backgroundColor: BACK_COLOR,
     elevation: 0, // 상단 테두리의 음영 효과를 없애기 위해 elevation 속성을 0으로 설정
-    paddingTop: sp(12.5),
-    height: sp(24),
+    paddingTop: hp(0.6),
+    height: hp(7),
     borderTopWidth: DASH_WIDTH, // 테두리 너비
   },
 });

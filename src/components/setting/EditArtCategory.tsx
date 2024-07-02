@@ -59,7 +59,7 @@ const ContentColumn = styled.View`
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(20.3)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
@@ -76,7 +76,7 @@ const pickerStyle = StyleSheet.create({
   },
   artName: {
     paddingLeft: wp(2),
-    fontSize: rf(19.2),
+    fontSize: rf(15),
     color: DEFAULT_TEXT,
     fontFamily: FONT_NAME,
   },

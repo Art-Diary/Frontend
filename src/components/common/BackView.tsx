@@ -4,8 +4,9 @@ import {TouchableOpacity, BackHandler} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
-  sizePercentage as sp,
   responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {BACK_COLOR, BORDER_COLOR, DEFAULT_TEXT} from './colors';
 import {DASH_WIDTH, FONT_NAME} from './style';
@@ -57,10 +58,10 @@ const Container = styled.View`
   flex-direction: row;
   justify-content: space-between; // 양 끝으로 버튼 배치
   align-items: center;
-  padding-left: ${sp(14)}px;
-  padding-right: ${sp(15)}px;
-  padding-top: ${sp(14)}px;
-  padding-bottom: ${sp(14)}px;
+  padding-left: ${wp(3)}px;
+  padding-right: ${wp(4)}px;
+  padding-top: ${wp(3)}px;
+  padding-bottom: ${wp(3)}px;
   width: 100%;
   background-color: ${BACK_COLOR};
 `;
@@ -73,7 +74,7 @@ const DashLine = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: ${rf(20.2)}px;
+  font-size: ${rf(17.8)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
@@ -81,5 +82,5 @@ const Title = styled.Text`
 const LeftSection = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${sp(13)}px;
+  gap: ${wp(2)}px;
 `;

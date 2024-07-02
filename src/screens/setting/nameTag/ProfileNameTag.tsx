@@ -2,7 +2,8 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
 import {useUserInfo} from '~/zustand/auth/auth';
@@ -88,26 +89,26 @@ const WordContainer = styled.View`
 
 const Wrapper = styled.View`
   flex: 1;
-  padding-left: ${sp(17)}px;
-  padding-right: ${sp(19)}px;
+  padding-left: ${wp(6)}px;
+  padding-right: ${wp(8)}px;
   flex-direction: row;
   align-items: center;
-  gap: ${sp(14)}px;
+  gap: ${wp(3)}px;
 `;
 
 const UserInfoRow = styled.View`
   flex-direction: row;
-  gap: ${sp(12)}px;
+  gap: ${wp(1)}px;
 `;
 
 const UserInfoColumn = styled.View`
   flex: 1;
   flex-direction: column;
-  gap: ${sp(11.5)}px;
+  gap: ${hp(0.4)}px;
 `;
 
 const NickName = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   text-align: center;
@@ -117,14 +118,14 @@ const ArtWrapper = styled.View`
 `;
 
 const Art = styled.Text`
-  font-size: ${rf(18.5)}px;
+  font-size: ${rf(11.6)}px;
   color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
   text-align: center;
 `;
 
 const Email = styled.Text`
-  font-size: ${rf(19)}px;
+  font-size: ${rf(13.7)}px;
   color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
   text-decoration-line: underline;
@@ -135,15 +136,15 @@ interface ProfileWrapperProps {
 }
 
 const ProfileWrapper = styled.View<ProfileWrapperProps>`
-  border-radius: ${sp(50)}px;
+  border-radius: ${wp(39)}px;
   align-items: center;
   justify-content: center;
-  width: ${sp(23)}px;
-  height: ${sp(23)}px;
+  width: ${wp(12)}px;
+  height: ${wp(12)}px;
   overflow: hidden;
   border-color: ${MAIN_COLOR};
   border-width: ${(props: ProfileWrapperProps) =>
-    props.isPresent ? `0px` : `1px`};
+    props.isPresent ? `0px` : `${wp(0.3)}px;`};
 `;
 
 const Profile = styled.Image`

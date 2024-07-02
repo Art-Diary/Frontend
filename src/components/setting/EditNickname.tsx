@@ -135,14 +135,14 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${rf(20.3)}px` : `${rf(18.6)}px`};
+    props.main ? `${rf(17)}px` : `${rf(13)}px`};
   color: ${(props: SectionNameProps) => props.color};
   font-family: ${FONT_NAME};
 `;
 
 const Nickname = styled.TextInput`
   flex: 1;
-  font-size: ${rf(20)}px;
+  font-size: ${rf(16)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   border-width: ${wp(0.3)}px;
@@ -158,8 +158,8 @@ interface CheckButtonProps {
 }
 
 const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
-  padding-top: ${hp(1.9)}px;
-  padding-bottom: ${hp(1.9)}px;
+  padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(2)}px;
   padding-left: ${wp(1.5)}px;
   padding-right: ${wp(1.5)}px;
   border-radius: ${wp(2)}px;
@@ -171,6 +171,6 @@ const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
 const CheckText = styled.Text`
   text-align: center;
   color: white;
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   font-family: ${FONT_NAME};
 `;

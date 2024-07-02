@@ -1,8 +1,9 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
-  sizePercentage as sp,
   responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -19,7 +20,6 @@ import {
   MAIN_COLOR,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 const LeaveScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -109,37 +109,37 @@ const Contents = styled.View`
   height: 100%;
   flex-direction: column;
   background-color: ${BACK_COLOR};
-  padding: ${sp(15)}px;
+  padding: ${wp(4)}px;
 `;
 
 const ContentColumn = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  gap: ${sp(15)}px;
+  gap: ${wp(4)}px;
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
 const ReasonView = styled.View`
-  border-width: ${sp(11.3)}px;
+  border-width: ${wp(0.3)}px;
   border-color: ${LIGHT_GREY};
-  border-radius: ${sp(12.5)}px;
+  border-radius: ${wp(1.5)}px;
   height: ${hp(40)}px;
 `;
 
 const ReasonScroll = styled.ScrollView``;
 
 const ReasonInput = styled.TextInput`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  padding-left: ${sp(13.9)}px;
-  padding-right: ${sp(13.9)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
 `;
 
 interface LeaveButtonProps {
@@ -147,12 +147,12 @@ interface LeaveButtonProps {
 }
 
 const LeaveButton = styled.Text<LeaveButtonProps>`
-  padding: ${sp(14.4)}px;
-  border-radius: ${sp(12.5)}px;
+  padding: ${wp(3.4)}px;
+  border-radius: ${wp(1.5)}px;
   text-align: center;
   background-color: ${(props: LeaveButtonProps) =>
     props.leave ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${rf(19.7)}px;
+  font-size: ${rf(16)}px;
   font-family: ${FONT_NAME};
 `;

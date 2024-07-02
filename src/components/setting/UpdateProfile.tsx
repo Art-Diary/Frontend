@@ -228,7 +228,7 @@ const ContentColumn = styled.View`
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(20.3)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
@@ -250,7 +250,7 @@ const BoxView = styled.View<ContentProps>`
 `;
 
 const EmailText = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(16.5)}px;
   color: white;
   font-family: ${FONT_NAME};
   text-align: center;
@@ -267,6 +267,6 @@ const CompleteButton = styled.Text<CompleteButtonProps>`
   background-color: ${(props: CompleteButtonProps) =>
     props.complete ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${rf(19.7)}px;
+  font-size: ${rf(16)}px;
   font-family: ${FONT_NAME};
 `;

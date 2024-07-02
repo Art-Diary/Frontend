@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
-  sizePercentage as sp,
   responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import UpdateAlarm1 from './UpdateAlarm1';
 import UpdateAlarm2 from './UpdateAlarm2';
@@ -46,11 +47,8 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: ${BACK_COLOR};
-  padding-top: ${sp(15)}px;
-  padding-bottom: ${sp(15)}px;
-  padding-left: ${sp(16.5)}px;
-  padding-right: ${sp(16.5)}px;
-  gap: ${sp(15.2)}px;
+  padding: ${wp(5)}px;
+  gap: ${wp(4.2)}px;
 `;
 
 const ContentRow = styled.View`
@@ -60,7 +58,7 @@ const ContentRow = styled.View`
 `;
 
 const AlarmText = styled.Text`
-  font-size: ${rf(19.9)}px;
+  font-size: ${rf(16.8)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

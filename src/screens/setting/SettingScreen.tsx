@@ -3,7 +3,8 @@ import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -112,20 +113,17 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  padding-left: ${sp(15)}px;
-  padding-right: ${sp(15)}px;
-  padding-top: ${sp(15)}px;
-  padding-bottom: ${sp(15)}px;
-  gap: ${sp(20)}px;
+  padding: ${wp(4)}px;
+  gap: ${wp(9)}px;
 `;
 
 const SettingWrapper = styled.View`
-  gap: ${sp(14)}px;
+  gap: ${wp(3)}px;
   justify-content: start;
 `;
 
 const TitleText = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

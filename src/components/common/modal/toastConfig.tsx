@@ -32,7 +32,7 @@ const Contents = styled.View`
 
 const Message = styled.Text`
   text-align: center;
-  font-size: ${rf(19.5)}px;
+  font-size: ${rf(17)}px;
   color: white;
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
