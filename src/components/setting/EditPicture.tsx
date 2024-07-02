@@ -14,7 +14,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
-import {FONT_NAME} from '../common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 
 interface EditNicknameProps {
   imageUri: string | undefined;
@@ -114,7 +114,7 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${rf(17)}px` : `${rf(14.5)}px`};
+    props.main ? `${AREA_FONT_SIZE}px` : `${rf(14.5)}px`};
   color: ${(props: SectionNameProps) =>
     props.main ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};

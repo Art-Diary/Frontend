@@ -19,7 +19,13 @@ import {
   LIGHT_GREY,
   MAIN_COLOR,
 } from '~/components/common/colors';
-import {FONT_NAME} from '~/components/common/style';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
 
 const LeaveScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -120,7 +126,7 @@ const ContentColumn = styled.View`
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
@@ -135,7 +141,7 @@ const ReasonView = styled.View`
 const ReasonScroll = styled.ScrollView``;
 
 const ReasonInput = styled.TextInput`
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2.9)}px;
@@ -147,12 +153,12 @@ interface LeaveButtonProps {
 }
 
 const LeaveButton = styled.Text<LeaveButtonProps>`
-  padding: ${wp(3.4)}px;
-  border-radius: ${wp(1.5)}px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: LeaveButtonProps) =>
     props.leave ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${rf(16)}px;
+  font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
 `;

@@ -24,7 +24,13 @@ import {
   LIGHT_GREY,
   MAIN_COLOR,
 } from '../common/colors';
-import {FONT_NAME} from '../common/style';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '../common/style';
 
 type InitProfile = {
   favoriteArt: string;
@@ -228,7 +234,7 @@ const ContentColumn = styled.View`
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
@@ -261,12 +267,12 @@ interface CompleteButtonProps {
 }
 
 const CompleteButton = styled.Text<CompleteButtonProps>`
-  padding: ${hp(1.8)}px;
-  border-radius: ${wp(1.5)}px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: CompleteButtonProps) =>
     props.complete ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${rf(16)}px;
+  font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
 `;

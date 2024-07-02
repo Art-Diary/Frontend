@@ -8,7 +8,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {useUserInfo} from '~/zustand/auth/auth';
-import {FONT_NAME} from '../common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 
 interface EditNicknameProps {
@@ -135,7 +135,7 @@ interface SectionNameProps {
 
 const SectionName = styled.Text<SectionNameProps>`
   font-size: ${(props: SectionNameProps) =>
-    props.main ? `${rf(17)}px` : `${rf(13)}px`};
+    props.main ? `${AREA_FONT_SIZE}px` : `${rf(13)}px`};
   color: ${(props: SectionNameProps) => props.color};
   font-family: ${FONT_NAME};
 `;
@@ -171,6 +171,6 @@ const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
 const CheckText = styled.Text`
   text-align: center;
   color: white;
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   font-family: ${FONT_NAME};
 `;

@@ -18,7 +18,7 @@ import {Linking, ScrollView} from 'react-native';
 import {useQueryClient} from 'react-query';
 import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
-import {FONT_NAME} from '~/components/common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
 
 const SettingScreen = () => {
@@ -123,7 +123,7 @@ const SettingWrapper = styled.View`
 `;
 
 const TitleText = styled.Text`
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

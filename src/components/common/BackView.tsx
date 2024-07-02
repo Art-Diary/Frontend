@@ -9,7 +9,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {BACK_COLOR, BORDER_COLOR, DEFAULT_TEXT} from './colors';
-import {DASH_WIDTH, FONT_NAME} from './style';
+import {BACK_FONT_SIZE, DASH_WIDTH, FONT_NAME} from './style';
 import {BackButtonIcon} from './icon';
 
 interface BackProps {
@@ -74,7 +74,7 @@ const DashLine = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: ${rf(17.8)}px;
+  font-size: ${BACK_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

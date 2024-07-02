@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {DASH_WIDTH, FONT_NAME} from './style';
+import {DASH_WIDTH, FONT_NAME, HEADER_FONT_SIZE} from './style';
 import {
   BACK_COLOR,
   BORDER_COLOR,
@@ -42,7 +42,7 @@ const Container = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: ${rf(20.5)}px;
+  font-size: ${HEADER_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

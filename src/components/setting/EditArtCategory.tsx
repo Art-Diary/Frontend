@@ -7,7 +7,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {FONT_NAME} from '../common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 
 interface IPicker {
@@ -59,7 +59,7 @@ const ContentColumn = styled.View`
 `;
 
 const SectionName = styled.Text`
-  font-size: ${rf(17)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

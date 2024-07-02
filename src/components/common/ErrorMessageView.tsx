@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {AREA_FONT_SIZE, FONT_NAME} from './style';
+import {BACK_COLOR, MIDDLE_GREY} from './colors';
 
 interface ErrorMessageProps {
   message: string;
@@ -22,14 +25,14 @@ export default ErrorMessageView;
 /** style */
 const Container = styled.View`
   flex: 1;
-  padding-top: 2.5%;
+  padding-top: ${hp(1.9)}px;
   align-items: center;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const Message = styled.Text`
   text-align: center;
-  font-size: ${fp(17)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
