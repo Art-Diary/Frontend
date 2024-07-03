@@ -5,9 +5,9 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import Header from '~/components/common/Header';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import ExhMateList from './ExhMateList';
 import {
@@ -16,6 +16,18 @@ import {
 } from '~/zustand/tabIdentifier';
 import GatheringListRequest from './GatheringListRequest';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_RADIUS,
+  DASH_WIDTH,
+  FONT_NAME,
+} from '~/components/common/style';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -58,8 +70,8 @@ const MateMainScreen = () => {
         <Dot />
         <MateList>
           <ContentText>전시메이트 목록</ContentText>
-          <ExhMateList />
         </MateList>
+        <ExhMateList />
       </Contents>
     </Container>
   );
@@ -75,54 +87,50 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-top: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  background-color: ${BACK_COLOR};
+  padding-top: ${wp(3.3)}px;
+  gap: ${wp(3.3)}px;
 `;
 
 const GatheringList = styled.View`
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  background-color: ${BACK_COLOR};
+  padding-left: ${wp(3.3)}px;
+  padding-right: ${wp(3.3)}px;
+  gap: ${wp(3.3)}px;
 `;
 
 const RowView = styled.View`
   flex-direction: row;
-  padding-bottom: ${hp(3)}px;
-  gap: 10px;
+  gap: ${wp(2.3)}px;
 `;
 
 const ContentText = styled.Text`
-  font-size: ${fp(22)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const Dot = styled.View`
   width: 100%;
-  border-bottom-width: ${wp(1.3)}px;
-  border-bottom-color: #d3d3d3;
+  border-bottom-width: ${DASH_WIDTH}px;
+  border-bottom-color: ${LIGHT_GREY};
   border-style: dashed;
 `;
 
 const MateList = styled.View`
-  flex: 1;
-  flex-direction: column;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  padding-left: ${wp(3.3)}px;
+  padding-right: ${wp(3.3)}px;
 `;
 
 const AddNewItem = styled.TouchableOpacity`
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-width: 1.1px;
-  border-color: #979797;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  height: ${wp(40)}px;
+  border-top-left-radius: ${BUTTON_RADIUS}px;
+  border-top-right-radius: ${BUTTON_RADIUS}px;
+  border-width: ${wp(0.3)}px;
+  border-color: ${MIDDLE_GREY};
+  padding-left: ${wp(4.2)}px;
+  padding-right: ${wp(4.2)}px;
+  height: ${wp(11.2)}px;
   align-items: center;
   justify-content: center;
 `;
@@ -132,7 +140,7 @@ interface NameProps {
 }
 
 const NameText = styled.Text<NameProps>`
-  font-size: ${fp(19)}px;
-  color: ${(props: NameProps) => (props.isAdd ? '#979797' : 'white')};
-  font-family: 'omyu pretty';
+  font-size: ${rf(18)}px;
+  color: ${(props: NameProps) => (props.isAdd ? `${MIDDLE_GREY}` : 'white')};
+  font-family: ${FONT_NAME};
 `;

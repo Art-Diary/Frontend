@@ -2,10 +2,12 @@ import React from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {MAIN_COLOR, MIDDLE_GREY} from '../common/colors';
+import {BUTTON_RADIUS, FONT_NAME} from '../common/style';
 
 interface GatherInfo {
   gatherId: number;
@@ -63,8 +65,7 @@ export default NameList;
 /** style */
 const Container = styled.View`
   flex-direction: row;
-  padding-bottom: ${hp(5)}px;
-  gap: 10px;
+  padding-bottom: ${hp(0.8)}px;
 `;
 
 interface ItemProps {
@@ -72,15 +73,16 @@ interface ItemProps {
 }
 
 const Item = styled.View<ItemProps>`
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  background-color: #ff6f61;
-  padding-left: ${wp(5)}px;
-  padding-right: ${wp(5)}px;
-  height: ${wp(40)}px;
+  border-top-left-radius: ${BUTTON_RADIUS}px;
+  border-top-right-radius: ${BUTTON_RADIUS}px;
+  background-color: ${MAIN_COLOR};
+  padding-left: ${wp(1.4)}px;
+  padding-right: ${wp(1.4)}px;
+  height: ${wp(11.1)}px;
   align-items: center;
   justify-content: center;
-  margin-right: ${(props: ItemProps) => (props.isLast ? '0px' : '10px')};
+  margin-right: ${(props: ItemProps) =>
+    props.isLast ? '0px' : `${wp(1.1)}px`};
 `;
 
 interface NameProps {
@@ -88,7 +90,7 @@ interface NameProps {
 }
 
 const NameText = styled.Text<NameProps>`
-  font-size: ${fp(19)}px;
-  color: ${(props: NameProps) => (props.isAdd ? '#979797' : 'white')};
-  font-family: 'omyu pretty';
+  font-size: ${rf(18)}px;
+  color: ${(props: NameProps) => (props.isAdd ? `${MIDDLE_GREY}` : 'white')};
+  font-family: ${FONT_NAME};
 `;

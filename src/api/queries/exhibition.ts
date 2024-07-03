@@ -114,7 +114,9 @@ export const useAddLike = (exhId: number) => {
       console.log('[AddLikeExhibition] error fetch favorite');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(exhibitionQueryKeys.fetchLikeList());
+      queryClient.invalidateQueries(
+        exhibitionQueryKeys.fetchLikeList().queryKey,
+      );
       console.log('[AddLikeExhibition] success fetch favorite');
     },
   });
@@ -130,7 +132,9 @@ export const useDeleteLike = (favoriteExhsList: number[]) => {
       console.log('[DeleteLikeExhibition] error fetch delete favorite');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(exhibitionQueryKeys.fetchLikeList());
+      queryClient.invalidateQueries(
+        exhibitionQueryKeys.fetchLikeList().queryKey,
+      );
       console.log('[DeleteLikeExhibition] success fetch delete favorite');
     },
   });

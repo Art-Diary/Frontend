@@ -2,17 +2,26 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-  widthPercentage as wp,
-} from '~/components/common/ResponsiveSize';
+import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import {Keyboard, TouchableOpacity} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
 
 const CreateGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -47,7 +56,7 @@ const CreateGatheringScreen = () => {
 
   const onPressCreate = () => {
     if (checkBlankInKeyword(gahteringKeyword)) {
-      showToast('다시 검색해 주세요');
+      showToast('모임 이름을 다시 작성해주세요.');
     } else {
       createGathering();
     }
@@ -63,15 +72,13 @@ const CreateGatheringScreen = () => {
         <ContentWrapper>
           <ContentText>모임 이름</ContentText>
           <WriteView>
-            <WriteScroll>
-              <GatheringInput
-                multiline={false}
-                placeholderTextColor="#D3D3D3"
-                placeholder={'새로운 모임 이름을 작성해주세요.'}
-                onChangeText={onChangeGathering}
-                value={gahteringKeyword}
-              />
-            </WriteScroll>
+            <GatheringInput
+              multiline={false}
+              placeholderTextColor="#D3D3D3"
+              placeholder={'새로운 모임 이름을 작성해주세요.'}
+              onChangeText={onChangeGathering}
+              value={gahteringKeyword}
+            />
           </WriteView>
         </ContentWrapper>
         {/* 모임 만들기 버튼 */}
@@ -94,49 +101,42 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-top: ${wp(12)}px;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-  gap: 10px;
+  background-color: ${BACK_COLOR};
+  padding: ${wp(3.3)}px;
 `;
 
 const ContentWrapper = styled.View`
   flex: 1;
   flex-direction: column;
-  gap: 15px;
+  gap: ${wp(3.8)}px;
 `;
 
 const ContentText = styled.Text`
-  font-size: ${fp(21)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const CreateButton = styled.Text`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
-  background-color: #ff6f61;
+  background-color: ${MAIN_COLOR};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;
 
 const WriteView = styled.View`
-  border-width: 1.5px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
+  border-width: ${wp(0.33)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
 `;
 
-const WriteScroll = styled.ScrollView``;
-
 const GatheringInput = styled.TextInput`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  border-color: #d3d3d3;
-  border-radius: 10px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
 `;

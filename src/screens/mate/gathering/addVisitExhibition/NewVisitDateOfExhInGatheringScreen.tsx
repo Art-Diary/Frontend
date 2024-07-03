@@ -8,6 +8,7 @@ import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';
 import NewVisitDateInGathering from './NewVisitDateInGathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import {BACK_COLOR} from '~/components/common/colors';
 
 const NewVisitDateOfExhInGatheringScreen = () => {
   const isFocused = useIsFocused();
@@ -59,5 +60,5 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
