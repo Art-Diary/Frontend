@@ -249,9 +249,9 @@ const CalHeader = styled.View`
   padding-left: ${wp(0.2)}px;
   padding-top: ${hp(0.5)}px;
   padding-bottom: ${hp(0.5)}px;
-  align-items: flex-start;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const DateWrapper = styled.View`

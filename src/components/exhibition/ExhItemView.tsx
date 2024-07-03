@@ -56,7 +56,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
             resizeMode="contain"
             alt={'이미지 읽기 실패'}
           />
-          <ExhInfo haveRate={haveRate}>
+          <ExhInfo haveRate={haveRate} haveChildren={children}>
             <ExhName numberOfLines={1} ellipsizeMode="tail">
               {exhInfo.exhName}
             </ExhName>
@@ -116,10 +116,11 @@ const TouchView = styled.TouchableOpacity`
 
 interface ExhInfoProps {
   haveRate: boolean;
+  haveChildren: boolean;
 }
 
 const ExhInfo = styled.View<ExhInfoProps>`
-  /* width: 85%; */
+  width: ${(props: ExhInfoProps) => (props.haveChildren ? `66%` : `100%`)};
   padding-top: ${wp(3)}px;
   padding-bottom: ${wp(3)}px;
   flex-direction: column;

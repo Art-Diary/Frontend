@@ -3,9 +3,9 @@ import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {calendarColor} from './calendarColor';
 import {useNavigation} from '@react-navigation/native';
@@ -16,6 +16,12 @@ import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import {IPicker} from './CalendarScreen';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
+import {DEFAULT_TEXT, LIGHT_GREY} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  FONT_NAME,
+  ITEM_BORDER_WIDTH,
+} from '~/components/common/style';
 
 interface CalendarProps {
   selectedDate: string;
@@ -91,9 +97,9 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
           <SelectedDateText>
             {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
           </SelectedDateText>
-          <AddExhButtonWrapper onPress={onPressAddMyExh}>
+          <TouchableOpacity onPress={onPressAddMyExh}>
             <AddMyExhButtonIcon />
-          </AddExhButtonWrapper>
+          </TouchableOpacity>
         </SelectedDateView>
       </SelectedDateWrapper>
       {/* 전시회 리스트 */}
@@ -139,29 +145,29 @@ export default ExhListOfDayInCalendar;
 /** style */
 const SelectedDateWrapper = styled.View`
   width: 100%;
-  padding-top: ${hp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  padding-top: ${wp(2.9)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
 `;
 
 const SelectedDateView = styled.View`
   width: 100%;
   flex-direction: row;
-  border-bottom-color: #d3d3d3;
-  border-bottom-width: ${hp(0.5)}px;
-  padding-bottom: ${hp(5)}px;
+  border-bottom-color: ${LIGHT_GREY};
+  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
+  padding-bottom: ${wp(1.6)}px;
   justify-content: space-between;
   align-items: center;
 `;
 
 const SelectedDateText = styled.Text`
-  font-size: ${fp(17.5)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const GatherWrapper = styled.View`
-  padding-top: ${hp(5)}px;
+  padding-top: ${wp(1.6)}px;
   align-items: center;
 `;
 
@@ -170,19 +176,15 @@ interface GatherNameProps {
 }
 
 const GatherName = styled.Text<GatherNameProps>`
-  font-size: ${fp(13)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  border-width: 1px;
+  font-size: ${rf(12.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  border-width: ${wp(0.3)}px;
   border-color: ${(props: GatherNameProps) => props.color}; //#ff6f61;
-  border-radius: 20px;
+  border-radius: ${wp(10)}px;
   background-color: white;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-`;
-
-const AddExhButtonWrapper = styled.TouchableOpacity`
-  margin: ${wp(2)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  padding-top: ${hp(0.9)}px;
+  padding-bottom: ${hp(0.9)}px;
 `;
