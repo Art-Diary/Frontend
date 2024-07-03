@@ -3,7 +3,6 @@ import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {AddMyExhButton} from '~/assets/images';
 import Header from '~/components/common/Header';
 import {
   heightPercentage as hp,
@@ -16,6 +15,7 @@ import {
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
 import GatheringListRequest from './GatheringListRequest';
+import {AddMyExhButtonIcon} from '~/components/common/icon';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -40,7 +40,7 @@ const MateMainScreen = () => {
       {/* header */}
       <Header title={'전시메이트'}>
         <TouchableOpacity onPress={() => navigation.navigate('AddNewMate')}>
-          <AddMyExhButton />
+          <AddMyExhButtonIcon />
         </TouchableOpacity>
       </Header>
 

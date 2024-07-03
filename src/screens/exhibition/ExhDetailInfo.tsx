@@ -31,7 +31,6 @@ import {
   ReduceContents,
   FillStarSmall,
   EmptyStarSmall,
-  FillStarIcon,
 } from '~/assets/images/index';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
@@ -45,6 +44,7 @@ import {
   BackButtonIcon,
   EmptyHeartIcon,
   FullHeartIcon,
+  FullStarIcon,
 } from '~/components/common/icon';
 
 type RootStackParamList = {
@@ -450,7 +450,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               </TitleTopView>
             ) : (
               <AvgRateView>
-                <FillStarIcon />
+                <FullStarIcon />
                 <AvgTitle> {avgRate}</AvgTitle>
                 <AvgText>
                   {' (기록 '}

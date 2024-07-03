@@ -1,10 +1,17 @@
 import {
+  AddMyExhButton,
+  AvgRateStar,
   BackButton,
   EmptyHeart,
+  EmptyStar,
   FullHeart,
+  FullStar,
+  OptionBar,
   PrivateToggle,
   ProfileUpdate,
   PublicToggle,
+  WriteDiaryButton,
+  WriterPencil,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import ProfileTag from '~/assets/name_tag/profile_tag.svg';
@@ -59,4 +66,39 @@ export const PublicToggleIcon = () => {
 export const PrivateToggleIcon = () => {
   const height = rw(6);
   return <PrivateToggle width={193 * (height / 100)} height={height} />;
+};
+
+export const AddMyExhButtonIcon = () => {
+  const height = rw(6);
+  return <AddMyExhButton width={100 * (height / 101)} height={height} />;
+};
+
+export const WriteDiaryButtonIcon = () => {
+  const height = rw(5);
+  return <WriteDiaryButton width={100 * (height / 100)} height={height} />;
+};
+
+export const WriterIcon = () => {
+  const height = rw(3.9);
+  return <WriterPencil width={100 * (height / 100)} height={height} />;
+};
+
+export const AvgRateStarIcon = () => {
+  const height = rw(3);
+  return <AvgRateStar width={106 * (height / 101)} height={height} />;
+};
+
+export const FullStarIcon = () => {
+  const height = rw(3.5);
+  return <FullStar width={106 * (height / 100)} height={height} />;
+};
+
+export const EmptyStarIcon = () => {
+  const height = rw(3.5);
+  return <EmptyStar width={106 * (height / 101)} height={height} />;
+};
+
+export const OptionBarIcon = () => {
+  const height = rw(6);
+  return <OptionBar width={100 * (height / 100)} height={height} />;
 };

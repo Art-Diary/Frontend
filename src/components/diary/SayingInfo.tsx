@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import {DASH_WIDTH, FONT_NAME} from '../common/style';
+import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 
 interface SayingProps {
   saying: string;
@@ -33,35 +34,35 @@ export default SayingInfo;
 
 /** style */
 const Container = styled.View`
-  flex: 1;
+  /* flex: 1; */
+  height: ${hp(29)}px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding-top: ${hp(12)}px;
-  padding-bottom: ${hp(12)}px;
+  padding-top: ${hp(2)}px;
   border-style: dashed;
-  border-color: #d3d3d3;
-  border-top-width: ${wp(1.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-top-width: ${DASH_WIDTH}px;
 `;
 
 const SayingText = styled.Text`
-  font-size: ${fp(23.5)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(22.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 const SayingContentView = styled.View`
   flex-direction: row;
 `;
 
 const ContentText = styled.Text`
-  font-size: ${fp(18.5)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(18)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const QuoteText = styled.Text`
-  font-size: ${fp(25.8)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(24.5)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

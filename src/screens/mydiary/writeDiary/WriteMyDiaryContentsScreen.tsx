@@ -3,9 +3,8 @@ import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import BackView from '~/components/common/BackView';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
@@ -22,6 +21,13 @@ import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import CustomDiaryEditor from './CustomDiaryEditor';
+import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -200,18 +206,18 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(10)}px;
+  padding-top: ${hp(1.6)}px;
+  padding-bottom: ${hp(1.6)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  gap: ${hp(1.6)}px;
 `;
 
 interface NextButtonProps {
@@ -219,12 +225,12 @@ interface NextButtonProps {
 }
 
 const NextButton = styled.Text<NextButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: NextButtonProps) =>
-    props.moveNext ? '#ff6f61' : '#D3D3D3'};
+    props.moveNext ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;

@@ -2,13 +2,15 @@ import React, {useRef, useState} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import FontFamilyStylesheet from '../../../assets/fonts/stylesheet';
 import {CameraIcon} from '~/assets/images';
 import {showPhoto} from './GetPhoto';
+import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
+import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
 
 /**
  * TODO
@@ -66,7 +68,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
     backgroundColor: '#f6f6f6',
-    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: ${fontColor}; height: 100%;`,
+    contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
   };
 
   return (
@@ -113,7 +115,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
           actions.alignFull,
           // actions.fontSize,
           actions.insertImage,
-          actions.foreColor,
+          // actions.foreColor,
           // actions.undo,
           // actions.redo,
         ]}
@@ -131,21 +133,21 @@ export default CustomDiaryEditor;
 
 const Container = styled.View`
   flex: 1;
-  background-color: #f6f6f6;
-  border-radius: ${wp(5)}px;
-  border-width: ${wp(2)}px;
-  border-color: #d3d3d3;
+  background-color: ${BACK_COLOR};
+  border-radius: ${BUTTON_RADIUS}px;
+  border-width: ${wp(0.5)}px;
+  border-color: ${LIGHT_GREY};
 `;
 interface ColorItemProps {
   color: string;
 }
 
 const FontColorTouch = styled.TouchableOpacity<ColorItemProps>`
-  width: ${wp(20)}px;
-  height: ${wp(20)}px;
+  width: ${wp(5.5)}px;
+  height: ${wp(5.5)}px;
   background-color: ${(props: ColorItemProps) => props.color};
-  border-width: ${wp(1.5)}px;
-  border-color: #d3d3d3;
+  border-width: ${wp(0.5)}px;
+  border-color: ${LIGHT_GREY};
 `;
 
 interface ContentsProps {
@@ -155,13 +157,13 @@ interface ContentsProps {
 const Contents = styled.View<ContentsProps>`
   flex-direction: row;
   width: 100%;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  gap: ${wp(10)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  padding-top: ${hp(1)}px;
+  padding-bottom: ${hp(1)}px;
+  gap: ${wp(2.9)}px;
   background-color: ${(props: ContentsProps) =>
-    props.isOverContent ? `#d3d3d3` : `white`};
+    props.isOverContent ? `${LIGHT_GREY}` : `white`};
 `;
 
 const styles = StyleSheet.create({
@@ -175,19 +177,19 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     // flexGrow: 1,
-    backgroundColor: '#f6f6f6',
+    backgroundColor: BACK_COLOR,
     fontSize: 100,
   },
   toolbar: {
-    backgroundColor: '#f6f6f6', // 툴바 배경색 변경
-    borderColor: '#d3d3d3', // 툴바 경계 색 변경
-    borderTopWidth: 1, // 경계 두께
+    backgroundColor: BACK_COLOR, // 툴바 배경색 변경
+    borderColor: LIGHT_GREY, // 툴바 경계 색 변경
+    borderTopWidth: wp(0.3), // 경계 두께
   },
 });
 
 const FontSizeTouch = styled.TouchableOpacity`
-  background-color: #f6f6f6;
-  border-radius: ${wp(5)}px;
-  border-width: ${wp(2)}px;
-  border-color: #d3d3d3;
+  background-color: ${BACK_COLOR};
+  border-radius: ${BUTTON_RADIUS}px;
+  border-width: ${wp(0.5)}px;
+  border-color: ${LIGHT_GREY};
 `;

@@ -7,6 +7,11 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import ExhItemView from '../exhibition/ExhItemView';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import {
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 
 interface SearchExhResultFrameProps {
   exhList: any[];
@@ -41,6 +46,7 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
         <ErrorMessageView message="검색 결과가 없습니다." />
       ) : (
         <FlatList
+          style={{paddingLeft: wp(2), paddingRight: wp(2)}}
           data={exhList}
           renderItem={({item, index}) => (
             <ExhItemView

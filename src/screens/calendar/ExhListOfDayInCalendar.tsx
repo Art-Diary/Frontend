@@ -7,7 +7,6 @@ import {
   widthPercentage as wp,
   heightPercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {AddMyExhButton} from '~/assets/images';
 import {calendarColor} from './calendarColor';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -15,7 +14,8 @@ import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {JoinDateWithHyphen} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
-import { IPicker } from './CalendarScreen';
+import {IPicker} from './CalendarScreen';
+import {AddMyExhButtonIcon} from '~/components/common/icon';
 
 interface CalendarProps {
   selectedDate: string;
@@ -92,7 +92,7 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
             {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
           </SelectedDateText>
           <AddExhButtonWrapper onPress={onPressAddMyExh}>
-            <AddMyExhButton />
+            <AddMyExhButtonIcon />
           </AddExhButtonWrapper>
         </SelectedDateView>
       </SelectedDateWrapper>

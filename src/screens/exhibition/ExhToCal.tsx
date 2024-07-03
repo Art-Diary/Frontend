@@ -8,7 +8,7 @@ import {
 } from '~/api/queries/mydiary';
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
-import AddVisitDate from '~/components/visitDate/AddVisitDate';
+import AddVisitDate from '~/components/diary/AddVisitDate';
 import {changeDotToHyphen, JoinDateWithDot, dateToString} from '~/utils/Date';
 import {
   heightPercentage as hp,

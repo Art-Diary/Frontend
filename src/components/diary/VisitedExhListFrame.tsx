@@ -1,12 +1,14 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
-import {LightStarIcon} from '~/assets/images/index';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {BORDER_COLOR, DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {FONT_NAME} from '../common/style';
+import {AvgRateStarIcon} from '../common/icon';
 
 interface ExhProps {
   exhList: any[];
@@ -37,7 +39,7 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
             </ExhTitle>
             <AvgRate>
               <AvgRateText>{item.rate.toFixed(1)}</AvgRateText>
-              <LightStarIcon />
+              <AvgRateStarIcon />
             </AvgRate>
           </Contents>
         </RowView>
@@ -55,44 +57,45 @@ interface RowViewProps {
 }
 
 const RowView = styled.TouchableOpacity<RowViewProps>`
-  gap: ${hp(6.5)}px;
+  gap: ${hp(1.5)}px;
   flex-direction: column;
   align-items: center;
-  width: 50%;
-  padding-top: ${hp(15)}px;
-  padding-bottom: ${hp(10)}px;
-  border-color: #d3d3d3;
-  border-right-width: ${hp(0.3)}px; // 테두리 너비
+  width: ${wp(50)}px;
+  padding-top: ${wp(5)}px;
+  padding-bottom: ${wp(4)}px;
+  border-color: ${BORDER_COLOR};
+  border-right-width: ${wp(0.1)}px; // 테두리 너비
   border-bottom-width: ${(props: RowViewProps) =>
-    props.noLine ? `0px` : `${hp(0.3)}px`};
+    props.noLine ? `0px` : `${wp(0.1)}px`};
 `;
 
 const Poster = styled.Image`
-  width: ${wp(115)}px;
-  height: ${hp(129.23)}px;
+  width: ${wp(30)}px;
+  height: ${wp(35)}px;
 `;
 
 const Contents = styled.View`
   flex-direction: column;
   align-items: center;
-  padding-left: ${wp(22)}px;
-  padding-right: ${wp(22)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
 `;
 
 const ExhTitle = styled.Text`
-  font-size: ${fp(17.2)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(16.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
   text-align: center;
 `;
 
 const AvgRate = styled.View`
   flex-direction: row;
   align-items: center;
+  gap: ${wp(0.6)}px;
 `;
 
 const AvgRateText = styled.Text`
-  font-size: ${fp(15.8)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15)}px;
+  color: ${LIGHT_GREY};
+  font-family: ${FONT_NAME};
 `;

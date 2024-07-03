@@ -16,7 +16,6 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {FlatList, TouchableOpacity} from 'react-native';
-import {AddMyExhButton} from '~/assets/images';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
@@ -26,6 +25,7 @@ import {
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useGatheringListParamsActions} from '~/zustand/gathering/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
+import {AddMyExhButtonIcon} from '~/components/common/icon';
 
 interface ExhInfo {
   exhId: number;
@@ -165,7 +165,7 @@ const GatheringInfoScreen = () => {
             <TouchableOpacity
               onPress={pressNewExh}
               disabled={enterGatheringInfo.gatherName === ''}>
-              <AddMyExhButton />
+              <AddMyExhButtonIcon />
             </TouchableOpacity>
           </ExhListTitle>
           {/* 모임이 방문한 전시회 리스트 */}

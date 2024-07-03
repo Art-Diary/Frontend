@@ -6,18 +6,26 @@ import {RootStackNavigationProp} from '~/App';
 import {useAddMyExhVisitDate} from '~/api/queries/mydiary';
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
-import AddVisitDate from '~/components/visitDate/AddVisitDate';
+import AddVisitDate from '~/components/diary/AddVisitDate';
 import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {
   useMySoloMarkedDatesActions,
   useMySoloMarkedDatesInfo,
 } from '~/zustand/mydiary/mySoloMarkedDates';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+} from '~/components/common/colors';
+import {FONT_NAME, ITEM_BORDER_WIDTH} from '~/components/common/style';
 
 interface MarkedType {
   date: string;
@@ -119,22 +127,21 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const BodyView = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  padding-left: ${wp(1.6)}px;
+  padding-top: ${hp(1.6)}px;
+  padding-bottom: ${hp(1.6)}px;
 `;
 
 const BodyText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  font-size: ${rf(16.5)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 interface ForgotProps {
@@ -142,10 +149,10 @@ interface ForgotProps {
 }
 
 const ForgetText = styled.Text<ForgotProps>`
-  font-size: ${fp(17)}px;
-  color: ${(props: ForgotProps) => (props.haveForgot ? '#D3D3D3' : '#ff6f61')};
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  text-decoration-line: underline;
+  font-size: ${rf(16)}px;
+  color: ${(props: ForgotProps) =>
+    props.haveForgot ? `${LIGHT_GREY}` : `${MAIN_COLOR}`};
+  font-family: ${FONT_NAME};
+  border-bottom-color: ${MAIN_COLOR};
+  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
 `;

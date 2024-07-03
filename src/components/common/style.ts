@@ -1,13 +1,12 @@
 import {
-  responseDash as rd,
   heightSizePercentage as hp,
   widthSizePercentage as wp,
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 
-export const DASH_WIDTH: number = rd(0.4);
+export const DASH_WIDTH: number = wp(0.4);
 
-export const ITEM_BORDER_WIDTH: number = rd(0.21);
+export const ITEM_BORDER_WIDTH: number = wp(0.21);
 
 export const FONT_NAME = 'omyu pretty';
 

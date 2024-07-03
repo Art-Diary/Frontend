@@ -6,10 +6,7 @@ import {
   useDeleteMyDiaryActions,
   useDeleteMyDiaryInfo,
 } from '~/zustand/mydiary/mydiary';
-import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
+import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useQueryClient} from 'react-query';
@@ -17,23 +14,38 @@ import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {gatheringQueryKeys} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
+import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
+
+type DeleteInfo = {
+  exhId: number;
+  diaryId: number;
+  userExhId: number;
+};
 
 interface DeleteDiaryModalProps {
+  deleteInfo: DeleteInfo;
   handleCloseModal: () => void;
   message: string;
-  handleIsDeleted: () => void;
+  handleSuccessDelete: () => void;
 }
 
 const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
+  deleteInfo,
   handleCloseModal,
   message,
-  handleIsDeleted,
+  handleSuccessDelete,
 }) => {
-  const queryClient = useQueryClient();
-  const {enterGatheringInfo} = useEnterGatheringInfo();
-  const tabIdentifierInfo = useTabIdentifierInfo();
-  const exhFromCalendarInfo = useExhFromCalendarInfo();
-  const deletemyDiaryInfo = useDeleteMyDiaryInfo();
+  // const queryClient = useQueryClient();
+  // const {enterGatheringInfo} = useEnterGatheringInfo();
+  // const tabIdentifierInfo = useTabIdentifierInfo();
+  // const exhFromCalendarInfo = useExhFromCalendarInfo();
+  // const deletemyDiaryInfo = useDeleteMyDiaryInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {
     mutate: deleteMyDiary,
@@ -41,9 +53,9 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
     isError,
     isSuccess,
   } = useDeleteMyDiary(
-    deletemyDiaryInfo.exhId,
-    deletemyDiaryInfo.diaryId,
-    deletemyDiaryInfo.userExhId ? true : false, // 모임 or 혼자
+    deleteInfo.exhId,
+    deleteInfo.diaryId,
+    deleteInfo.userExhId ? true : false, // 모임 or 혼자
   );
 
   useEffect(() => {
@@ -55,30 +67,32 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       updateforDeleteMyDiary(-1, -1, -1);
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
-      handleIsDeleted();
+      handleSuccessDelete();
 
-      if (tabIdentifierInfo.tab === 'mydiary') {
-        queryClient.invalidateQueries(
-          mydiaryQueryKeys.fetchMyDiaryList(deletemyDiaryInfo.exhId),
-        );
-        queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
-      } else if (tabIdentifierInfo.tab === 'gathering') {
-        queryClient.invalidateQueries(
-          gatheringQueryKeys.fetchGatheringDiaryList(
-            enterGatheringInfo.gatherId,
-            deletemyDiaryInfo.exhId,
-          ),
-        );
-      } else if (tabIdentifierInfo.tab === 'calendar') {
-        queryClient.invalidateQueries(
-          mydiaryQueryKeys.fetchMyDiaryListInCalendar(
-            deletemyDiaryInfo.exhId,
-            exhFromCalendarInfo.forget,
-            exhFromCalendarInfo.visitDate,
-            exhFromCalendarInfo.gatherId,
-          ),
-        );
-      }
+      // if (tabIdentifierInfo.tab === 'mydiary') {
+      //   // queryClient.invalidateQueries(
+      //   //   mydiaryQueryKeys.fetchMyDiaryList(deletemyDiaryInfo.exhId),
+      //   // );
+      //   // queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
+      // } else if (tabIdentifierInfo.tab === 'gathering') {
+      //   console.log('??');
+      //   // TODO 업데이트 안됨.
+      //   queryClient.removeQueries(
+      //     gatheringQueryKeys.fetchGatheringDiaryList(
+      //       enterGatheringInfo.gatherId,
+      //       deletemyDiaryInfo.exhId,
+      //     ),
+      //   );
+      // } else if (tabIdentifierInfo.tab === 'calendar') {
+      //   queryClient.invalidateQueries(
+      //     mydiaryQueryKeys.fetchMyDiaryListInCalendar(
+      //       deletemyDiaryInfo.exhId,
+      //       exhFromCalendarInfo.forget,
+      //       exhFromCalendarInfo.visitDate,
+      //       exhFromCalendarInfo.gatherId,
+      //     ),
+      //   );
+      // }
     }
   }, [isError, isSuccess, handleCloseModal]);
 
@@ -97,21 +111,18 @@ export default DeleteDiaryModal;
 /** style */
 const Message = styled.Text`
   text-align: center;
-  font-size: ${fp(17.9)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(45)}px;
-  padding-bottom: ${hp(45)}px;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding: ${hp(8)}px;
 `;
 
 const DeleteButton = styled.Text`
   text-align: center;
-  margin-top: ${hp(14)}px;
-  font-size: ${fp(17.9)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
   color: white;
-  background-color: #ff6f61;
-  padding-top: ${hp(9.5)}px;
-  padding-bottom: ${hp(9.5)}px;
-  border-radius: 5px;
+  background-color: ${MAIN_COLOR};
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
 `;

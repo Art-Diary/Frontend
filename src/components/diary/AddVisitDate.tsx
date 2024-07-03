@@ -3,10 +3,18 @@ import {TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '../common/style';
+import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 
 interface MarkedType {
   date: string;
@@ -75,44 +83,41 @@ const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(13)}px;
-  padding-right: ${wp(13)}px;
+  padding-bottom: ${hp(1)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
 `;
 
 const GroupText = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(2)}px;
-  padding-bottom: ${hp(10)}px;
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-bottom: ${hp(1.8)}px;
 `;
 
 const BodyView = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  padding-top: ${hp(2.5)}px;
+  padding-bottom: ${hp(1)}px;
 `;
 
 const BodyText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  font-size: ${rf(16.5)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 interface NextButtonProps {
   isAlready: boolean;
 }
 const NextButton = styled.Text<NextButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: NextButtonProps) =>
-    props.isAlready ? '#D3D3D3' : '#ff6f61'};
+    props.isAlready ? `${LIGHT_GREY}` : `${MAIN_COLOR}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;

@@ -1,12 +1,14 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot} from '~/utils/Date';
 import {PrivateToggleIcon, PublicToggleIcon} from '../common/icon';
+import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
+import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
 
 interface OtherProps {
   userExhId: number | null;
@@ -54,37 +56,37 @@ const Container = styled.View`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 20%;
-  padding-bottom: ${hp(26.5)}px;
+  height: ${hp(14)}px;
+  padding-bottom: ${hp(4.6)}px;
 `;
 
 const ContentView = styled.View`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  gap: ${wp(13)}px;
+  gap: ${wp(3)}px;
 `;
 
 const LineView = styled.View`
-  width: ${wp(0.55)}px;
-  height: 100%;
-  background-color: #d3d3d3;
+  width: ${ITEM_BORDER_WIDTH}px;
+  height: ${hp(10)}px;
+  background-color: ${LIGHT_GREY};
 `;
 
 const CategoryText = styled.Text`
-  font-size: ${fp(15.8)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
 const WithText = styled.Text`
-  font-size: ${fp(19.5)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(17)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const VisitText = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(17)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

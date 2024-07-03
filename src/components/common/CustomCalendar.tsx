@@ -3,11 +3,13 @@ import {TouchableOpacity} from 'react-native';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {dateToString} from '~/utils/Date';
+import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
+import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
 
 interface MarkedType {
   date: string;
@@ -177,8 +179,8 @@ const CustomCalendar: React.FC<CalendarProps> = ({
                             itemDate === selectedDate && markedDates
                               ? 'white'
                               : markedDates
-                              ? color
-                              : 'white'
+                                ? color
+                                : 'white'
                           }
                         />
                       );
@@ -233,20 +235,20 @@ export default CustomCalendar;
 /** style */
 const Container = styled.View`
   flex-direction: column;
-  background-color: white;
-  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
+  border-radius: ${wp(2)}px;
   width: 100%;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(13)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(7.36)}px;
+  padding-top: ${hp(1.8)}px;
+  padding-bottom: ${hp(2.2)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  gap: ${hp(1.5)}px;
 `;
 
 const CalHeader = styled.View`
-  padding-left: ${wp(1)}px;
-  padding-top: ${hp(3)}px;
-  padding-bottom: ${hp(3)}px;
+  padding-left: ${wp(0.2)}px;
+  padding-top: ${hp(0.5)}px;
+  padding-bottom: ${hp(0.5)}px;
   align-items: flex-start;
   flex-direction: row;
   justify-content: space-between;
@@ -255,43 +257,42 @@ const CalHeader = styled.View`
 const DateWrapper = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: 10px;
+  gap: ${wp(2.5)}px;
 `;
 
 const ArrowLabel = styled.Text`
-  padding-left: 3px;
-  padding-right: 3px;
-  font-size: ${fp(16.56)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  padding-left: ${wp(1)}px;
+  padding-right: ${wp(1)}px;
+  font-size: ${rf(15.8)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const MonthLabel = styled.Text`
-  font-size: ${fp(16.56)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15.8)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const CalendarView = styled.View`
   justify-content: space-between;
-  height: ${hp(206.08)}px;
+  height: ${hp(38)}px;
 `;
 
 const WeekDayView = styled.View`
   flex-direction: row;
-  height: ${hp(25)}px;
   justify-content: space-between;
   align-items: center;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  padding-bottom: ${hp(5)}px;
+  padding-left: ${wp(4.3)}px;
+  padding-right: ${wp(4.3)}px;
+  padding-top: ${hp(0.5)}px;
+  padding-bottom: ${hp(1.9)}px;
   border-color: #e9e9e9;
-  border-bottom-width: 1px;
+  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
 `;
 
 const CellTouchable = styled.TouchableOpacity`
   flex: 1;
-  /* height: ${hp(25)}px; */
   flex-direction: column;
   align-items: center;
 `;
@@ -303,9 +304,10 @@ interface CircleProps {
 }
 
 const CellText = styled.Text<CircleProps>`
-  color: ${(props: CircleProps) => (props.isTouched ? 'white' : '#3c4045')};
-  font-size: ${fp(14.25)}px;
-  font-family: 'omyu pretty';
+  color: ${(props: CircleProps) =>
+    props.isTouched ? 'white' : `${DEFAULT_TEXT}`};
+  font-size: ${rf(13)}px;
+  font-family: ${FONT_NAME};
 `;
 
 const MarkedDotWrapper = styled.View`
@@ -315,21 +317,21 @@ const MarkedDotWrapper = styled.View`
 
 const MarkedDot = styled.View<CircleProps>`
   background-color: ${(props: CircleProps) => props.color};
-  width: 5px;
-  height: 5px;
-  border-radius: 50px;
+  width: ${wp(0.9)}px;
+  height: ${wp(0.9)}px;
+  border-radius: ${wp(50)}px;
 `;
 
 const Circle = styled.View<CircleProps>`
-  gap: 3px;
-  width: ${wp(31.28)}px;
-  height: ${wp(31.28)}px;
+  gap: ${wp(0.3)}px;
+  width: ${wp(7.5)}px;
+  height: ${wp(7.5)}px;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
-  border-width: ${wp(0.92)}px;
+  border-radius: ${wp(50)}px;
+  border-width: ${wp(0.3)}px;
   border-color: ${(props: CircleProps) =>
-    !props.isTouched && props.isToday ? '#ff6f61' : 'white'};
+    !props.isTouched && props.isToday ? `${MAIN_COLOR}` : 'white'};
   background-color: ${(props: CircleProps) =>
-    props.isTouched ? '#ff6f61' : 'white'};
+    props.isTouched ? `${MAIN_COLOR}` : 'white'};
 `;
