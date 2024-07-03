@@ -3,14 +3,16 @@ import {StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ChooseVisitDateList from './ChooseVisitDateList';
 import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 import FetchMyStoredDateListOfExh from './FetchMyStoredDateListOfExh';
+import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 
 interface IPicker {
   label: string;
@@ -79,9 +81,9 @@ const ChooseVisitDateScreen = () => {
             writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
               ? '개인'
               : writeMyDiaryInfo.gatherExhId ===
-                dateInfoList[dIndex].gatherExhId
-              ? storedDateListOfExh[index].gatherName
-              : '--';
+                  dateInfoList[dIndex].gatherExhId
+                ? storedDateListOfExh[index].gatherName
+                : '--';
           setValue(index);
           gatherNameList.push({
             label: labelName,
@@ -141,21 +143,23 @@ const ChooseVisitDateScreen = () => {
       />
       <ContentsContainer>
         {/* 모임선택 */}
-        <GroupText>모임 선택</GroupText>
-        <DropDownPicker
-          style={{
-            ...pickerStyle.box,
-            backgroundColor: canNotOpen ? '#D3D3D3' : '#f6f6f6',
-          }}
-          textStyle={pickerStyle.gatherName}
-          open={canNotOpen ? false : open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          placeholder="모임을 선택해 주세요."
-        />
+        <SelectGroup>
+          <GroupText>모임 선택</GroupText>
+          <DropDownPicker
+            style={{
+              ...pickerStyle.box,
+              backgroundColor: canNotOpen ? '#D3D3D3' : '#f6f6f6',
+            }}
+            textStyle={pickerStyle.gatherName}
+            open={canNotOpen ? false : open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder="모임을 선택해 주세요."
+          />
+        </SelectGroup>
         {/* 날짜 목록 */}
         <ChooseVisitDateList
           myStoredDateListOfExh={storedDateListOfExh}
@@ -173,25 +177,27 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
+  padding-bottom: ${hp(1)}px;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
+  gap: ${hp(3)}px;
+`;
+
+const SelectGroup = styled.View`
+  gap: ${hp(1.5)}px;
 `;
 
 const GroupText = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const pickerStyle = StyleSheet.create({
@@ -199,13 +205,14 @@ const pickerStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#ff6f61',
+    height: wp(8),
+    borderRadius: wp(1),
+    borderWidth: wp(0.25),
+    borderColor: MAIN_COLOR,
   },
   gatherName: {
-    fontSize: 19,
-    color: '#3c4045',
-    fontFamily: 'omyu pretty',
+    fontSize: rf(14.5),
+    color: DEFAULT_TEXT,
+    fontFamily: FONT_NAME,
   },
 });

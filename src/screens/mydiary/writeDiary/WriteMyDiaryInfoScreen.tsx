@@ -4,17 +4,11 @@ import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import BackView from '~/components/common/BackView';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {
-  CameraIcon,
-  EmptyStarIcon,
-  FillStarIcon,
-  PrivateToggle,
-  PublicToggle,
-} from '~/assets/images';
+import {CameraIcon} from '~/assets/images';
 import {
   Asset,
   ImageLibraryOptions,
@@ -27,6 +21,27 @@ import {
 } from '~/zustand/mydiary/writeMyDiary';
 import {RootStackNavigationProp} from '~/App';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {
+  EmptyStarIcon,
+  FullStarIcon,
+  PrivateToggleIcon,
+  PublicToggleIcon,
+} from '~/components/common/icon';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+  ITEM_BORDER_WIDTH,
+} from '~/components/common/style';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
 
 const WriteMyDiaryInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -148,26 +163,26 @@ const WriteMyDiaryInfoScreen = () => {
             <SectionName>별점</SectionName>
             <StarList>
               <TouchableOpacity onPress={() => changeStarNum(1)}>
-                {starNum >= 1 ? <FillStarIcon /> : <EmptyStarIcon />}
+                {starNum >= 1 ? <FullStarIcon /> : <EmptyStarIcon />}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => changeStarNum(2)}>
-                {starNum >= 2 ? <FillStarIcon /> : <EmptyStarIcon />}
+                {starNum >= 2 ? <FullStarIcon /> : <EmptyStarIcon />}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => changeStarNum(3)}>
-                {starNum >= 3 ? <FillStarIcon /> : <EmptyStarIcon />}
+                {starNum >= 3 ? <FullStarIcon /> : <EmptyStarIcon />}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => changeStarNum(4)}>
-                {starNum >= 4 ? <FillStarIcon /> : <EmptyStarIcon />}
+                {starNum >= 4 ? <FullStarIcon /> : <EmptyStarIcon />}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => changeStarNum(5)}>
-                {starNum >= 5 ? <FillStarIcon /> : <EmptyStarIcon />}
+                {starNum >= 5 ? <FullStarIcon /> : <EmptyStarIcon />}
               </TouchableOpacity>
             </StarList>
           </HalfSection>
           <HalfSection>
             <SectionName>공개 여부</SectionName>
             <TouchableOpacity onPress={changeToggle}>
-              {isPublic ? <PublicToggle /> : <PrivateToggle />}
+              {isPublic ? <PublicToggleIcon /> : <PrivateToggleIcon />}
             </TouchableOpacity>
           </HalfSection>
         </SecondSection>
@@ -176,7 +191,7 @@ const WriteMyDiaryInfoScreen = () => {
           <WriteSayingSection>
             <SectionName>"</SectionName>
             <WriteSaying
-              placeholderTextColor="#D3D3D3"
+              placeholderTextColor={LIGHT_GREY}
               placeholder={'한마디'}
               value={sayingKeyword}
               onChangeText={onChangeSaying}
@@ -232,56 +247,53 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(10)}px;
+  padding-top: ${hp(1.6)}px;
+  padding-bottom: ${hp(1.6)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  gap: ${hp(1.6)}px;
 `;
 
 const WriteTitle = styled.TextInput`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  font-size: ${rf(16)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  border-width: ${ITEM_BORDER_WIDTH}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
 `;
 
 const SecondSection = styled.View`
   width: 100%;
   flex-direction: row;
-  gap: ${wp(10)}px;
+  gap: ${wp(2.9)}px;
 `;
 
 const HalfSection = styled.View`
   flex: 1;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
+  border-width: ${ITEM_BORDER_WIDTH}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
   width: 50%;
-  padding-top: ${wp(10)}px;
-  padding-bottom: ${wp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
+  padding: ${wp(2.9)}px;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
 `;
 
 const SectionName = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
 const StarList = styled.View`
@@ -291,15 +303,12 @@ const StarList = styled.View`
 
 const SayingSection = styled.View`
   flex-direction: column;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
+  border-width: ${ITEM_BORDER_WIDTH}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
-  padding-top: ${wp(10)}px;
-  padding-bottom: ${wp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(10)}px;
+  padding: ${wp(2.9)}px;
+  gap: ${hp(1.6)}px;
 `;
 
 const WriteSayingSection = styled.View`
@@ -307,23 +316,20 @@ const WriteSayingSection = styled.View`
 `;
 
 const WriteSaying = styled.TextInput`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(16)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const ThumbnailSection = styled.View`
   flex: 1;
   flex-direction: column;
-  border-width: 1px;
-  border-color: #d3d3d3;
-  border-radius: 5px;
+  border-width: ${ITEM_BORDER_WIDTH}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
-  padding-top: ${wp(10)}px;
-  padding-bottom: ${wp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  gap: ${hp(10)}px;
+  padding: ${wp(2.9)}px;
+  gap: ${hp(1.6)}px;
 `;
 
 const PutThumbnail = styled.View`
@@ -338,12 +344,12 @@ interface NextButtonProps {
 }
 
 const NextButton = styled.Text<NextButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: NextButtonProps) =>
-    props.moveNext ? '#ff6f61' : '#D3D3D3'};
+    props.moveNext ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;

@@ -2,9 +2,12 @@ import React from 'react';
 import {Modal, ActivityIndicator} from 'react-native';
 import styled from 'styled-components/native';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {DEFAULT_TEXT} from '../colors';
+import {FONT_NAME} from '../style';
 
 interface LoadingModalProps {
   message: string;
@@ -35,17 +38,17 @@ const Container = styled.View`
 
 const Content = styled.View`
   background-color: white;
-  border-radius: 20px;
+  border-radius: ${wp(4.5)}px;
   justify-content: center;
   align-items: center;
-  width: 70%;
-  height: 20%;
-  gap: 5px;
+  width: ${wp(65)}px;
+  height: ${hp(20)}px;
+  gap: ${wp(3)}px;
 `;
 
 const Message = styled.Text`
   text-align: center;
-  font-size: ${fp(17.9)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(17)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

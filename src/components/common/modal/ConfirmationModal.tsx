@@ -1,7 +1,10 @@
 import React, {ReactNode} from 'react';
 import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
-import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
+import {
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 
 interface ConfirmationModalProps {
   handleCloseModal: () => void;
@@ -34,13 +37,14 @@ export default ConfirmationModal;
 const Container = styled.View`
   justify-content: flex-end;
   align-items: center;
+  justify-content: center;
   background-color: rgba(0, 0, 0, 0.3);
 `;
 
 const Contents = styled.View`
   background-color: white;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
-  padding: ${hp(14)}px;
+  border-top-left-radius: ${wp(5)}px;
+  border-top-right-radius: ${wp(5)}px;
+  padding: ${hp(2.4)}px;
   width: 100%;
 `;

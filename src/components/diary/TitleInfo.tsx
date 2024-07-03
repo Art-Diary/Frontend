@@ -1,27 +1,21 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {fontPercentage as fp} from '~/components/common/ResponsiveSize';
-import UpdateDelete from './UpdateDelete';
+import {
+  responseFont as rf,
+  fontPercentage as fp,
+} from '~/components/common/ResponsiveSize';
+import {DEFAULT_TEXT} from '../common/colors';
+import {FONT_NAME} from '../common/style';
 
 interface TitleProps {
   diaryInfo: any;
-  handleIsDeleted: () => void;
-  isMyDiary: boolean;
 }
 
-const TitleInfo: React.FC<TitleProps> = ({
-  diaryInfo,
-  handleIsDeleted,
-  isMyDiary,
-}) => {
+const TitleInfo: React.FC<TitleProps> = ({diaryInfo}) => {
   return (
     <Container>
       {/* 기록 제목 */}
       <TitleText>{diaryInfo.title}</TitleText>
-      {/* 수정 | 삭제 */}
-      {isMyDiary && (
-        <UpdateDelete diaryInfo={diaryInfo} handleIsDeleted={handleIsDeleted} />
-      )}
     </Container>
   );
 };
@@ -37,7 +31,7 @@ const Container = styled.View`
 `;
 
 const TitleText = styled.Text`
-  font-size: ${fp(25.8)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(24.3)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

@@ -10,12 +10,28 @@ type FetchInfo = {
   exhId: number;
 };
 
+type DeleteActions = {
+  handleShowOptionBar: (show: boolean) => void; // 내가 작성한 기록만 옵션바가 보이도록
+  isDeleteModalOpen: boolean; // 옵션 모달에서 삭제 눌렀는지
+  handleCloseDeleteModal: () => void; // 삭제 모달 닫기
+  handleCloseOptionModal: () => void; // 옵션 모달 닫기
+};
+
+type UpdateActions = {
+  isUpdateClicked: boolean;
+  handleCloseOptionModal: () => void; // 옵션 모달 닫기
+};
+
 interface FetchGatheringDiaryListProps {
   fetchInfo: FetchInfo;
+  deleteActions: DeleteActions;
+  updateActions: UpdateActions;
 }
 
 const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
   fetchInfo,
+  deleteActions,
+  updateActions,
 }) => {
   const isFocused = useIsFocused();
   const {
@@ -50,7 +66,11 @@ const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
       {gatheringDiaryList.length === 0 ? (
         <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
       ) : (
-        <DiaryList diaryList={gatheringDiaryList} />
+        <DiaryList
+          diaryList={gatheringDiaryList}
+          deleteActions={deleteActions}
+          updateActions={updateActions}
+        />
       )}
     </>
   );

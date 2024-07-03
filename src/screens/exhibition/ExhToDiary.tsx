@@ -1,14 +1,27 @@
-import React, {ReactNode, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import {RouteProp, useNavigation} from '@react-navigation/native';
-import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
+import {RouteProp} from '@react-navigation/native';
 import DiaryList from '~/components/diary/DiaryList';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import BackView from '~/components/common/BackView';
+import {TouchableOpacity} from 'react-native';
+import {OptionBarIcon} from '~/components/common/icon';
+import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
+import {
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
+import {
+  BORDER_COLOR,
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+} from '~/components/common/colors';
+import {
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
+} from '~/components/common/ResponsiveSize';
 
 type RootStackParamList = {
   ExhToDiary: {diary: any};
@@ -22,6 +35,10 @@ interface Props {
 
 const ExhToDiary: React.FC<Props> = ({route}) => {
   //  const navigation = useNavigation<RootStackNavigationProp>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isUpdateClicked, setIsUpdateClicked] = useState<boolean>(false);
+  const [showOptionBar, setShowOptionBar] = useState(false);
 
   const {diary} = route.params;
   const [diaryArr, setDiaryArr] = useState<any[]>([diary]);
@@ -32,11 +49,52 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
     );
   }
 
+  const clickDeletePage = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const clickUpdatePage = () => {
+    setIsUpdateClicked(true);
+  };
+
   return (
     <Container>
-      <BackView line={false} children={null} />
+      <BackView line={false}>
+        {showOptionBar && (
+          <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <OptionBarIcon />
+          </TouchableOpacity>
+        )}
+      </BackView>
 
-      <DiaryList diaryList={diaryArr}></DiaryList>
+      <DiaryList
+        diaryList={diaryArr}
+        deleteActions={{
+          handleShowOptionBar: setShowOptionBar,
+          isDeleteModalOpen: isDeleteModalOpen,
+          handleCloseDeleteModal: () => setIsDeleteModalOpen(false),
+          handleCloseOptionModal: () => setIsModalOpen(false),
+        }}
+        updateActions={{
+          isUpdateClicked: isUpdateClicked,
+          handleCloseOptionModal: () => setIsModalOpen(false),
+        }}
+      />
+      {/* TODO [수정 | 삭제] 바로 반영 되도록 수정 */}
+      {isModalOpen && (
+        <ConfirmationModal handleCloseModal={() => setIsModalOpen(false)}>
+          <TouchableOpacity onPress={clickUpdatePage}>
+            <Message>수정</Message>
+          </TouchableOpacity>
+          <SeperateLine />
+          <TouchableOpacity onPress={clickDeletePage}>
+            <Message>삭제</Message>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <DeleteButton>취소</DeleteButton>
+          </TouchableOpacity>
+        </ConfirmationModal>
+      )}
     </Container>
   );
 };
@@ -54,8 +112,29 @@ const Container = styled.View`
   align-items: center; */
 `;
 
-const Title = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+const SeperateLine = styled.View`
+  flex-direction: row;
+  align-items: center;
+  border-width: ${wp(0.05)}px;
+  border-color: ${BORDER_COLOR};
+  margin-left: ${wp(2)}px;
+  margin-right: ${wp(2)}px;
+`;
+
+const Message = styled.Text`
+  text-align: center;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding: ${hp(3.3)}px;
+`;
+
+const DeleteButton = styled.Text`
+  text-align: center;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
+  color: white;
+  background-color: ${MAIN_COLOR};
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
 `;

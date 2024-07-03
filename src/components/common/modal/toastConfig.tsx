@@ -27,7 +27,7 @@ export const toastConfig: ToastConfig = {
 
 const Contents = styled.View`
   background-color: ${MIDDLE_GREY};
-  border-radius: ${wp(5)}px;
+  border-radius: ${wp(50)}px;
 `;
 
 const Message = styled.Text`
@@ -35,8 +35,8 @@ const Message = styled.Text`
   font-size: ${rf(17)}px;
   color: white;
   font-family: ${FONT_NAME};
-  padding-top: ${hp(1)}px;
-  padding-bottom: ${hp(1)}px;
+  padding-top: ${hp(1.5)}px;
+  padding-bottom: ${hp(1.5)}px;
   padding-left: ${wp(5)}px;
   padding-right: ${wp(5)}px;
 `;

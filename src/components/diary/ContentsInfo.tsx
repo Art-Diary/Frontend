@@ -2,23 +2,17 @@ import React from 'react';
 import {RichEditor} from 'react-native-pell-rich-editor';
 import styled from 'styled-components/native';
 import FontFamilyStylesheet from '~/assets/fonts/stylesheet';
-import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
-import {JoinDateWithDot} from '~/utils/Date';
+import {DEFAULT_TEXT} from '../common/colors';
 
 interface ContentsProps {
   contents: string;
-  writeDate: number[];
 }
 
-const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
+const ContentsInfo: React.FC<ContentsProps> = ({contents}) => {
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
     backgroundColor: 'white',
-    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: #3c4045; height: 100%;`,
+    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: ${DEFAULT_TEXT}; height: 100%;`,
   };
 
   return (
@@ -33,12 +27,6 @@ const ContentsInfo: React.FC<ContentsProps> = ({contents, writeDate}) => {
           />
         </ContentScroll>
       </ContentWrapper>
-
-      {/* 작성 날짜 */}
-      <WriteDateView>
-        <WriteDateText>작성날짜</WriteDateText>
-        <WriteDateText>{JoinDateWithDot(writeDate)}</WriteDateText>
-      </WriteDateView>
     </Container>
   );
 };
@@ -50,31 +38,14 @@ const Container = styled.View`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-bottom: ${hp(15.7)}px;
 `;
 
 const ContentWrapper = styled.View`
   height: 100%;
   width: 100%;
-  padding-bottom: ${hp(10)}px;
 `;
 
 const ContentScroll = styled.ScrollView`
   height: 100%;
   width: 100%;
-`;
-
-const WriteDateView = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding-left: ${wp(20)}px;
-  padding-right: ${wp(20)}px;
-`;
-
-const WriteDateText = styled.Text`
-  font-size: ${fp(16.8)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
 `;

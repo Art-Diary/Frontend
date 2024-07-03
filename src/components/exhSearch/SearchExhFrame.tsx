@@ -3,10 +3,12 @@ import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {SearchIcon} from '~/assets/images';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {FONT_NAME} from '../common/style';
+import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -57,20 +59,19 @@ const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-bottom: ${hp(5)}px;
 `;
 
 const SearchContainer = styled.View`
   flex-direction: column;
-  padding-top: ${hp(7)}px;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(18)}px;
-  padding-right: ${wp(18)}px;
+  padding-top: ${hp(1.2)}px;
+  padding-bottom: ${hp(0.8)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
 `;
 
 const UnderLine = styled.View`
-  border-bottom-width: 1px;
-  border-color: #ff6f61;
+  border-bottom-width: ${wp(0.3)}px;
+  border-color: ${MAIN_COLOR};
 `;
 
 const SearchView = styled.View`
@@ -81,7 +82,7 @@ const SearchView = styled.View`
 
 const SearchWord = styled.TextInput`
   flex: 1;
-  font-size: ${fp(16)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15.2)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

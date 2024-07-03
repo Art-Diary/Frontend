@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
-import AddVisitDate from '~/components/visitDate/AddVisitDate';
+import AddVisitDate from '~/components/diary/AddVisitDate';
 import {JoinDateWithDot, changeDotToHyphen, dateToString} from '~/utils/Date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';

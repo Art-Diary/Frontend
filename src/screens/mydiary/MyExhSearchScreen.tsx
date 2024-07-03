@@ -12,6 +12,7 @@ import {
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useQueryClient} from 'react-query';
 import SearchExhResult from '~/components/exhSearch/SearchExhResult';
+import {BACK_COLOR} from '~/components/common/colors';
 
 const MyExhSearchScreen = () => {
   const queryClient = useQueryClient();
@@ -75,5 +76,5 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;

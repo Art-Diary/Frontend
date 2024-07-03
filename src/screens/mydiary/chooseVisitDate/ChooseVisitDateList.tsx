@@ -4,9 +4,19 @@ import {TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+  ITEM_BORDER_WIDTH,
+} from '~/components/common/style';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {useMySoloMarkedDatesActions} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
@@ -155,7 +165,7 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
   };
 
   return (
-    <>
+    <Container>
       {/* 날짜 목록 */}
       <AddDateGroupView>
         <GroupText>방문 날짜</GroupText>
@@ -195,34 +205,38 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
       ) : (
         <NextButton isPressed={false}>전시회 선택 완료</NextButton>
       )}
-    </>
+    </Container>
   );
 };
-//D3D3D3
+
 export default ChooseVisitDateList;
 
 /** style */
-const GroupText = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-`;
-
-const AddDateText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
-  border-bottom-width: 1px;
-  border-bottom-color: #ff6f61;
+const Container = styled.View`
+  flex: 1;
+  padding-top: ${hp(1)}px;
+  gap: ${hp(1.5)}px;
 `;
 
 const AddDateGroupView = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
+  align-items: center;
+`;
+
+const GroupText = styled.Text`
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-top: ${hp(0.9)}px;
+`;
+
+const AddDateText = styled.Text`
+  font-size: ${rf(15)}px;
+  color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
+  border-bottom-width: ${wp(0.3)}px;
+  border-bottom-color: ${MAIN_COLOR};
 `;
 
 const Dates = styled.View`
@@ -230,41 +244,39 @@ const Dates = styled.View`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 10px;
 `;
 
 const DateView = styled.View`
   justify-content: center;
   align-items: center;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  border-bottom-width: 0.5px;
-  border-bottom-color: #d3d3d3;
+  padding-top: ${hp(1.7)}px;
+  padding-bottom: ${hp(1.7)}px;
+  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
+  border-bottom-color: ${LIGHT_GREY};
 `;
 
 const DateText = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(16.5)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 interface NextButtonProps {
   isPressed: boolean;
 }
 const NextButton = styled.Text<NextButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: NextButtonProps) =>
-    props.isPressed ? '#ff6f61' : '#D3D3D3'};
+    props.isPressed ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;
 
 const pickerStyle = StyleSheet.create({
   selected: {
     backgroundColor: '#fde2e0',
-    borderRadius: 5,
   },
 });

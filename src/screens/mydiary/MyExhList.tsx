@@ -7,6 +7,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import VisitedExhListFrame from '~/components/diary/VisitedExhListFrame';
 import {RootStackNavigationProp} from '~/App';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import {BACK_COLOR} from '~/components/common/colors';
 
 const MyExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -46,5 +47,5 @@ export default MyExhList;
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
 
 interface ThumbnailProps {
   thumbnail: string;
@@ -28,7 +29,7 @@ export default ThumbnailInfo;
 
 /** style */
 const Container = styled.View`
-  height: 30%;
+  height: ${hp(27.8)}px;
 `;
 
 const ThumbnailBackground = styled.ImageBackground`

@@ -7,7 +7,26 @@ import DiaryList from '~/components/diary/DiaryList';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 import {useIsFocused} from '@react-navigation/native';
 
-const CalendarDiaryList = () => {
+type DeleteActions = {
+  handleShowOptionBar: (show: boolean) => void; // 내가 작성한 기록만 옵션바가 보이도록
+  isDeleteModalOpen: boolean; // 옵션 모달에서 삭제 눌렀는지
+  handleCloseDeleteModal: () => void; // 삭제 모달 닫기
+  handleCloseOptionModal: () => void; // 옵션 모달 닫기
+};
+
+type UpdateActions = {
+  isUpdateClicked: boolean;
+  handleCloseOptionModal: () => void; // 옵션 모달 닫기
+};
+
+interface CalendarDiaryListProps {
+  deleteActions: DeleteActions;
+  updateActions: UpdateActions;
+}
+const CalendarDiaryList: React.FC<CalendarDiaryListProps> = ({
+  deleteActions,
+  updateActions,
+}) => {
   const isFocused = useIsFocused();
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const exhFromCalendarInfo = useExhFromCalendarInfo();
@@ -43,7 +62,13 @@ const CalendarDiaryList = () => {
     return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />;
   }
 
-  return <DiaryList diaryList={diaryList} />;
+  return (
+    <DiaryList
+      diaryList={diaryList}
+      deleteActions={deleteActions}
+      updateActions={updateActions}
+    />
+  );
 };
 
 export default CalendarDiaryList;

@@ -4,11 +4,15 @@ import BackView from '~/components/common/BackView';
 import {Shadow} from 'react-native-shadow-2';
 import ContentsInfo from '~/components/diary/ContentsInfo';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useDiaryBackInfo} from '~/zustand/common/diaryBack';
 import LoadingModal from '../common/modal/LoadingModal';
+import {JoinDateWithDot} from '~/utils/Date';
+import {FONT_NAME} from '../common/style';
+import {LIGHT_GREY} from '../common/colors';
 
 const DiaryBackFrame = () => {
   const {backInfo} = useDiaryBackInfo();
@@ -30,11 +34,15 @@ const DiaryBackFrame = () => {
           <ContentsContainer>
             <Shadow distance={5}>
               <Contents>
-                <ContentsInfo
-                  contents={backInfo.contents}
-                  writeDate={backInfo.writeDate}
-                />
+                <ContentsInfo contents={backInfo.contents} />
               </Contents>
+              {/* 작성 날짜 */}
+              <WriteDateView>
+                <WriteDateText>작성날짜</WriteDateText>
+                <WriteDateText>
+                  {JoinDateWithDot(backInfo.writeDate)}
+                </WriteDateText>
+              </WriteDateView>
             </Shadow>
           </ContentsContainer>
         </Container>
@@ -57,9 +65,9 @@ const ContentsContainer = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(5)}px;
-  padding-right: ${wp(5)}px;
+  padding-bottom: ${hp(0.9)}px;
+  padding-left: ${wp(1.5)}px;
+  padding-right: ${wp(1.5)}px;
   background-color: white;
 `;
 
@@ -67,6 +75,21 @@ const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   align-items: center;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(20)}px;
+`;
+
+const WriteDateView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: ${wp(7)}px;
+  padding-right: ${wp(7)}px;
+  padding-top: ${hp(1.3)}px;
+  padding-bottom: ${hp(1.3)}px;
+`;
+
+const WriteDateText = styled.Text`
+  font-size: ${rf(15.8)}px;
+  color: ${LIGHT_GREY};
+  font-family: ${FONT_NAME};
 `;

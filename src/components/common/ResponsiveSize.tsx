@@ -36,10 +36,6 @@ export function responseFont(size: number) {
   return baseFontSize * (size / 100);
 }
 
-export function responseDash(size: number) {
-  return wp(size);
-}
-
 export const widthSizePercentage = (size: number): number => {
   return wp(size);
 };
