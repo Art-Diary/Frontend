@@ -5,10 +5,13 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import FetchFavoriteList from './FetchFavoriteList';
+import {FONT_NAME} from '~/components/common/style';
+import {MAIN_COLOR} from '~/components/common/colors';
 
 const FavoriteListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -42,9 +45,9 @@ const Container = styled.View`
 `;
 
 const EditText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
-  border-bottom-color: #ff6f61;
-  border-bottom-width: 1px;
+  font-size: ${rf(16)}px;
+  color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
+  border-bottom-color: ${MAIN_COLOR};
+  border-bottom-width: ${wp(0.3)}px;
 `;

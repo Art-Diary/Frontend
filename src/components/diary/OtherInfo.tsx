@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {PrivateToggle, PublicToggle} from '~/assets/images/index';
 import {
   widthPercentage as wp,
   heightPercentage as hp,
   fontPercentage as fp,
 } from '~/components/common/ResponsiveSize';
 import {JoinDateWithDot} from '~/utils/Date';
+import {PrivateToggleIcon, PublicToggleIcon} from '../common/icon';
 
 interface OtherProps {
   userExhId: number | null;
@@ -40,11 +40,7 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 공개여부 */}
       <ContentView>
         <CategoryText>비공개/공개</CategoryText>
-        {diaryPrivate === false ? (
-          <PrivateToggle width={43} />
-        ) : (
-          <PublicToggle width={43} />
-        )}
+        {diaryPrivate === false ? <PrivateToggleIcon /> : <PublicToggleIcon />}
       </ContentView>
     </Container>
   );

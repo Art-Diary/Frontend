@@ -3,6 +3,7 @@ import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {useFetchFavoriteList} from '~/api/queries/exhibition';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
+import {BACK_COLOR} from '~/components/common/colors';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useFavoriteListActions} from '~/zustand/setting/favoriteList';
@@ -54,5 +55,5 @@ export default FetchFavoriteList;
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;

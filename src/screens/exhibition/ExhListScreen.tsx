@@ -37,6 +37,7 @@ import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
+import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 
 interface Exhibition {
   exhId: number;
@@ -506,9 +507,9 @@ const ExhListScreen = () => {
                     {hearts &&
                     hearts.length === data.length &&
                     hearts[index].favoriteExh ? (
-                      <FullHeart />
+                      <FullHeartIcon />
                     ) : (
-                      <EmptyHeart />
+                      <EmptyHeartIcon />
                     )}
                   </TouchableOpacity>
                 </EmptyHeartContent>
@@ -575,7 +576,6 @@ const Contents = styled.View`
 `;
 
 const EmptyHeartContent = styled.View`
-  flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: center;

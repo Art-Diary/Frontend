@@ -4,7 +4,10 @@ import {
   responsiveScreenWidth,
   responsiveFontSize,
 } from 'react-native-responsive-dimensions';
-import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 export function widthPercentage(width: number): number {
   const percentage = (width / 360) * 100;
@@ -26,19 +29,24 @@ export function fontPercentage(size: number): number {
 
 // ---------------------
 
+const {width, height} = Dimensions.get('window');
+const baseFontSize = width * 0.29;
+
+export function responseFont(size: number) {
+  return baseFontSize * (size / 100);
+}
+
 export function responseDash(size: number) {
   return wp(size);
 }
 
-export const sizePercentage = (size: number, minSize: number = 1): number => {
-  const calculatedSize = wp(size - 11);
-
-  return size >= 11 ? calculatedSize : wp(minSize);
+export const widthSizePercentage = (size: number): number => {
+  return wp(size);
 };
 
-export function responseFont(size: number) {
-  return wp(size - 15);
-}
+export const heightSizePercentage = (size: number): number => {
+  return hp(size);
+};
 
 // const {width, height} = Dimensions.get('window');
 // const FIGMA_WINDOW = {

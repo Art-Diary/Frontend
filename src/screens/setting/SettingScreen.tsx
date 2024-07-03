@@ -3,7 +3,8 @@ import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -17,7 +18,7 @@ import {Linking, ScrollView} from 'react-native';
 import {useQueryClient} from 'react-query';
 import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
-import {FONT_NAME} from '~/components/common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
 
 const SettingScreen = () => {
@@ -112,20 +113,17 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  padding-left: ${sp(15)}px;
-  padding-right: ${sp(15)}px;
-  padding-top: ${sp(15)}px;
-  padding-bottom: ${sp(15)}px;
-  gap: ${sp(20)}px;
+  padding: ${wp(4)}px;
+  gap: ${wp(9)}px;
 `;
 
 const SettingWrapper = styled.View`
-  gap: ${sp(14)}px;
+  gap: ${wp(3)}px;
   justify-content: start;
 `;
 
 const TitleText = styled.Text`
-  font-size: ${rf(20)}px;
+  font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

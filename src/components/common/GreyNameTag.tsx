@@ -2,7 +2,8 @@ import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from './style';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
@@ -65,14 +66,14 @@ const WordContainer = styled.View`
 
 const TouchView = styled.TouchableOpacity`
   flex: 1;
-  padding-left: ${sp(17)}px;
+  padding-left: ${wp(6)}px;
   flex-direction: row;
   align-items: center;
-  gap: ${sp(14)}px;
+  gap: ${wp(3)}px;
 `;
 
 const TitleText = styled.Text`
-  font-size: ${rf(19.3)}px;
+  font-size: ${rf(14.8)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;

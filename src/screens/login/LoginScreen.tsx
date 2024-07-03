@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -19,6 +20,8 @@ import {TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {handleKakaoLogin} from './KakaoLogin';
 import messaging from '@react-native-firebase/messaging';
+import {FONT_NAME} from '~/components/common/style';
+import {BACK_COLOR, MAIN_COLOR} from '~/components/common/colors';
 
 type LoginUserInfo = {
   email: string;
@@ -187,7 +190,7 @@ export default LoginScreen;
 const Container = styled.View`
   flex: 1;
   flex-direction: row;
-  background-color: #ff6f61;
+  background-color: ${MAIN_COLOR};
 `;
 
 const Contents = styled.View`
@@ -195,39 +198,39 @@ const Contents = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${sp(25)}px;
+  gap: ${hp(8.7)}px;
 `;
 
 const LineWrapper = styled.View`
   height: 100%;
-  padding-right: ${sp(18)}px;
+  padding-right: ${wp(7)}px;
   align-items: center;
 `;
 
 const Line = styled.View`
   height: 100%;
-  background-color: #f6f6f6;
-  width: ${sp(17)}px;
+  background-color: ${BACK_COLOR};
+  width: ${wp(6)}px;
 `;
 
 const ArtDiary = styled.Text`
-  font-size: ${rf(44)}px;
+  font-size: ${rf(100)}px;
   color: white;
-  font-family: 'omyu pretty';
+  font-family: ${FONT_NAME};
   text-align: center;
 `;
 
 const LoginWrapper = styled.View`
   align-items: center;
-  padding-left: ${sp(12)}px;
+  padding-left: ${wp(1)}px;
   width: 100%;
-  gap: ${sp(15.5)}px;
+  gap: ${hp(1)}px;
 `;
 
 const Tester = styled.Text`
   margin: 5px;
-  font-size: ${rf(20)}px;
+  font-size: ${rf(17)}px;
   color: white;
-  font-family: 'omyu pretty';
+  font-family: ${FONT_NAME};
   text-decoration: underline;
 `;

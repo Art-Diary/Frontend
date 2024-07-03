@@ -2,13 +2,15 @@ import React from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
-  heightPercentage as hp,
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import UpdateAlarm1 from './UpdateAlarm1';
 import UpdateAlarm2 from './UpdateAlarm2';
 import UpdateAlarm3 from './UpdateAlarm3';
+import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
+import {FONT_NAME} from '~/components/common/style';
 
 const AlarmSettingScreen = () => {
   return (
@@ -44,12 +46,9 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-top: ${hp(10)}px;
-  padding-bottom: ${hp(10)}px;
-  padding-left: ${wp(20)}px;
-  padding-right: ${wp(20)}px;
-  gap: ${wp(15)}px;
+  background-color: ${BACK_COLOR};
+  padding: ${wp(5)}px;
+  gap: ${wp(4.2)}px;
 `;
 
 const ContentRow = styled.View`
@@ -59,7 +58,7 @@ const ContentRow = styled.View`
 `;
 
 const AlarmText = styled.Text`
-  font-size: ${fp(18)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(16.8)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;

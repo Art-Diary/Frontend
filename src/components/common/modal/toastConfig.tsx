@@ -2,9 +2,11 @@ import Toast, {ToastConfig} from 'react-native-toast-message';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
-  sizePercentage as sp,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {MIDDLE_GREY} from '../colors';
+import {FONT_NAME} from '../style';
 
 export const showToast = (text: string) => {
   Toast.show({
@@ -25,18 +27,16 @@ export const toastConfig: ToastConfig = {
 
 const Contents = styled.View`
   background-color: ${MIDDLE_GREY};
-  border-radius: 50px;
-  padding: ${sp(10)}px;
-  /* height: 150%; */
-  width: 70%;
-  /* justify-content: center; */
+  border-radius: ${wp(5)}px;
 `;
 
 const Message = styled.Text`
   text-align: center;
-  font-size: ${rf(19.5)}px;
+  font-size: ${rf(17)}px;
   color: white;
-  font-family: 'omyu pretty';
-  padding-top: ${sp(3)}px;
-  padding-bottom: ${sp(3)}px;
+  font-family: ${FONT_NAME};
+  padding-top: ${hp(1)}px;
+  padding-bottom: ${hp(1)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
 `;
