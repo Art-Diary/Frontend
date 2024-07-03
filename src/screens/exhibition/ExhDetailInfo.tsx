@@ -4,6 +4,8 @@ import {
   ScrollView,
   BackHandler,
   StyleSheet,
+  Linking,
+  Alert,
 } from 'react-native';
 import styled, {css} from 'styled-components/native';
 //import BackView from '~/components/common/BackView';
@@ -306,19 +308,26 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     return result;
   };
 
-  // const onPressSharedModal = () => {
-  //   setSharedModal(true);
-  // };
-
-  // const closeSharedModal = () => {
-  //   setSharedModal(false);
-  // };
-
   const clickMoreReview = () => {
     console.log('더 많은 리뷰', exhId);
     navigation.navigate('ExhToMoreReview', {
       exhId: exhId,
     });
+  };
+
+  const exhToHomepage = async () => {
+    //홈페이지 이동
+    const url = 'https://www.naver.com'; //[변경 예정] 해당 갤러리 홈페이지로 이동
+
+    // 주어진 URL을 열 수 있는지 확인합니다.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // 주어진 URL을 엽니다.
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
   };
 
   return (
@@ -367,7 +376,8 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
             />
 
             <Bar>{'|'}</Bar>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={exhToHomepage}>
+              {/* // onPress={() => navigation.navigate('ExhToHomepage')}> */}
               <Homepage />
             </TouchableOpacity>
           </IconView>
