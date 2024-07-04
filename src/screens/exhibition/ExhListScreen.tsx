@@ -1,20 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, TouchableOpacity, ScrollView} from 'react-native';
+import {TouchableOpacity, ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {CalendarIcon} from '~/assets/images/index';
-import {AnotherSearchIcon} from '~/assets/images/index';
-import {ClassifyButton} from '~/assets/images/index';
-import {EmptyHeart} from '~/assets/images/index';
-import {FullHeart} from '~/assets/images/index';
 import {useFetchSearchExh} from '~/api/queries/exhibition';
-import {ServerContainer, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -22,7 +16,6 @@ import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhSearchModal from './ExhSearchModal';
 import ExhSearchByDate from './ExhSearchByDate';
-import ExhDetailInfo from './ExhDetailInfo';
 import {
   useSearchNameActions,
   useSearchNameInfo,
@@ -37,7 +30,15 @@ import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
-import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
+import {
+  AnotherSearchIcon,
+  ClassifyButtonIcon,
+  EmptyHeartIcon,
+  FullHeartIcon,
+  SearchDateCalendarIcon,
+} from '~/components/common/icon';
+import {BACK_COLOR, BORDER_COLOR, MAIN_COLOR} from '~/components/common/colors';
+import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 
 interface Exhibition {
   exhId: number;
@@ -410,7 +411,7 @@ const ExhListScreen = () => {
       <Header title={'전시회'}>
         <IconsView>
           <TouchableOpacity onPress={() => openModal()}>
-            <ClassifyButton />
+            <ClassifyButtonIcon />
             {isModalVisible && (
               <ExhSearchModal
                 title={'전시 분류 카테고리'}
@@ -428,93 +429,103 @@ const ExhListScreen = () => {
             onPress={() => navigation.navigate('ExhibitionSearch')}>
             <AnotherSearchIcon />
           </TouchableOpacity>
-          {selectedState ? (
-            <TouchableOpacity onPress={() => optionsModalOpen()}>
-              <CalendarIcon />
-              {isOptionsModalPressed && (
-                <OptionsModal
-                  handleCloseModal={optionsModalClose}
-                  onPressYes={() => onPressYes()}
-                  onPressNo={() => onPressNo()}
-                  message="이미 지정된 전시 진행 상황은 삭제됩니다. 
+          <TouchableOpacity
+            onPress={selectedState ? optionsModalOpen : openCalendarModal}>
+            <SearchDateCalendarIcon />
+            {isCalendarModalVisible && (
+              <ExhSearchByDate
+                isVisible={isCalendarModalVisible}
+                state={selectedState}
+                date={selectedDate}
+                onClose={handleCalendarModalClose}
+              />
+            )}
+            {isOptionsModalPressed && (
+              <OptionsModal
+                handleCloseModal={optionsModalClose}
+                onPressYes={() => onPressYes()}
+                onPressNo={() => onPressNo()}
+                message="이미 지정된 전시 진행 상황은 삭제됩니다. 
               그렇게 할까요?"
-                />
-              )}
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={openCalendarModal}>
-              <CalendarIcon />
-              {isCalendarModalVisible && (
-                <ExhSearchByDate
-                  isVisible={isCalendarModalVisible}
-                  state={selectedState}
-                  date={selectedDate}
-                  onClose={handleCalendarModalClose}
-                />
-              )}
-            </TouchableOpacity>
-          )}
+              />
+            )}
+          </TouchableOpacity>
         </IconsView>
       </Header>
 
       {/* body */}
-
-      <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
-        <OptionContainer>
+      <OptionContainer
+        haveOption={
+          isDateVisible ||
+          isNameVisible ||
+          isFieldVisible ||
+          isPriceVisible ||
+          isStateVisible
+        }>
+        <ScrollView
+          horizontal={true}
+          pagingEnabled={false}
+          showsHorizontalScrollIndicator={true}>
           {isDateVisible && (
-            <TouchableOpacity onPress={() => deleteDate()}>
-              <OptionView>{selectedDate}x</OptionView>
-            </TouchableOpacity>
+            <OptionView onPress={() => deleteDate()}>
+              <OptionText>{selectedDate}</OptionText>
+              <OptionText isDeleteText> x</OptionText>
+            </OptionView>
           )}
           {isNameVisible && (
-            <TouchableOpacity onPress={() => deleteName()}>
-              <OptionView>{selectedName}x</OptionView>
-            </TouchableOpacity>
+            <OptionView onPress={() => deleteName()}>
+              <OptionText>{selectedName}</OptionText>
+              <OptionText isDeleteText> x</OptionText>
+            </OptionView>
           )}
           {isFieldVisible &&
             selectedField?.map((item: string) => (
-              <TouchableOpacity onPress={() => deleteField(item)}>
-                <OptionView>{item}x</OptionView>
-              </TouchableOpacity>
+              <OptionView onPress={() => deleteField(item)}>
+                <OptionText>{item}</OptionText>
+                <OptionText isDeleteText> x</OptionText>
+              </OptionView>
             ))}
           {isPriceVisible && (
-            <TouchableOpacity onPress={() => deletePrice()}>
-              <OptionView>{selectedPrice}x</OptionView>
-            </TouchableOpacity>
+            <OptionView onPress={() => deletePrice()}>
+              <OptionText>{selectedPrice}</OptionText>
+              <OptionText isDeleteText> x</OptionText>
+            </OptionView>
           )}
           {isStateVisible &&
             selectedState?.map((item: string) => (
-              <TouchableOpacity onPress={() => deleteState(item)}>
-                <OptionView key={item}>{item}x</OptionView>
-              </TouchableOpacity>
+              <OptionView onPress={() => deleteState(item)}>
+                <OptionText key={item}>{item}</OptionText>
+                <OptionText isDeleteText> x</OptionText>
+              </OptionView>
             ))}
-        </OptionContainer>
+        </ScrollView>
+      </OptionContainer>
+      <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
         {data &&
           data.map((item: any, index: number) => (
-            <Contents key={item.exhId}>
-              <ExhItemView
-                exhInfo={{...item}}
-                noLine={index === data.length - 1 ? true : false}
-                notTouchable={false}
-                onTouch={() =>
-                  navigation.navigate('ExhDetailInfo', {
-                    exhId: item.exhId,
-                  })
-                }>
-                <EmptyHeartContent>
-                  <TouchableOpacity
-                    onPress={() => onPressHeart(item.exhId, index)}>
-                    {hearts &&
-                    hearts.length === data.length &&
-                    hearts[index].favoriteExh ? (
-                      <FullHeartIcon />
-                    ) : (
-                      <EmptyHeartIcon />
-                    )}
-                  </TouchableOpacity>
-                </EmptyHeartContent>
-              </ExhItemView>
-            </Contents>
+            <ExhItemView
+              key={index}
+              exhInfo={{...item}}
+              noLine={index === data.length - 1 ? true : false}
+              notTouchable={false}
+              onTouch={() =>
+                navigation.navigate('ExhDetailInfo', {
+                  exhId: item.exhId,
+                })
+              }>
+              <EmptyHeartContent>
+                <TouchableOpacity
+                  onPress={() => onPressHeart(item.exhId, index)}>
+                  {hearts &&
+                  hearts.length === data.length &&
+                  hearts[index].favoriteExh ? (
+                    <FullHeartIcon />
+                  ) : (
+                    <EmptyHeartIcon />
+                  )}
+                </TouchableOpacity>
+              </EmptyHeartContent>
+            </ExhItemView>
           ))}
       </ScrollView>
     </Container>
@@ -526,53 +537,52 @@ export default ExhListScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
-const HeartContent = styled.View`
-  flex: 1;
-  background-color: #f6f6f6;
-`;
+interface OptionContainerProps {
+  haveOption: boolean;
+}
 
-const OptionContainer = styled.View`
-  flex: 1;
-  background-color: #f6f6f6;
-  //flex-wrap: wrap;
+const OptionContainer = styled.View<OptionContainerProps>`
   flex-direction: row;
-  padding: ${wp(10)}px;
-  padding-left: ${wp(10)}px;
-  padding-bottom: ${wp(0)}px;
-  gap: 10px;
+  width: 100%;
+  padding: ${(props: OptionContainerProps) =>
+    props.haveOption ? `${wp(2.9)}px` : `0px`};
+  border-style: dashed;
+  border-bottom-color: ${BORDER_COLOR};
+  border-bottom-width: ${(props: OptionContainerProps) =>
+    props.haveOption ? `${DASH_WIDTH}px` : `0px`};
 `;
-const OptionView = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
-  text-align: center;
-  padding-bottom: ${wp(2)}px;
-  padding-top: ${wp(7)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  border-color: #ff6f61;
-  border-width: ${wp(1.3)}px;
+
+const OptionView = styled.TouchableOpacity`
+  flex-direction: row;
+  padding-top: ${wp(0.5)}px;
+  padding-bottom: ${wp(1.3)}px;
+  padding-left: ${wp(2)}px;
+  padding-right: ${wp(2)}px;
+  border-color: ${MAIN_COLOR};
+  border-width: ${wp(0.4)}px;
   border-radius: ${wp(20)}px;
+  align-items: flex-end;
+  margin-right: ${wp(1)}px;
+`;
+
+interface OptionTextProps {
+  isDeleteText: boolean;
+}
+
+const OptionText = styled.Text<OptionTextProps>`
+  font-size: ${(props: OptionTextProps) =>
+    props.isDeleteText ? `${rf(17)}px` : `${rf(14.1)}px`};
+  color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
 `;
 
 const IconsView = styled.View`
-  // flex: 1;
   flex-direction: row;
   align-items: center;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3개의 동일한 폭의 열을 만듦 */
-  gap: ${wp(15)}px;
-  /* display: flex;
-  justify-content: space-between;*/
-`;
-
-const Contents = styled.View`
-  flex: 1;
-  flex-direction: row;
-  background-color: #f6f6f6;
+  gap: ${wp(4)}px;
 `;
 
 const EmptyHeartContent = styled.View`

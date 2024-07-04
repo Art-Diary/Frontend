@@ -1,23 +1,48 @@
 import {
   AddMyExhButton,
+  AnotherSearch,
   AvgRateStar,
   BackButton,
+  CalendarShare,
+  CameraButton,
+  CenterDiary,
+  ClassifyButton,
   EmptyHeart,
   EmptyStar,
+  ExhShareButton,
   FullHeart,
   FullStar,
+  GoogleLogo,
   GreyTag,
+  Homepage,
+  KakaoLogo,
   LeaveGathering,
+  MoreContents,
+  NaverLogo,
+  OffCalender,
+  OffExhibition,
+  OffMate,
+  OffSetting,
+  OnCalender,
+  OnExhibition,
+  OnMate,
+  OnSetting,
   OptionBar,
   PinkTag,
   PrivateToggle,
   ProfileUpdate,
   PublicToggle,
+  ReduceContents,
   SearchButton,
+  SearchDateCalendar,
   WriteDiaryButton,
   WriterPencil,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
+import {
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
+} from '~/components/common/ResponsiveSize';
 import ProfileTag from '~/assets/name_tag/profile_tag.svg';
 
 export const FullHeartIcon = () => {
@@ -92,13 +117,13 @@ export const AvgRateStarIcon = () => {
   return <AvgRateStar width={106 * (height / 101)} height={height} />;
 };
 
-export const FullStarIcon = () => {
-  const height = rw(3.5);
+export const FullStarIcon = ({customHeight = 3.5}) => {
+  const height = rw(customHeight);
   return <FullStar width={106 * (height / 100)} height={height} />;
 };
 
-export const EmptyStarIcon = () => {
-  const height = rw(3.5);
+export const EmptyStarIcon = ({customHeight = 3.5}) => {
+  const height = rw(customHeight);
   return <EmptyStar width={106 * (height / 101)} height={height} />;
 };
 
@@ -122,7 +147,114 @@ export const SearchButtonIcon = () => {
   return <SearchButton width={100 * (height / 100)} height={height} />;
 };
 
+export const AnotherSearchIcon = () => {
+  const height = rw(4.8);
+  return <AnotherSearch width={101 * (height / 100)} height={height} />;
+};
+
+export const SearchDateCalendarIcon = () => {
+  const height = rw(6);
+  return <SearchDateCalendar width={100 * (height / 100)} height={height} />;
+};
+
 export const LeaveGatheringIcon = () => {
   const height = rw(4.8);
   return <LeaveGathering width={101 * (height / 100)} height={height} />;
+};
+
+export const ClassifyButtonIcon = () => {
+  const height = rw(6);
+  return <ClassifyButton width={172 * (height / 79)} height={height} />;
+};
+
+export const MoreContentsIcon = () => {
+  const height = rw(2.7);
+  return <MoreContents width={259 * (height / 126)} height={height} />;
+};
+
+export const ReduceContentsIcon = () => {
+  const height = rw(2.7);
+  return <ReduceContents width={259 * (height / 126)} height={height} />;
+};
+
+export const CalendarShareIcon = () => {
+  const height = rw(5.4);
+  return <CalendarShare width={100 * (height / 100)} height={height} />;
+};
+
+export const ExhShareButtonIcon = () => {
+  const height = rw(5.3);
+  return <ExhShareButton width={101 * (height / 100)} height={height} />;
+};
+
+export const HomepageIcon = () => {
+  const height = rw(6.3);
+  return <Homepage width={100 * (height / 100)} height={height} />;
+};
+
+export const CameraButtonIcon = () => {
+  const height = rw(5.5);
+  return <CameraButton width={100 * (height / 100)} height={height} />;
+};
+
+/** bottom nav */
+export const OffCalenderIcon = () => {
+  const height = hp(5);
+  return <OffCalender width={100 * (height / 153)} height={height} />;
+};
+
+export const OnCalenderIcon = () => {
+  const height = hp(5);
+  return <OnCalender width={101 * (height / 153)} height={height} />;
+};
+
+export const OffMateIcon = () => {
+  const height = hp(5);
+  return <OffMate width={167 * (height / 153)} height={height} />;
+};
+
+export const OnMateIcon = () => {
+  const height = hp(5);
+  return <OnMate width={167 * (height / 153)} height={height} />;
+};
+
+export const OffSettingIcon = () => {
+  const height = hp(5);
+  return <OffSetting width={100 * (height / 153)} height={height} />;
+};
+
+export const OnSettingIcon = () => {
+  const height = hp(5);
+  return <OnSetting width={103 * (height / 153)} height={height} />;
+};
+
+export const OffExhibitionIcon = () => {
+  const height = hp(5);
+  return <OffExhibition width={105 * (height / 153)} height={height} />;
+};
+
+export const OnExhibitionIcon = () => {
+  const height = hp(5);
+  return <OnExhibition width={110 * (height / 153)} height={height} />;
+};
+
+export const CenterDiaryIcon = () => {
+  const height = hp(7.8);
+  return <CenterDiary width={100 * (height / 133)} height={height} />;
+};
+
+// social login logo
+export const GoogleLogoIcon = ({customHeight = 3.5}) => {
+  const height = hp(customHeight);
+  return <GoogleLogo width={100 * (height / 100)} height={height} />;
+};
+
+export const NaverLogoIcon = ({customHeight = 3.5}) => {
+  const height = hp(customHeight);
+  return <NaverLogo width={100 * (height / 100)} height={height} />;
+};
+
+export const KakaoLogoIcon = ({customHeight = 3.5}) => {
+  const height = hp(customHeight);
+  return <KakaoLogo width={100 * (height / 100)} height={height} />;
 };

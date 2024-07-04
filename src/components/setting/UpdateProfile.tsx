@@ -8,7 +8,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
-import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {TouchableOpacity} from 'react-native';
 import {useUpdateUserInfo} from '~/api/queries/auth';
@@ -31,6 +30,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '../common/style';
+import {GoogleLogoIcon, KakaoLogoIcon, NaverLogoIcon} from '../common/icon';
 
 type InitProfile = {
   favoriteArt: string;
@@ -185,12 +185,12 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           <SectionName>이메일</SectionName>
           <BoxView color={true}>
             {initProfile.providerType === 'naver' ? (
-              <NaverIcon width={20} />
+              <NaverLogoIcon customHeight={2.6} />
             ) : initProfile.providerType === 'gmail' ||
               initProfile.providerType === 'google' ? (
-              <GoogleIcon width={20} />
+              <GoogleLogoIcon customHeight={2.6} />
             ) : initProfile.providerType === 'kakao' ? (
-              <KakaoIcon width={20} />
+              <KakaoLogoIcon customHeight={2.6} />
             ) : (
               <></>
             )}

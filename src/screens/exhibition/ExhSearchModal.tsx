@@ -1,14 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, Modal, BackHandler, ScrollView} from 'react-native';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
+import {TouchableOpacity, Modal} from 'react-native';
 import styled from 'styled-components/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import OptionsModal from '~/components/exhibition/OptionsModal';
+import {
+  BACK_COLOR,
+  BORDER_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  DASH_WIDTH,
+  FONT_NAME,
+} from '~/components/common/style';
 
 interface ExhSearchProps {
   title: string; // title prop의 타입을 문자열로 지정
@@ -36,7 +49,6 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
   date,
   onClose,
 }) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedOption2, setSelectedOption2] = useState<string[] | null>(
     field,
   ); //전시 분야
@@ -329,7 +341,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
                 <TouchableOpacity
                   key={key}
                   onPress={() => pressExhField(key, value)}>
-                  {value ? <Option>{key}</Option> : <UnOption>{key}</UnOption>}
+                  <Option isClicked={value}>{key}</Option>
                 </TouchableOpacity>
               ))}
             </OptionContainer>
@@ -344,7 +356,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
                 <TouchableOpacity
                   key={key}
                   onPress={() => pressExhPrice(key, value)}>
-                  {value ? <Option>{key}</Option> : <UnOption>{key}</UnOption>}
+                  <Option isClicked={value}>{key}</Option>
                 </TouchableOpacity>
               ))}
             </OptionContainer>
@@ -352,32 +364,17 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
           <SubSection>
             <SubTitle>{'전시 진행상황'}</SubTitle>
             <OptionContainer>
-              {isClickState.map(
-                (
-                  {key, value}, //{
-                ) =>
-                  selectedOption5 ? (
-                    <TouchableOpacity
-                      key={key}
-                      onPress={() => optionsModalOpen(key, value)}>
-                      {value ? (
-                        <Option>{key}</Option>
-                      ) : (
-                        <UnOption>{key}</UnOption>
-                      )}
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      key={key}
-                      onPress={() => pressExhState(key, value)}>
-                      {value ? (
-                        <Option>{key}</Option>
-                      ) : (
-                        <UnOption>{key}</UnOption>
-                      )}
-                    </TouchableOpacity>
-                  ),
-              )}
+              {isClickState.map(({key, value}) => (
+                <TouchableOpacity
+                  key={key}
+                  onPress={
+                    selectedOption5
+                      ? () => optionsModalOpen(key, value)
+                      : () => pressExhState(key, value)
+                  }>
+                  <Option isClicked={value}>{key}</Option>
+                </TouchableOpacity>
+              ))}
               {isOptionsModalPressed && (
                 <OptionsModal
                   handleCloseModal={optionsModalClose}
@@ -392,21 +389,19 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
           </SubSection>
         </ModalBody>
         <ButtonSection>
-          {isPossibleSearch ? (
-            <TouchableOpacity
-              onPress={() =>
-                handleConfirm(
-                  selectedOption2,
-                  selectedOption3,
-                  selectedOption4,
-                  selectedOption5,
-                )
-              }>
-              <CompleteButton>{'선택 완료'}</CompleteButton>
-            </TouchableOpacity>
-          ) : (
-            <UnCompleteButton>{'선택 완료'}</UnCompleteButton>
-          )}
+          <TouchableOpacity
+            onPress={() =>
+              handleConfirm(
+                selectedOption2,
+                selectedOption3,
+                selectedOption4,
+                selectedOption5,
+              )
+            }>
+            <CompleteButton isClicked={isPossibleSearch}>
+              {'선택 완료'}
+            </CompleteButton>
+          </TouchableOpacity>
         </ButtonSection>
       </Container>
     </Modal>
@@ -419,129 +414,108 @@ export default ExhSearchModal;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  justify-content: space-between; // 양 끝으로 버튼 배치
-  width: 100%;
-  height: ${hp(42)}px;
-  background-color: #f6f6f6;
-`;
-
-const Title = styled.Text`
-  flex: 1;
-  font-size: ${fp(20)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
-`;
-
-const BackButton = styled.Text`
-  font-size: ${fp(21)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  background-color: ${BACK_COLOR};
+  gap: ${wp(4.5)}px;
 `;
 
 const ModalHeader = styled.View`
+  width: 100%;
   flex-direction: row;
+  justify-content: space-between; // 양 끝으로 버튼 배치
   align-items: center;
-  padding: ${wp(18)}px;
+  border-style: dashed;
+  border-bottom-color: ${BORDER_COLOR};
+  border-bottom-width: ${DASH_WIDTH}px;
+  padding: ${wp(4.5)}px;
 `;
 
-const SubSection = styled.View`
-  flex-direction: column;
-  padding-bottom: ${wp(35)}px;
+const Title = styled.Text`
+  font-size: ${rf(19)}px;
+  color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
 `;
 
-const UnCompleteButton = styled.Text`
-  font-size: ${fp(17)}px;
-  flex-direction: column;
-  color: #ffffff;
-  padding: ${wp(10)}px;
-  font-family: 'omyu pretty';
-  text-align: center;
-  background-color: #979797;
-  border-color: #979797;
-  border-width: ${wp(1.3)}px;
-  border-radius: ${wp(5)}px;
-`;
-
-const CompleteButton = styled.Text`
-  font-size: ${fp(17)}px;
-  flex-direction: column;
-  color: #ffffff;
-  padding: ${wp(10)}px;
-  font-family: 'omyu pretty';
-  text-align: center;
-  background-color: #ff6f61;
-  border-color: #ff6f61;
-  border-width: ${wp(1.3)}px;
-  border-radius: ${wp(5)}px;
-`;
-
-const ButtonSection = styled.View`
-  flex-direction: column;
-  padding: ${wp(10)}px;
+const BackButton = styled.Text`
+  font-size: ${rf(19.5)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
 const ModalBody = styled.View`
   flex: 1;
   flex-direction: column;
-  padding: ${wp(20)}px;
-  padding-top: ${wp(10)}px;
+  padding-left: ${wp(4.5)}px;
+  padding-right: ${wp(4.5)}px;
+  gap: ${wp(9)}px;
 `;
 
-const SubTitlePrice = styled.View`
-  flex-wrap: wrap;
-  flex-direction: row;
-  padding: ${wp(10)}px;
-  padding-left: ${wp(0)}px;
-  padding-bottom: ${wp(0)}px;
-  gap: 10px;
+const SubSection = styled.View`
+  flex-direction: column;
+  gap: ${wp(2.9)}px;
 `;
 
 const SubTitle = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+`;
+
+const SubTitlePrice = styled.View`
+  flex-direction: row;
+  gap: ${wp(1.5)}px;
 `;
 
 const SubNoticeTitle = styled.Text`
-  font-size: ${fp(10)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(9.5)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
   text-align: center;
+  padding-top: ${wp(0.4)}px;
 `;
 
 const OptionContainer = styled.View`
   flex-wrap: wrap;
   flex-direction: row;
-  padding: ${wp(10)}px;
-  padding-left: ${wp(0)}px;
-  padding-bottom: ${wp(0)}px;
-  gap: 10px;
+  gap: ${wp(1.8)}px;
 `;
 
-const Option = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
+interface OptionProps {
+  isClicked: boolean;
+}
+
+const Option = styled.Text<OptionProps>`
+  font-size: ${rf(14.3)}px;
+  color: ${(props: OptionProps) =>
+    props.isClicked ? `${MAIN_COLOR}` : `${MIDDLE_GREY}`};
+  font-family: ${FONT_NAME};
   text-align: center;
-  padding-bottom: ${wp(2)}px;
-  padding-top: ${wp(7)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  border-color: #ff6f61;
-  border-width: ${wp(1.3)}px;
-  border-radius: ${wp(20)}px;
+  padding-top: ${wp(1.5)}px;
+  padding-bottom: ${wp(0.8)}px;
+  padding-left: ${wp(2.9)}px;
+  padding-right: ${wp(2.9)}px;
+  border-color: ${(props: OptionProps) =>
+    props.isClicked ? `${MAIN_COLOR}` : `${MIDDLE_GREY}`};
+  border-width: ${DASH_WIDTH}px;
+  border-radius: ${wp(50)}px;
 `;
 
-const UnOption = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+interface CompleteButtonProps {
+  isClicked: boolean;
+}
+
+const CompleteButton = styled.Text<CompleteButtonProps>`
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
-  padding-bottom: ${wp(2)}px;
-  padding-top: ${wp(7)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-  border-color: #979797;
-  border-width: ${wp(1.3)}px;
-  border-radius: ${wp(20)}px;
+  background-color: ${(props: CompleteButtonProps) =>
+    props.isClicked ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
+  color: white;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
+`;
+
+const ButtonSection = styled.View`
+  padding-left: ${wp(4.5)}px;
+  padding-right: ${wp(4.5)}px;
+  padding-bottom: ${wp(2.9)}px;
 `;

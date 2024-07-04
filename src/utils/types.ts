@@ -36,6 +36,7 @@ export type RootStackParamList = {
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;
+  // exhibition
   ExhibitionSearch: undefined;
   ExhDetailInfo: {
     exhId: number;

@@ -8,7 +8,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {KakaoIconBig, Instagram, Copy} from '~/assets/images/index';
-import {sendText} from 'react-native-kakao-share-link';
+// import {sendText} from 'react-native-kakao-share-link';
 
 interface ModalProps {
   handleCloseModal: () => void;

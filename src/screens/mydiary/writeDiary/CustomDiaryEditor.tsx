@@ -7,10 +7,10 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import FontFamilyStylesheet from '../../../assets/fonts/stylesheet';
-import {CameraIcon} from '~/assets/images';
 import {showPhoto} from './GetPhoto';
 import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
+import {CameraButtonIcon} from '~/components/common/icon';
 
 /**
  * TODO
@@ -50,7 +50,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
 
   const handlePhoto = () => (
     <TouchableOpacity onPress={() => showPhoto(editorRef)}>
-      <CameraIcon />
+      <CameraButtonIcon />
     </TouchableOpacity>
   );
 

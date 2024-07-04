@@ -2,20 +2,22 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {TouchableOpacity} from 'react-native';
-import {
-  FillStarSmall,
-  EmptyStarSmall,
-  FillStarIcon,
-} from '~/assets/images/index';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchDiaryListForExh} from '~/api/queries/exhibition';
 import {JoinDateWithDot} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
+import {EmptyStarIcon, FullStarIcon} from '~/components/common/icon';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {FONT_NAME} from '~/components/common/style';
 
 type RootStackParamList = {
   ExhToMoreReview: {exhId: number};
@@ -27,6 +29,10 @@ interface Props {
   route: ExhToMoreReviewProp;
 }
 
+/**
+ * TODO
+ * 더보기 들어와서 기록 수정하면 바로 반영되지 않음.
+ */
 const ExhToMoreReview: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -93,42 +99,39 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     const rateInt = parseInt(rate);
     let num = 0;
     for (let i = 0; i < rateInt; i++) {
-      result.push(<FillStarSmall key={`${num++}`} />);
+      result.push(<FullStarIcon customHeight={2.55} key={`${num++}`} />);
     }
     for (let i = 0; i < 5 - rateInt; i++) {
-      result.push(<EmptyStarSmall key={`${num++}`} />);
+      result.push(<EmptyStarIcon customHeight={2.55} key={`${num++}`} />);
     }
     return result;
   };
+
   return (
     <Container>
-      <TitleView>
-        <TitleTopView>
-          <Title>{'기록'} </Title>
-        </TitleTopView>
-        <AvgRateView>
-          <FillStarIcon />
-          <AvgTitle> {avgRate}</AvgTitle>
-          <AvgText>
-            {' (기록 '}
-            {avgNumber}
-            {'개 평점)'}
-          </AvgText>
-        </AvgRateView>
-      </TitleView>
+      <Title>{'기록'} </Title>
+      <AvgRateView>
+        <FullStarIcon customHeight={4.3} />
+        <AvgTitle>{avgRate}</AvgTitle>
+        <AvgText>
+          {'(기록 '}
+          {avgNumber}
+          {'개 평점)'}
+        </AvgText>
+      </AvgRateView>
       <ReView>
         {diaryData &&
           diaryData
             .slice(offset, offset + limit)
             .map((item: any, index: number) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() =>
-                  navigation.navigate('ExhToDiary', {
-                    diary: item,
-                  })
-                }>
-                <ReViewList>
+              <>
+                <ReViewList
+                  key={index}
+                  onPress={() =>
+                    navigation.navigate('ExhToDiary', {
+                      diary: item,
+                    })
+                  }>
                   <ReviewImage
                     source={{
                       uri: `data:image/png;base64,${item.thumbnail}`,
@@ -137,13 +140,11 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
                     alt={'이미지 읽기 실패'}
                   />
                   <ReviewTextView>
-                    <TextView>
-                      <ReviewTitle>
-                        {'"'}
-                        {item.title}
-                        {'"'}
-                      </ReviewTitle>
-                    </TextView>
+                    <ReviewTitle>
+                      {'"'}
+                      {item.title}
+                      {'"'}
+                    </ReviewTitle>
                     <TextView>
                       <SubTextView key={index}>
                         <ReviewName>{item.nickname}</ReviewName>
@@ -153,7 +154,8 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
                     </TextView>
                   </ReviewTextView>
                 </ReViewList>
-              </TouchableOpacity>
+                <BorderView />
+              </>
             ))}
       </ReView>
       <PageNumberView>
@@ -162,6 +164,7 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
           disabled={page === 1}>
           <PageNumber>{'<'}</PageNumber>
         </TouchableOpacity>
+
         {numPagesArr.map((item, index) => (
           <TouchableOpacity key={index + 1} onPress={() => setPage(index + 1)}>
             {index + 1 == page ? (
@@ -187,133 +190,133 @@ export default ExhToMoreReview;
 /** style */
 const Container = styled.View`
   flex: 1;
-  background-color: #ffffff;
-  padding: ${wp(10)}px;
+  flex-direction: column;
+  background-color: white;
+  align-items: center;
+  padding: ${wp(5.2)}px;
+  gap: ${wp(2)}px;
 `;
 
 const Title = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(19)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+`;
+
+// review section
+const AvgRateView = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  padding: ${wp(1.4)}px;
+  padding-bottom: ${wp(2.5)}px;
+  gap: ${wp(0.8)}px;
 `;
 
 const AvgTitle = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
+  font-size: ${rf(20)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const AvgText = styled.Text`
-  font-size: ${fp(13)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
+  font-size: ${rf(17)}px;
+  color: ${LIGHT_GREY};
+  font-family: ${FONT_NAME};
 `;
 
+// review list
 const ReView = styled.View`
   flex: 1;
   flex-direction: column;
-  padding: ${wp(15)}px;
-  background-color: #ffffff;
+  width: 100%;
+  gap: ${wp(2)}px;
 `;
 
-const TitleView = styled.View`
-  flex-direction: column;
-`;
-
-const TitleTopView = styled.View`
-  flex-direction: column;
-  align-items: center;
-  padding: ${wp(15)}px;
-`;
-
-const AvgRateView = styled.View`
+const ReViewList = styled.TouchableOpacity`
+  width: 100%;
   flex-direction: row;
   align-items: center;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  padding-top: ${wp(5)}px;
+  padding-top: ${wp(1.4)}px;
+  padding-bottom: ${wp(1.4)}px;
+  gap: ${wp(2)}px;
 `;
 
-const ReViewList = styled.View`
-  flex-direction: row;
-  padding-top: ${wp(5)}px;
-  padding-bottom: ${wp(0)}px;
-  background-color: #ffffff;
-  border-bottom-width: ${wp(1)}px;
-  border-bottom-color: #979797;
+const BorderView = styled.View`
+  width: 100%;
+  background-color: ${LIGHT_GREY};
+  height: ${wp(0.3)}px;
 `;
 
-const ReviewTitle = styled.Text`
-  font-size: ${fp(15)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
-`;
-
-const ReviewName = styled.Text`
-  font-size: ${fp(12)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
-`;
-
-const ReviewRate = styled.Text`
-  font-size: ${fp(14)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
-  padding-left: ${wp(3)}px;
-`;
-
-const ReviewDate = styled.Text`
-  font-size: ${fp(10)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
-  padding: ${wp(1)}px;
+const ReviewImage = styled.Image`
+  width: ${wp(11)}px;
+  height: ${wp(11)}px;
+  border-radius: ${wp(50)}px; /* width의 절반을 사용하여 원형으로 만듦 */
 `;
 
 const ReviewTextView = styled.View`
   flex: 1;
   flex-direction: column;
-  padding: ${wp(5)}px;
+  gap: ${wp(1.2)}px;
+`;
+
+const ReviewTitle = styled.Text`
+  font-size: ${rf(16)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const TextView = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 const SubTextView = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: ${wp(1)}px;
+  gap: ${wp(0.8)}px;
 `;
 
-const ReviewImage = styled.Image`
-  width: ${wp(36)}px;
-  height: ${hp(36)}px;
-  border-radius: ${wp(18)}px; /* width의 절반을 사용하여 원형으로 만듦 */
+const ReviewName = styled.Text`
+  font-size: ${rf(13.5)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
+const ReviewRate = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ReviewDate = styled.Text`
+  font-size: ${rf(11)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
+  align-items: center;
+`;
+
+// page
 const PageNumberView = styled.View`
+  width: 100%;
   flex-direction: row;
   justify-content: center;
   align-items: flex-end;
-  padding: ${wp(1)}px;
 `;
 
 const PageNumber = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding: ${wp(7)}px;
+  font-size: ${rf(17)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-left: ${wp(2)}px;
+  padding-right: ${wp(2)}px;
 `;
 
 const CurrentPageNumber = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #ff6f61;
-  font-family: 'omyu pretty';
-  padding: ${wp(7)}px;
+  font-size: ${rf(17)}px;
+  color: ${MAIN_COLOR};
+  font-family: ${FONT_NAME};
+  padding-left: ${wp(2)}px;
+  padding-right: ${wp(2)}px;
 `;

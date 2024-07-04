@@ -10,12 +10,9 @@ import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/diary/AddVisitDate';
 import {changeDotToHyphen, JoinDateWithDot, dateToString} from '~/utils/Date';
-import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
+import {BACK_COLOR} from '~/components/common/colors';
 
 interface MarkedType {
   date: string;
@@ -31,7 +28,11 @@ type ExhToCalProp = RouteProp<RootStackParamList, 'ExhToCal'>;
 interface Props {
   route: ExhToCalProp;
 }
-
+/**
+ * TODO
+ * 캘린더 이동이 안됨.
+ * 날짜 저장하고 바로 달력에 표시 안됨.
+ */
 const ExhToCal: React.FC<Props> = ({route}) => {
   const {exhId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -151,7 +152,8 @@ const ExhToCal: React.FC<Props> = ({route}) => {
         selectedDate={selectedDate}
         onSelectedDate={onSelectedDate}
         onClickNextButton={onClickNextButton}
-        selectedMssg="선택 할 날짜"></AddVisitDate>
+        selectedMssg="선택 할 날짜"
+      />
     </Container>
   );
 };
@@ -163,39 +165,5 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
-`;
-
-const Title = styled.Text`
-  font-size: ${fp(19)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-`;
-
-const BodyView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-`;
-
-const BodyText = styled.Text`
-  font-size: ${fp(17)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-`;
-
-interface ForgotProps {
-  haveForgot: boolean;
-}
-
-const ForgetText = styled.Text<ForgotProps>`
-  font-size: ${fp(17)}px;
-  color: ${(props: ForgotProps) => (props.haveForgot ? '#D3D3D3' : '#ff6f61')};
-  font-family: 'omyu pretty';
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  text-decoration-line: underline;
+  background-color: ${BACK_COLOR};
 `;
