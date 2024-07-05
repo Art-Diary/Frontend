@@ -1,5 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {
+  UseMutationResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import {
   addNewMate,
   fetchExhMateList,
@@ -49,10 +54,12 @@ export const useFetchSearchMateList = (nickname: string) =>
     select: (res: any) => res.data,
   });
 
-export const useAddNewMate = (userId: number) => {
+export const useAddNewMate = (
+  userId: number,
+): UseMutationResult<unknown, any, void, unknown> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<unknown, any, void, unknown>({
     mutationFn: () => addNewMate(userId),
     onError: err => {
       console.log(err);
@@ -60,7 +67,7 @@ export const useAddNewMate = (userId: number) => {
     },
     onSuccess: res => {
       console.log('[AddNewMate] success create AddNewMate');
-      queryClient.invalidateQueries(mateQueryKeys.fetchExhMateList());
+      queryClient.invalidateQueries(mateQueryKeys.fetchExhMateList().queryKey);
     },
   });
 };

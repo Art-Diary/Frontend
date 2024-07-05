@@ -1,7 +1,5 @@
 import React, {ReactNode, useCallback} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {SearchIcon} from '~/assets/images';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
@@ -9,6 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import {SearchButtonIcon} from '../common/icon';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -40,9 +39,9 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
             placeholder={searchMessage ?? '전시회를 검색하세요'}
             value={searchKeyword}
           />
-          <TouchableOpacity onPress={onPressSearch}>
-            <SearchIcon />
-          </TouchableOpacity>
+          <SearchIconTouch onPress={onPressSearch}>
+            <SearchButtonIcon />
+          </SearchIconTouch>
         </SearchView>
         <UnderLine />
       </SearchContainer>
@@ -63,7 +62,7 @@ const ContentsContainer = styled.View`
 
 const SearchContainer = styled.View`
   flex-direction: column;
-  padding-top: ${hp(1.2)}px;
+  padding-top: ${wp(2.2)}px;
   padding-bottom: ${hp(0.8)}px;
   padding-left: ${wp(5)}px;
   padding-right: ${wp(5)}px;
@@ -77,7 +76,10 @@ const UnderLine = styled.View`
 const SearchView = styled.View`
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+`;
+
+const SearchIconTouch = styled.TouchableOpacity`
+  padding-top: ${hp(2.4)}px;
 `;
 
 const SearchWord = styled.TextInput`

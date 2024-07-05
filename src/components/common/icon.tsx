@@ -6,10 +6,14 @@ import {
   EmptyStar,
   FullHeart,
   FullStar,
+  GreyTag,
+  LeaveGathering,
   OptionBar,
+  PinkTag,
   PrivateToggle,
   ProfileUpdate,
   PublicToggle,
+  SearchButton,
   WriteDiaryButton,
   WriterPencil,
 } from '~/assets/images';
@@ -101,4 +105,24 @@ export const EmptyStarIcon = () => {
 export const OptionBarIcon = () => {
   const height = rw(6);
   return <OptionBar width={100 * (height / 100)} height={height} />;
+};
+
+export const GreyNameTagIcon = () => {
+  const height = rw(12.9);
+  return <GreyTag width={2800 * (height / 400)} height={height} />;
+};
+
+export const PinkNameTagIcon = () => {
+  const height = rw(12.9);
+  return <PinkTag width={2800 * (height / 400)} height={height} />;
+};
+
+export const SearchButtonIcon = () => {
+  const height = rw(4);
+  return <SearchButton width={100 * (height / 100)} height={height} />;
+};
+
+export const LeaveGatheringIcon = () => {
+  const height = rw(4.8);
+  return <LeaveGathering width={101 * (height / 100)} height={height} />;
 };

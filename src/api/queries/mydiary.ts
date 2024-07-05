@@ -182,8 +182,10 @@ export const useCreateMyDiary = (
     },
     onSuccess: () => {
       console.log('[WriteMyDiaryScreen] success create WriteMyDiary');
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList());
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
+      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyExhList().queryKey);
+      queryClient.invalidateQueries(
+        mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
+      );
     },
   });
 };
@@ -203,7 +205,9 @@ export const useUpdateMyDiary = (
     },
     onSuccess: () => {
       console.log('[WriteMyDiaryScreen(Update)] success update WriteMyDiary');
-      queryClient.invalidateQueries(mydiaryQueryKeys.fetchMyDiaryList(exhId));
+      queryClient.invalidateQueries(
+        mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
+      );
     },
   });
 };

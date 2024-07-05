@@ -1,15 +1,21 @@
 import React, {useEffect} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameTag from '../NameTag';
 import {useFetchSearchNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
+import {
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {FONT_NAME} from '~/components/common/style';
 
 interface SearchNewMateListInGatheringProps {
   searchKeyword: string;
@@ -64,7 +70,7 @@ const SearchNewMateListInGathering: React.FC<
         <FlatList
           data={searchNewMateInGathering}
           renderItem={({item, index}) => (
-            <TouchNewMate onPress={() => pressItem(item)}>
+            <TouchableOpacity onPress={() => pressItem(item)}>
               <UserInfoWrapper>
                 <NameTag isSelected={item.userId === selectedMate}>
                   <UserInfo>
@@ -86,7 +92,7 @@ const SearchNewMateListInGathering: React.FC<
                   </UserInfo>
                 </NameTag>
               </UserInfoWrapper>
-            </TouchNewMate>
+            </TouchableOpacity>
           )}
         />
       )}
@@ -102,28 +108,24 @@ const MateListView = styled.View`
   flex-direction: column;
 `;
 
-const TouchNewMate = styled.TouchableOpacity`
-  margin-left: ${wp(12)}px;
-  margin-right: ${wp(12)}px;
-`;
-
 const UserInfoWrapper = styled.View`
-  padding-top: ${wp(7)}px;
+  padding-top: ${wp(1.9)}px;
+  align-items: center;
 `;
 
 const UserInfo = styled.View`
   flex-direction: row;
   justify-content: center;
-  gap: 13px;
+  gap: ${wp(3.1)}px;
 `;
 
 const ProfileWrapper = styled.View`
-  border-color: #ff6f61;
-  border-radius: 50px;
+  border-color: ${MAIN_COLOR};
+  border-radius: ${wp(50)}px;
   align-items: center;
   justify-content: center;
-  width: ${wp(35)}px;
-  height: ${wp(35)}px;
+  width: ${wp(10)}px;
+  height: ${wp(10)}px;
   overflow: hidden;
 `;
 
@@ -135,19 +137,19 @@ const Profile = styled.Image`
 
 const UserInfoColumn = styled.View`
   flex-direction: column;
-  gap: 1.6px;
+  gap: ${wp(0.4)}px;
   justify-content: center;
 `;
 
 const NickName = styled.Text`
-  font-size: ${fp(16)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15.1)}px;
   text-align: center;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const Art = styled.Text`
-  font-size: ${fp(11)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(10.4)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;

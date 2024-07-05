@@ -3,9 +3,8 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import {Keyboard} from 'react-native';
@@ -16,6 +15,19 @@ import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {useAddNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import SearchNewMateListInGathering from './SearchNewMateListInGathering';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '~/components/common/style';
 
 const AddNewMateInGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -59,7 +71,7 @@ const AddNewMateInGatheringScreen = () => {
 
   const onPressSearch = () => {
     if (checkBlankInKeyword(nicknameKeyword)) {
-      showToast('다시 검색해 주세요');
+      showToast('다시 검색해 주세요.');
     } else {
       setSelectedMate(-1);
       setKeyword(nicknameKeyword);
@@ -92,15 +104,15 @@ const AddNewMateInGatheringScreen = () => {
             />
           )}
         </SearchExhFrame>
+        {/* 모임 메이트 추가 버튼 */}
+        <ButtonTouch
+          onPress={onPressCreate}
+          disabled={selectedMate === -1 ? true : false}>
+          <CreateButton isSelected={selectedMate === -1 ? false : true}>
+            추가
+          </CreateButton>
+        </ButtonTouch>
       </Contents>
-      {/* 모임 메이트 추가 버튼 */}
-      <ButtonTouch
-        onPress={onPressCreate}
-        disabled={selectedMate === -1 ? true : false}>
-        <CreateButton isSelected={selectedMate === -1 ? false : true}>
-          추가
-        </CreateButton>
-      </ButtonTouch>
       {isLoadingOpen && <LoadingModal message={'모임 메이트 추가 중'} />}
     </Container>
   );
@@ -111,14 +123,16 @@ export default AddNewMateInGatheringScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
+  flex-direction: column;
+  background-color: ${BACK_COLOR};
 `;
 
 const AreaView = styled.View`
   flex-direction: row;
-  padding-top: ${hp(10)}px;
-  padding-left: ${wp(20)}px;
-  gap: ${wp(5)}px;
-  align-items: flex-end;
+  padding-top: ${wp(3.3)}px;
+  padding-left: ${wp(4.8)}px;
+  gap: ${wp(1.5)}px;
+  align-items: center;
 `;
 
 interface AreaTextProps {
@@ -127,21 +141,20 @@ interface AreaTextProps {
 
 const AreaText = styled.Text<AreaTextProps>`
   font-size: ${(props: AreaTextProps) =>
-    props.greyColor ? `${fp(15)}px` : `${fp(19)}px`};
-  font-family: 'omyu pretty';
-  color: #3c4045;
-  color: ${(props: AreaTextProps) => (props.greyColor ? '#D3D3D3' : '#3c4045')};
+    props.greyColor ? `${rf(14)}px` : `${AREA_FONT_SIZE}px`};
+  color: ${(props: AreaTextProps) =>
+    props.greyColor ? `${LIGHT_GREY}` : `${DEFAULT_TEXT}`};
+  font-family: ${FONT_NAME};
 `;
 
 const Contents = styled.View`
   flex: 1;
-  flex-direction: column;
-  background-color: #f6f6f6;
+  padding-bottom: ${wp(3.3)}px;
 `;
 
 const ButtonTouch = styled.TouchableOpacity`
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
 `;
 
 interface CreateButtonProps {
@@ -149,12 +162,12 @@ interface CreateButtonProps {
 }
 
 const CreateButton = styled.Text<CreateButtonProps>`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
   background-color: ${(props: CreateButtonProps) =>
-    props.isSelected ? '#ff6f61' : '#D3D3D3'};
+    props.isSelected ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
 `;

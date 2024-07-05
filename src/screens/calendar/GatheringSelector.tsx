@@ -6,7 +6,14 @@ import {SelectCountry} from 'react-native-element-dropdown';
 import {imageDataset} from './imageDataset';
 import {useIsFocused} from '@react-navigation/native';
 import {IPicker} from './CalendarScreen';
-import { showToast } from '~/components/common/modal/toastConfig';
+import {showToast} from '~/components/common/modal/toastConfig';
+import {MAIN_COLOR} from '~/components/common/colors';
+import {FONT_NAME} from '~/components/common/style';
+import {
+  responseFont as rf,
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
+} from '~/components/common/ResponsiveSize';
 
 interface GatheringSelectorProps {
   handleSelectorItems: (list: IPicker[]) => void;
@@ -66,7 +73,7 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
       settingGatheringSelector();
     }
     if (isError) {
-      showToast("모임 목록 조회 실패:(")
+      showToast('모임 목록 조회 실패 :(');
     }
     if (isLoading) {
       setOpenLoading(true);
@@ -77,24 +84,24 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
 
   return (
     <>
-    <SelectCountry
-      style={styles.dropdown}
-      selectedTextStyle={styles.selectedTextStyle}
-      placeholderStyle={styles.placeholderStyle}
-      imageStyle={styles.imageStyle}
-      iconStyle={styles.iconStyle}
-      maxHeight={200}
-      value={selectedValue}
-      data={selectorItems}
-      valueField="value"
-      labelField="label"
-      imageField="image"
-      placeholder="모임 선택"
-      onChange={e => {
-        handleSelectedValue(e.value);
-      }}
-    />
-    {openLoading && <LoadingModal message="모임 목록 조회 중 :)" />}
+      <SelectCountry
+        style={styles.dropdown}
+        selectedTextStyle={styles.selectedTextStyle}
+        placeholderStyle={styles.placeholderStyle}
+        imageStyle={styles.imageStyle}
+        iconStyle={styles.iconStyle}
+        maxHeight={200}
+        value={selectedValue}
+        data={selectorItems}
+        valueField="value"
+        labelField="label"
+        imageField="image"
+        placeholder="모임 선택"
+        onChange={e => {
+          handleSelectedValue(e.value);
+        }}
+      />
+      {openLoading && <LoadingModal message="모임 목록 조회 중 :)" />}
     </>
   );
 };
@@ -104,26 +111,27 @@ export default GatheringSelector;
 /** style */
 const styles = StyleSheet.create({
   dropdown: {
-    width: '30%',
+    width: wp(20), // 동적으로 가능?
+    height: hp(4),
     backgroundColor: 'white',
-    borderRadius: 22,
-    paddingHorizontal: 8,
-    borderColor: '#ff6f61',
-    borderWidth: 1,
-    marginTop: -8,
+    borderRadius: wp(20),
+    paddingHorizontal: wp(1.5),
+    borderColor: MAIN_COLOR,
+    borderWidth: wp(0.3),
+    marginTop: wp(-2),
   },
   imageStyle: {
     width: 0,
     height: 0,
   },
   placeholderStyle: {
-    fontSize: 16,
-    fontFamily: 'omyu pretty',
+    fontSize: rf(13),
+    fontFamily: FONT_NAME,
   },
   selectedTextStyle: {
-    fontSize: 16,
-    marginLeft: 8,
-    fontFamily: 'omyu pretty',
+    fontSize: rf(13),
+    marginLeft: wp(1.8),
+    fontFamily: FONT_NAME,
   },
   iconStyle: {
     width: 20,

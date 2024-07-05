@@ -46,7 +46,7 @@ const MyExhSearchScreen = () => {
 
   const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
-      showToast('다시 검색해 주세요');
+      showToast('다시 검색해 주세요.');
     } else {
       refetch();
     }

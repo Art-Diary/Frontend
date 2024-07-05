@@ -7,6 +7,7 @@ import {
   useFetchSearchExhInMyDiary,
 } from '~/api/queries/exhibition';
 import BackView from '~/components/common/BackView';
+import {BACK_COLOR} from '~/components/common/colors';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
@@ -45,7 +46,7 @@ const SearchAddVisitExhInGatheringScreen = () => {
 
   const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
-      showToast('다시 검색해 주세요');
+      showToast('다시 검색해 주세요.');
     } else {
       refetch();
     }
@@ -79,5 +80,5 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;

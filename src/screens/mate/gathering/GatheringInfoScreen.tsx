@@ -3,9 +3,9 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
-  heightPercentage as hp,
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import {
@@ -15,7 +15,7 @@ import {
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView from '~/components/exhibition/ExhItemView';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, Modal, Pressable, TouchableOpacity} from 'react-native';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
@@ -25,7 +25,27 @@ import {
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useGatheringListParamsActions} from '~/zustand/gathering/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
-import {AddMyExhButtonIcon} from '~/components/common/icon';
+import {
+  AddMyExhButtonIcon,
+  LeaveGatheringIcon,
+  OptionBarIcon,
+} from '~/components/common/icon';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_PADDING,
+  BUTTON_RADIUS,
+  DASH_WIDTH,
+  FONT_NAME,
+} from '~/components/common/style';
+import {Shadow} from 'react-native-shadow-2';
 
 interface ExhInfo {
   exhId: number;
@@ -42,7 +62,8 @@ const GatheringInfoScreen = () => {
   const {updateTab} = useTabIdentifierActions();
   const {updateGatheringListParams} = useGatheringListParamsActions();
   const {enterGatheringInfo} = useEnterGatheringInfo();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isOptionBarOpen, setIsOptionBarOpen] = useState(false);
   const {
     data: gatheringInfo,
     isLoading,
@@ -116,19 +137,28 @@ const GatheringInfoScreen = () => {
     });
   };
 
-  const pressGetOut = () => {
-    // 나가기 모달 열기
-    setIsOpen(true);
-  };
+  // const pressGetOut = () => {
+  //   // 나가기 모달 열기
+  //   setIsDeleteModalOpen(true);
+  // };
 
   const handleCloseModal = () => {
     // 나가기 모달 닫기
-    setIsOpen(false);
+    setIsDeleteModalOpen(false);
   };
 
   const handleDeleteGathering = () => {
     // 모임 나가기 api
     deleteGathering();
+  };
+
+  const handleOpenOptionBar = (open: boolean) => {
+    setIsOptionBarOpen(open);
+  };
+
+  const handleClickDeleteOption = () => {
+    handleOpenOptionBar(false);
+    setIsDeleteModalOpen(true);
   };
 
   return (
@@ -140,8 +170,32 @@ const GatheringInfoScreen = () => {
             ? '이전 페이지로 이동해주세요.'
             : enterGatheringInfo.gatherName
         }
-        line={true}
-      />
+        line={true}>
+        <TouchableOpacity onPress={() => handleOpenOptionBar(!isOptionBarOpen)}>
+          <OptionBarIcon />
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={isOptionBarOpen}
+            onRequestClose={() => handleOpenOptionBar(false)}>
+            <Pressable
+              // style={{borderWidth: 1}}backgroundColor: 'rgba(0, 0, 0, 0.3)'
+              style={{flex: 1}}
+              onPress={() => handleOpenOptionBar(false)}>
+              <OptionWrapper>
+                <Shadow distance={8}>
+                  <TouchableOpacity onPress={handleClickDeleteOption}>
+                    <OptionContent>
+                      <LeaveGatheringIcon />
+                      <OptionContentText>모임 나가기</OptionContentText>
+                    </OptionContent>
+                  </TouchableOpacity>
+                </Shadow>
+              </OptionWrapper>
+            </Pressable>
+          </Modal>
+        </TouchableOpacity>
+      </BackView>
       {/* body */}
       <Contents>
         <ExhMates>
@@ -183,21 +237,22 @@ const GatheringInfoScreen = () => {
             )}
           />
         </ExhListWrapper>
-        {/* 모임 나가기 버튼 */}
-        <DeleteTouch
-          onPress={pressGetOut}
-          disabled={enterGatheringInfo.gatherName === ''}>
-          <OutButton>모임 나가기</OutButton>
-        </DeleteTouch>
-        {isOpen && (
-          <ConfirmationModal handleCloseModal={handleCloseModal}>
-            <Message>모임을 나가겠습니까?</Message>
-            <TouchableOpacity onPress={handleDeleteGathering}>
-              <DeleteButton>나가기</DeleteButton>
-            </TouchableOpacity>
-          </ConfirmationModal>
-        )}
       </Contents>
+      {/* 모임 나가기 버튼 */}
+      {/* <DeleteTouch
+        onPress={pressGetOut}
+        disabled={enterGatheringInfo.gatherName === ''}>
+        <OutButton>모임 나가기</OutButton>
+      </DeleteTouch> */}
+
+      {isDeleteModalOpen && (
+        <ConfirmationModal handleCloseModal={handleCloseModal}>
+          <Message>모임을 나가겠습니까?</Message>
+          <TouchableOpacity onPress={handleDeleteGathering}>
+            <DeleteButton>나가기</DeleteButton>
+          </TouchableOpacity>
+        </ConfirmationModal>
+      )}
     </Container>
   );
 };
@@ -207,100 +262,64 @@ export default GatheringInfoScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
+  /* padding-bottom: ${wp(3)}px; */
 `;
 
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-top: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  background-color: ${BACK_COLOR};
+  padding-top: ${wp(3.3)}px;
+  gap: ${wp(3.3)}px;
 `;
 
 const ExhMates = styled.View`
   flex-direction: column;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  padding-left: ${wp(3.3)}px;
+  padding-right: ${wp(3.3)}px;
+  gap: ${wp(3.3)}px;
 `;
 
 const ExhListWrapper = styled.View`
   flex: 1;
   flex-direction: column;
-  gap: ${wp(5)}px;
 `;
 
 const ExhListTitle = styled.View`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(13)}px;
+  padding-left: ${wp(3.3)}px;
+  padding-right: ${wp(3.3)}px;
 `;
 
 const ContentText = styled.Text`
-  font-size: ${fp(22)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const Dot = styled.View`
   width: 100%;
-  border-bottom-width: ${wp(1.3)}px;
-  border-bottom-color: #d3d3d3;
+  border-bottom-width: ${DASH_WIDTH}px;
+  border-bottom-color: ${LIGHT_GREY};
   border-style: dashed;
-`;
-
-const OutButton = styled.Text`
-  padding: ${hp(10)}px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: #ff6f61;
-  color: white;
-  font-size: ${fp(17)}px;
-  font-family: 'omyu pretty';
-`;
-
-const Message = styled.Text`
-  text-align: center;
-  font-size: ${fp(17.9)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
-  padding-top: ${hp(45)}px;
-  padding-bottom: ${hp(45)}px;
-`;
-
-const DeleteTouch = styled.TouchableOpacity`
-  padding-left: ${wp(12)}px;
-  padding-right: ${wp(12)}px;
-`;
-
-const DeleteButton = styled.Text`
-  text-align: center;
-  margin-top: ${hp(14)}px;
-  font-size: ${fp(17.9)}px;
-  font-family: 'omyu pretty';
-  color: white;
-  background-color: #ff6f61;
-  padding-top: ${hp(9.5)}px;
-  padding-bottom: ${hp(9.5)}px;
-  border-radius: 5px;
 `;
 
 const RowView = styled.View`
   flex-direction: row;
-  padding-bottom: ${hp(3)}px;
-  gap: 10px;
+  padding-bottom: ${hp(0.5)}px;
+  gap: ${wp(2.3)}px;
 `;
 
 const AddNewItem = styled.TouchableOpacity`
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-width: 1.1px;
-  border-color: #979797;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-  height: ${wp(40)}px;
+  border-top-left-radius: ${BUTTON_RADIUS}px;
+  border-top-right-radius: ${BUTTON_RADIUS}px;
+  border-width: ${wp(0.3)}px;
+  border-color: ${MIDDLE_GREY};
+  padding-left: ${wp(4.2)}px;
+  padding-right: ${wp(4.2)}px;
+  height: ${wp(11.2)}px;
   align-items: center;
   justify-content: center;
 `;
@@ -310,7 +329,63 @@ interface NameProps {
 }
 
 const NameText = styled.Text<NameProps>`
-  font-size: ${fp(19)}px;
-  color: ${(props: NameProps) => (props.isAdd ? '#979797' : 'white')};
-  font-family: 'omyu pretty';
+  font-size: ${rf(18)}px;
+  color: ${(props: NameProps) => (props.isAdd ? `${MIDDLE_GREY}` : 'white')};
+  font-family: ${FONT_NAME};
 `;
+
+const Message = styled.Text`
+  text-align: center;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding: ${hp(8)}px;
+`;
+
+const DeleteButton = styled.Text`
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${BUTTON_RADIUS}px;
+  text-align: center;
+  background-color: ${MAIN_COLOR};
+  color: white;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
+`;
+
+const OptionWrapper = styled.View`
+  /* flex: 1; */
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-top: ${wp(12)}px;
+  margin-right: ${wp(5)}px;
+`;
+
+const OptionContent = styled.View`
+  flex-direction: row;
+  background-color: ${BACK_COLOR};
+  align-items: center;
+  gap: ${wp(3.3)}px;
+  padding: ${wp(3.3)}px;
+`;
+
+const OptionContentText = styled.Text`
+  text-align: center;
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+`;
+
+// const OutButton = styled.Text`
+//   padding: ${BUTTON_PADDING}px;
+//   border-radius: ${BUTTON_RADIUS}px;
+//   text-align: center;
+//   background-color: ${MAIN_COLOR};
+//   color: white;
+//   font-size: ${BUTTON_FONT_SIZE}px;
+//   font-family: ${FONT_NAME};
+// `;
+
+// const DeleteTouch = styled.TouchableOpacity`
+//   padding-left: ${wdp(3.3)}px;
+//   padding-right: ${wdp(3.3)}px;
+// `;

@@ -1,12 +1,24 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {
-  fontPercentage as fp,
-  widthPercentage as wp,
+  responseFont as rf,
+  widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import {useMateInfo} from '~/zustand/mate/mate';
 import MateExhList from './MateExhList';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {
+  DASH_WIDTH,
+  FONT_NAME,
+  ITEM_BORDER_WIDTH,
+} from '~/components/common/style';
 
 const MateExhListScreen = () => {
   const mateInfo = useMateInfo();
@@ -50,10 +62,10 @@ const MateExhListScreen = () => {
             </UserInfoColumn>
           </UserInfo>
         </UserWrapper>
-        <DashLine />
-        {/* 전시 목록 */}
-        <MateExhList />
       </Contents>
+      <DashLine />
+      {/* 전시 목록 */}
+      <MateExhList />
     </Container>
   );
 };
@@ -63,25 +75,27 @@ export default MateExhListScreen;
 /** style */
 const Container = styled.View`
   flex: 1;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const Contents = styled.View`
-  flex: 1;
+  /* flex: 1; */
   flex-direction: column;
-  padding-top: ${wp(12)}px;
-  gap: ${wp(12)}px;
+  padding-top: ${wp(3.3)}px;
+  padding-bottom: ${wp(3.3)}px;
+  /* gap: ${wp(3.3)}px; */
 `;
 
 const UserWrapper = styled.View`
   width: 100%;
   justify-content: center;
-  padding-left: ${wp(12)}px;
+  padding-left: ${wp(3.3)}px;
 `;
 
 const UserInfo = styled.View`
   flex-direction: row;
-  gap: 13px;
+  gap: ${wp(3.1)}px;
+  align-items: center;
 `;
 
 interface ProfileWrapperProps {
@@ -89,15 +103,15 @@ interface ProfileWrapperProps {
 }
 
 const ProfileWrapper = styled.View<ProfileWrapperProps>`
-  border-color: #ff6f61;
-  border-radius: 50px;
+  border-color: ${MAIN_COLOR};
+  border-radius: ${wp(50)}px;
   align-items: center;
   justify-content: center;
-  width: ${wp(35)}px;
-  height: ${wp(35)}px;
+  width: ${wp(10)}px;
+  height: ${wp(10)}px;
   overflow: hidden;
   border-width: ${(props: ProfileWrapperProps) =>
-    props.isPresent ? `0px` : `1px`};
+    props.isPresent ? `0px` : `${ITEM_BORDER_WIDTH}px`};
 `;
 
 const Profile = styled.Image`
@@ -108,26 +122,26 @@ const Profile = styled.Image`
 
 const UserInfoColumn = styled.View`
   flex-direction: column;
-  gap: 1.6px;
+  gap: ${wp(0.4)}px;
   justify-content: center;
 `;
 
 const NickName = styled.Text`
-  font-size: ${fp(16)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  font-size: ${rf(15.1)}px;
   text-align: center;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
 `;
 
 const Art = styled.Text`
-  font-size: ${fp(11)}px;
-  color: #979797;
-  font-family: 'omyu pretty';
+  font-size: ${rf(10.4)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
 const DashLine = styled.View`
   width: 100%;
   border-style: dashed;
-  border-color: #d3d3d3;
-  border-bottom-width: ${wp(1.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-bottom-width: ${DASH_WIDTH}px;
 `;

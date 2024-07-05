@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {Keyboard, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {SearchIcon} from '~/assets/images';
 import BackView from '~/components/common/BackView';
 import {
   widthPercentage as wp,
@@ -25,7 +24,7 @@ const ExhSearchName = () => {
 
   const onPressSearch = (name: string) => {
     if (checkBlankInKeyword(searchKeyword)) {
-      showToast('다시 검색해 주세요');
+      showToast('다시 검색해 주세요.');
     } else {
       setKeyword(searchKeyword);
       updateSearchName(searchKeyword);

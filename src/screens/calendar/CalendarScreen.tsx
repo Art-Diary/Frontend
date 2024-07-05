@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
 import {JoinDateWithDot, dateToString} from '~/utils/Date';
-import {heightPercentage as hp} from '~/components/common/ResponsiveSize';
 import {calendarColor} from './calendarColor';
 import {
   useTabIdentifierActions,
@@ -14,6 +13,7 @@ import ExhListOfDayInCalendar from './ExhListOfDayInCalendar';
 import {useFetchCalendar} from '~/api/queries/calendar';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {BACK_COLOR} from '~/components/common/colors';
 
 export interface IPicker {
   label: string;
@@ -51,8 +51,8 @@ const CalendarScreen = () => {
     Number(selectedValue) === -1
       ? 'alone'
       : Number(selectedValue) === -2
-      ? 'all'
-      : 'gather',
+        ? 'all'
+        : 'gather',
     Number(selectedValue) > -1 ? Number(selectedValue) : null,
     Number(changeMonth.split('.')[0]),
     Number(changeMonth.split('.')[1]),
@@ -158,6 +158,5 @@ export default CalendarScreen;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
-  padding-bottom: ${hp(5)}px;
+  background-color: ${BACK_COLOR};
 `;

@@ -1,6 +1,5 @@
 import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
-import {LightStarIcon} from '~/assets/images';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
@@ -9,6 +8,7 @@ import {
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
+import {AvgRateStarIcon} from '../common/icon';
 
 interface ExhInfo {
   poster: string;
@@ -56,7 +56,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
             resizeMode="contain"
             alt={'이미지 읽기 실패'}
           />
-          <ExhInfo haveRate={haveRate}>
+          <ExhInfo haveRate={haveRate} haveChildren={children}>
             <ExhName numberOfLines={1} ellipsizeMode="tail">
               {exhInfo.exhName}
             </ExhName>
@@ -72,7 +72,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
               </>
             ) : (
               <ExhRateWrapper>
-                <LightStarIcon />
+                <AvgRateStarIcon />
                 <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
               </ExhRateWrapper>
             )}
@@ -116,10 +116,11 @@ const TouchView = styled.TouchableOpacity`
 
 interface ExhInfoProps {
   haveRate: boolean;
+  haveChildren: boolean;
 }
 
 const ExhInfo = styled.View<ExhInfoProps>`
-  /* width: 85%; */
+  width: ${(props: ExhInfoProps) => (props.haveChildren ? `66%` : `100%`)};
   padding-top: ${wp(3)}px;
   padding-bottom: ${wp(3)}px;
   flex-direction: column;
@@ -156,6 +157,7 @@ const Poster = styled.Image`
 const ExhRateWrapper = styled.View`
   flex-direction: row;
   align-items: center;
+  gap: ${wp(0.5)}px;
 `;
 
 const ExhRate = styled.Text`
