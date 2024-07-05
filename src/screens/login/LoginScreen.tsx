@@ -7,7 +7,6 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import {GoogleIcon, KakaoIcon, NaverIcon} from '~/assets/images';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -22,6 +21,11 @@ import {handleKakaoLogin} from './KakaoLogin';
 import messaging from '@react-native-firebase/messaging';
 import {FONT_NAME} from '~/components/common/style';
 import {BACK_COLOR, MAIN_COLOR} from '~/components/common/colors';
+import {
+  GoogleLogoIcon,
+  KakaoLogoIcon,
+  NaverLogoIcon,
+} from '~/components/common/icon';
 
 type LoginUserInfo = {
   email: string;
@@ -156,19 +160,19 @@ const LoginScreen = () => {
             login={true}
             content="Google 로그인"
             handleTouch={() => handleLogin('google')}>
-            <GoogleIcon />
+            <GoogleLogoIcon />
           </GreyNameTag>
           <GreyNameTag
             login={true}
             content="Naver 로그인"
             handleTouch={() => handleLogin('naver')}>
-            <NaverIcon />
+            <NaverLogoIcon />
           </GreyNameTag>
           <GreyNameTag
             login={true}
             content="Kakao 로그인"
             handleTouch={() => handleLogin('kakao')}>
-            <KakaoIcon />
+            <KakaoLogoIcon />
           </GreyNameTag>
           {/* TODO 나중에 지우기 */}
           <TouchableOpacity onPress={handleTester}>

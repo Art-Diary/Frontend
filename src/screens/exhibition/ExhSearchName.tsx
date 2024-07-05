@@ -1,19 +1,19 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {Keyboard, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import {
-  widthPercentage as wp,
-  heightPercentage as hp,
-  fontPercentage as fp,
-} from '~/components/common/ResponsiveSize';
+import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import SearchExhFrame from '../../components/exhSearch/SearchExhFrame';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
-
+import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
+import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+/**TODO
+ * 같은 키워드를 검색할 경우 문제 생김
+ */
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -53,11 +53,10 @@ const ExhSearchName = () => {
         searchKeyword={searchKeyword}
         onPressSearch={() => onPressSearch(searchKeyword)}
         handleSearchKeyword={setSearchKeyword}>
-        {/* children={null}> */}
         <PreSearch>{'최근검색기록'}</PreSearch>
 
-        {/*테두리 있는 것
-        <PreSearchView>
+        {/* 테두리 있는 것 */}
+        {/* <PreSearchView>
           <PreSearchList>
             {'요시다유니'}
             {' x'}
@@ -68,15 +67,6 @@ const ExhSearchName = () => {
         </PreSearchView>
         <PreSearchView>
           <PreSearchList>{'대구'}</PreSearchList>
-        </PreSearchView> */}
-
-        {/* <PreSearchView>
-          <TouchableOpacity onPress={() => onPressPreSearch('요시다유니')}>
-            <PreSearchList>{'요시다유니'}</PreSearchList>
-          </TouchableOpacity>
-          <TouchableOpacity onPress=onPressDelete>
-            <PreSearchList>{'X'}</PreSearchList>
-          </TouchableOpacity>
         </PreSearchView> */}
 
         {examples.map((item: any) => (
@@ -101,78 +91,37 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
 `;
 
 const PreSearchView = styled.View`
-  //flex: 1;
   flex-direction: row;
-  // padding: ${wp(10)}px;
-  // text-align: center;
-  padding-bottom: ${wp(2)}px;
-  padding-top: ${wp(5)}px;
-  padding-left: ${wp(7)}px;
-  padding-right: ${wp(10)}px;
+  align-items: center;
+  padding-top: ${wp(1.8)}px;
+  padding-bottom: ${wp(1.8)}px;
+  padding-left: ${wp(8.3)}px;
+  gap: ${wp(6)}px;
 `;
 
 const PreSearch = styled.Text`
-  // flex: 1;
-  flex-direction: column;
-  font-size: ${fp(17)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
-  padding-top: ${wp(18)}px;
-  padding-bottom: ${wp(5)}px;
-  padding-left: ${wp(10)}px;
+  font-size: ${AREA_FONT_SIZE}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
+  padding-top: ${wp(4.5)}px;
+  padding-bottom: ${wp(1.5)}px;
+  padding-left: ${wp(5.5)}px;
+  padding-right: ${wp(5.5)}px;
 `;
 
 const PreSearchList = styled.Text`
-  //flex: 1;
-  flex-direction: row;
-  font-size: ${fp(15)}px;
-  color: #d3d3d3;
-  font-family: 'omyu pretty';
-  padding-right: ${wp(10)}px;
-  padding-bottom: ${wp(5)}px;
-  padding-top: ${wp(5)}px;
-  padding-left: ${wp(15)}px;
-  /* border-color: #d3d3d3;
-  border-width: ${wp(1.3)}px;
-  border-radius: ${wp(20)}px; */
-`;
+  color: ${LIGHT_GREY};
+  font-size: ${AREA_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
+  text-align: center;
 
-const ContentsContainer = styled.View`
-  flex: 1;
-  flex-direction: column;
-  width: 100%;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(15)}px;
-  padding-right: ${wp(15)}px;
-`;
-
-const SearchContainer = styled.View`
-  flex-direction: column;
-  padding-top: ${hp(5)}px;
-  padding-bottom: ${hp(5)}px;
-  padding-left: ${wp(10)}px;
-  padding-right: ${wp(10)}px;
-`;
-
-const UnderLine = styled.View`
-  border-bottom-width: 1px;
-  border-color: #ff6f61;
-`;
-
-const SearchView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const SearchWord = styled.TextInput`
-  flex: 1;
-  font-size: ${fp(16)}px;
-  color: #3c4045;
-  font-family: 'omyu pretty';
+  /* 테두리 있는 것 */
+  /* padding: ${wp(2)}px;
+  border-color: ${LIGHT_GREY};
+  border-width: ${DASH_WIDTH}px;
+  border-radius: ${wp(50)}px; */
 `;

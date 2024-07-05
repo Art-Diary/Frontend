@@ -7,7 +7,6 @@ import {
 } from 'react-native-image-picker';
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import styled from 'styled-components/native';
-import {CameraIcon} from '~/assets/images';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
@@ -15,6 +14,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
+import {CameraButtonIcon} from '../common/icon';
 
 interface EditNicknameProps {
   imageUri: string | undefined;
@@ -69,7 +69,7 @@ const EditPicture: React.FC<EditNicknameProps> = ({imageUri, setImageUri}) => {
         <PutProfile>
           {imageUri === undefined ? (
             <TouchableOpacity style={{padding: 30}} onPress={showPhoto}>
-              <CameraIcon />
+              <CameraButtonIcon />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity

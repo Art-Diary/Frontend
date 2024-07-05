@@ -8,7 +8,6 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {CameraIcon} from '~/assets/images';
 import {
   Asset,
   ImageLibraryOptions,
@@ -22,6 +21,7 @@ import {
 import {RootStackNavigationProp} from '~/App';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {
+  CameraButtonIcon,
   EmptyStarIcon,
   FullStarIcon,
   PrivateToggleIcon,
@@ -204,7 +204,7 @@ const WriteMyDiaryInfoScreen = () => {
           <PutThumbnail>
             {imageUri === undefined ? (
               <TouchableOpacity style={{padding: 30}} onPress={showPhoto}>
-                <CameraIcon />
+                <CameraButtonIcon />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

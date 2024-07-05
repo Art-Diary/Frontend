@@ -7,17 +7,9 @@ import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import SettingScreen from '~/screens/setting/SettingScreen';
 import {
-  OnExhibitionButton,
-  OffExhibitionButton,
-  OnCalenderButton,
-  OffCalenderButton,
-  OffDiaryButton,
-  OnMateButton,
-  OffMateButton,
-  OnSettingButton,
-  OffSettingButton,
-} from '~/assets/images/index';
-import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import MateMainScreen from '~/screens/mate/main/MateMainScreen';
@@ -25,6 +17,17 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {DASH_WIDTH} from '~/components/common/style';
 import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {
+  CenterDiaryIcon,
+  OffCalenderIcon,
+  OffExhibitionIcon,
+  OffMateIcon,
+  OffSettingIcon,
+  OnCalenderIcon,
+  OnExhibitionIcon,
+  OnMateIcon,
+  OnSettingIcon,
+} from '~/components/common/icon';
 
 const Tab = createBottomTabNavigator();
 
@@ -93,22 +96,18 @@ const BottomRoutes = () => {
 
             if (route.name === 'Exhibition') {
               iconSource = focused ? (
-                <OnExhibitionButton />
+                <OnExhibitionIcon />
               ) : (
-                <OffExhibitionButton />
+                <OffExhibitionIcon />
               );
             } else if (route.name === 'Calender') {
-              iconSource = focused ? (
-                <OnCalenderButton />
-              ) : (
-                <OffCalenderButton />
-              );
+              iconSource = focused ? <OnCalenderIcon /> : <OffCalenderIcon />;
             } else if (route.name === 'Diary') {
-              iconSource = <OffDiaryButton />;
+              iconSource = <CenterDiaryIcon />;
             } else if (route.name === 'Mate') {
-              iconSource = focused ? <OnMateButton /> : <OffMateButton />;
+              iconSource = focused ? <OnMateIcon /> : <OffMateIcon />;
             } else if (route.name === 'Setting') {
-              iconSource = focused ? <OnSettingButton /> : <OffSettingButton />;
+              iconSource = focused ? <OnSettingIcon /> : <OffSettingIcon />;
             }
             return iconSource;
           },
@@ -146,6 +145,8 @@ const footerStyles = StyleSheet.create({
     borderColor: BORDER_COLOR,
     backgroundColor: BACK_COLOR,
     elevation: 0, // 상단 테두리의 음영 효과를 없애기 위해 elevation 속성을 0으로 설정
+    paddingLeft: wp(1),
+    paddingRight: wp(1),
     paddingTop: hp(0.6),
     height: hp(7),
     borderTopWidth: DASH_WIDTH, // 테두리 너비
