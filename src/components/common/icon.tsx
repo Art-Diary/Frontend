@@ -19,11 +19,11 @@ import {
   LeaveGathering,
   MoreContents,
   NaverLogo,
-  OffCalender,
+  OffCalendar,
   OffExhibition,
   OffMate,
   OffSetting,
-  OnCalender,
+  OnCalendar,
   OnExhibition,
   OnMate,
   OnSetting,
@@ -198,14 +198,14 @@ export const CameraButtonIcon = () => {
 };
 
 /** bottom nav */
-export const OffCalenderIcon = () => {
+export const OffCalendarIcon = () => {
   const height = hp(5);
-  return <OffCalender width={100 * (height / 153)} height={height} />;
+  return <OffCalendar width={100 * (height / 153)} height={height} />;
 };
 
-export const OnCalenderIcon = () => {
+export const OnCalendarIcon = () => {
   const height = hp(5);
-  return <OnCalender width={101 * (height / 153)} height={height} />;
+  return <OnCalendar width={101 * (height / 153)} height={height} />;
 };
 
 export const OffMateIcon = () => {
