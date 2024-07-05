@@ -28,17 +28,20 @@ import {
   DASH_WIDTH,
   FONT_NAME,
 } from '~/components/common/style';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
+  const {updateDate} = useDateFromExhActions();
 
   useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'mate') {
         updateTab('mate');
+        updateDate(null);
       }
     }
   }, [isFocused]);

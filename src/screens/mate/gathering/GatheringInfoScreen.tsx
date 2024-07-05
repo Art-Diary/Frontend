@@ -46,6 +46,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import {Shadow} from 'react-native-shadow-2';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 interface ExhInfo {
   exhId: number;
@@ -77,11 +78,13 @@ const GatheringInfoScreen = () => {
     isError: deleteError,
     isSuccess: deleteSuccess,
   } = useDeleteGathering(enterGatheringInfo.gatherId);
+  const {updateDate} = useDateFromExhActions();
 
   useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'gathering') {
         updateTab('gathering');
+        updateDate(null);
       }
       refetch();
     }

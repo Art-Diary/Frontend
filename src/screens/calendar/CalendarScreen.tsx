@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {JoinDateWithDot, dateToString} from '~/utils/Date';
+import {JoinDateWithDot, splitDate} from '~/utils/Date';
 import {calendarColor} from './calendarColor';
 import {
   useTabIdentifierActions,
@@ -14,6 +14,7 @@ import {useFetchCalendar} from '~/api/queries/calendar';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
+import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 
 export interface IPicker {
   label: string;
@@ -30,10 +31,15 @@ const CalendarScreen = () => {
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
+  const {date: dateFromExhInfo} = useDateFromExhInfo();
   // 사용자가 선택한 날짜
-  const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
+  const [selectedDate, setSelectedDate] = useState(
+    JoinDateWithDot(splitDate(dateFromExhInfo)),
+  );
   // 월 변경 화살표 클릭 인식을 위한 상태 변화
-  const [changeMonth, setChangeMonth] = useState(dateToString(new Date()));
+  const [changeMonth, setChangeMonth] = useState(
+    JoinDateWithDot(splitDate(dateFromExhInfo)),
+  );
   // 일정이 있는 날짜 리스트
   const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
   // 모임 선택 selector - item
@@ -131,6 +137,7 @@ const CalendarScreen = () => {
   return (
     <Container>
       <CustomCalendar
+        initDate={splitDate(dateFromExhInfo)}
         onSelectedDate={setSelectedDate}
         markedDates={markedDates}
         setChangeMonth={setChangeMonth}>

@@ -1,6 +1,6 @@
 // bottom nav icon
-export {default as OffCalender} from './bottom_nav_icon/off_calendar.svg';
-export {default as OnCalender} from './bottom_nav_icon/on_calendar.svg';
+export {default as OffCalendar} from './bottom_nav_icon/off_calendar.svg';
+export {default as OnCalendar} from './bottom_nav_icon/on_calendar.svg';
 export {default as OffMate} from './bottom_nav_icon/off_mate.svg';
 export {default as OnMate} from './bottom_nav_icon/on_mate.svg';
 export {default as OffSetting} from './bottom_nav_icon/off_setting.svg';
