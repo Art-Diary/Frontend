@@ -4,6 +4,8 @@ import {
   deleteUser,
   fetchUserInfo,
   loginUser,
+  separateSocialLogin,
+  uniteSocialLogin,
   updateAlarm1,
   updateAlarm2,
   updateAlarm3,
@@ -113,8 +115,13 @@ export const useDeleteUser = (reason: string) => {
   });
 };
 
-export const useLoginUser = () => {
-  return useMutation({
+export const useLoginUser = (): UseMutationResult<
+  any,
+  any,
+  LoginUserParams,
+  unknown
+> => {
+  return useMutation<any, any, LoginUserParams, unknown>({
     mutationFn: (loginInfo: LoginUserParams) => loginUser(loginInfo),
     onError: err => {
       console.log(err);
@@ -131,6 +138,58 @@ export const useLoginUser = () => {
           JSON.stringify(resData.initInfo),
         );
         console.log('[Login] success Login');
+        // console.log('[Login] success Login +', providerType);
+      } catch (error) {
+        console.log('[AsyncStorage] Error storing userId', error);
+      }
+      return resData;
+    },
+  });
+};
+
+export const useUniteSocialLogin = () => {
+  return useMutation({
+    mutationFn: (loginInfo: LoginUserParams) => uniteSocialLogin(loginInfo),
+    onError: err => {
+      console.log(err);
+      console.log('[Unite Login] error Login');
+    },
+    onSuccess: async (res: any) => {
+      const resData = res.data;
+      // TODO
+      try {
+        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem(
+          'initInfo',
+          JSON.stringify(resData.initInfo),
+        );
+        console.log('[Unite Login] success Login');
+        // console.log('[Login] success Login +', providerType);
+      } catch (error) {
+        console.log('[AsyncStorage] Error storing userId', error);
+      }
+      return resData;
+    },
+  });
+};
+
+export const useSeparateSocialLogin = () => {
+  return useMutation({
+    mutationFn: (loginInfo: LoginUserParams) => separateSocialLogin(loginInfo),
+    onError: err => {
+      console.log(err);
+      console.log('[Separate Login] error Login');
+    },
+    onSuccess: async (res: any) => {
+      const resData = res.data;
+      // TODO
+      try {
+        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem(
+          'initInfo',
+          JSON.stringify(resData.initInfo),
+        );
+        console.log('[Separate Login] success Login');
         // console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);

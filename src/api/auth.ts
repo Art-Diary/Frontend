@@ -26,6 +26,12 @@ export const deleteUser = (reason: string) =>
 export const loginUser = async (loginInfo: LoginUserParams) =>
   client.post(`/users`, {...loginInfo});
 
+export const uniteSocialLogin = async (loginInfo: LoginUserParams) =>
+  client.post(`/users/unite`, {...loginInfo});
+
+export const separateSocialLogin = async (loginInfo: LoginUserParams) =>
+  client.post(`/users/separate`, {...loginInfo});
+
 export const updateAlarmToken = (alarmToken: string | null) =>
   client.patch(`/users/alarm-token`, {alarmToken: alarmToken});
 
