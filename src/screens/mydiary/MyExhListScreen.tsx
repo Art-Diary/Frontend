@@ -10,17 +10,20 @@ import {
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 const MyExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
+  const {updateDate} = useDateFromExhActions();
 
   useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'mydiary') {
         updateTab('mydiary');
+        updateDate(null);
       }
     }
   }, [isFocused]);

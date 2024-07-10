@@ -32,6 +32,22 @@ export const changeDotToHyphen = (date: string) => {
   return date.replace(/\./g, '-');
 };
 
+export const splitDate = (date: string | null) => {
+  var data;
+  var result: number[] = [];
+
+  if (date) {
+    data = date.split('-');
+  } else {
+    data = dateToString(new Date()).split('.');
+  }
+
+  result.push(Number(data[0]));
+  result.push(Number(data[1]));
+  result.push(Number(data[2]));
+  return result;
+};
+
 export const getDateDay = (dates: number[]) => {
   const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
   return WEEKDAY[new Date(dates[0], dates[1] - 1, dates[2]).getDay()];

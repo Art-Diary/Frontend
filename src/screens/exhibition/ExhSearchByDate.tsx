@@ -3,7 +3,7 @@ import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {changeDotToHyphen, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString, splitDate} from '~/utils/Date';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,
@@ -13,6 +13,7 @@ import {
 } from '~/components/common/style';
 import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {BackButtonIcon} from '~/components/common/icon';
+import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 
 interface ExhSearchByDateProps {
   isVisible: boolean;
@@ -38,6 +39,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
     state,
   );
   const [selectedOption5, setSelectedOption5] = useState<string | null>(date);
+  const {date: dateFromExhInfo} = useDateFromExhInfo();
 
   const onPressDate = (selectedOption4: string[] | null) => {
     const dateObject = changeDotToHyphen(selectedDate);
@@ -57,6 +59,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
         <ContentView>
           <TextView>{'날짜 선택'}</TextView>
           <CustomCalendar
+            initDate={splitDate(dateFromExhInfo)}
             onSelectedDate={setSelectedDate}
             markedDates={[]}
             setChangeMonth={setChangeMonth}

@@ -19,11 +19,11 @@ import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
   CenterDiaryIcon,
-  OffCalenderIcon,
+  OffCalendarIcon,
   OffExhibitionIcon,
   OffMateIcon,
   OffSettingIcon,
-  OnCalenderIcon,
+  OnCalendarIcon,
   OnExhibitionIcon,
   OnMateIcon,
   OnSettingIcon,
@@ -100,8 +100,8 @@ const BottomRoutes = () => {
               ) : (
                 <OffExhibitionIcon />
               );
-            } else if (route.name === 'Calender') {
-              iconSource = focused ? <OnCalenderIcon /> : <OffCalenderIcon />;
+            } else if (route.name === 'Calendar') {
+              iconSource = focused ? <OnCalendarIcon /> : <OffCalendarIcon />;
             } else if (route.name === 'Diary') {
               iconSource = <CenterDiaryIcon />;
             } else if (route.name === 'Mate') {
@@ -117,7 +117,7 @@ const BottomRoutes = () => {
         })}
         backBehavior="none">
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
-        <Tab.Screen name="Calender" component={CalendarScreen} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="Diary" component={MyExhListScreen} />
         <Tab.Screen name="Mate" component={MateMainScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import {
@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ProfileNameTag from './nameTag/ProfileNameTag';
 import GreyNameTag from '../../components/common/GreyNameTag';
@@ -20,10 +20,28 @@ import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
 import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 const SettingScreen = () => {
   const queryClient = useQueryClient();
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
+  const {updateDate} = useDateFromExhActions();
+
+  useEffect(() => {
+    if (isFocused) {
+      if (tabIdentifierInfo.tab !== 'setting') {
+        updateTab('setting');
+        updateDate(null);
+      }
+    }
+  }, [isFocused]);
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem('userId');

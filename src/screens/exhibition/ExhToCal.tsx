@@ -1,4 +1,4 @@
-import {useNavigation, RouteProp} from '@react-navigation/native';
+import {useNavigation, RouteProp, useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -13,6 +13,7 @@ import {changeDotToHyphen, JoinDateWithDot, dateToString} from '~/utils/Date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 interface MarkedType {
   date: string;
@@ -30,8 +31,9 @@ interface Props {
 }
 /**
  * TODO
- * 캘린더 이동이 안됨.
- * 날짜 저장하고 바로 달력에 표시 안됨.
+ * [x] 캘린더 이동이 안됨.
+ * [x] 캘린더 이동 시 해당 달로 이동
+ * [x] 날짜 저장하고 바로 달력에 표시 안됨.
  */
 const ExhToCal: React.FC<Props> = ({route}) => {
   const {exhId} = route.params;
@@ -41,6 +43,8 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   const visitedExhId = exhId;
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); //날짜 선택 누를 시,모달 오픈
+  const {updateDate} = useDateFromExhActions();
+  const isFocused = useIsFocused();
 
   const {
     data: dates,
@@ -59,6 +63,12 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     visitedExhId,
     isForgot ? null : changeDotToHyphen(selectedDate),
   );
+
+  useEffect(() => {
+    if (isFocused) {
+      refetchDates();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (isDatesSuccess) {
@@ -113,6 +123,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
 
   const onPressYes = () => {
     optionsModalClose();
+    updateDate(selectedDate);
     navigation.reset({
       index: 0,
       routes: [

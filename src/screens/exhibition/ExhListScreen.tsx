@@ -39,6 +39,7 @@ import {
 } from '~/components/common/icon';
 import {BACK_COLOR, BORDER_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
 interface Exhibition {
   exhId: number;
@@ -77,6 +78,7 @@ const ExhListScreen = () => {
   const {updateAddDate} = useAddScheduleActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
+  const {updateDate} = useDateFromExhActions();
 
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
@@ -114,6 +116,11 @@ const ExhListScreen = () => {
       setIsPriceVisible(false);
       setIsStateVisible(false);
       setIsDateVisible(false);
+
+      if (tabIdentifierInfo.tab !== 'exhibition') {
+        updateTab('exhibition');
+        updateDate(null);
+      }
 
       refetch();
     }
@@ -209,16 +216,7 @@ const ExhListScreen = () => {
   useEffect(() => {
     if (isSuccess) {
       setHearts(data);
-      // }
-
-      // useEffect(() => {
-      //   if (isFocused) {
-      if (tabIdentifierInfo.tab !== 'exhibition') {
-        updateTab('exhibition');
-      }
-      // refetch();
     }
-    // }, [isFocused, changeMonth, selectedValue]);
   }, [isSuccess, data]);
 
   useEffect(() => {

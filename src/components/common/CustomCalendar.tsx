@@ -7,7 +7,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {dateToString} from '~/utils/Date';
+import {dateToString, JoinDateWithDot} from '~/utils/Date';
 import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
 
@@ -17,6 +17,7 @@ interface MarkedType {
 }
 
 interface CalendarProps {
+  initDate: number[];
   onSelectedDate: (selectedDate: string) => void;
   markedDates: MarkedType[];
   setChangeMonth?: (changeMonth: string) => void;
@@ -46,14 +47,17 @@ const months = [
 ];
 
 const CustomCalendar: React.FC<CalendarProps> = ({
+  initDate,
   onSelectedDate,
   markedDates,
   setChangeMonth,
   children,
 }) => {
-  const [currentDate, setCurrentDate] = useState(new Date()); // 현재 월
+  const [currentDate, setCurrentDate] = useState<Date>(
+    new Date(initDate[0], initDate[1] - 1, initDate[2]),
+  ); // 현재 월
   const [selectedDate, setSelectedDate] = useState<string>(
-    dateToString(new Date()),
+    JoinDateWithDot(initDate),
   ); // 선택한 날짜
 
   const goToNextMonth = () => {
