@@ -26,6 +26,8 @@ import {
   KakaoLogoIcon,
   NaverLogoIcon,
 } from '~/components/common/icon';
+import EmailDuplicateModal from './EmailDuplicateModal';
+import {LoginUserParams} from '~/api/auth';
 
 type LoginUserInfo = {
   email: string;
@@ -39,13 +41,19 @@ const LoginScreen = () => {
   const {updateEmail, updateProviderId, updateProviderType} =
     useUserLoginActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [isDuplicateModalOpen, setDuplicateModalOpen] =
+    useState<boolean>(false);
   const [pushToken, setPushToken] = useState<string | null>(null);
+  const [loginUserInfo, setLoginUserInfo] = useState<LoginUserParams | null>(
+    null,
+  );
   const {
     mutate: loginUser,
     isLoading: isLoading,
     isError: isError,
     isSuccess: isSuccess,
     data: resData,
+    error,
   } = useLoginUser();
   const {mutate: updateAlarmToken} = useUpdateAlarmToken();
 
@@ -69,9 +77,22 @@ const LoginScreen = () => {
     checkUserId();
   }, [navigation]);
 
+  const emailDuplicateModal = () => {
+    // TODO
+    // 일단 모달로 확인
+    setDuplicateModalOpen(true);
+  };
+
   useEffect(() => {
     if (isError) {
-      showToast('로그인에 실패했습니다.');
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        // 상태 코드를 체크 (예: 409 Conflict)
+        emailDuplicateModal();
+      } else {
+        showToast('로그인에 실패했습니다.');
+      }
     }
     if (!isLoading) {
       setIsLoadingOpen(false);
@@ -121,6 +142,7 @@ const LoginScreen = () => {
       const alarmToken = await handlePushToken();
       setPushToken(alarmToken);
       loginUser({...loginInfo, alarmToken});
+      setLoginUserInfo({...loginInfo, alarmToken});
     } else {
       showToast('로그인에 실패했습니다.');
     }
@@ -184,6 +206,12 @@ const LoginScreen = () => {
         <Line />
       </LineWrapper>
       {isLoadingOpen && <LoadingModal message={'로그인 시도 중 :)'} />}
+      {isDuplicateModalOpen && loginUserInfo && (
+        <EmailDuplicateModal
+          handleCloseModal={() => setDuplicateModalOpen(false)}
+          loginUserInfo={loginUserInfo}
+        />
+      )}
     </Container>
   );
 };
