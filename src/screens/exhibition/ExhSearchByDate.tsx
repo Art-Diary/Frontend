@@ -14,45 +14,37 @@ import {
 import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {BackButtonIcon} from '~/components/common/icon';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
+import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 
 interface ExhSearchByDateProps {
   isVisible: boolean;
-  state: string[] | null;
   date: string | null;
-  onClose: (
-    selectedOption4: string[] | null, //state
-    selectedOption5: string | null, //date
-  ) => void;
+  onClose: () => void;
 }
 
 const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
   isVisible,
-  state,
-  date,
   onClose,
 }) => {
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   // 월 변경 화살표 클릭 인식을 위한 상태 변화
   const [changeMonth, setChangeMonth] = useState(dateToString(new Date()));
-  const [selectedOption4, setSelectedOption4] = useState<string[] | null>(
-    state,
-  );
-  const [selectedOption5, setSelectedOption5] = useState<string | null>(date);
   const {date: dateFromExhInfo} = useDateFromExhInfo();
+  const {updateAddDate} = useAddScheduleActions();
 
-  const onPressDate = (selectedOption4: string[] | null) => {
+  const onPressDate = () => {
     const dateObject = changeDotToHyphen(selectedDate);
     console.log('dateObject', dateObject);
-    onClose(selectedOption4, dateObject);
+    updateAddDate(dateObject);
+    onClose();
   };
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <Container>
         <Backview>
-          <TouchableOpacity
-            onPress={() => onClose(selectedOption4, selectedOption5)}>
+          <TouchableOpacity onPress={onClose}>
             <BackButtonIcon />
           </TouchableOpacity>
         </Backview>
@@ -69,7 +61,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
             <TextView>{selectedDate}</TextView>
           </DateView>
         </ContentView>
-        <TouchableOpacity onPress={() => onPressDate(state)}>
+        <TouchableOpacity onPress={onPressDate}>
           <CompleteButton>{'선택 완료'}</CompleteButton>
         </TouchableOpacity>
       </Container>

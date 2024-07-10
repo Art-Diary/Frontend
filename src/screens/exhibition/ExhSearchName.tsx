@@ -11,9 +11,7 @@ import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
-/**TODO
- * 같은 키워드를 검색할 경우 문제 생김
- */
+
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -69,8 +67,8 @@ const ExhSearchName = () => {
           <PreSearchList>{'대구'}</PreSearchList>
         </PreSearchView> */}
 
-        {examples.map((item: any) => (
-          <PreSearchView>
+        {examples.map((item: any, index: number) => (
+          <PreSearchView key={index}>
             <TouchableOpacity onPress={() => onPressPreSearch(item)}>
               <PreSearchList>{item}</PreSearchList>
             </TouchableOpacity>
