@@ -11,10 +11,7 @@ import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
-/**TODO
- * 같은 키워드를 검색할 경우 문제 생김
- * 키워드 검색하면 기존 옵션 초기화됨.
- */
+
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -27,7 +24,6 @@ const ExhSearchName = () => {
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
     } else {
-      console.log('text: ', searchKeyword);
       setKeyword(searchKeyword);
       updateSearchName(searchKeyword);
       console.log('지금 써치 네임은', name, ',');

@@ -78,7 +78,8 @@ const ExhListScreen = () => {
   const {updateAddDate} = useAddScheduleActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
-  const {updateDate} = useDateFromExhActions();
+  const {updateDate} = useDateFromExhActions(); // 전시회 상세 페이지 내부 캘린더에서 날짜 선택 시 사용
+  const {updateSearchName} = useSearchNameActions();
 
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
@@ -105,86 +106,42 @@ const ExhListScreen = () => {
 
   useEffect(() => {
     if (isFocused) {
-      // 다른 화면을 갔다왔을때 갱신 그냥 null을 사용해 다시 받는게 더 빠를 수도,,,
-      setSelectedName(null);
-      setSelectedField(null);
-      setSelectedPrice(null);
-      setSelectedState(null);
-      setSelectedDate(null);
-      setIsNameVisible(false);
-      setIsFieldVisible(false);
-      setIsPriceVisible(false);
-      setIsStateVisible(false);
-      setIsDateVisible(false);
-
       if (tabIdentifierInfo.tab !== 'exhibition') {
         updateTab('exhibition');
         updateDate(null);
+
+        // 다른 화면을 갔다왔을때 갱신 그냥 null을 사용해 다시 받는게 더 빠를 수도,,,
+        setSelectedName(null);
+        setSelectedField(null);
+        setSelectedPrice(null);
+        setSelectedState(null);
+        setSelectedDate(null);
+        setIsNameVisible(false);
+        setIsFieldVisible(false);
+        setIsPriceVisible(false);
+        setIsStateVisible(false);
+        setIsDateVisible(false);
       }
 
       refetch();
     }
   }, [isFocused]);
 
-  // TODO
-  const {updateSearchName} = useSearchNameActions();
   useEffect(() => {
-    //이름으로 검색시
-    if (searchExhName != null) {
-      console.log('change text: ', searchExhName);
+    if (searchExhName) {
       setSelectedName(searchExhName);
       setIsNameVisible(true);
       updateSearchName(null);
-      //console.log('자, 이름을 알려줘:', searchExhName);
-      // setIsNameVisible(true);
     }
   }, [searchExhName]);
 
   useEffect(() => {
-    // 캘린더에서 특정 날짜에 전시회 추가할 때
-    if (addDate != null) {
+    if (addDate) {
       setSelectedDate(addDate);
+      setIsDateVisible(true);
       updateAddDate(null);
     }
   }, [addDate]);
-
-  useEffect(() => {
-    //날짜로 검색시
-    if (selectedDate != null) {
-      //searchExhDate=>selectedDate
-      if (isStateVisible) {
-        setSelectedState(null);
-        setIsStateVisible(false);
-      }
-      setSelectedDate(selectedDate); //searchExhDate=>selectedDate
-      //searchExhDate=>selectedDate
-      // setIsNameVisible(true);
-    } //else setIsDateVisible(false);
-    console.log('자, 날짜 알려줘:', selectedDate);
-  }, [selectedDate]); //searchExhDate=>selectedDate
-
-  //선택된 옵션 있으면 상단에 보여주기
-  useEffect(() => {
-    if (selectedDate) {
-      setIsDateVisible(true);
-    } else {
-      setIsDateVisible(false);
-    }
-    // console.log(
-    //   'name',
-    //   selectedName,
-    //   ' field: ',
-    //   selectedField,
-    //   ' price: ',
-    //   selectedPrice,
-    //   ' state:',
-    //   selectedState,
-    //   'date:',
-    //   selectedDate,
-    //   '이름 상태',
-    //   isNameVisible,
-    // );
-  }, [selectedDate]);
 
   useEffect(() => {
     if (selectedField) {
@@ -292,10 +249,19 @@ const ExhListScreen = () => {
     selectedOption4: string[] | null,
     selectedOption5: string | null,
   ) => {
+    if (selectedOption2 && selectedOption2.length === 0) {
+      selectedOption2 = null;
+    }
+    if (selectedOption4 && selectedOption4.length === 0) {
+      selectedOption4 = null;
+    }
     setSelectedField(selectedOption2);
     setSelectedPrice(selectedOption3);
     setSelectedState(selectedOption4);
     setSelectedDate(selectedOption5);
+    if (!selectedOption5) {
+      setIsDateVisible(false);
+    }
     closeModal();
   };
 
@@ -308,12 +274,7 @@ const ExhListScreen = () => {
     setIsCalendarModalVisible(false);
   };
 
-  const handleCalendarModalClose = (
-    selectedOption4: string[] | null,
-    selectedOption5: string | null,
-  ) => {
-    setSelectedState(selectedOption4);
-    setSelectedDate(selectedOption5);
+  const handleCalendarModalClose = () => {
     closeCalendarModal();
   };
 
@@ -392,6 +353,7 @@ const ExhListScreen = () => {
 
   const onPressYes = () => {
     setSelectedState(null);
+    setIsStateVisible(false);
     optionsModalClose();
     openCalendarModal();
   };
@@ -430,7 +392,6 @@ const ExhListScreen = () => {
             {isCalendarModalVisible && (
               <ExhSearchByDate
                 isVisible={isCalendarModalVisible}
-                state={selectedState}
                 date={selectedDate}
                 onClose={handleCalendarModalClose}
               />
