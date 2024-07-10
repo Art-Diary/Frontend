@@ -126,10 +126,15 @@ const ExhListScreen = () => {
     }
   }, [isFocused]);
 
+  // TODO
+  const {updateSearchName} = useSearchNameActions();
   useEffect(() => {
     //이름으로 검색시
     if (searchExhName != null) {
+      console.log('change text: ', searchExhName);
       setSelectedName(searchExhName);
+      setIsNameVisible(true);
+      updateSearchName(null);
       //console.log('자, 이름을 알려줘:', searchExhName);
       // setIsNameVisible(true);
     }
@@ -180,14 +185,6 @@ const ExhListScreen = () => {
     //   isNameVisible,
     // );
   }, [selectedDate]);
-
-  useEffect(() => {
-    if (selectedName) {
-      setIsNameVisible(true);
-    } else {
-      setIsNameVisible(false);
-    }
-  }, [selectedName]);
 
   useEffect(() => {
     if (selectedField) {

@@ -29,12 +29,7 @@ type ExhToCalProp = RouteProp<RootStackParamList, 'ExhToCal'>;
 interface Props {
   route: ExhToCalProp;
 }
-/**
- * TODO
- * [x] 캘린더 이동이 안됨.
- * [x] 캘린더 이동 시 해당 달로 이동
- * [x] 날짜 저장하고 바로 달력에 표시 안됨.
- */
+
 const ExhToCal: React.FC<Props> = ({route}) => {
   const {exhId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
