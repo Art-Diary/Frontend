@@ -29,10 +29,6 @@ interface Props {
   route: ExhToMoreReviewProp;
 }
 
-/**
- * TODO
- * 더보기 들어와서 기록 수정하면 바로 반영되지 않음.
- */
 const ExhToMoreReview: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
