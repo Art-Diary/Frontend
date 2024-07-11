@@ -78,6 +78,7 @@ const CalendarDiaryListScreen = () => {
         }}
         updateActions={{
           isUpdateClicked: isUpdateClicked,
+          handleUpdateClicked: () => setIsUpdateClicked(false),
           handleCloseOptionModal: () => setIsModalOpen(false),
         }}
       />

@@ -75,6 +75,7 @@ const GatheringDiaryListScreen = () => {
         }}
         updateActions={{
           isUpdateClicked: isUpdateClicked,
+          handleUpdateClicked: () => setIsUpdateClicked(false),
           handleCloseOptionModal: () => setIsModalOpen(false),
         }}
       />

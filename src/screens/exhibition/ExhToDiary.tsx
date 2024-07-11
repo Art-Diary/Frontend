@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RouteProp} from '@react-navigation/native';
 import DiaryList from '~/components/diary/DiaryList';
@@ -43,11 +43,9 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
   const {diary} = route.params;
   const [diaryArr, setDiaryArr] = useState<any[]>([diary]);
 
-  if (diary.length === 0) {
-    return (
-      <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다 >_<'} />
-    );
-  }
+  useEffect(() => {
+    setDiaryArr([diary]);
+  }, [diary]);
 
   const clickDeletePage = () => {
     setIsDeleteModalOpen(true);
@@ -67,20 +65,25 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
         )}
       </BackView>
 
-      <DiaryList
-        diaryList={diaryArr}
-        deleteActions={{
-          handleShowOptionBar: setShowOptionBar,
-          isDeleteModalOpen: isDeleteModalOpen,
-          handleCloseDeleteModal: () => setIsDeleteModalOpen(false),
-          handleCloseOptionModal: () => setIsModalOpen(false),
-        }}
-        updateActions={{
-          isUpdateClicked: isUpdateClicked,
-          handleCloseOptionModal: () => setIsModalOpen(false),
-        }}
-      />
-      {/* TODO [수정 | 삭제] 바로 반영 되도록 수정 */}
+      {diaryArr.length === 0 ? (
+        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+      ) : (
+        <DiaryList
+          diaryList={diaryArr}
+          deleteActions={{
+            handleShowOptionBar: setShowOptionBar,
+            isDeleteModalOpen: isDeleteModalOpen,
+            handleCloseDeleteModal: () => setIsDeleteModalOpen(false),
+            handleCloseOptionModal: () => setIsModalOpen(false),
+          }}
+          updateActions={{
+            isUpdateClicked: isUpdateClicked,
+            handleUpdateClicked: () => setIsUpdateClicked(false),
+            handleCloseOptionModal: () => setIsModalOpen(false),
+          }}
+        />
+      )}
+
       {isModalOpen && (
         <ConfirmationModal handleCloseModal={() => setIsModalOpen(false)}>
           <TouchableOpacity onPress={clickUpdatePage}>

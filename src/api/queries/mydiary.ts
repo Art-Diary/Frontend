@@ -1,5 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import {
   addMyExhVisitDate,
   createMyDiary,
@@ -13,6 +18,7 @@ import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {gatheringQueryKeys} from './gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
+import {exhibitionQueryKeys} from './exhibition';
 
 export const mydiaryQueryKeys = createQueryKeys('mydiary', {
   fetchMyExhList: () => ['fetchMyExhList'],
@@ -194,10 +200,11 @@ export const useUpdateMyDiary = (
   exhId: number,
   diaryId: number,
   newMyDiary: FormData | null,
-) => {
+): UseMutationResult<any, any, void, unknown> => {
   const queryClient = useQueryClient();
+  const tabIdentifierInfo = useTabIdentifierInfo();
 
-  return useMutation({
+  return useMutation<any, any, void, unknown>({
     mutationFn: () => updateMyDiary(exhId, diaryId, newMyDiary),
     onError: err => {
       console.log(err);
@@ -205,9 +212,15 @@ export const useUpdateMyDiary = (
     },
     onSuccess: () => {
       console.log('[WriteMyDiaryScreen(Update)] success update WriteMyDiary');
-      queryClient.invalidateQueries(
-        mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
-      );
+      if (tabIdentifierInfo.tab === 'mydiary') {
+        queryClient.invalidateQueries(
+          mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
+        );
+      } else if (tabIdentifierInfo.tab === 'exhibition') {
+        queryClient.invalidateQueries(
+          exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
+        );
+      }
     },
   });
 };
