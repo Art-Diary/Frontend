@@ -38,3 +38,18 @@ export const fetchAddLike = (exhId: number) =>
 
 export const fetchDeleteLike = (favoriteExhsList: number[]) =>
   client.post(`/favorites/unlike`, {favoriteExhsList: favoriteExhsList});
+
+/** 전시회 검색 기록 API*/
+export const fetchSearchContentList = () => client.get(`/search`);
+
+export const fetchAddSearchContent = (
+  searchContent: string,
+  searchTime: Date,
+) =>
+  client.post(`/search`, {
+    searchContent: searchContent,
+    searchTime: searchTime,
+  });
+
+export const fetchDeleteSearchContent = (searchId: number) =>
+  client.post(`/search/${searchId}`);

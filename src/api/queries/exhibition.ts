@@ -8,6 +8,9 @@ import {
   fetchDeleteLike,
   fetchDiaryListForExh,
   fetchStoredDateOfExhInGroup,
+  fetchSearchContentList,
+  fetchAddSearchContent,
+  fetchDeleteSearchContent,
 } from '../exhibition';
 
 export const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -30,6 +33,7 @@ export const exhibitionQueryKeys = createQueryKeys('exhibition', {
     exhId,
     gatherId,
   ],
+  fetchSearchContentList: () => ['fetchSearchContentList'],
 });
 
 export const useFetchSearchExhInMyDiary = (searchName: string) =>
@@ -179,3 +183,39 @@ export const useFetchStoredDateOfExhInGroup = (
     },
     select: (res: any) => res.data,
   });
+
+export const useFetchSearchContentList = () =>
+  useQuery({
+    queryKey: exhibitionQueryKeys.fetchSearchContentList().queryKey,
+    queryFn: () => fetchSearchContentList(),
+    staleTime: 500000,
+    onError: err => {
+      console.log(err);
+      console.log('[ExhSearchNameScreen] error fetch SearchContentList');
+    },
+    onSuccess: () => {
+      console.log('[ExhSearchNameScreen] success fetch SearchContentList');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchAddSearchContent = (
+  searchContent: string,
+  searchTime: Date,
+) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => fetchAddSearchContent(searchContent, searchTime),
+    onError: err => {
+      console.log(err);
+      console.log('[AddSearchContent] error fetch Add SearchContent');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        exhibitionQueryKeys.fetchSearchContentList().queryKey,
+      );
+      console.log('[AddSearchContent] success fetch Add SearchContent');
+    },
+  });
+};
