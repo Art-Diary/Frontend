@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
@@ -11,72 +11,108 @@ import {useSearchNameActions} from '~/zustand/exhibition/exhibition';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {
+  useFetchAddSearchContent,
+  useFetchDeleteSearchContent,
+  useFetchSearchContentList,
+} from '~/api/queries/exhibition';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [keyword, setKeyword] = useState<string>('');
-  // const {name, updateSearchName} = useSearchName();
+  // const [keyword, setKeyword] = useState<string>('');
   const {updateSearchName} = useSearchNameActions();
-  const examples: string[] = ['요시다유니', '장욱진', '덕수궁']; //search_list에서 가져올 것.
+  //search_list 가져오기
+  const {
+    data: examples,
+    isLoading,
+    isError,
+    isSuccess,
+    refetch,
+  } = useFetchSearchContentList();
+  const currentTime = new Date();
+  const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
+  const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
+  const [searchContentId, setSearchContentId] = useState<number>(-1);
+  const limit = 10; //보여주는 검색 기록 개수
+  //검색 기록 추가
+  const {
+    mutate: fetchAddSearchContent,
+    isLoading: isLoadingAddSearch,
+    isError: isErrorAddSearch,
+    isSuccess: isSuccessAddSearch,
+  } = useFetchAddSearchContent(content, currentTime);
 
-  const onPressSearch = (name: string) => {
+  const {
+    mutate: fetchDeleteSearchContent,
+    isLoading: isLoadingDeleteSearch,
+    isError: isErrorDeleteSearch,
+    isSuccess: isSuccessDeleteSearch,
+  } = useFetchDeleteSearchContent(searchContentId);
+
+  useEffect(() => {
+    //DB에서 데이터 추가 or 업데이트
+
+    if (content) {
+      fetchAddSearchContent();
+      setCheck(true);
+    }
+  }, [content]);
+
+  useEffect(() => {
+    if (check) {
+      navigation.goBack();
+    }
+  }, [check]);
+
+  useEffect(() => {
+    if (searchContentId != -1) {
+      fetchDeleteSearchContent(); //검색기록삭제
+    }
+  }, [searchContentId]);
+
+  const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
     } else {
-      setKeyword(searchKeyword);
+      setContent(searchKeyword);
+      //setKeyword(searchKeyword);
       updateSearchName(searchKeyword);
-      console.log('지금 써치 네임은', name, ',');
-      //navigation.navigate('Exhibition');
-      navigation.goBack();
     }
     Keyboard.dismiss();
   };
 
   const onPressPreSearch = (text: string) => {
-    setKeyword(text);
+    //setKeyword(text);
+    setContent(text);
     updateSearchName(text);
-    navigation.goBack();
   };
 
-  const onPresDelete = (text: string) => {
-    //searchList에서 삭제
+  const onPressDelete = (searchId: number) => {
+    //searchList에서 삭제할 기록 searchId
+    setSearchContentId(searchId);
   };
 
   return (
     <Container>
       <BackView line={false} children={null} />
-
       <SearchExhFrame
         searchKeyword={searchKeyword}
-        onPressSearch={() => onPressSearch(searchKeyword)}
+        onPressSearch={onPressSearch}
         handleSearchKeyword={setSearchKeyword}>
         <PreSearch>{'최근검색기록'}</PreSearch>
-
-        {/* 테두리 있는 것 */}
-        {/* <PreSearchView>
-          <PreSearchList>
-            {'요시다유니'}
-            {' x'}
-          </PreSearchList>
-        </PreSearchView>
-        <PreSearchView>
-          <PreSearchList>{'덕수궁'}</PreSearchList>
-        </PreSearchView>
-        <PreSearchView>
-          <PreSearchList>{'대구'}</PreSearchList>
-        </PreSearchView> */}
-
-        {examples.map((item: any, index: number) => (
-          <PreSearchView key={index}>
-            <TouchableOpacity onPress={() => onPressPreSearch(item)}>
-              <PreSearchList>{item}</PreSearchList>
-            </TouchableOpacity>
-            <TouchableOpacity /*onPress=onPressDelete*/>
-              <PreSearchList>{'X'}</PreSearchList>
-            </TouchableOpacity>
-          </PreSearchView>
-        ))}
+        {examples &&
+          examples.slice(0, limit).map((item: any, index: number) => (
+            <PreSearchView key={index}>
+              <TouchableOpacity
+                onPress={() => onPressPreSearch(item.searchContent)}>
+                <PreSearchList>{item.searchContent}</PreSearchList>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => onPressDelete(item.searchId)}>
+                <PreSearchList>{'X'}</PreSearchList>
+              </TouchableOpacity>
+            </PreSearchView>
+          ))}
       </SearchExhFrame>
     </Container>
   );
@@ -116,10 +152,4 @@ const PreSearchList = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
   font-family: ${FONT_NAME};
   text-align: center;
-
-  /* 테두리 있는 것 */
-  /* padding: ${wp(2)}px;
-  border-color: ${LIGHT_GREY};
-  border-width: ${DASH_WIDTH}px;
-  border-radius: ${wp(50)}px; */
 `;
