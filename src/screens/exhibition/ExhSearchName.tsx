@@ -13,6 +13,7 @@ import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {
   useFetchAddSearchContent,
+  useFetchDeleteSearchContent,
   useFetchSearchContentList,
 } from '~/api/queries/exhibition';
 
@@ -32,6 +33,7 @@ const ExhSearchName = () => {
   const currentTime = new Date();
   const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
   const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
+  const [searchContentId, setSearchContentId] = useState<number>(-1);
   const limit = 10; //보여주는 검색 기록 개수
   //검색 기록 추가
   const {
@@ -41,10 +43,18 @@ const ExhSearchName = () => {
     isSuccess: isSuccessAddSearch,
   } = useFetchAddSearchContent(content, currentTime);
 
+  const {
+    mutate: fetchDeleteSearchContent,
+    isLoading: isLoadingDeleteSearch,
+    isError: isErrorDeleteSearch,
+    isSuccess: isSuccessDeleteSearch,
+  } = useFetchDeleteSearchContent(searchContentId);
+
   useEffect(() => {
     //DB에서 데이터 추가 or 업데이트
-    fetchAddSearchContent();
+
     if (content) {
+      fetchAddSearchContent();
       setCheck(true);
     }
   }, [content]);
@@ -55,7 +65,13 @@ const ExhSearchName = () => {
     }
   }, [check]);
 
-  const onPressSearch = (name: string) => {
+  useEffect(() => {
+    if (searchContentId != -1) {
+      fetchDeleteSearchContent(); //검색기록삭제
+    }
+  }, [searchContentId]);
+
+  const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
     } else {
@@ -72,8 +88,9 @@ const ExhSearchName = () => {
     updateSearchName(text);
   };
 
-  const onPresDelete = (text: string) => {
-    //searchList에서 삭제
+  const onPressDelete = (searchId: number) => {
+    //searchList에서 삭제할 기록 searchId
+    setSearchContentId(searchId);
   };
 
   return (
@@ -81,7 +98,7 @@ const ExhSearchName = () => {
       <BackView line={false} children={null} />
       <SearchExhFrame
         searchKeyword={searchKeyword}
-        onPressSearch={() => onPressSearch(searchKeyword)}
+        onPressSearch={onPressSearch}
         handleSearchKeyword={setSearchKeyword}>
         <PreSearch>{'최근검색기록'}</PreSearch>
         {examples &&
@@ -91,7 +108,7 @@ const ExhSearchName = () => {
                 onPress={() => onPressPreSearch(item.searchContent)}>
                 <PreSearchList>{item.searchContent}</PreSearchList>
               </TouchableOpacity>
-              <TouchableOpacity /*onPress={onPressDelete}*/>
+              <TouchableOpacity onPress={() => onPressDelete(item.searchId)}>
                 <PreSearchList>{'X'}</PreSearchList>
               </TouchableOpacity>
             </PreSearchView>

@@ -52,4 +52,4 @@ export const fetchAddSearchContent = (
   });
 
 export const fetchDeleteSearchContent = (searchId: number) =>
-  client.post(`/search/${searchId}`);
+  client.delete(`/search/${searchId}`);

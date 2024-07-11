@@ -219,3 +219,21 @@ export const useFetchAddSearchContent = (
     },
   });
 };
+
+export const useFetchDeleteSearchContent = (searchId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => fetchDeleteSearchContent(searchId),
+    onError: err => {
+      console.log(err);
+      console.log('[DeleteSearchContent] error fetch Delete SearchContent');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        exhibitionQueryKeys.fetchSearchContentList().queryKey,
+      );
+      console.log('[DeleteSearchContent] success fetch Delete SearchContent');
+    },
+  });
+};
