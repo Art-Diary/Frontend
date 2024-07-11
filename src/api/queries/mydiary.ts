@@ -135,6 +135,10 @@ export const useDeleteMyDiary = (
             exhFromCalendarInfo.gatherId,
           ).queryKey,
         );
+      } else if (tabIdentifierInfo.tab === 'exhibition') {
+        queryClient.invalidateQueries(
+          exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
+        );
       }
     },
   });

@@ -13,6 +13,9 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
+import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
+import {useNavigation} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 type DeleteInfo = {
   exhId: number;
@@ -33,6 +36,8 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   message,
   handleSuccessDelete,
 }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {
     mutate: deleteMyDiary,
@@ -55,6 +60,9 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
       handleSuccessDelete();
+      if (tabIdentifierInfo.tab === 'exhibition') {
+        navigation.goBack();
+      }
     }
   }, [isError, isSuccess, handleCloseModal]);
 
