@@ -56,8 +56,10 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
   const [numPages, setNumPages] = useState<number>(0);
 
   useEffect(() => {
-    setTotal(diaryData.length);
-    setNumPages(Math.ceil(diaryData.length / limit));
+    if (isSuccess) {
+      setTotal(diaryData.length);
+      setNumPages(Math.ceil(diaryData.length / limit));
+    }
   }, [isSuccess, diaryData]);
 
   useEffect(() => {

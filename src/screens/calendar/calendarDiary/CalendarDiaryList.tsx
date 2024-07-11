@@ -16,6 +16,7 @@ type DeleteActions = {
 
 type UpdateActions = {
   isUpdateClicked: boolean;
+  handleUpdateClicked: () => void;
   handleCloseOptionModal: () => void; // 옵션 모달 닫기
 };
 

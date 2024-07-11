@@ -35,6 +35,7 @@ type DeleteActions = {
 
 type UpdateActions = {
   isUpdateClicked: boolean;
+  handleUpdateClicked: () => void;
   handleCloseOptionModal: () => void; // 옵션 모달 닫기
 };
 
@@ -96,7 +97,8 @@ const DiaryList: React.FC<DiaryListProps> = ({
         );
         updateforContent(diaryList[currentPage].contents);
         updateInGathering(false, null);
-        updateActions?.handleCloseOptionModal();
+        updateActions.handleUpdateClicked();
+        updateActions.handleCloseOptionModal();
         if (
           tabIdentifier.tab === 'mydiary' ||
           tabIdentifier.tab === 'gathering'

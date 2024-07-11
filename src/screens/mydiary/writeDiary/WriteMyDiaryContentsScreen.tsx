@@ -51,6 +51,7 @@ const WriteMyDiaryContentsScreen = () => {
     isLoading: isLoadingUpdate,
     isError: isErrorUpdate,
     isSuccess: isSuccessUpdate,
+    data: resData,
   } = useUpdateMyDiary(
     visitedExhId,
     writeMyDiaryInfo.diaryId ?? -1,
@@ -115,15 +116,15 @@ const WriteMyDiaryContentsScreen = () => {
           params: undefined,
         });
       } else if (tabIdentifier.tab === 'exhibition') {
-        //[캘린더] 전시회 기록 목록 화면으로 이동
-        // queryClient.invalidateQueries(
-        //   exhibitionQueryKeys.fetchDiaryListForExh(visitedExhId),
-        // );
-        navigation.navigate('ExhToDiary', {
-          diary: writeMyDiaryInfo, //수정필요ㅜ
-        });
+        const data = resData.data;
+        const filteredData = data.filter(
+          (value: any) =>
+            value.diaryId === writeMyDiaryInfo.diaryId &&
+            (value.userExhId === writeMyDiaryInfo.userExhId ||
+              value.gatherExhId === writeMyDiaryInfo.gatherExhId),
+        )[0];
+        navigation.navigate('ExhToDiary', {diary: filteredData});
       }
-      // [NEW] 추가
     }
   }, [
     isErrorCreate,
