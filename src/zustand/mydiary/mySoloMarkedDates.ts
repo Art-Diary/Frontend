@@ -9,7 +9,6 @@ interface MySoloMarkedDatesState {
   actions: {
     // updateSoloExhId: (exhId: number) => void;
     updateVisitDates: (visitDates: number[][]) => void;
-    updateOneVisitDate: (visitDates: string) => void;
   };
 }
 
@@ -44,10 +43,6 @@ const useMySoloMarkedDates = create<MySoloMarkedDatesState>(set => ({
       set(state => ({
         visitDates: change(visitDates),
         haveForgot: isForgot(visitDates),
-      })),
-    updateOneVisitDate: (newVisitDate: string) =>
-      set(state => ({
-        visitDates: [...state.visitDates, newVisitDate],
       })),
   },
 }));

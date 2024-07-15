@@ -38,13 +38,7 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {
-    updateForget,
-    updateVisitDate,
-    updateGatherId,
-    updateUserExhId,
-    updateGatherExhId,
-  } = useExhFromCalendarActions();
+  const {updateExhFromCalendar} = useExhFromCalendarActions();
   const {updateAddDate} = useAddScheduleActions();
 
   const findGatherColor = (gatherId: number): string => {
@@ -59,13 +53,12 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   const onPressExhItem = (exhItem: any) => {
     /* 선택한 날짜의 기록들 */
     updateVisitedExhId(exhItem.exhId);
-    updateForget(exhItem.visitDate ? false : true);
-    updateVisitDate(
+    updateExhFromCalendar(
+      exhItem.visitDate ? false : true,
       exhItem.visitDate ? JoinDateWithHyphen(exhItem.visitDate) : null,
+      exhItem.gatherId ?? null,
+      exhItem.exhVisitId ?? null,
     );
-    updateGatherId(exhItem.gatherId ?? null);
-    updateUserExhId(exhItem.userExhId ?? null);
-    updateGatherExhId(exhItem.gatherExhId ?? null);
     navigation.navigate('CalendarDiaryRoutes');
   };
 

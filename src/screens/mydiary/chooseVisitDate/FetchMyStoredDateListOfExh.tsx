@@ -4,10 +4,10 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useIsFocused} from '@react-navigation/native';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {StoredDateListOfExh} from './ChooseVisitDateScreen';
+import {MyVisitedDateType} from '~/utils/dataTypes';
 
 interface StoredDateListProps {
-  handleStoredDateList: (list: StoredDateListOfExh[]) => void;
+  handleStoredDateList: (list: MyVisitedDateType[]) => void;
 }
 
 const FetchMyStoredDateListOfExh: React.FC<StoredDateListProps> = ({

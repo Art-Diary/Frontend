@@ -131,15 +131,11 @@ const WriteMyDiaryInfoScreen = () => {
       today.getMonth() + 1,
       today.getDate(),
     ];
-    if (imageUri === undefined) {
-      console.log('사진 uri 없음.');
-      return;
-    }
     updateforDetailInfo(
       titleKeyword,
       starNum,
       isPublic,
-      imageUri,
+      imageUri ?? null,
       dateList,
       sayingKeyword,
     );
@@ -226,9 +222,7 @@ const WriteMyDiaryInfoScreen = () => {
           </PutThumbnail>
         </ThumbnailSection>
         {/* 다음 버튼 */}
-        {!checkBlankInKeyword(titleKeyword) &&
-        starNum > 0 &&
-        imageUri !== undefined ? (
+        {!checkBlankInKeyword(titleKeyword) && starNum > 0 ? (
           <TouchableOpacity onPress={onClickNextButton}>
             <NextButton moveNext={true}>다음</NextButton>
           </TouchableOpacity>

@@ -5,14 +5,14 @@ interface ExhFromCalendarState {
   forget: boolean | null;
   visitDate: string | null;
   gatherId: number | null;
-  userExhId: number | null;
-  gatherExhId: number | null;
+  exhVisitId: number | null;
   actions: {
-    updateForget: (forget: boolean | null) => void;
-    updateVisitDate: (visitDate: string | null) => void;
-    updateGatherId: (gatherId: number | null) => void;
-    updateUserExhId: (userExhId: number | null) => void;
-    updateGatherExhId: (gatherExhId: number | null) => void;
+    updateExhFromCalendar: (
+      forget: boolean | null,
+      visitDate: string | null,
+      gatherId: number | null,
+      exhVisitId: number | null,
+    ) => void;
   };
 }
 
@@ -21,18 +21,20 @@ const useExhFromCalendar = create<ExhFromCalendarState>(set => ({
   forget: null,
   visitDate: null,
   gatherId: null,
-  userExhId: null,
-  gatherExhId: null,
+  exhVisitId: null,
   actions: {
-    updateForget: (forget: boolean | null) => set(state => ({forget: forget})),
-    updateVisitDate: (visitDate: string | null) =>
-      set(state => ({visitDate: visitDate})),
-    updateGatherId: (gatherId: number | null) =>
-      set(state => ({gatherId: gatherId})),
-    updateUserExhId: (userExhId: number | null) =>
-      set(state => ({userExhId: userExhId})),
-    updateGatherExhId: (gatherExhId: number | null) =>
-      set(state => ({gatherExhId: gatherExhId})),
+    updateExhFromCalendar: (
+      forget: boolean | null,
+      visitDate: string | null,
+      gatherId: number | null,
+      exhVisitId: number | null,
+    ) =>
+      set(state => ({
+        forget: forget,
+        visitDate: visitDate,
+        gatherId: gatherId,
+        exhVisitId: exhVisitId,
+      })),
   },
 }));
 
@@ -41,8 +43,7 @@ export const useExhFromCalendarInfo = () =>
     forget: state.forget,
     visitDate: state.visitDate,
     gatherId: state.gatherId,
-    userExhId: state.userExhId,
-    gatherExhId: state.gatherExhId,
+    exhVisitId: state.exhVisitId,
   }));
 export const useExhFromCalendarActions = () =>
   useExhFromCalendar(state => state.actions);

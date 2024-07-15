@@ -33,7 +33,7 @@ import ExhToCal from './screens/exhibition/ExhToCal';
 import ExhToMoreReview from './screens/exhibition/ExhToMoreReview';
 import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
-import {RootStackParamList} from './utils/types';
+import {RootStackParamList} from './utils/stackTypes';
 import SettingRoutes from './routes/setting/SettingRoutes';
 import messaging from '@react-native-firebase/messaging';
 import pushNoti from './utils/pushNoti';

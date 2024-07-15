@@ -36,11 +36,7 @@ const CalendarDiaryListScreen = () => {
 
   const onPressButton = () => {
     updateIsUpdate(false);
-    updateforIds(
-      null,
-      exhFromCalendarInfo.userExhId ?? -1,
-      exhFromCalendarInfo.gatherExhId ?? -1,
-    );
+    updateforIds(null, exhFromCalendarInfo.exhVisitId);
     navigation.navigate('WriteMyDiaryRoutes');
   };
 

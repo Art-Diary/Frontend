@@ -84,8 +84,7 @@ const DiaryList: React.FC<DiaryListProps> = ({
           diaryList[currentPage].diaryId
             ? diaryList[currentPage].diaryId
             : null,
-          diaryList[currentPage].userExhId ?? -1,
-          diaryList[currentPage].gatherExhId ?? -1,
+          diaryList[currentPage].exhVisitId,
         );
         updateforDetailInfo(
           diaryList[currentPage].title,
@@ -132,7 +131,6 @@ const DiaryList: React.FC<DiaryListProps> = ({
     } else if (tabIdentifierInfo.tab === 'exhibition') {
       navigation.navigate('ExhToDiaryBack');
     }
-    // [NEW] 추가
   };
 
   const handleIsDeleted = (isLastItem: boolean) => {
@@ -183,7 +181,6 @@ const DiaryList: React.FC<DiaryListProps> = ({
                           rate={item.rate}
                         />
                         <OtherInfo
-                          userExhId={item.userExhId}
                           gatherName={item.gatherName}
                           visitDate={item.visitDate}
                           diaryPrivate={item.diaryPrivate}
@@ -207,7 +204,6 @@ const DiaryList: React.FC<DiaryListProps> = ({
           deleteInfo={{
             exhId: visitedExhId,
             diaryId: diaryList[currentPage].diaryId,
-            userExhId: diaryList[currentPage].userExhId,
           }}
           handleCloseModal={deleteActions.handleCloseDeleteModal}
           message="기록을 삭제하겠습니까?"

@@ -41,12 +41,13 @@ const AddSoloVisitDateScreen = () => {
   // 혼자 방문한 날짜 가져오기
   const markedDates = mySoloMarkedDatesInfo.visitDates;
   // 내 기록의 전시회 방문 날짜 추가 API
-  const {updateOneVisitDate} = useMySoloMarkedDatesActions();
+  const {updateVisitDates} = useMySoloMarkedDatesActions();
   const {
     mutate: addMyExhVisitDate,
     isLoading,
     isError,
     isSuccess,
+    data: resData,
   } = useAddMyExhVisitDate(
     visitedExhId,
     isForgot ? null : changeDotToHyphen(selectedDate),
@@ -63,7 +64,13 @@ const AddSoloVisitDateScreen = () => {
       showToast('방문 가능한 날짜가 아닙니다');
     }
     if (isSuccess) {
-      updateOneVisitDate(selectedDate);
+      const data = resData.data;
+      var dateList = [];
+
+      for (var i = 0; i < data.lemgth; i++) {
+        dateList.push(data[i].visitDate);
+      }
+      updateVisitDates(dateList);
       showToast('방문 날짜를 추가했습니다');
       // TODO 다음 페이지로 이동 => 이전 페이지로 이동되도록
       navigation.goBack();

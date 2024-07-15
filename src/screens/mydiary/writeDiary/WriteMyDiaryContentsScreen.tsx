@@ -92,7 +92,7 @@ const WriteMyDiaryContentsScreen = () => {
     }
     if (isSuccessCreate || isSuccessUpdate) {
       updateIsUpdate(null);
-      updateforIds(null, null, null);
+      updateforIds(null, null);
       updateforDetailInfo(null, null, null, null, null, null);
       updateforContent(null);
       if (isSuccessCreate) {
@@ -118,10 +118,7 @@ const WriteMyDiaryContentsScreen = () => {
       } else if (tabIdentifier.tab === 'exhibition') {
         const data = resData.data;
         const filteredData = data.filter(
-          (value: any) =>
-            value.diaryId === writeMyDiaryInfo.diaryId &&
-            (value.userExhId === writeMyDiaryInfo.userExhId ||
-              value.gatherExhId === writeMyDiaryInfo.gatherExhId),
+          (value: any) => value.diaryId === writeMyDiaryInfo.diaryId,
         )[0];
         navigation.navigate('ExhToDiary', {diary: filteredData});
       }
@@ -138,8 +135,7 @@ const WriteMyDiaryContentsScreen = () => {
   const onClickNextButton = async () => {
     const formData = new FormData();
 
-    formData.append('userExhId', writeMyDiaryInfo.userExhId);
-    formData.append('gatherExhId', writeMyDiaryInfo.gatherExhId);
+    formData.append('exhVisitId', writeMyDiaryInfo.exhVisitId);
     formData.append('title', writeMyDiaryInfo.title);
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);

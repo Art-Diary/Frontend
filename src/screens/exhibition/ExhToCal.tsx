@@ -14,6 +14,7 @@ import {calendarColor} from '~/screens/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import {MyVisitedDateType, VisitedDateInfo} from '~/utils/dataTypes';
 
 interface MarkedType {
   date: string;
@@ -68,8 +69,8 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   useEffect(() => {
     if (isDatesSuccess) {
       var list: string[] = [];
-      dates.map((items: any) => {
-        items.dateInfoList.map((item: any) => {
+      dates.map((items: MyVisitedDateType) => {
+        items.dateInfoList.map((item: VisitedDateInfo) => {
           if (item.visitDate != null) {
             list.push(JoinDateWithDot(item.visitDate));
           }

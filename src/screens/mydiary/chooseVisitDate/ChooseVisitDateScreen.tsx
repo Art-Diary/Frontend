@@ -13,25 +13,12 @@ import {useWriteMyDiaryInfo} from '~/zustand/mydiary/writeMyDiary';
 import FetchMyStoredDateListOfExh from './FetchMyStoredDateListOfExh';
 import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
+import {MyVisitedDateType} from '~/utils/dataTypes';
 
 interface IPicker {
   label: string;
   value: number;
 }
-
-type DateInfo = {
-  gatherExhId: number | null; // 개인일 경우엔 null
-  userExhId: number | null; // 모임일 경우엔 null
-  visitDate: number[];
-};
-
-export type StoredDateListOfExh = {
-  index: number;
-  exhId: number;
-  gatherId: number; // 개인일 경우엔 null
-  gatherName: string; // 개인일 경우엔 null
-  dateInfoList: DateInfo[];
-};
 
 const ChooseVisitDateScreen = () => {
   const [open, setOpen] = useState(false);
@@ -41,7 +28,7 @@ const ChooseVisitDateScreen = () => {
   const canNotOpen =
     writeMyDiaryInfo.isUpdate || writeMyDiaryInfo.isInGathering;
   const [storedDateListOfExh, setStoredDateListOfExh] = useState<
-    StoredDateListOfExh[]
+    MyVisitedDateType[]
   >([]);
 
   // 내 기록 탭에서 추가할 경우 (모임 선택 가능)
@@ -51,7 +38,7 @@ const ChooseVisitDateScreen = () => {
     }
     gatherNameList.push({label: '개인', value: -1});
     for (let index = 0; index < storedDateListOfExh.length; index++) {
-      if (storedDateListOfExh[index].gatherName !== undefined) {
+      if (storedDateListOfExh[index].gatherName) {
         gatherNameList.push({
           label: storedDateListOfExh[index].gatherName ?? '--',
           value: storedDateListOfExh[index].index,
@@ -73,20 +60,13 @@ const ChooseVisitDateScreen = () => {
       var dateInfoList = storedDateListOfExh[index].dateInfoList;
 
       for (let dIndex = 0; dIndex < dateInfoList.length; dIndex++) {
-        if (
-          writeMyDiaryInfo.gatherExhId === dateInfoList[dIndex].gatherExhId ||
-          writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
-        ) {
-          const labelName: string =
-            writeMyDiaryInfo.userExhId === dateInfoList[dIndex].userExhId
-              ? '개인'
-              : writeMyDiaryInfo.gatherExhId ===
-                  dateInfoList[dIndex].gatherExhId
-                ? storedDateListOfExh[index].gatherName
-                : '--';
+        if (writeMyDiaryInfo.exhVisitId === dateInfoList[dIndex].exhVisitId) {
+          const labelName = storedDateListOfExh[index].gatherName
+            ? storedDateListOfExh[index].gatherName
+            : '개인';
           setValue(index);
           gatherNameList.push({
-            label: labelName,
+            label: labelName ?? '--',
             value: storedDateListOfExh[index].index,
           });
         }
