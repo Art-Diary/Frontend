@@ -2,20 +2,8 @@ import {client} from './client';
 
 /** 내 기록 API */
 
+// myexhs
 export const fetchMyExhList = () => client.get(`/myexhs`);
-
-export const fetchMyDiaryList = (
-  exhId: number,
-  forget: boolean | null,
-  visitDate: string | null,
-  gatherId: number | null,
-) =>
-  client.get(`/myexhs/${exhId}/diaries`, {
-    params: {forget, visitDate, gatherId},
-  });
-
-export const deleteMyDiary = (exhId: number, diaryId: number, solo: boolean) =>
-  client.delete(`/myexhs/${exhId}/diaries/${diaryId}`, {params: {solo}});
 
 export const fetchMyStoredDateListOfExh = (exhId: number) =>
   client.get(`/myexhs/${exhId}`);
@@ -27,6 +15,17 @@ interface MyExhVisitDate {
   exhId: number;
   visitDate: string | null;
 }
+
+// mydiaries
+export const fetchMyDiaryList = (
+  exhId: number,
+  forget: boolean | null,
+  visitDate: string | null,
+  gatherId: number | null,
+) =>
+  client.get(`/myexhs/${exhId}/diaries`, {
+    params: {forget, visitDate, gatherId},
+  });
 
 export const createMyDiary = (exhId: number, newMyDiary: FormData | null) =>
   client.post(`/myexhs/${exhId}/diaries`, newMyDiary, {
@@ -41,3 +40,6 @@ export const updateMyDiary = (
   client.patch(`/myexhs/${exhId}/diaries/${diaryId}`, newMyDiary, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+
+export const deleteMyDiary = (exhId: number, diaryId: number) =>
+  client.delete(`/myexhs/${exhId}/diaries/${diaryId}`);

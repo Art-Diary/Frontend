@@ -11,14 +11,12 @@ import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
 
 interface OtherProps {
-  userExhId: number | null;
   gatherName: string | null;
   visitDate: number[];
   diaryPrivate: boolean;
 }
 
 const OtherInfo: React.FC<OtherProps> = ({
-  userExhId,
   gatherName,
   visitDate,
   diaryPrivate,
@@ -28,7 +26,7 @@ const OtherInfo: React.FC<OtherProps> = ({
       {/* 누구와 */}
       <ContentView>
         <CategoryText>with</CategoryText>
-        <WithText>{userExhId === undefined ? gatherName : '나'}</WithText>
+        <WithText>{gatherName ? gatherName : '나'}</WithText>
       </ContentView>
       <LineView />
       {/* 관람 날짜 */}

@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
-import {useDeleteMyDiaryActions} from '~/zustand/mydiary/mydiary';
 import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -20,7 +19,6 @@ import {RootStackNavigationProp} from '~/App';
 type DeleteInfo = {
   exhId: number;
   diaryId: number;
-  userExhId: number;
 };
 
 interface DeleteDiaryModalProps {
@@ -38,17 +36,12 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const tabIdentifierInfo = useTabIdentifierInfo();
-  const {updateforDeleteMyDiary} = useDeleteMyDiaryActions();
   const {
     mutate: deleteMyDiary,
     isLoading,
     isError,
     isSuccess,
-  } = useDeleteMyDiary(
-    deleteInfo.exhId,
-    deleteInfo.diaryId,
-    deleteInfo.userExhId ? true : false, // 모임 or 혼자
-  );
+  } = useDeleteMyDiary(deleteInfo.exhId, deleteInfo.diaryId);
 
   useEffect(() => {
     if (isError) {
@@ -56,7 +49,6 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       showToast('에러 발생 ;(');
     }
     if (isSuccess) {
-      updateforDeleteMyDiary(-1, -1, -1);
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
       handleSuccessDelete();

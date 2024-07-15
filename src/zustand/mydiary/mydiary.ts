@@ -19,42 +19,5 @@ export const useVisitedExhIdInfo = () =>
   useVisitedExhId(state => ({exhId: state.exhId}));
 export const useVisitedExhIdActions = () =>
   useVisitedExhId(state => state.actions);
-
-/** 내 기록 삭제하기 */
-interface DeleteMyDiaryState {
-  exhId: number;
-  diaryId: number;
-  userExhId: number;
-  actions: {
-    updateforDeleteMyDiary: (
-      exhId: number,
-      diaryId: number,
-      userExhId: number,
-    ) => void;
-  };
-}
-
-// create: 보관함(Store)을 만들어주는 유용한 함수
-const useDeleteMyDiary = create<DeleteMyDiaryState>(set => ({
-  exhId: -1,
-  diaryId: -1,
-  userExhId: -1,
-  actions: {
-    updateforDeleteMyDiary: (
-      exhId: number,
-      diaryId: number,
-      userExhId: number,
-    ) => set(state => ({exhId: exhId, diaryId: diaryId, userExhId: userExhId})),
-  },
-}));
-
-export const useDeleteMyDiaryInfo = () =>
-  useDeleteMyDiary(state => ({
-    exhId: state.exhId,
-    diaryId: state.diaryId,
-    userExhId: state.userExhId,
-  }));
-export const useDeleteMyDiaryActions = () =>
-  useDeleteMyDiary(state => state.actions);
 // https://itchallenger.tistory.com/814
 // https://www.nextree.io/zustand/

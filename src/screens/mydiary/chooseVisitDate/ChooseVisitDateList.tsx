@@ -18,6 +18,7 @@ import {
   ITEM_BORDER_WIDTH,
 } from '~/components/common/style';
 import {JoinDateWithDot, getDateDay} from '~/utils/Date';
+import {MyVisitedDateType} from '~/utils/dataTypes';
 import {useMySoloMarkedDatesActions} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
   useWriteMyDiaryActions,
@@ -26,19 +27,13 @@ import {
 
 interface DateValue {
   index: number;
-  userExhId: number;
-  gatherExhId: number;
+  exhVisitId: number;
   visitDate: number[];
   weekday: string | null;
 }
 
-interface DateIds {
-  userExhId: number;
-  gatherExhId: number;
-}
-
 interface VisitDatesProps {
-  myStoredDateListOfExh: any;
+  myStoredDateListOfExh: MyVisitedDateType[];
   value: number | null;
 }
 
@@ -51,34 +46,24 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
     null,
   ); // 아이템 선택
-  const [selectedIds, setSelectedIds] = useState<DateIds>({
-    userExhId: -1,
-    gatherExhId: -1,
-  }); // 다음 페이지로 넘어갈 때 사용할 아이템의 userExhId와 gatherExhId
+  const [selectedExhVisitId, setSelectedExhVisitId] = useState<number | null>(
+    null,
+  ); // 다음 페이지로 넘어갈 때 사용할 아이템의 exhVisitId
   const {updateVisitDates} = useMySoloMarkedDatesActions();
   const {updateforIds} = useWriteMyDiaryActions();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
   useEffect(() => {
     if (writeMyDiaryInfo.isUpdate && value !== null) {
-      const infoList = myStoredDateListOfExh[value].dateInfoList;
+      const dateInfoList = myStoredDateListOfExh[value].dateInfoList;
 
-      for (let info = 0; info < infoList.length; info++) {
+      for (let info = 0; info < dateInfoList.length; info++) {
         if (
-          (writeMyDiaryInfo.userExhId !== -1 &&
-            writeMyDiaryInfo.userExhId === infoList[info].userExhId) ||
-          (writeMyDiaryInfo.gatherExhId !== -1 &&
-            writeMyDiaryInfo.gatherExhId === infoList[info].gatherExhId)
+          writeMyDiaryInfo.exhVisitId &&
+          writeMyDiaryInfo.exhVisitId === dateInfoList[info].exhVisitId
         ) {
           setSelectedItemIndex(info);
-          setSelectedIds({
-            userExhId: writeMyDiaryInfo.userExhId
-              ? writeMyDiaryInfo.userExhId
-              : -1,
-            gatherExhId: writeMyDiaryInfo.gatherExhId
-              ? writeMyDiaryInfo.gatherExhId
-              : -1,
-          });
+          setSelectedExhVisitId(writeMyDiaryInfo.exhVisitId);
         }
       }
     }
@@ -91,27 +76,17 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
   const onPressVisitDate = (item: DateValue) => {
     if (selectedItemIndex !== item.index) {
       setSelectedItemIndex(item.index);
-      setSelectedIds({
-        userExhId: item.userExhId === null ? -1 : item.userExhId,
-        gatherExhId: item.gatherExhId === null ? -1 : item.gatherExhId,
-      });
+      setSelectedExhVisitId(item.exhVisitId);
     } else {
       setSelectedItemIndex(null);
-      setSelectedIds({userExhId: -1, gatherExhId: -1});
+      setSelectedExhVisitId(null);
     }
   };
 
   const onPressNextButton = () => {
     // 기록 작성 페이지로 이동
-    if (
-      (selectedIds.userExhId !== -1 && selectedIds.gatherExhId === -1) ||
-      (selectedIds.userExhId === -1 && selectedIds.gatherExhId !== -1)
-    ) {
-      updateforIds(
-        writeMyDiaryInfo.diaryId,
-        selectedIds.userExhId,
-        selectedIds.gatherExhId,
-      );
+    if (selectedExhVisitId) {
+      updateforIds(writeMyDiaryInfo.diaryId, selectedExhVisitId);
       navigation.navigate('WriteMyDiaryRoutes');
     }
   };
@@ -148,12 +123,10 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
       return visitDateInfoList;
     }
     const dateInfoList = myStoredDateListOfExh[value].dateInfoList;
-
     for (let index = 0; index < dateInfoList.length; index++) {
       visitDateInfoList.push({
         index: index,
-        userExhId: dateInfoList[index].userExhId,
-        gatherExhId: dateInfoList[index].gatherExhId,
+        exhVisitId: dateInfoList[index].exhVisitId,
         visitDate: dateInfoList[index].visitDate,
         weekday:
           dateInfoList[index].visitDate === null

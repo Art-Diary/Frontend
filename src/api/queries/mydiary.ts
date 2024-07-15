@@ -94,18 +94,14 @@ export const useFetchMyDiaryList = (exhId: number) => {
   });
 };
 
-export const useDeleteMyDiary = (
-  exhId: number,
-  diaryId: number,
-  solo: boolean,
-) => {
+export const useDeleteMyDiary = (exhId: number, diaryId: number) => {
   const queryClient = useQueryClient();
   const {enterGatheringInfo} = useEnterGatheringInfo();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
 
   return useMutation({
-    mutationFn: () => deleteMyDiary(exhId, diaryId, solo),
+    mutationFn: () => deleteMyDiary(exhId, diaryId),
     onError: err => {
       console.log(err);
       console.log('[MyDiaryDeleteModal] error fetch MyDiaryDelete');
