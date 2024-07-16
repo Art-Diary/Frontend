@@ -13,7 +13,11 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {handleGoogleLogin} from './GoogleLogin';
 import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
-import {useLoginUser, useUpdateAlarmToken} from '~/api/queries/auth';
+import {
+  useLoginTest,
+  useLoginUser,
+  useUpdateAlarmToken,
+} from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
 import {TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -56,14 +60,15 @@ const LoginScreen = () => {
     error,
   } = useLoginUser();
   const {mutate: updateAlarmToken} = useUpdateAlarmToken();
+  const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest();
 
   useEffect(() => {
     const checkUserId = async () => {
-      const userId = await AsyncStorage.getItem('userId');
+      const accessToken = await AsyncStorage.getItem('accessToken');
       const initInfo = await AsyncStorage.getItem('initInfo');
       // TODO 출력 삭제
-      console.log(userId, initInfo);
-      if (userId && initInfo === 'true') {
+      console.log('{login page}', initInfo, accessToken);
+      if (accessToken && initInfo === 'true') {
         // 토큰 확인
         const alarmToken = await handlePushToken();
         if (alarmToken !== pushToken) {
@@ -162,15 +167,16 @@ const LoginScreen = () => {
     return null;
   };
 
-  const handleTester = async () => {
-    try {
-      await AsyncStorage.setItem('userId', JSON.stringify(3));
-      await AsyncStorage.setItem('initInfo', 'true');
-      console.log('[AsyncStorage] Success storing userId TESTER 3');
+  // TODO 나중에 지우기
+  useEffect(() => {
+    if (isSuccessTest) {
       navigation.navigate('UserInfo');
-    } catch (error) {
-      console.log('[AsyncStorage] Error storing userId TESTER 3');
     }
+  }, [isSuccessTest]);
+
+  // TODO 나중에 지우기
+  const handleTester = async () => {
+    testerLogin(3);
   };
 
   return (

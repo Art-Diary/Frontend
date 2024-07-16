@@ -4,6 +4,7 @@ import {
   deleteUser,
   fetchUserInfo,
   loginUser,
+  loginUserTest,
   separateSocialLogin,
   uniteSocialLogin,
   updateAlarm1,
@@ -132,13 +133,12 @@ export const useLoginUser = (): UseMutationResult<
       const resData = res.data;
       // TODO
       try {
-        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
           'initInfo',
           JSON.stringify(resData.initInfo),
         );
         console.log('[Login] success Login');
-        // console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);
       }
@@ -158,13 +158,12 @@ export const useUniteSocialLogin = () => {
       const resData = res.data;
       // TODO
       try {
-        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
           'initInfo',
           JSON.stringify(resData.initInfo),
         );
         console.log('[Unite Login] success Login');
-        // console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);
       }
@@ -184,13 +183,12 @@ export const useSeparateSocialLogin = () => {
       const resData = res.data;
       // TODO
       try {
-        await AsyncStorage.setItem('userId', JSON.stringify(resData.userId));
+        await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
           'initInfo',
           JSON.stringify(resData.initInfo),
         );
         console.log('[Separate Login] success Login');
-        // console.log('[Login] success Login +', providerType);
       } catch (error) {
         console.log('[AsyncStorage] Error storing userId', error);
       }
@@ -208,6 +206,32 @@ export const useUpdateAlarmToken = () => {
     },
     onSuccess: () => {
       console.log('[AlarmToken] success udpate AlarmToken');
+    },
+  });
+};
+
+// TODO
+export const useLoginTest = () => {
+  return useMutation({
+    mutationFn: (userId: number) => loginUserTest(userId),
+    onError: err => {
+      console.log(err);
+      console.log('[Tester Login] error Login');
+    },
+    onSuccess: async (res: any) => {
+      const resData = res.data;
+      // TODO
+      try {
+        await AsyncStorage.setItem('accessToken', resData.accessToken);
+        await AsyncStorage.setItem(
+          'initInfo',
+          JSON.stringify(resData.initInfo),
+        );
+        console.log('[Tester Login] success Login');
+      } catch (error) {
+        console.log('[AsyncStorage] Error storing userId', error);
+      }
+      return resData;
     },
   });
 };

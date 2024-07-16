@@ -3,9 +3,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AlarmSettingScreen from '~/screens/setting/updateAlarm/AlarmSettingScreen';
 import EditProfileScreen from '~/screens/setting/EditProfileScreen';
 import LeaveScreen from '~/screens/setting/LeaveScreen';
-import {SettingStackParamList} from '~/utils/types';
 import FavoriteListScreen from '~/screens/setting/favoriteList/FavoriteListScreen';
 import EditFavoriteScreen from '~/screens/setting/favoriteList/EditFavoriteScreen';
+import {SettingStackParamList} from '~/utils/stackTypes';
 
 const Setting = createNativeStackNavigator<SettingStackParamList>();
 

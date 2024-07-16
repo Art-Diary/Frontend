@@ -5,7 +5,10 @@
  * @format
  */
 
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -41,6 +44,7 @@ import notifee from '@notifee/react-native';
 import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox} from 'react-native';
+import {setNavigator} from './api/navigationService';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -71,7 +75,13 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer linking={linking}>
+      <NavigationContainer
+        linking={linking}
+        ref={(
+          navigatorRef: NavigationContainerRef<RootStackParamList> | null,
+        ) => {
+          setNavigator(navigatorRef);
+        }}>
         <RecoilRoot>
           <Stack.Navigator
             initialRouteName={'Login'}

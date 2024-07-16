@@ -11,7 +11,6 @@ import {RootStackNavigationProp} from '~/App';
 import ProfileNameTag from './nameTag/ProfileNameTag';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SettingStackParamList} from '~/utils/types';
 import notifee, {AndroidNotificationSetting} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {Linking, ScrollView} from 'react-native';
@@ -25,6 +24,7 @@ import {
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import {SettingStackParamList} from '~/utils/stackTypes';
 
 const SettingScreen = () => {
   const queryClient = useQueryClient();
@@ -44,7 +44,7 @@ const SettingScreen = () => {
   }, [isFocused]);
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('userId');
+    await AsyncStorage.removeItem('accessToken');
     await AsyncStorage.setItem('initInfo', 'false');
     // TODO 나중에 로그아웃 구체적으로 하기 + 푸시 알림도 변경
     // 쿼리 제거

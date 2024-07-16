@@ -1,12 +1,12 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GatheringInfoScreen from '~/screens/mate/gathering/GatheringInfoScreen';
-import {GatheringStackParamList} from '~/utils/types';
 import GatheringDiaryListScreen from '~/screens/mate/gathering/GatheringDiaryListScreen';
 import GatheringDiaryBackScreen from '~/screens/mate/gathering/GatheringDiaryBackScreen';
 import SearchAddVisitExhInGatheringScreen from '~/screens/mate/gathering/addVisitExhibition/SearchAddVisitExhInGatheringScreen';
 import NewVisitDateOfExhInGatheringScreen from '~/screens/mate/gathering/addVisitExhibition/NewVisitDateOfExhInGatheringScreen';
 import AddNewMateInGatheringScreen from '~/screens/mate/gathering/AddNewMateInGatheringScreen';
+import {GatheringStackParamList} from '~/utils/stackTypes';
 
 const Gathering = createNativeStackNavigator<GatheringStackParamList>();
 
