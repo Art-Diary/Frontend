@@ -8,5 +8,5 @@ export type MyVisitedDateType = {
 
 export type VisitedDateInfo = {
   exhVisitId: number;
-  visitDate: number[];
+  visitDate: string;
 };

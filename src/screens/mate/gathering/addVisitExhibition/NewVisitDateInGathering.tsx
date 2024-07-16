@@ -3,19 +3,29 @@ import React, {useEffect, useState} from 'react';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/diary/AddVisitDate';
-import {JoinDateWithDot, changeDotToHyphen, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useAddNewDateOfExhGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 
-interface MarkedType {
+type MarkedType = {
   date: string;
   color: string[];
-}
+};
+
+// TODO
+// type VisitInfo = {
+//   visitDate: string;
+//   exhVisitId: number;
+// };
+
+// interface NewDateProps {
+//   markedDates: VisitInfo[];
+// }
 
 interface NewDateProps {
-  markedDates: any[];
+  markedDates: string[];
 }
 
 const NewVisitDateInGathering: React.FC<NewDateProps> = ({markedDates}) => {
@@ -56,10 +66,10 @@ const NewVisitDateInGathering: React.FC<NewDateProps> = ({markedDates}) => {
     addNewDateOfExhGathering();
   };
 
-  const markedDatesFormatChange = (markedDates: number[][]): MarkedType[] => {
+  const markedDatesFormatChange = (markedDates: string[]): MarkedType[] => {
     var dates: string[] = [];
     for (let i = 0; i < markedDates.length; i++) {
-      dates.push(JoinDateWithDot(markedDates[i]));
+      dates.push(markedDates[i]);
     }
     var list: MarkedType[] = [];
 

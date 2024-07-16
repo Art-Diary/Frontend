@@ -17,7 +17,7 @@ import {
   FONT_NAME,
   ITEM_BORDER_WIDTH,
 } from '~/components/common/style';
-import {JoinDateWithDot, getDateDay} from '~/utils/Date';
+import {getDateDay} from '~/utils/Date';
 import {MyVisitedDateType} from '~/utils/dataTypes';
 import {useMySoloMarkedDatesActions} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
@@ -28,7 +28,7 @@ import {
 interface DateValue {
   index: number;
   exhVisitId: number;
-  visitDate: number[];
+  visitDate: string;
   weekday: string | null;
 }
 
@@ -128,10 +128,9 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
         index: index,
         exhVisitId: dateInfoList[index].exhVisitId,
         visitDate: dateInfoList[index].visitDate,
-        weekday:
-          dateInfoList[index].visitDate === null
-            ? null
-            : getDateDay(dateInfoList[index].visitDate),
+        weekday: !dateInfoList[index].visitDate
+          ? null
+          : getDateDay(dateInfoList[index].visitDate),
       });
     }
     return visitDateInfoList;
@@ -161,10 +160,7 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
                 <DateText>
                   {item.visitDate === null
                     ? '기억 안 남'
-                    : JoinDateWithDot(item.visitDate) +
-                      ' (' +
-                      item.weekday +
-                      ')'}
+                    : item.visitDate + ' (' + item.weekday + ')'}
                 </DateText>
               </DateView>
             </TouchableOpacity>

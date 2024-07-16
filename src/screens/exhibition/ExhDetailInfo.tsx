@@ -17,7 +17,7 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
-import {JoinDateWithDot, dateToString} from '~/utils/Date';
+import {dateToString} from '~/utils/Date';
 //import ExhShareModal from './ExhShareModal';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';
@@ -113,15 +113,15 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     if (isSuccess) {
       setHearts(data.favoriteExh);
 
-      if (currentDate > JoinDateWithDot(data.exhPeriodEnd)) {
+      if (currentDate > data.exhPeriodEnd) {
         // 진행상황 확인
         setExhState('종료');
       } else if (
-        currentDate >= JoinDateWithDot(data.exhPeriodStart) &&
-        currentDate <= JoinDateWithDot(data.exhPeriodEnd)
+        currentDate >= data.exhPeriodStart &&
+        currentDate <= data.exhPeriodEnd
       ) {
         setExhState('진행중');
-      } else if (currentDate < JoinDateWithDot(data.exhPeriodStart)) {
+      } else if (currentDate < data.exhPeriodStart) {
         setExhState('예정');
       }
 
@@ -283,9 +283,9 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     setIsMoreContent(false);
   };
 
-  const changeDateType = (visitDate: number[] | undefined) => {
+  const changeDateType = (visitDate: string | undefined) => {
     if (visitDate === undefined) return '방문날짜모름';
-    else return JoinDateWithDot(visitDate);
+    else return visitDate;
   };
 
   const showRate = (rate: string) => {
@@ -384,11 +384,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         </InfoView>
         <InfoView>
           <InfoTitle>{'일정'}</InfoTitle>
-          <Info>
-            {JoinDateWithDot(data.exhPeriodStart)}
-            {' ~ '}
-            {JoinDateWithDot(data.exhPeriodEnd)}
-          </Info>
+          <Info>{data.exhPeriodStart + ' ~ ' + data.exhPeriodEnd}</Info>
         </InfoView>
         <InfoView>
           <InfoTitle>{'작가'}</InfoTitle>

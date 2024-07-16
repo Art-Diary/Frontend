@@ -5,7 +5,6 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {JoinDateWithDot} from '~/utils/Date';
 import {PrivateToggleIcon, PublicToggleIcon} from '../common/icon';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
@@ -33,7 +32,7 @@ const OtherInfo: React.FC<OtherProps> = ({
       <ContentView>
         <CategoryText>관람 날짜</CategoryText>
         <VisitText>
-          {visitDate === undefined ? '기억 안 남' : JoinDateWithDot(visitDate)}
+          {visitDate === undefined ? '기억 안 남' : visitDate}
         </VisitText>
       </ContentView>
       <LineView />

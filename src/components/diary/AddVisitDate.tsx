@@ -15,7 +15,7 @@ import {
   FONT_NAME,
 } from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
-import {splitDate} from '~/utils/Date';
+import {dateToString} from '~/utils/Date';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 
 interface MarkedType {
@@ -56,7 +56,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
       <GroupText>방문 날짜 선택</GroupText>
       {/* 커스텀 캘린더 */}
       <CustomCalendar
-        initDate={splitDate(dateFromExhInfo)}
+        initDate={dateFromExhInfo ?? dateToString(new Date())}
         onSelectedDate={onSelectedDate}
         markedDates={markedDates}
       />
