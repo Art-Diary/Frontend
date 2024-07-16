@@ -80,12 +80,30 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
     } else {
       setOpenLoading(false);
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [isSuccess, isError, isLoading, gatheringList]);
+
+  const getDropdownWidth = () => {
+    const filteredData = selectorItems.filter(
+      (value: any) => value.value === selectedValue,
+    )[0];
+    if (filteredData) {
+      const nameLength: number = filteredData.label.length;
+      if (nameLength < 5) {
+        return wp(20);
+      } else if (nameLength < 8) {
+        return wp(30);
+      } else {
+        return wp(36);
+      }
+    } else {
+      return wp(25);
+    }
+  };
 
   return (
     <>
       <SelectCountry
-        style={styles.dropdown}
+        style={[styles.dropdown, {width: getDropdownWidth()}]}
         selectedTextStyle={styles.selectedTextStyle}
         placeholderStyle={styles.placeholderStyle}
         imageStyle={styles.imageStyle}
@@ -111,7 +129,6 @@ export default GatheringSelector;
 /** style */
 const styles = StyleSheet.create({
   dropdown: {
-    width: wp(20), // 동적으로 가능?
     height: hp(4),
     backgroundColor: 'white',
     borderRadius: wp(20),
@@ -127,11 +144,13 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: rf(13),
     fontFamily: FONT_NAME,
+    textAlign: 'center',
   },
   selectedTextStyle: {
     fontSize: rf(13),
     marginLeft: wp(1.8),
     fontFamily: FONT_NAME,
+    textAlign: 'center',
   },
   iconStyle: {
     width: 20,

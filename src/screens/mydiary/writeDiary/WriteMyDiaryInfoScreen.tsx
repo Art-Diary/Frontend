@@ -48,7 +48,7 @@ const WriteMyDiaryInfoScreen = () => {
   const [titleKeyword, setTitleKeyword] = useState<string>('');
   const [starNum, setStarNum] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
-  const [sayingKeyword, setSayingKeyword] = useState<string>('');
+  const [sayingKeyword, setSayingKeyword] = useState<string | null>(null);
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const {updateforDetailInfo} = useWriteMyDiaryActions();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
@@ -188,7 +188,7 @@ const WriteMyDiaryInfoScreen = () => {
             <SectionName>"</SectionName>
             <WriteSaying
               placeholderTextColor={LIGHT_GREY}
-              placeholder={'한마디'}
+              placeholder={!sayingKeyword ? '한마디' : ''}
               value={sayingKeyword}
               onChangeText={onChangeSaying}
             />
@@ -313,6 +313,8 @@ const WriteSaying = styled.TextInput`
   font-size: ${rf(16)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+  padding-right: 0%;
+  max-width: 97%;
 `;
 
 const ThumbnailSection = styled.View`
