@@ -1,5 +1,4 @@
 import {create} from 'zustand';
-import {changeDotToHyphen} from '~/utils/Date';
 
 // year.month.day
 interface DateFromExhState {
@@ -13,8 +12,7 @@ interface DateFromExhState {
 const useDateFromExh = create<DateFromExhState>(set => ({
   date: null,
   actions: {
-    updateDate: (date: string | null) =>
-      set(state => ({date: date ? changeDotToHyphen(date) : date})),
+    updateDate: (date: string | null) => set(state => ({date: date})),
   },
 }));
 

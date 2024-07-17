@@ -3,7 +3,7 @@ import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {changeDotToHyphen, dateToString, splitDate} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,
@@ -51,7 +51,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
         <ContentView>
           <TextView>{'날짜 선택'}</TextView>
           <CustomCalendar
-            initDate={splitDate(dateFromExhInfo)}
+            initDate={dateFromExhInfo ?? dateToString(new Date())}
             onSelectedDate={setSelectedDate}
             markedDates={[]}
             setChangeMonth={setChangeMonth}

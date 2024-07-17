@@ -1,5 +1,5 @@
 import {LinkingOptions} from '@react-navigation/native';
-import {RootStackParamList} from './types';
+import {RootStackParamList} from './stackTypes';
 import {Linking} from 'react-native';
 
 export const DEEPLINK_PREFIX_URL = ['artdiary://'];

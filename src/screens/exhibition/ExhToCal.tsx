@@ -9,7 +9,7 @@ import {
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/diary/AddVisitDate';
-import {changeDotToHyphen, JoinDateWithDot, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
@@ -72,7 +72,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
       dates.map((items: MyVisitedDateType) => {
         items.dateInfoList.map((item: VisitedDateInfo) => {
           if (item.visitDate != null) {
-            list.push(JoinDateWithDot(item.visitDate));
+            list.push(item.visitDate);
           }
         });
         setMarkedDates(list);

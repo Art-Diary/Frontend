@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {JoinDateWithDot, getDateDay} from '~/utils/Date';
+import {getDateDay} from '~/utils/Date';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
@@ -14,8 +14,8 @@ interface ExhInfo {
   poster: string;
   exhName: string;
   gallery: string;
-  exhPeriodStart: number[];
-  exhPeriodEnd: number[];
+  exhPeriodStart: string;
+  exhPeriodEnd: string;
   rate?: number;
 }
 
@@ -37,11 +37,11 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   haveRate,
 }) => {
   const changeExhDateFormat = (
-    exhPeriodStart: number[],
-    exhPeriodEnd: number[],
+    exhPeriodStart: string,
+    exhPeriodEnd: string,
   ): string => {
-    const start = JoinDateWithDot(exhPeriodStart);
-    const end = JoinDateWithDot(exhPeriodEnd);
+    const start = exhPeriodStart;
+    const end = exhPeriodEnd;
     const startDay = getDateDay(exhPeriodStart);
     const endDay = getDateDay(exhPeriodEnd);
     return start + ' (' + startDay + ')' + ' ~ ' + end + ' (' + endDay + ')';
