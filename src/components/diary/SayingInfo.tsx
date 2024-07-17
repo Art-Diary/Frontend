@@ -18,14 +18,14 @@ const SayingInfo: React.FC<SayingProps> = ({saying, exhName}) => {
       {/* 한마디 */}
       <SayingText>한마디</SayingText>
       <SayingContentView>
-        <ContentText numberOfLines={8}>
+        <ContentText numberOfLines={8} haveSaying={saying}>
           <QuoteText>"</QuoteText>
-          {saying}
+          {saying ?? '작성해주세요.'}
           <QuoteText>"</QuoteText>
         </ContentText>
       </SayingContentView>
       {/* 전시회 제목 */}
-      <ContentText>{exhName}</ContentText>
+      <ContentText haveSaying>{exhName}</ContentText>
     </Container>
   );
 };
@@ -55,9 +55,15 @@ const SayingContentView = styled.View`
   flex-direction: row;
 `;
 
-const ContentText = styled.Text`
+interface ContentTextProps {
+  haveSaying: boolean;
+}
+
+const ContentText = styled.Text<ContentTextProps>`
   font-size: ${rf(18)}px;
   color: ${DEFAULT_TEXT};
+  color: ${(props: ContentTextProps) =>
+    props.haveSaying ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};
 `;
 
