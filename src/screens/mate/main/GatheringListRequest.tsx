@@ -6,6 +6,7 @@ import {useFetchGatheringList} from '~/api/queries/gathering';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useEnterGatheringActions} from '~/zustand/gathering/enterGathering';
+import styled from 'styled-components/native';
 
 interface GatherInfo {
   gatherId: number;
@@ -50,8 +51,17 @@ const GatheringListRequest = () => {
   };
 
   return (
-    <NameList itemList={gatheringList} handleClickItem={pressEnterGathering} />
+    <Container>
+      <NameList
+        itemList={gatheringList}
+        handleClickItem={pressEnterGathering}
+      />
+    </Container>
   );
 };
+
+const Container = styled.View`
+  flex: 1;
+`;
 
 export default GatheringListRequest;

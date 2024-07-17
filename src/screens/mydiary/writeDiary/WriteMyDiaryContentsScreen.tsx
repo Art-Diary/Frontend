@@ -140,7 +140,11 @@ const WriteMyDiaryContentsScreen = () => {
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
     formData.append('contents', editorContent);
+    formData.append('writeDate', changeDotToHyphen(dateToString(new Date())));
 
+    if (writeMyDiaryInfo.saying) {
+      formData.append('saying', writeMyDiaryInfo.saying);
+    }
     // 기록 생성에만 추가
     if (
       writeMyDiaryInfo.thumbnail?.search('file://') !== undefined &&
@@ -169,9 +173,6 @@ const WriteMyDiaryContentsScreen = () => {
         uri: uri,
       });
     }
-
-    formData.append('writeDate', changeDotToHyphen(dateToString(new Date())));
-    formData.append('saying', writeMyDiaryInfo.saying);
     setCreateFormData(formData);
   };
 
