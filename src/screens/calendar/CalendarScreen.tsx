@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {JoinDateWithDot, splitDate} from '~/utils/Date';
+import {dateToString} from '~/utils/Date';
 import {calendarColor} from './calendarColor';
 import {
   useTabIdentifierActions,
@@ -34,11 +34,11 @@ const CalendarScreen = () => {
   const {date: dateFromExhInfo} = useDateFromExhInfo();
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(
-    JoinDateWithDot(splitDate(dateFromExhInfo)),
+    dateFromExhInfo ?? dateToString(new Date()),
   );
   // 월 변경 화살표 클릭 인식을 위한 상태 변화
   const [changeMonth, setChangeMonth] = useState(
-    JoinDateWithDot(splitDate(dateFromExhInfo)),
+    dateFromExhInfo ?? dateToString(new Date()),
   );
   // 일정이 있는 날짜 리스트
   const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
@@ -109,11 +109,12 @@ const CalendarScreen = () => {
             colorList.push(calendarColor[0]);
           }
           list.push({
-            date: JoinDateWithDot([
-              Number(changeMonth.split('.')[0]),
-              Number(changeMonth.split('.')[1]),
-              exhInfoOfDays[i].day,
-            ]),
+            date:
+              changeMonth.split('.')[0] +
+              '.' +
+              changeMonth.split('.')[1] +
+              '.' +
+              ('0' + exhInfoOfDays[i].day).slice(-2),
             color: colorList,
           });
         }
@@ -137,7 +138,7 @@ const CalendarScreen = () => {
   return (
     <Container>
       <CustomCalendar
-        initDate={splitDate(dateFromExhInfo)}
+        initDate={dateFromExhInfo ?? dateToString(new Date())}
         onSelectedDate={setSelectedDate}
         markedDates={markedDates}
         setChangeMonth={setChangeMonth}>

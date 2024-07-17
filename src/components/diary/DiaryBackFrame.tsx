@@ -10,7 +10,6 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {useDiaryBackInfo} from '~/zustand/common/diaryBack';
 import LoadingModal from '../common/modal/LoadingModal';
-import {JoinDateWithDot} from '~/utils/Date';
 import {FONT_NAME} from '../common/style';
 import {LIGHT_GREY} from '../common/colors';
 
@@ -39,9 +38,7 @@ const DiaryBackFrame = () => {
               {/* 작성 날짜 */}
               <WriteDateView>
                 <WriteDateText>작성날짜</WriteDateText>
-                <WriteDateText>
-                  {JoinDateWithDot(backInfo.writeDate)}
-                </WriteDateText>
+                <WriteDateText>{backInfo.writeDate}</WriteDateText>
               </WriteDateView>
             </Shadow>
           </ContentsContainer>

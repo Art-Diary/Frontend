@@ -11,7 +11,7 @@ import {calendarColor} from './calendarColor';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
-import {JoinDateWithHyphen} from '~/utils/Date';
+import {changeDotToHyphen} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import {IPicker} from './CalendarScreen';
@@ -55,7 +55,7 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
     updateVisitedExhId(exhItem.exhId);
     updateExhFromCalendar(
       exhItem.visitDate ? false : true,
-      exhItem.visitDate ? JoinDateWithHyphen(exhItem.visitDate) : null,
+      exhItem.visitDate ? changeDotToHyphen(exhItem.visitDate) : null,
       exhItem.gatherId ?? null,
       exhItem.exhVisitId ?? null,
     );

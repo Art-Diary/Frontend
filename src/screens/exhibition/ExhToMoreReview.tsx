@@ -8,7 +8,6 @@ import {
 import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchDiaryListForExh} from '~/api/queries/exhibition';
-import {JoinDateWithDot} from '~/utils/Date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {EmptyStarIcon, FullStarIcon} from '~/components/common/icon';
 import {
@@ -87,9 +86,9 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     }
   }, [isSuccess, diaryData]);
 
-  const changeDateType = (visitDate: number[] | undefined) => {
+  const changeDateType = (visitDate: string | undefined) => {
     if (visitDate === undefined) return '방문날짜모름';
-    else return JoinDateWithDot(visitDate);
+    else return visitDate;
   };
 
   const showRate = (rate: string) => {
