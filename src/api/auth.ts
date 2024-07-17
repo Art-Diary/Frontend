@@ -41,3 +41,7 @@ export type LoginUserParams = {
   providerId: string;
   alarmToken: string | null;
 };
+
+// TODO
+export const loginUserTest = async (userId: number) =>
+  client.post(`/users/test`, {userId});

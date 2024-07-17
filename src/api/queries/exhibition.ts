@@ -70,10 +70,10 @@ export const useFetchSearchExh = (
     queryFn: () => fetchSearchExh(searchName, price, field, state, date),
     staleTime: 500000,
     onError: err => {
-      console.log('error fetch SearchExh');
+      console.log('[FetchSearchExh] error fetch SearchExh');
     },
     onSuccess: () => {
-      console.log('success fetch SearchExh');
+      console.log('[FetchSearchExh] success fetch SearchExh');
     },
     select: (res: any) => res.data,
   });
