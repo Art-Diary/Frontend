@@ -16,6 +16,7 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
+import {DEFAULT_IMAGE} from '@env';
 
 const ProfileNameTag = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -29,9 +30,7 @@ const ProfileNameTag = () => {
         <Wrapper>
           <ProfileWrapper isPresent={userInfo.authInfo.profile}>
             <Profile
-              source={{
-                uri: `data:image/png;base64,${userInfo.authInfo.profile}`,
-              }}
+              source={{uri: `${userInfo.authInfo.profile ?? DEFAULT_IMAGE}`}}
               resizeMode="cover"
               alt={'이미지'}
             />

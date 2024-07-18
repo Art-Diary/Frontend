@@ -9,6 +9,7 @@ import {
 import {BORDER_COLOR, DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
+import {DEFAULT_IMAGE} from '@env';
 
 interface ExhProps {
   exhList: any[];
@@ -29,7 +30,7 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
               : false
           }>
           <Poster
-            source={{uri: `data:image/png;base64,${item.poster}`}}
+            source={{uri: `${item.poster ?? DEFAULT_IMAGE}`}}
             alt={'이미지 읽기 실패'}
             resizeMode="contain"
           />

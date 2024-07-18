@@ -7,11 +7,13 @@ import {
 } from 'react-query';
 import {
   addMyExhVisitDate,
+  CreateDiaryParams,
   createMyDiary,
   deleteMyDiary,
   fetchMyDiaryList,
   fetchMyExhList,
   fetchMyStoredDateListOfExh,
+  UpdateDiaryParams,
   updateMyDiary,
 } from '../mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
@@ -176,12 +178,12 @@ export const useAddMyExhVisitDate = (
 
 export const useCreateMyDiary = (
   exhId: number,
-  newMyDiary: FormData | null,
-) => {
+): UseMutationResult<any, any, CreateDiaryParams, unknown> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => createMyDiary(exhId, newMyDiary),
+  return useMutation<any, any, CreateDiaryParams, unknown>({
+    mutationFn: (createDiaryParams: CreateDiaryParams) =>
+      createMyDiary(createDiaryParams),
     onError: err => {
       console.log(err);
       console.log('[WriteMyDiaryScreen] error create WriteMyDiary');
@@ -198,14 +200,13 @@ export const useCreateMyDiary = (
 
 export const useUpdateMyDiary = (
   exhId: number,
-  diaryId: number,
-  newMyDiary: FormData | null,
-): UseMutationResult<any, any, void, unknown> => {
+): UseMutationResult<any, any, UpdateDiaryParams, unknown> => {
   const queryClient = useQueryClient();
   const tabIdentifierInfo = useTabIdentifierInfo();
 
-  return useMutation<any, any, void, unknown>({
-    mutationFn: () => updateMyDiary(exhId, diaryId, newMyDiary),
+  return useMutation<any, any, UpdateDiaryParams, unknown>({
+    mutationFn: (updateDiaryParams: UpdateDiaryParams) =>
+      updateMyDiary(updateDiaryParams),
     onError: err => {
       console.log(err);
       console.log('[WriteMyDiaryScreen(Update)] error update WriteMyDiary');

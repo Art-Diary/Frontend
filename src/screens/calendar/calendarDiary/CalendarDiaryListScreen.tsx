@@ -28,7 +28,8 @@ import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 const CalendarDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
-  const {updateIsUpdate, updateforIds} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateforIds, resetWriteInfo} =
+    useWriteMyDiaryActions();
   const [showOptionBar, setShowOptionBar] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -37,6 +38,7 @@ const CalendarDiaryListScreen = () => {
   const onPressButton = () => {
     updateIsUpdate(false);
     updateforIds(null, exhFromCalendarInfo.exhVisitId);
+    resetWriteInfo();
     navigation.navigate('WriteMyDiaryRoutes');
   };
 

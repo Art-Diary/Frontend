@@ -6,4 +6,5 @@ declare module '@env' {
   export const SHARE_LINK: string;
   export const SHARE_DOMAIN_URI_PREFIX: string;
   export const PROJECT_PACKAGE_NAME: string;
+  export const DEFAULT_IMAGE: string;
 }

@@ -65,9 +65,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     initProfile.nickname,
   );
   const [imageUri, setImageUri] = useState<string | undefined>(
-    initProfile.profile
-      ? `data:image/png;base64,${initProfile.profile}`
-      : initProfile.profile,
+    initProfile.profile,
   );
   const [createFormData, setCreateFormData] = useState<FormData | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(true);
@@ -140,8 +138,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     if (isImage !== undefined && isImage !== -1) {
       const resizedImage = await ImageResizer.createResizedImage(
         imageUri ?? '', // path
-        300, // width
-        300, // height
+        640, // width
+        640, // height
         'JPEG', // format
         100, // quality
         undefined, // rotation

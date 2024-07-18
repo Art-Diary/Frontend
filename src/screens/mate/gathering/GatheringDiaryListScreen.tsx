@@ -28,7 +28,8 @@ import {
 const GatheringDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {params} = useGatheringListParamsInfo();
-  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
   const [showOptionBar, setShowOptionBar] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -37,6 +38,7 @@ const GatheringDiaryListScreen = () => {
   const onPressButton = () => {
     updateIsUpdate(false);
     updateInGathering(true, params.gatherId);
+    resetWriteInfo();
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

@@ -32,7 +32,8 @@ import DiaryList from '~/components/diary/DiaryList';
 const MyDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const visitedExhId = useVisitedExhIdInfo().exhId;
-  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isUpdateClicked, setIsUpdateClicked] = useState<boolean>(false);
@@ -59,6 +60,7 @@ const MyDiaryListScreen = () => {
   const onPressButton = () => {
     updateIsUpdate(false);
     updateInGathering(false, null);
+    resetWriteInfo();
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

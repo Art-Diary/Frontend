@@ -35,9 +35,7 @@ const WriteMyDiaryContentsScreen = () => {
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const tabIdentifier = useTabIdentifierInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
-  const {updateIsUpdate, updateforIds, updateforDetailInfo, updateforContent} =
-    useWriteMyDiaryActions();
-  const [createFormData, setCreateFormData] = useState<FormData | null>(null);
+  const {resetWriteInfo, updateforContent} = useWriteMyDiaryActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // post
   const {
@@ -45,37 +43,18 @@ const WriteMyDiaryContentsScreen = () => {
     isLoading: isLoadingCreate,
     isError: isErrorCreate,
     isSuccess: isSuccessCreate,
-  } = useCreateMyDiary(visitedExhId, createFormData);
+  } = useCreateMyDiary(visitedExhId);
   const {
     mutate: updateMyDiary,
     isLoading: isLoadingUpdate,
     isError: isErrorUpdate,
     isSuccess: isSuccessUpdate,
     data: resData,
-  } = useUpdateMyDiary(
-    visitedExhId,
-    writeMyDiaryInfo.diaryId ?? -1,
-    createFormData,
-  );
+  } = useUpdateMyDiary(visitedExhId);
 
   useEffect(() => {
-    if (writeMyDiaryInfo.isUpdate) {
-      setEditorContent(writeMyDiaryInfo.contents ?? '');
-    } else {
-      setEditorContent('');
-    }
+    setEditorContent(writeMyDiaryInfo.contents ?? '');
   }, []);
-
-  useEffect(() => {
-    if (createFormData) {
-      if (!writeMyDiaryInfo.isUpdate) {
-        createMyDiary();
-      } else {
-        // 업데이트
-        updateMyDiary();
-      }
-    }
-  }, [createFormData]);
 
   useEffect(() => {
     if (isErrorCreate) {
@@ -91,15 +70,12 @@ const WriteMyDiaryContentsScreen = () => {
       setIsLoadingOpen(false);
     }
     if (isSuccessCreate || isSuccessUpdate) {
-      updateIsUpdate(null);
-      updateforIds(null, null);
-      updateforDetailInfo(null, null, null, null, null, null);
-      updateforContent(null);
       if (isSuccessCreate) {
         showToast('다이어리 작성 완료!');
       } else if (isSuccessUpdate) {
         showToast('다이어리 업데이트 완료!');
       }
+      resetWriteInfo();
       if (tabIdentifier.tab === 'mydiary') {
         navigation.reset({
           // [내 기록] 기록 목록 화면으로 이동
@@ -133,6 +109,30 @@ const WriteMyDiaryContentsScreen = () => {
   ]);
 
   const onClickNextButton = async () => {
+    /**
+     * TODO
+     * {check editorContent}
+     * 1. 이미지 업로드 api 만들기
+     * 2. 문자열 정규화를 통해 이미지 찾기
+     * 3. 찾은 이미지를 서버에 보내 스토리지에 저장
+     * 4. 이미지 자리를 이미지 경로로 바꾸기
+     */
+    const resultFormData = await makeFormData();
+    if (writeMyDiaryInfo.isUpdate) {
+      updateMyDiary({
+        exhId: visitedExhId,
+        diaryId: writeMyDiaryInfo.diaryId ?? -1,
+        formData: resultFormData,
+      });
+    } else {
+      createMyDiary({
+        exhId: visitedExhId,
+        formData: resultFormData,
+      });
+    }
+  };
+
+  const makeFormData = async (): Promise<FormData> => {
     const formData = new FormData();
 
     formData.append('exhVisitId', writeMyDiaryInfo.exhVisitId);
@@ -147,14 +147,13 @@ const WriteMyDiaryContentsScreen = () => {
     }
     // 기록 생성에만 추가
     if (
-      writeMyDiaryInfo.thumbnail?.search('file://') !== undefined &&
-      writeMyDiaryInfo.thumbnail?.search('file://') !== null &&
-      writeMyDiaryInfo.thumbnail?.search('file://') !== -1
+      writeMyDiaryInfo.thumbnail &&
+      writeMyDiaryInfo.thumbnail.indexOf('file:///') !== -1
     ) {
       const resizedImage = await ImageResizer.createResizedImage(
         writeMyDiaryInfo.thumbnail ?? '', // path
-        300, // width
-        300, // height
+        640, // width
+        640, // height
         'JPEG', // format
         100, // quality
         undefined, // rotation
@@ -169,11 +168,16 @@ const WriteMyDiaryContentsScreen = () => {
 
       formData.append('thumbnail', {
         name: filename,
-        type,
+        type: type,
         uri: uri,
       });
     }
-    setCreateFormData(formData);
+    return formData;
+  };
+
+  const handleContent = (content: string) => {
+    setEditorContent(content);
+    updateforContent(content);
   };
 
   return (
@@ -181,7 +185,7 @@ const WriteMyDiaryContentsScreen = () => {
       <BackView title="기록 작성" line={true} children={null} />
       <ContentsContainer>
         <CustomDiaryEditor
-          handleEditorContent={setEditorContent}
+          handleEditorContent={handleContent}
           editorContent={editorContent}
         />
         {!checkBlankInKeyword(editorContent) ? (

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
@@ -15,6 +15,7 @@ const FetchMyStoredDateListOfExh: React.FC<StoredDateListProps> = ({
 }) => {
   const isFocused = useIsFocused();
   const visitedExhId = useVisitedExhIdInfo().exhId;
+  const [isOpenLoading, setIsOpenLoading] = useState(false);
 
   // 모임과 개인 전시회 날짜
   const {
@@ -37,15 +38,20 @@ const FetchMyStoredDateListOfExh: React.FC<StoredDateListProps> = ({
     }
   }, [isSuccess, storedDateListOfExh]);
 
-  if (isError) {
-    showToast('방문 날짜 조회 실패 ;(');
-  }
+  useEffect(() => {
+    if (isError) {
+      showToast('방문 날짜 조회 실패 ;(');
+    }
+    if (isLoading) {
+      setIsOpenLoading(true);
+    } else {
+      setIsOpenLoading(false);
+    }
+  }, [isError, isLoading]);
 
-  if (isLoading) {
-    return <LoadingModal message={'방문 날짜 조회 중 :)'} />;
-  }
-
-  return <></>;
+  return (
+    <>{isOpenLoading && <LoadingModal message={'방문 날짜 조회 중 :)'} />}</>
+  );
 };
 
 export default FetchMyStoredDateListOfExh;

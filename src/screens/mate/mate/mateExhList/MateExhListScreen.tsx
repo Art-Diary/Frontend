@@ -19,6 +19,7 @@ import {
   FONT_NAME,
   ITEM_BORDER_WIDTH,
 } from '~/components/common/style';
+import {DEFAULT_IMAGE} from '@env';
 
 const MateExhListScreen = () => {
   const mateInfo = useMateInfo();
@@ -41,9 +42,7 @@ const MateExhListScreen = () => {
           <UserInfo>
             <ProfileWrapper isPresent={mateInfo.mateInfo.profile}>
               <Profile
-                source={{
-                  uri: `data:image/png;base64,${mateInfo.mateInfo.profile}`,
-                }}
+                source={{uri: `${mateInfo.mateInfo.profile ?? DEFAULT_IMAGE}`}}
                 resizeMode="cover"
                 alt={'이미지 읽기 실패'}
               />

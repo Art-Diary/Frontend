@@ -17,6 +17,7 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
+import {DEFAULT_IMAGE} from '@env';
 
 type RootStackParamList = {
   ExhToMoreReview: {exhId: number};
@@ -130,9 +131,7 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
                     })
                   }>
                   <ReviewImage
-                    source={{
-                      uri: `data:image/png;base64,${item.thumbnail}`,
-                    }}
+                    source={{uri: `${item.thumbnail ?? DEFAULT_IMAGE}`}}
                     resizeMode="cover"
                     alt={'이미지 읽기 실패'}
                   />

@@ -15,6 +15,7 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
+import {DEFAULT_IMAGE} from '@env';
 
 interface SearchNewMateListProps {
   searchKeyword: string;
@@ -72,7 +73,7 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
                   <UserInfo>
                     <ProfileWrapper>
                       <Profile
-                        source={{uri: `data:image/png;base64,${item.profile}`}}
+                        source={{uri: `${item.profile ?? DEFAULT_IMAGE}`}}
                         resizeMode="cover"
                         alt={'이미지 읽기 실패'}
                       />
