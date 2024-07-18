@@ -16,7 +16,6 @@ import {changeDotToHyphen, dateToString} from '~/utils/Date';
 import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {checkBlankInKeyword} from '~/utils/CheckKeyword';
@@ -28,6 +27,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
+import {changeImageSize} from '~/utils/resizeImage';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -150,27 +150,10 @@ const WriteMyDiaryContentsScreen = () => {
       writeMyDiaryInfo.thumbnail &&
       writeMyDiaryInfo.thumbnail.indexOf('file:///') !== -1
     ) {
-      const resizedImage = await ImageResizer.createResizedImage(
-        writeMyDiaryInfo.thumbnail ?? '', // path
-        640, // width
-        640, // height
-        'JPEG', // format
-        100, // quality
-        undefined, // rotation
-        // uploadFileName, // outputPath
-        undefined, // keepMeta,
-        undefined, // options => object
+      const resultResizedImage = await changeImageSize(
+        writeMyDiaryInfo.thumbnail,
       );
-      const uri = resizedImage.uri;
-      const filename = uri.split('/').pop();
-      const match = /\.(\w+)$/.exec(filename || '');
-      const type = match ? `image/${match[1]}` : `image`;
-
-      formData.append('thumbnail', {
-        name: filename,
-        type: type,
-        uri: uri,
-      });
+      formData.append('thumbnail', resultResizedImage);
     }
     return formData;
   };

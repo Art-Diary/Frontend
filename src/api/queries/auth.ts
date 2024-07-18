@@ -75,9 +75,14 @@ export const useFetchUserInfo = () =>
     select: (res: any) => res.data,
   });
 
-export const useUpdateUserInfo = (info: FormData | null) => {
-  return useMutation({
-    mutationFn: () => updateUserInfo(info),
+export const useUpdateUserInfo = (): UseMutationResult<
+  any,
+  any,
+  FormData,
+  unknown
+> => {
+  return useMutation<any, any, FormData, unknown>({
+    mutationFn: (info: FormData | null) => updateUserInfo(info),
     onError: err => {
       console.log(err);
       console.log('[EditProfileScreen] error update UserInfo');
