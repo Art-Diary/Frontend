@@ -29,6 +29,12 @@ import {
 } from '~/components/common/style';
 import {changeImageSize} from '~/utils/resizeImage';
 
+export type ImageType = {
+  // 첨부한 사진 타입
+  base64: string;
+  uri: string;
+};
+
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [editorContent, setEditorContent] = useState('');
@@ -37,6 +43,7 @@ const WriteMyDiaryContentsScreen = () => {
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
   const {resetWriteInfo, updateforContent} = useWriteMyDiaryActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [images, setImages] = useState<ImageType[]>([]); // 작성한 글에 첨부한 사진들
   // post
   const {
     mutate: createMyDiary,
@@ -108,15 +115,11 @@ const WriteMyDiaryContentsScreen = () => {
     isSuccessUpdate,
   ]);
 
+  const escapeRegExp = (str: string) => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // 특수 문자를 이스케이프 처리
+  };
+
   const onClickNextButton = async () => {
-    /**
-     * TODO
-     * {check editorContent}
-     * 1. 이미지 업로드 api 만들기
-     * 2. 문자열 정규화를 통해 이미지 찾기
-     * 3. 찾은 이미지를 서버에 보내 스토리지에 저장
-     * 4. 이미지 자리를 이미지 경로로 바꾸기
-     */
     const resultFormData = await makeFormData();
     if (writeMyDiaryInfo.isUpdate) {
       updateMyDiary({
@@ -134,12 +137,28 @@ const WriteMyDiaryContentsScreen = () => {
 
   const makeFormData = async (): Promise<FormData> => {
     const formData = new FormData();
+    let newText = editorContent;
 
+    for (const image of images) {
+      const escapedBase64 = escapeRegExp(image.base64);
+      const regex = new RegExp(escapedBase64, 'g');
+      newText = newText.replace(regex, image.uri);
+      if (newText.indexOf(image.uri) !== -1) {
+        const resultResizedImage = await changeImageSize(image.uri);
+
+        if (resultResizedImage.name) {
+          const escapedUri = escapeRegExp(image.uri);
+          const regexUri = new RegExp(escapedUri, 'g');
+          newText = newText.replace(regexUri, resultResizedImage.name);
+        }
+        formData.append('files', resultResizedImage);
+      }
+    }
+    formData.append('contents', newText);
     formData.append('exhVisitId', writeMyDiaryInfo.exhVisitId);
     formData.append('title', writeMyDiaryInfo.title);
     formData.append('rate', writeMyDiaryInfo.rate);
     formData.append('diaryPrivate', writeMyDiaryInfo.diaryPrivate);
-    formData.append('contents', editorContent);
     formData.append('writeDate', changeDotToHyphen(dateToString(new Date())));
 
     if (writeMyDiaryInfo.saying) {
@@ -170,6 +189,8 @@ const WriteMyDiaryContentsScreen = () => {
         <CustomDiaryEditor
           handleEditorContent={handleContent}
           editorContent={editorContent}
+          setImages={setImages}
+          images={images}
         />
         {!checkBlankInKeyword(editorContent) ? (
           <TouchableOpacity onPress={onClickNextButton}>

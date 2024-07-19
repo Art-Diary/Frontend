@@ -7,6 +7,7 @@ import {
 import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import RNFS from 'react-native-fs';
 import {RichEditor} from 'react-native-pell-rich-editor';
+import {ImageType} from './WriteMyDiaryContentsScreen';
 
 const requestCameraPermission = async () => {
   if (Platform.OS === 'android') {
@@ -23,7 +24,11 @@ const requestCameraPermission = async () => {
   }
 };
 
-export const showPhoto = async (editorRef: React.RefObject<RichEditor>) => {
+export const showPhoto = async (
+  editorRef: React.RefObject<RichEditor>,
+  setImages: (info: ImageType[]) => void,
+  images: ImageType[],
+) => {
   await requestCameraPermission();
 
   const option: ImageLibraryOptions = {
@@ -43,7 +48,9 @@ export const showPhoto = async (editorRef: React.RefObject<RichEditor>) => {
     if (imageUri) {
       const imageData = await RNFS.readFile(imageUri, 'base64');
       const base64Uri = `data:image/jpeg;base64,${imageData}`;
+
       if (editorRef.current) {
+        setImages([...images, {uri: imageUri, base64: base64Uri}]);
         editorRef.current?.insertImage(base64Uri, 'width: 100%; height: auto;');
       }
     }

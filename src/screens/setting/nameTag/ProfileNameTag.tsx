@@ -28,7 +28,7 @@ const ProfileNameTag = () => {
 
       <WordContainer>
         <Wrapper>
-          <ProfileWrapper isPresent={userInfo.authInfo.profile}>
+          <ProfileWrapper>
             <Profile
               source={{uri: `${userInfo.authInfo.profile ?? DEFAULT_IMAGE}`}}
               resizeMode="cover"
@@ -130,20 +130,13 @@ const Email = styled.Text`
   text-decoration-line: underline;
 `;
 
-interface ProfileWrapperProps {
-  isPresent: boolean;
-}
-
-const ProfileWrapper = styled.View<ProfileWrapperProps>`
-  border-radius: ${wp(39)}px;
+const ProfileWrapper = styled.View`
+  border-radius: ${wp(50)}px;
   align-items: center;
   justify-content: center;
   width: ${wp(12)}px;
   height: ${wp(12)}px;
   overflow: hidden;
-  border-color: ${MAIN_COLOR};
-  border-width: ${(props: ProfileWrapperProps) =>
-    props.isPresent ? `0px` : `${wp(0.3)}px;`};
 `;
 
 const Profile = styled.Image`

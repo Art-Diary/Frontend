@@ -8,7 +8,12 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,
@@ -150,22 +155,30 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
           )}
       </AddDateGroupView>
       <Dates>
-        <FlatList
-          data={getVisitDates(value)}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() => onPressVisitDate(item)}
-              style={item.index === selectedItemIndex && pickerStyle.selected}>
-              <DateView key={item.index}>
-                <DateText>
-                  {item.visitDate === null
-                    ? '기억 안 남'
-                    : item.visitDate + ' (' + item.weekday + ')'}
-                </DateText>
-              </DateView>
-            </TouchableOpacity>
-          )}
-        />
+        {value === null ? (
+          <SelectMsgView>
+            <SelectMsgText>모임을 선택해 주세요.</SelectMsgText>
+          </SelectMsgView>
+        ) : (
+          <FlatList
+            data={getVisitDates(value)}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() => onPressVisitDate(item)}
+                style={
+                  item.index === selectedItemIndex && pickerStyle.selected
+                }>
+                <DateView key={item.index}>
+                  <DateText>
+                    {item.visitDate === null
+                      ? '기억 안 남'
+                      : item.visitDate + ' (' + item.weekday + ')'}
+                  </DateText>
+                </DateView>
+              </TouchableOpacity>
+            )}
+          />
+        )}
       </Dates>
       {selectedItemIndex !== null ? (
         <TouchableOpacity onPress={onPressNextButton}>
@@ -213,6 +226,19 @@ const Dates = styled.View`
   flex-direction: column;
   width: 100%;
   height: 100%;
+`;
+
+const SelectMsgView = styled.View`
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const SelectMsgText = styled.Text`
+  font-size: ${rf(16)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
+  padding-top: ${hp(0.9)}px;
 `;
 
 const DateView = styled.View`
