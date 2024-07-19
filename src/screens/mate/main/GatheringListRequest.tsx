@@ -33,11 +33,10 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     refetch,
   } = useFetchGatheringList();
 
-  const handlesRefresh = async () => {
+  const handleRefetch = async () => {
     await refetch().then(() => {
       handleRefresh(false);
     });
-    handleRefresh(false);
   };
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
       refetch();
     }
     if (refreshing) {
-      handlesRefresh();
+      handleRefetch();
     }
   }, [isFocused, refreshing]);
 

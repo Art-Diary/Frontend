@@ -11,7 +11,8 @@ import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
 
-interface ExhInfo {
+export interface ExhInfo {
+  exhId: number;
   poster: string;
   exhName: string;
   gallery: string;

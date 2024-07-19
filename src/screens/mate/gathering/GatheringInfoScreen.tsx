@@ -14,8 +14,14 @@ import {
 } from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
-import ExhItemView from '~/components/exhibition/ExhItemView';
-import {FlatList, Modal, Pressable, TouchableOpacity} from 'react-native';
+import ExhItemView, {ExhInfo} from '~/components/exhibition/ExhItemView';
+import {
+  Modal,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
@@ -48,13 +54,6 @@ import {
 import {Shadow} from 'react-native-shadow-2';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 
-interface ExhInfo {
-  exhId: number;
-  poster: string;
-  exhName: string;
-  rate?: number;
-}
-
 const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
@@ -65,6 +64,8 @@ const GatheringInfoScreen = () => {
   const {enterGatheringInfo} = useEnterGatheringInfo();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOptionBarOpen, setIsOptionBarOpen] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
   const {
     data: gatheringInfo,
     isLoading,
@@ -88,7 +89,16 @@ const GatheringInfoScreen = () => {
       }
       refetch();
     }
-  }, [isFocused]);
+    if (refreshing) {
+      handleRefetch();
+    }
+  }, [isFocused, refreshing]);
+
+  const handleRefetch = async () => {
+    await refetch().then(() => {
+      setRefreshing(false);
+    });
+  };
 
   useEffect(() => {
     if (deleteError) {
@@ -164,6 +174,10 @@ const GatheringInfoScreen = () => {
     setIsDeleteModalOpen(true);
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
+
   return (
     <Container>
       {/* header */}
@@ -200,47 +214,64 @@ const GatheringInfoScreen = () => {
         </TouchableOpacity>
       </BackView>
       {/* body */}
-      <Contents>
-        <ExhMates>
-          <ContentText>전시 메이트</ContentText>
-          <RowView>
-            <AddNewItem
-              onPress={pressNewExhMate}
-              disabled={enterGatheringInfo.gatherName === ''}>
-              <NameText isAdd={true}>+</NameText>
-            </AddNewItem>
-            <NameList
-              itemList={gatheringInfo ? gatheringInfo.mates : []}
-              handleClickItem={null}
-            />
-          </RowView>
-        </ExhMates>
-        <Dot />
-        <ExhListWrapper>
-          <ExhListTitle>
-            <ContentText>함께 한 전시 리스트</ContentText>
-            <TouchableOpacity
-              onPress={pressNewExh}
-              disabled={enterGatheringInfo.gatherName === ''}>
-              <AddMyExhButtonIcon />
-            </TouchableOpacity>
-          </ExhListTitle>
-          {/* 모임이 방문한 전시회 리스트 */}
-          <FlatList
-            data={gatheringInfo ? gatheringInfo.exhibitions : []}
-            renderItem={({item, index}) => (
-              <ExhItemView
-                key={index}
-                exhInfo={item}
-                noLine={gatheringInfo.exhibitions.length - 1 === index}
-                notTouchable={false}
-                onTouch={() => pressExh(item)}
-                haveRate={true}
-              />
-            )}
-          />
-        </ExhListWrapper>
-      </Contents>
+      <RefreshView
+        data={['']}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        renderItem={({}) => (
+          <Contents>
+            <ExhMates>
+              <ContentText>전시 메이트</ContentText>
+              <RowView>
+                <AddNewItem
+                  onPress={pressNewExhMate}
+                  disabled={enterGatheringInfo.gatherName === ''}>
+                  <NameText isAdd={true}>+</NameText>
+                </AddNewItem>
+                <NameListWrapper>
+                  <NameList
+                    itemList={gatheringInfo ? gatheringInfo.mates : []}
+                    handleClickItem={null}
+                  />
+                </NameListWrapper>
+              </RowView>
+            </ExhMates>
+            <Dot />
+            <ExhListWrapper>
+              <ExhListTitle>
+                <ContentText>함께 한 전시 리스트</ContentText>
+                <TouchableOpacity
+                  onPress={pressNewExh}
+                  disabled={enterGatheringInfo.gatherName === ''}>
+                  <AddMyExhButtonIcon />
+                </TouchableOpacity>
+              </ExhListTitle>
+              {/* 모임이 방문한 전시회 리스트 */}
+              <ScrollView>
+                {gatheringInfo &&
+                  gatheringInfo.exhibitions.map(
+                    (item: ExhInfo, index: number) => {
+                      return (
+                        <ExhItemView
+                          key={index}
+                          exhInfo={item}
+                          noLine={
+                            gatheringInfo.exhibitions.length - 1 === index
+                          }
+                          notTouchable={false}
+                          onTouch={() => pressExh(item)}
+                          haveRate={true}
+                        />
+                      );
+                    },
+                  )}
+              </ScrollView>
+            </ExhListWrapper>
+          </Contents>
+        )}
+      />
+
       {/* 모임 나가기 버튼 */}
       {/* <DeleteTouch
         onPress={pressGetOut}
@@ -266,6 +297,10 @@ export default GatheringInfoScreen;
 const Container = styled.View`
   flex: 1;
   /* padding-bottom: ${wp(3)}px; */
+`;
+
+const RefreshView = styled.FlatList`
+  background-color: ${BACK_COLOR};
 `;
 
 const Contents = styled.View`
@@ -376,6 +411,10 @@ const OptionContentText = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+`;
+
+const NameListWrapper = styled.View`
+  flex: 1;
 `;
 
 // const OutButton = styled.Text`
