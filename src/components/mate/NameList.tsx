@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -8,6 +8,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {MAIN_COLOR, MIDDLE_GREY} from '../common/colors';
 import {BUTTON_RADIUS, FONT_NAME} from '../common/style';
+import CustomTouchable from '../common/CustomTouchable';
 
 interface GatherInfo {
   gatherId: number;
@@ -44,8 +45,7 @@ const NameList: React.FC<NameListProps> = ({itemList, handleClickItem}) => {
         {itemList &&
           itemList.map((item: GatherInfo | ExhMateInfo, index: number) => {
             return (
-              <TouchableOpacity
-                activeOpacity={0.6}
+              <CustomTouchable
                 key={index}
                 disabled={!isGatherInfo(item)}
                 onPress={() => onPressItem(isGatherInfo(item) ? item : null)}>
@@ -54,7 +54,7 @@ const NameList: React.FC<NameListProps> = ({itemList, handleClickItem}) => {
                     {isGatherInfo(item) ? item.gatherName : item.nickname}
                   </NameText>
                 </Item>
-              </TouchableOpacity>
+              </CustomTouchable>
             );
           })}
       </ScrollView>

@@ -20,6 +20,8 @@ interface GatheringSelectorProps {
   selectorItems: IPicker[];
   handleSelectedValue: (value: string) => void;
   selectedValue: string;
+  handleRefetch: () => void;
+  refreshing: boolean;
 }
 
 const GatheringSelector: React.FC<GatheringSelectorProps> = ({
@@ -27,6 +29,8 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
   selectorItems,
   handleSelectedValue,
   selectedValue,
+  handleRefetch,
+  refreshing,
 }) => {
   const isFocused = useIsFocused();
   const [openLoading, setOpenLoading] = useState(false);
@@ -38,11 +42,17 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
     refetch,
   } = useFetchGatheringList();
 
+  const handleRefetchGatheringList = async () => {
+    await refetch().then(() => {
+      handleRefetch();
+    });
+  };
+
   useEffect(() => {
-    if (isFocused) {
-      refetch();
+    if (refreshing) {
+      handleRefetchGatheringList();
     }
-  }, [isFocused]);
+  }, [refreshing]);
 
   const settingGatheringSelector = () => {
     var list: IPicker[] = [];

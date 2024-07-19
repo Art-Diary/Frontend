@@ -1,6 +1,6 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {RefreshControl, TouchableOpacity} from 'react-native';
+import {RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import Header from '~/components/common/Header';
@@ -29,6 +29,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -59,11 +60,9 @@ const MateMainScreen = () => {
     <Container>
       {/* header */}
       <Header title={'전시메이트'}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => navigation.navigate('AddNewMate')}>
+        <CustomTouchable onPress={() => navigation.navigate('AddNewMate')}>
           <AddMyExhButtonIcon />
-        </TouchableOpacity>
+        </CustomTouchable>
       </Header>
 
       {/* body */}

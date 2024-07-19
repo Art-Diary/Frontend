@@ -6,7 +6,6 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {
   useWriteMyDiaryActions,
@@ -28,6 +27,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import {changeImageSize} from '~/utils/resizeImage';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 export type ImageType = {
   // 첨부한 사진 타입
@@ -194,9 +194,9 @@ const WriteMyDiaryContentsScreen = () => {
           images={images}
         />
         {!checkBlankInKeyword(editorContent) ? (
-          <TouchableOpacity onPress={onClickNextButton}>
+          <CustomTouchable onPress={onClickNextButton}>
             <NextButton moveNext={true}>완료</NextButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         ) : (
           <NextButton moveNext={false}>완료</NextButton>
         )}

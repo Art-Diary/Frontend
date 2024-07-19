@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, Modal} from 'react-native';
+import {Modal} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -22,6 +22,7 @@ import {
   DASH_WIDTH,
   FONT_NAME,
 } from '~/components/common/style';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface ExhSearchProps {
   title: string; // title prop의 타입을 문자열로 지정
@@ -328,21 +329,21 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
       <Container>
         <ModalHeader>
           <Title>{title}</Title>
-          <TouchableOpacity
+          <CustomTouchable
             onPress={() => handleConfirm(field, price, state, date)}>
             <BackButton>{x}</BackButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ModalHeader>
         <ModalBody>
           <SubSection>
             <SubTitle>{'전시 부문'}</SubTitle>
             <OptionContainer>
               {isClickField.map(({key, value}) => (
-                <TouchableOpacity
+                <CustomTouchable
                   key={key}
                   onPress={() => pressExhField(key, value)}>
                   <Option isClicked={value}>{key}</Option>
-                </TouchableOpacity>
+                </CustomTouchable>
               ))}
             </OptionContainer>
           </SubSection>
@@ -353,11 +354,11 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
             </SubTitlePrice>
             <OptionContainer>
               {isClickPrice.map(({key, value}) => (
-                <TouchableOpacity
+                <CustomTouchable
                   key={key}
                   onPress={() => pressExhPrice(key, value)}>
                   <Option isClicked={value}>{key}</Option>
-                </TouchableOpacity>
+                </CustomTouchable>
               ))}
             </OptionContainer>
           </SubSection>
@@ -365,7 +366,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
             <SubTitle>{'전시 진행상황'}</SubTitle>
             <OptionContainer>
               {isClickState.map(({key, value}) => (
-                <TouchableOpacity
+                <CustomTouchable
                   key={key}
                   onPress={
                     selectedOption5
@@ -373,7 +374,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
                       : () => pressExhState(key, value)
                   }>
                   <Option isClicked={value}>{key}</Option>
-                </TouchableOpacity>
+                </CustomTouchable>
               ))}
               {isOptionsModalPressed && (
                 <OptionsModal
@@ -389,7 +390,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
           </SubSection>
         </ModalBody>
         <ButtonSection>
-          <TouchableOpacity
+          <CustomTouchable
             onPress={() =>
               handleConfirm(
                 selectedOption2,
@@ -401,7 +402,7 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
             <CompleteButton isClicked={isPossibleSearch}>
               {'선택 완료'}
             </CompleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ButtonSection>
       </Container>
     </Modal>

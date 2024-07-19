@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
 import {
@@ -17,6 +17,7 @@ import {
 import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 import {dateToString} from '~/utils/Date';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
+import CustomTouchable from '../common/CustomTouchable';
 
 interface MarkedType {
   date: string;
@@ -72,9 +73,9 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
       {alreadyMarkedDate() ? (
         <NextButton isAlready={true}>이미 저장된 방문 날짜입니다</NextButton>
       ) : (
-        <TouchableOpacity onPress={onClickNextButton}>
+        <CustomTouchable onPress={onClickNextButton}>
           <NextButton isAlready={false}>날짜 선택 완료</NextButton>
-        </TouchableOpacity>
+        </CustomTouchable>
       )}
     </ContentsContainer>
   );

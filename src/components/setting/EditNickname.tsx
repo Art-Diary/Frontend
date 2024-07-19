@@ -99,6 +99,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
           value={getNickname}
         />
         <CheckButton
+          activeOpacity={0.6}
           isVerified={isVerified}
           disabled={isVerified}
           onPress={onPressVerify}>

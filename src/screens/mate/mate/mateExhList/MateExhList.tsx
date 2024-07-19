@@ -28,10 +28,13 @@ const MateExhList = () => {
     if (isFocused) {
       refetch();
     }
+  }, [isFocused]);
+
+  useEffect(() => {
     if (refreshing) {
       handleRefetch();
     }
-  }, [isFocused, refreshing]);
+  }, [refreshing]);
 
   if (isError) {
     return <ErrorMessageView message="전시 메이트 정보 조회 실패 ;(" />;

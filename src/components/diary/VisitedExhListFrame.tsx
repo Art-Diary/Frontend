@@ -17,17 +17,18 @@ interface ExhProps {
 }
 
 const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
+  const limitSize = 2;
+
   return (
     <FlatList
       data={exhList}
       renderItem={({item, index}) => (
         <RowView
+          activeOpacity={0.6}
           onPress={() => handlePressExh(item.exhId)}
           noLine={
-            exhList.length - 1 === index ||
-            (exhList.length / 2 === 0 && exhList.length - 2 === index)
-              ? true
-              : false
+            (index % limitSize === 0 && index === exhList.length - 2) ||
+            index === exhList.length - 1
           }>
           <Poster
             source={{uri: `${item.poster ?? DEFAULT_IMAGE}`}}
@@ -45,7 +46,7 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
           </Contents>
         </RowView>
       )}
-      numColumns={2}
+      numColumns={limitSize}
     />
   );
 };

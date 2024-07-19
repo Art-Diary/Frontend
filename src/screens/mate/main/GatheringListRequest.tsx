@@ -33,20 +33,23 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     refetch,
   } = useFetchGatheringList();
 
+  useEffect(() => {
+    if (isFocused) {
+      refetch();
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (refreshing) {
+      handleRefetch();
+    }
+  }, [refreshing]);
+
   const handleRefetch = async () => {
     await refetch().then(() => {
       handleRefresh(false);
     });
   };
-
-  useEffect(() => {
-    if (isFocused) {
-      refetch();
-    }
-    if (refreshing) {
-      handleRefetch();
-    }
-  }, [isFocused, refreshing]);
 
   if (isError) {
     return <ErrorMessageView message="모임 목록 조회 실패:(" />;

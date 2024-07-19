@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useAddMyExhVisitDate} from '~/api/queries/mydiary';
@@ -26,6 +25,7 @@ import {
   MAIN_COLOR,
 } from '~/components/common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '~/components/common/style';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface MarkedType {
   date: string;
@@ -117,9 +117,9 @@ const AddSoloVisitDateScreen = () => {
           {mySoloMarkedDatesInfo.haveForgot ? (
             <ForgetText haveForgot={true}>기억 안 남</ForgetText>
           ) : (
-            <TouchableOpacity onPress={onClickForgotButton}>
+            <CustomTouchable onPress={onClickForgotButton}>
               <ForgetText haveForgot={false}>기억 안 남</ForgetText>
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
         </BodyView>
       </AddVisitDate>

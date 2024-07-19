@@ -8,7 +8,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
-import {TouchableOpacity} from 'react-native';
 import {useUpdateUserInfo} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -31,6 +30,7 @@ import {
 } from '../common/style';
 import {GoogleLogoIcon, KakaoLogoIcon, NaverLogoIcon} from '../common/icon';
 import {changeImageSize} from '~/utils/resizeImage';
+import CustomTouchable from '../common/CustomTouchable';
 
 type InitProfile = {
   favoriteArt: string;
@@ -168,12 +168,12 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           </BoxView>
         </ContentColumn>
         {/* 완료 버튼 */}
-        <TouchableOpacity onPress={onPressComplete}>
+        <CustomTouchable onPress={onPressComplete}>
           <CompleteButton
             complete={nicknameKeyword !== '' && art !== '' && isVerified}>
             완료
           </CompleteButton>
-        </TouchableOpacity>
+        </CustomTouchable>
       </Contents>
       {isLoadingOpen && <LoadingModal message={'정보 수정 중 :)'} />}
     </Container>

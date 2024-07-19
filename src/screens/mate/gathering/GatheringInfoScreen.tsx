@@ -15,13 +15,7 @@ import {
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView, {ExhInfo} from '~/components/exhibition/ExhItemView';
-import {
-  Modal,
-  Pressable,
-  RefreshControl,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {Modal, Pressable, RefreshControl, ScrollView} from 'react-native';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
@@ -53,6 +47,7 @@ import {
 } from '~/components/common/style';
 import {Shadow} from 'react-native-shadow-2';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -89,10 +84,13 @@ const GatheringInfoScreen = () => {
       }
       refetch();
     }
+  }, [isFocused]);
+
+  useEffect(() => {
     if (refreshing) {
       handleRefetch();
     }
-  }, [isFocused, refreshing]);
+  }, [refreshing]);
 
   const handleRefetch = async () => {
     await refetch().then(() => {
@@ -188,9 +186,7 @@ const GatheringInfoScreen = () => {
             : enterGatheringInfo.gatherName
         }
         line={true}>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => handleOpenOptionBar(!isOptionBarOpen)}>
+        <CustomTouchable onPress={() => handleOpenOptionBar(!isOptionBarOpen)}>
           <OptionBarIcon />
           <Modal
             animationType="fade"
@@ -203,19 +199,17 @@ const GatheringInfoScreen = () => {
               onPress={() => handleOpenOptionBar(false)}>
               <OptionWrapper>
                 <Shadow distance={8}>
-                  <TouchableOpacity
-                    activeOpacity={0.6}
-                    onPress={handleClickDeleteOption}>
+                  <CustomTouchable onPress={handleClickDeleteOption}>
                     <OptionContent>
                       <LeaveGatheringIcon />
                       <OptionContentText>모임 나가기</OptionContentText>
                     </OptionContent>
-                  </TouchableOpacity>
+                  </CustomTouchable>
                 </Shadow>
               </OptionWrapper>
             </Pressable>
           </Modal>
-        </TouchableOpacity>
+        </CustomTouchable>
       </BackView>
       {/* body */}
       <RefreshView
@@ -246,12 +240,11 @@ const GatheringInfoScreen = () => {
             <ExhListWrapper>
               <ExhListTitle>
                 <ContentText>함께 한 전시 리스트</ContentText>
-                <TouchableOpacity
-                  activeOpacity={0.6}
+                <CustomTouchable
                   onPress={pressNewExh}
                   disabled={enterGatheringInfo.gatherName === ''}>
                   <AddMyExhButtonIcon />
-                </TouchableOpacity>
+                </CustomTouchable>
               </ExhListTitle>
               {/* 모임이 방문한 전시회 리스트 */}
               <ScrollView>
@@ -288,9 +281,9 @@ const GatheringInfoScreen = () => {
       {isDeleteModalOpen && (
         <ConfirmationModal handleCloseModal={handleCloseModal}>
           <Message>모임을 나가겠습니까?</Message>
-          <TouchableOpacity activeOpacity={0.6} onPress={handleDeleteGathering}>
+          <CustomTouchable onPress={handleDeleteGathering}>
             <DeleteButton>나가기</DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ConfirmationModal>
       )}
     </Container>

@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
+import React from 'react';
 import styled from 'styled-components/native';
 import {
   heightPercentage as hp,
@@ -8,6 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {KakaoIconBig, Instagram, Copy} from '~/assets/images/index';
+import CustomTouchable from '~/components/common/CustomTouchable';
 // import {sendText} from 'react-native-kakao-share-link';
 
 interface ModalProps {
@@ -39,24 +39,24 @@ const ExhShareModal: React.FC<ModalProps> = ({
       <ModalContainer>
         <Message>{'공유하기'}</Message>
         <ModalContentView>
-          <TouchableOpacity>
+          <CustomTouchable>
             <SnsView>
               <KakaoIconBig />
               <Sns>{'카카오톡'}</Sns>
             </SnsView>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={shareWithInsta}>
+          </CustomTouchable>
+          <CustomTouchable onPress={shareWithInsta}>
             <SnsView>
               <Instagram />
               <Sns>{'인스타그램'}</Sns>
             </SnsView>
-          </TouchableOpacity>
-          <TouchableOpacity>
+          </CustomTouchable>
+          <CustomTouchable>
             <SnsView>
               <Copy />
               <Sns>{'링크복사'}</Sns>
             </SnsView>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ModalContentView>
       </ModalContainer>
     </ConfirmationModal>

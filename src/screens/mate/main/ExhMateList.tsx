@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
@@ -19,6 +19,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface ExhMateInfo {
   userId: number;
@@ -65,10 +66,7 @@ const ExhMateList = () => {
       <ScrollView>
         {exhMateList.map((item: any, index: number) => {
           return (
-            <TouchableOpacity
-              activeOpacity={0.6}
-              key={index}
-              onPress={() => pressExhMate(item)}>
+            <CustomTouchable key={index} onPress={() => pressExhMate(item)}>
               <UserInfoWrapper>
                 <NameTag isSelected={true}>
                   <UserInfo>
@@ -90,7 +88,7 @@ const ExhMateList = () => {
                   </UserInfo>
                 </NameTag>
               </UserInfoWrapper>
-            </TouchableOpacity>
+            </CustomTouchable>
           );
         })}
       </ScrollView>

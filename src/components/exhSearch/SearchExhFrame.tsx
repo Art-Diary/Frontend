@@ -39,7 +39,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
             placeholder={searchMessage ?? '전시회를 검색하세요'}
             value={searchKeyword}
           />
-          <SearchIconTouch onPress={onPressSearch}>
+          <SearchIconTouch activeOpacity={0.6} onPress={onPressSearch}>
             <SearchButtonIcon />
           </SearchIconTouch>
         </SearchView>

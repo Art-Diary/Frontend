@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {ReactNode, useEffect} from 'react';
-import {TouchableOpacity, BackHandler} from 'react-native';
+import {BackHandler} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {
@@ -11,6 +11,7 @@ import {
 import {BACK_COLOR, BORDER_COLOR, DEFAULT_TEXT} from './colors';
 import {BACK_FONT_SIZE, DASH_WIDTH, FONT_NAME} from './style';
 import {BackButtonIcon} from './icon';
+import CustomTouchable from './CustomTouchable';
 
 interface BackProps {
   title?: string;
@@ -39,9 +40,9 @@ const BackView: React.FC<BackProps> = ({title, line, children}) => {
     <>
       <Container>
         <LeftSection>
-          <TouchableOpacity onPress={handlePressBack}>
+          <CustomTouchable onPress={handlePressBack}>
             <BackButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
           <Title>{title}</Title>
         </LeftSection>
         {children}

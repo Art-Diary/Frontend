@@ -7,7 +7,6 @@ import {
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import {TouchableOpacity} from 'react-native';
 import {useDeleteUser} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
@@ -26,6 +25,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 // [WORD_LIMIT]
 const LeaveScreen = () => {
@@ -91,9 +91,9 @@ const LeaveScreen = () => {
         </ContentColumn>
         {/* 탈퇴 버튼 */}
         {reasonKeyword !== '' ? (
-          <TouchableOpacity onPress={onPressLeave}>
+          <CustomTouchable onPress={onPressLeave}>
             <LeaveButton leave={true}>탈퇴</LeaveButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         ) : (
           <LeaveButton leave={false}>탈퇴</LeaveButton>
         )}

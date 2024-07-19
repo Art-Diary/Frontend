@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Header from '~/components/common/Header';
@@ -11,6 +10,7 @@ import {
 } from '~/zustand/tabIdentifier';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const MyExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -33,10 +33,10 @@ const MyExhListScreen = () => {
       {/* <RefreshControl onRefresh={refresh} refreshing={isRefreshing} /> */}
       {/* header */}
       <Header title={'내 기록'}>
-        <TouchableOpacity
+        <CustomTouchable
           onPress={() => navigation.navigate('MyExhibitionSearch')}>
           <AddMyExhButtonIcon />
-        </TouchableOpacity>
+        </CustomTouchable>
       </Header>
 
       {/* body */}

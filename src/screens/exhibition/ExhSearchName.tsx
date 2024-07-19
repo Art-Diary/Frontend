@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, TouchableOpacity} from 'react-native';
+import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
@@ -16,6 +16,7 @@ import {
   useFetchDeleteSearchContent,
   useFetchSearchContentList,
 } from '~/api/queries/exhibition';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -104,13 +105,13 @@ const ExhSearchName = () => {
         {examples &&
           examples.slice(0, limit).map((item: any, index: number) => (
             <PreSearchView key={index}>
-              <TouchableOpacity
+              <CustomTouchable
                 onPress={() => onPressPreSearch(item.searchContent)}>
                 <PreSearchList>{item.searchContent}</PreSearchList>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => onPressDelete(item.searchId)}>
+              </CustomTouchable>
+              <CustomTouchable onPress={() => onPressDelete(item.searchId)}>
                 <PreSearchList>{'X'}</PreSearchList>
-              </TouchableOpacity>
+              </CustomTouchable>
             </PreSearchView>
           ))}
       </SearchExhFrame>

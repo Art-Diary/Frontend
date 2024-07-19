@@ -1,14 +1,16 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
+import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {
+  BACK_COLOR,
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
@@ -149,9 +151,9 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
         {value !== null &&
           (value === -1 ||
             myStoredDateListOfExh[value].gatherName === undefined) && (
-            <TouchableOpacity onPress={onPressAddDate}>
+            <CustomTouchable onPress={onPressAddDate}>
               <AddDateText>추가</AddDateText>
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
       </AddDateGroupView>
       <Dates>
@@ -163,27 +165,25 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
           <FlatList
             data={getVisitDates(value)}
             renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() => onPressVisitDate(item)}
-                style={
-                  item.index === selectedItemIndex && pickerStyle.selected
-                }>
-                <DateView key={item.index}>
+              <CustomTouchable onPress={() => onPressVisitDate(item)}>
+                <DateView
+                  key={item.index}
+                  isSelected={item.index === selectedItemIndex}>
                   <DateText>
                     {item.visitDate === null
                       ? '기억 안 남'
                       : item.visitDate + ' (' + item.weekday + ')'}
                   </DateText>
                 </DateView>
-              </TouchableOpacity>
+              </CustomTouchable>
             )}
           />
         )}
       </Dates>
       {selectedItemIndex !== null ? (
-        <TouchableOpacity onPress={onPressNextButton}>
+        <CustomTouchable onPress={onPressNextButton}>
           <NextButton isPressed={true}>전시회 선택 완료</NextButton>
-        </TouchableOpacity>
+        </CustomTouchable>
       ) : (
         <NextButton isPressed={false}>전시회 선택 완료</NextButton>
       )}
@@ -241,13 +241,19 @@ const SelectMsgText = styled.Text`
   padding-top: ${hp(0.9)}px;
 `;
 
-const DateView = styled.View`
+interface DateViewProps {
+  isSelected: boolean;
+}
+
+const DateView = styled.View<DateViewProps>`
   justify-content: center;
   align-items: center;
   padding-top: ${hp(1.7)}px;
   padding-bottom: ${hp(1.7)}px;
   border-bottom-width: ${ITEM_BORDER_WIDTH}px;
   border-bottom-color: ${LIGHT_GREY};
+  background-color: ${(props: DateViewProps) =>
+    props.isSelected ? '#fde2e0' : `${BACK_COLOR}`};
 `;
 
 const DateText = styled.Text`

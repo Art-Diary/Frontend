@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, ScrollView} from 'react-native';
+import {ScrollView, RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -40,6 +40,7 @@ import {
 import {BACK_COLOR, BORDER_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface Exhibition {
   exhId: number;
@@ -80,6 +81,7 @@ const ExhListScreen = () => {
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions(); // 전시회 상세 페이지 내부 캘린더에서 날짜 선택 시 사용
   const {updateSearchName} = useSearchNameActions();
+  const [refreshing, setRefreshing] = useState(false);
 
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
     selectedName,
@@ -126,6 +128,22 @@ const ExhListScreen = () => {
       refetch();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    if (refreshing) {
+      handleRefetch();
+    }
+  }, [refreshing]);
+
+  const handleRefetch = async () => {
+    await refetch().then(() => {
+      setRefreshing(false);
+    });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
 
   useEffect(() => {
     if (searchExhName) {
@@ -367,7 +385,7 @@ const ExhListScreen = () => {
       {/* header */}
       <Header title={'전시회'}>
         <IconsView>
-          <TouchableOpacity onPress={() => openModal()}>
+          <CustomTouchable onPress={() => openModal()}>
             <ClassifyButtonIcon />
             {isModalVisible && (
               <ExhSearchModal
@@ -381,12 +399,12 @@ const ExhListScreen = () => {
                 onClose={handleModalClose}
               />
             )}
-          </TouchableOpacity>
-          <TouchableOpacity
+          </CustomTouchable>
+          <CustomTouchable
             onPress={() => navigation.navigate('ExhibitionSearch')}>
             <AnotherSearchIcon />
-          </TouchableOpacity>
-          <TouchableOpacity
+          </CustomTouchable>
+          <CustomTouchable
             onPress={selectedState ? optionsModalOpen : openCalendarModal}>
             <SearchDateCalendarIcon />
             {isCalendarModalVisible && (
@@ -405,7 +423,7 @@ const ExhListScreen = () => {
               그렇게 할까요?"
               />
             )}
-          </TouchableOpacity>
+          </CustomTouchable>
         </IconsView>
       </Header>
 
@@ -423,40 +441,45 @@ const ExhListScreen = () => {
           pagingEnabled={false}
           showsHorizontalScrollIndicator={true}>
           {isDateVisible && (
-            <OptionView onPress={() => deleteDate()}>
+            <OptionView activeOpacity={0.6} onPress={() => deleteDate()}>
               <OptionText>{selectedDate}</OptionText>
               <OptionText isDeleteText> x</OptionText>
             </OptionView>
           )}
           {isNameVisible && (
-            <OptionView onPress={() => deleteName()}>
+            <OptionView activeOpacity={0.6} onPress={() => deleteName()}>
               <OptionText>{selectedName}</OptionText>
               <OptionText isDeleteText> x</OptionText>
             </OptionView>
           )}
           {isFieldVisible &&
             selectedField?.map((item: string) => (
-              <OptionView onPress={() => deleteField(item)}>
+              <OptionView activeOpacity={0.6} onPress={() => deleteField(item)}>
                 <OptionText>{item}</OptionText>
                 <OptionText isDeleteText> x</OptionText>
               </OptionView>
             ))}
           {isPriceVisible && (
-            <OptionView onPress={() => deletePrice()}>
+            <OptionView activeOpacity={0.6} onPress={() => deletePrice()}>
               <OptionText>{selectedPrice}</OptionText>
               <OptionText isDeleteText> x</OptionText>
             </OptionView>
           )}
           {isStateVisible &&
             selectedState?.map((item: string) => (
-              <OptionView onPress={() => deleteState(item)}>
+              <OptionView activeOpacity={0.6} onPress={() => deleteState(item)}>
                 <OptionText key={item}>{item}</OptionText>
                 <OptionText isDeleteText> x</OptionText>
               </OptionView>
             ))}
         </ScrollView>
       </OptionContainer>
-      <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        style={{flex: 1}}
+        scrollEventThrottle={200}>
         {data &&
           data.map((item: any, index: number) => (
             <ExhItemView
@@ -470,7 +493,7 @@ const ExhListScreen = () => {
                 })
               }>
               <EmptyHeartContent>
-                <TouchableOpacity
+                <CustomTouchable
                   onPress={() => onPressHeart(item.exhId, index)}>
                   {hearts &&
                   hearts.length === data.length &&
@@ -479,7 +502,7 @@ const ExhListScreen = () => {
                   ) : (
                     <EmptyHeartIcon />
                   )}
-                </TouchableOpacity>
+                </CustomTouchable>
               </EmptyHeartContent>
             </ExhItemView>
           ))}
