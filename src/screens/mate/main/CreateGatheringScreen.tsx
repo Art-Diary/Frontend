@@ -23,6 +23,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 
+// [WORD_LIMIT]
 const CreateGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);

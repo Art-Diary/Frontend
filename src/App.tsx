@@ -43,7 +43,7 @@ import pushNoti from './utils/pushNoti';
 import notifee from '@notifee/react-native';
 import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {LogBox} from 'react-native';
+import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 import {setNavigator} from './api/navigationService';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -56,6 +56,29 @@ const queryClient = new QueryClient();
 LogBox.ignoreAllLogs();
 
 export default function App() {
+  const hasAndroidPermission = async () => {
+    //외부 스토리지를 읽고 쓰는 권한 가져오기
+    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+
+    const hasPermission = await PermissionsAndroid.check(permission);
+    if (hasPermission) {
+      return true;
+    }
+
+    const status = await PermissionsAndroid.request(permission);
+    return status === 'granted';
+  };
+
+  const getPhotoWithPermission = async () => {
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    getPhotoWithPermission();
+  }, []);
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       pushNoti.displayNoti(remoteMessage);

@@ -41,20 +41,22 @@ const NameList: React.FC<NameListProps> = ({itemList, handleClickItem}) => {
         horizontal={true}
         pagingEnabled={false}
         showsHorizontalScrollIndicator={true}>
-        {itemList.map((item: GatherInfo | ExhMateInfo, index: number) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              disabled={!isGatherInfo(item)}
-              onPress={() => onPressItem(isGatherInfo(item) ? item : null)}>
-              <Item isLast={itemList.length - 1 === index}>
-                <NameText>
-                  {isGatherInfo(item) ? item.gatherName : item.nickname}
-                </NameText>
-              </Item>
-            </TouchableOpacity>
-          );
-        })}
+        {itemList &&
+          itemList.map((item: GatherInfo | ExhMateInfo, index: number) => {
+            return (
+              <TouchableOpacity
+                activeOpacity={0.6}
+                key={index}
+                disabled={!isGatherInfo(item)}
+                onPress={() => onPressItem(isGatherInfo(item) ? item : null)}>
+                <Item isLast={itemList.length - 1 === index}>
+                  <NameText>
+                    {isGatherInfo(item) ? item.gatherName : item.nickname}
+                  </NameText>
+                </Item>
+              </TouchableOpacity>
+            );
+          })}
       </ScrollView>
     </Container>
   );

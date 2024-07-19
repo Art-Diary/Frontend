@@ -43,6 +43,7 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 
+// [WORD_LIMIT]
 const WriteMyDiaryInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [titleKeyword, setTitleKeyword] = useState<string>('');

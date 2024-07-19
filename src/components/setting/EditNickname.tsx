@@ -18,6 +18,7 @@ interface EditNicknameProps {
   isVerified: boolean;
 }
 
+// [WORD_LIMIT]
 const EditNickname: React.FC<EditNicknameProps> = ({
   getNickname,
   setNickname,

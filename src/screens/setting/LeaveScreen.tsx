@@ -27,6 +27,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 
+// [WORD_LIMIT]
 const LeaveScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);

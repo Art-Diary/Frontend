@@ -13,7 +13,15 @@ interface GatherInfo {
   gatherName: string;
 }
 
-const GatheringListRequest = () => {
+interface GatheringListRequestProps {
+  handleRefresh: (refreshing: boolean) => void;
+  refreshing: boolean;
+}
+
+const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
+  handleRefresh,
+  refreshing,
+}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const {updateEnterGatheringInfo} = useEnterGatheringActions();
@@ -25,11 +33,21 @@ const GatheringListRequest = () => {
     refetch,
   } = useFetchGatheringList();
 
+  const handlesRefresh = async () => {
+    await refetch().then(() => {
+      handleRefresh(false);
+    });
+    handleRefresh(false);
+  };
+
   useEffect(() => {
     if (isFocused) {
       refetch();
     }
-  }, [isFocused]);
+    if (refreshing) {
+      handlesRefresh();
+    }
+  }, [isFocused, refreshing]);
 
   if (isError) {
     return <ErrorMessageView message="모임 목록 조회 실패:(" />;

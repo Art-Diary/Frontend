@@ -1,6 +1,6 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {RefreshControl, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import Header from '~/components/common/Header';
@@ -36,6 +36,7 @@ const MateMainScreen = () => {
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions();
+  const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -50,32 +51,49 @@ const MateMainScreen = () => {
     navigation.navigate('CreateGathering');
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
+
   return (
     <Container>
       {/* header */}
       <Header title={'전시메이트'}>
-        <TouchableOpacity onPress={() => navigation.navigate('AddNewMate')}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => navigation.navigate('AddNewMate')}>
           <AddMyExhButtonIcon />
         </TouchableOpacity>
       </Header>
 
       {/* body */}
-      <Contents>
-        <GatheringList>
-          <ContentText>모임 목록</ContentText>
-          <RowView>
-            <AddNewItem onPress={pressCreateGathering}>
-              <NameText isAdd={true}>+</NameText>
-            </AddNewItem>
-            <GatheringListRequest />
-          </RowView>
-        </GatheringList>
-        <Dot />
-        <MateList>
-          <ContentText>전시메이트 목록</ContentText>
-        </MateList>
-        <ExhMateList />
-      </Contents>
+      <RefreshView
+        data={['a']}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        renderItem={({}) => (
+          <Contents>
+            <GatheringList>
+              <ContentText>모임 목록</ContentText>
+              <RowView>
+                <AddNewItem activeOpacity={0.6} onPress={pressCreateGathering}>
+                  <NameText isAdd={true}>+</NameText>
+                </AddNewItem>
+                <GatheringListRequest
+                  handleRefresh={setRefreshing}
+                  refreshing={refreshing}
+                />
+              </RowView>
+            </GatheringList>
+            <Dot />
+            <MateList>
+              <ContentText>전시메이트 목록</ContentText>
+            </MateList>
+            <ExhMateList />
+          </Contents>
+        )}
+      />
     </Container>
   );
 };
@@ -87,10 +105,13 @@ const Container = styled.View`
   flex: 1;
 `;
 
+const RefreshView = styled.FlatList`
+  background-color: ${BACK_COLOR};
+`;
+
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: ${BACK_COLOR};
   padding-top: ${wp(3.3)}px;
   gap: ${wp(3.3)}px;
 `;
