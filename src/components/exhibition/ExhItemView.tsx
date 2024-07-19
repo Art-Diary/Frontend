@@ -52,7 +52,10 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   return (
     <Wrapper>
       <ExhView noLine={noLine}>
-        <TouchView disabled={notTouchable} onPress={onTouch}>
+        <TouchView
+          disabled={notTouchable}
+          activeOpacity={0.6}
+          onPress={onTouch}>
           <Poster
             source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
             resizeMode="contain"

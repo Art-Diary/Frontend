@@ -188,7 +188,9 @@ const GatheringInfoScreen = () => {
             : enterGatheringInfo.gatherName
         }
         line={true}>
-        <TouchableOpacity onPress={() => handleOpenOptionBar(!isOptionBarOpen)}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => handleOpenOptionBar(!isOptionBarOpen)}>
           <OptionBarIcon />
           <Modal
             animationType="fade"
@@ -201,7 +203,9 @@ const GatheringInfoScreen = () => {
               onPress={() => handleOpenOptionBar(false)}>
               <OptionWrapper>
                 <Shadow distance={8}>
-                  <TouchableOpacity onPress={handleClickDeleteOption}>
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={handleClickDeleteOption}>
                     <OptionContent>
                       <LeaveGatheringIcon />
                       <OptionContentText>모임 나가기</OptionContentText>
@@ -225,6 +229,7 @@ const GatheringInfoScreen = () => {
               <ContentText>전시 메이트</ContentText>
               <RowView>
                 <AddNewItem
+                  activeOpacity={0.6}
                   onPress={pressNewExhMate}
                   disabled={enterGatheringInfo.gatherName === ''}>
                   <NameText isAdd={true}>+</NameText>
@@ -242,6 +247,7 @@ const GatheringInfoScreen = () => {
               <ExhListTitle>
                 <ContentText>함께 한 전시 리스트</ContentText>
                 <TouchableOpacity
+                  activeOpacity={0.6}
                   onPress={pressNewExh}
                   disabled={enterGatheringInfo.gatherName === ''}>
                   <AddMyExhButtonIcon />
@@ -282,7 +288,7 @@ const GatheringInfoScreen = () => {
       {isDeleteModalOpen && (
         <ConfirmationModal handleCloseModal={handleCloseModal}>
           <Message>모임을 나가겠습니까?</Message>
-          <TouchableOpacity onPress={handleDeleteGathering}>
+          <TouchableOpacity activeOpacity={0.6} onPress={handleDeleteGathering}>
             <DeleteButton>나가기</DeleteButton>
           </TouchableOpacity>
         </ConfirmationModal>
