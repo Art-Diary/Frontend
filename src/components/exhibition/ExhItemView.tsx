@@ -9,6 +9,7 @@ import {getDateDay} from '~/utils/Date';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
+import {DEFAULT_IMAGE} from '@env';
 
 interface ExhInfo {
   poster: string;
@@ -52,7 +53,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
       <ExhView noLine={noLine}>
         <TouchView disabled={notTouchable} onPress={onTouch}>
           <Poster
-            source={{uri: `data:image/png;base64,${exhInfo.poster}`}}
+            source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
             resizeMode="contain"
             alt={'이미지 읽기 실패'}
           />

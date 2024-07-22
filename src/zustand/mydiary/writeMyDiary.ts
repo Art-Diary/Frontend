@@ -12,7 +12,7 @@ interface WriteMyDiaryState {
   diaryPrivate: boolean | null;
   contents: string | null;
   thumbnail: string | null;
-  writeDate: number[] | null;
+  writeDate: string | null;
   saying: string | null;
   actions: {
     updateInGathering: (
@@ -26,10 +26,15 @@ interface WriteMyDiaryState {
       rate: number | null,
       diaryPrivate: boolean | null,
       thumbnail: string | null,
-      writeDate: number[] | null,
       saying: string | null,
     ) => void;
+    updateTitle: (title: string | null) => void;
+    updateRate: (rate: number | null) => void;
+    updateDiaryPrivate: (diaryPrivate: boolean | null) => void;
+    updateThumbnail: (thumbnail: string | null) => void;
+    updateSaying: (saying: string | null) => void;
     updateforContent: (contents: string | null) => void;
+    resetWriteInfo: () => void;
   };
 }
 
@@ -61,7 +66,6 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
       rate: number | null,
       diaryPrivate: boolean | null,
       thumbnail: string | null,
-      writeDate: number[] | null,
       saying: string | null,
     ) =>
       set(state => ({
@@ -69,11 +73,43 @@ const useWriteMyDiary = create<WriteMyDiaryState>(set => ({
         rate: rate,
         diaryPrivate: diaryPrivate,
         thumbnail: thumbnail,
-        writeDate: writeDate,
+        saying: saying,
+      })),
+    updateTitle: (title: string | null) =>
+      set(state => ({
+        title: title,
+      })),
+    updateRate: (rate: number | null) =>
+      set(state => ({
+        rate: rate,
+      })),
+    updateDiaryPrivate: (diaryPrivate: boolean | null) =>
+      set(state => ({
+        diaryPrivate: diaryPrivate,
+      })),
+    updateThumbnail: (thumbnail: string | null) =>
+      set(state => ({
+        thumbnail: thumbnail,
+      })),
+    updateSaying: (saying: string | null) =>
+      set(state => ({
         saying: saying,
       })),
     updateforContent: (contents: string | null) =>
       set(state => ({contents: contents})),
+    resetWriteInfo: () =>
+      set(state => ({
+        isUpdate: null,
+        diaryId: null,
+        exhVisitId: null,
+        title: null,
+        rate: null,
+        diaryPrivate: null,
+        thumbnail: null,
+        writeDate: null,
+        saying: null,
+        contents: null,
+      })),
   },
 }));
 

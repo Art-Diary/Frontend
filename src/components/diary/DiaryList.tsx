@@ -91,7 +91,6 @@ const DiaryList: React.FC<DiaryListProps> = ({
           diaryList[currentPage].rate,
           diaryList[currentPage].diaryPrivate,
           diaryList[currentPage].thumbnail,
-          diaryList[currentPage].writeDate,
           diaryList[currentPage].saying,
         );
         updateforContent(diaryList[currentPage].contents);

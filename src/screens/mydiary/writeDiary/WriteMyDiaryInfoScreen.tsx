@@ -50,25 +50,23 @@ const WriteMyDiaryInfoScreen = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [sayingKeyword, setSayingKeyword] = useState<string | null>(null);
   const [imageUri, setImageUri] = useState<string | undefined>(undefined);
-  const {updateforDetailInfo} = useWriteMyDiaryActions();
+  const {
+    updateforDetailInfo,
+    updateTitle,
+    updateRate,
+    updateDiaryPrivate,
+    updateThumbnail,
+    updateSaying,
+  } = useWriteMyDiaryActions();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
 
   useEffect(() => {
-    if (writeMyDiaryInfo.isUpdate) {
-      setTitleKeyword(writeMyDiaryInfo.title ?? '');
-      setStarNum(writeMyDiaryInfo.rate ?? 0.0);
-      setIsPublic(writeMyDiaryInfo.diaryPrivate ?? true);
-      setSayingKeyword(writeMyDiaryInfo.saying ?? '');
-      // thumbnail
-      setImageUri(`data:image/png;base64,${writeMyDiaryInfo.thumbnail}`);
-    } else {
-      setTitleKeyword('');
-      setStarNum(0.0);
-      setIsPublic(true);
-      setSayingKeyword('');
-      // thumbnail
-      setImageUri(undefined);
-    }
+    setTitleKeyword(writeMyDiaryInfo.title ?? '');
+    setStarNum(writeMyDiaryInfo.rate ?? 0.0);
+    setIsPublic(writeMyDiaryInfo.diaryPrivate ?? true);
+    setSayingKeyword(writeMyDiaryInfo.saying ?? '');
+    // thumbnail
+    setImageUri(writeMyDiaryInfo.thumbnail ?? undefined);
   }, []);
 
   const requestCameraPermission = async () => {
@@ -105,38 +103,36 @@ const WriteMyDiaryInfoScreen = () => {
       const imageUri = uris[0].uri;
 
       setImageUri(imageUri);
+      updateThumbnail(imageUri ?? null);
     }
   };
 
   const changeStarNum = (num: number) => {
     setStarNum(num);
+    updateRate(num);
   };
 
   const changeToggle = () => {
+    updateDiaryPrivate(!isPublic);
     setIsPublic(!isPublic);
   };
 
   const onChangeTitle = useCallback((text: string) => {
     setTitleKeyword(text);
+    updateTitle(text);
   }, []);
 
   const onChangeSaying = useCallback((text: string) => {
     setSayingKeyword(text);
+    updateSaying(text);
   }, []);
 
   const onClickNextButton = async () => {
-    const today = new Date();
-    const dateList = [
-      today.getFullYear(),
-      today.getMonth() + 1,
-      today.getDate(),
-    ];
     updateforDetailInfo(
       titleKeyword,
       starNum,
       isPublic,
       imageUri ?? null,
-      dateList,
       sayingKeyword,
     );
     // 기록 내용 작성 페이지로 이동
@@ -198,7 +194,7 @@ const WriteMyDiaryInfoScreen = () => {
         <ThumbnailSection>
           <SectionName>대표사진</SectionName>
           <PutThumbnail>
-            {imageUri === undefined ? (
+            {!imageUri ? (
               <TouchableOpacity style={{padding: 30}} onPress={showPhoto}>
                 <CameraButtonIcon />
               </TouchableOpacity>

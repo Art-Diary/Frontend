@@ -24,7 +24,8 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {updateIsUpdate, updateInGathering} = useWriteMyDiaryActions();
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
 
   const onPressExh = (exhId: number) => {
     updateVisitedExhId(exhId);
@@ -36,6 +37,7 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
     } else {
       updateIsUpdate(false);
       updateInGathering(false, null);
+      resetWriteInfo();
       navigation.navigate('AddMyVisitDateRoutes');
     }
   };

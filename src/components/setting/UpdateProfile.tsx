@@ -8,7 +8,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {TouchableOpacity} from 'react-native';
 import {useUpdateUserInfo} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -31,6 +30,7 @@ import {
   FONT_NAME,
 } from '../common/style';
 import {GoogleLogoIcon, KakaoLogoIcon, NaverLogoIcon} from '../common/icon';
+import {changeImageSize} from '~/utils/resizeImage';
 
 type InitProfile = {
   favoriteArt: string;
@@ -65,11 +65,8 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     initProfile.nickname,
   );
   const [imageUri, setImageUri] = useState<string | undefined>(
-    initProfile.profile
-      ? `data:image/png;base64,${initProfile.profile}`
-      : initProfile.profile,
+    initProfile.profile,
   );
-  const [createFormData, setCreateFormData] = useState<FormData | null>(null);
   const [isVerified, setIsVerified] = useState<boolean>(true);
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {
@@ -78,13 +75,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     isError,
     isSuccess,
     data: resData,
-  } = useUpdateUserInfo(createFormData);
-
-  useEffect(() => {
-    if (createFormData !== null) {
-      updateUserInfo();
-    }
-  }, [createFormData]);
+  } = useUpdateUserInfo();
 
   useEffect(() => {
     if (isError) {
@@ -110,7 +101,6 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
         alarm3: data.alarm3,
         providerType: data.providerType,
       });
-      setCreateFormData(null);
       showToast(messages.successMsg);
       if (navigateTo === 'back') {
         navigation.goBack();
@@ -136,31 +126,11 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     formData.append('nickname', nicknameKeyword);
     formData.append('favoriteArt', art);
 
-    const isImage = imageUri?.search('file://');
-    if (isImage !== undefined && isImage !== -1) {
-      const resizedImage = await ImageResizer.createResizedImage(
-        imageUri ?? '', // path
-        300, // width
-        300, // height
-        'JPEG', // format
-        100, // quality
-        undefined, // rotation
-        // uploadFileName, // outputPath
-        undefined, // keepMeta,
-        undefined, // options => object
-      );
-      const uri = resizedImage.uri;
-      const filename = uri.split('/').pop();
-      const match = /\.(\w+)$/.exec(filename || '');
-      const type = match ? `image/${match[1]}` : `image`;
-
-      formData.append('profile', {
-        name: filename,
-        type,
-        uri: uri,
-      });
+    if (imageUri && imageUri.indexOf('file:///') !== -1) {
+      const resultResizedImage = await changeImageSize(imageUri);
+      formData.append('profile', resultResizedImage);
     }
-    setCreateFormData(formData);
+    updateUserInfo(formData);
   };
 
   return (

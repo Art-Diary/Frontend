@@ -15,6 +15,7 @@ import {
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 import {CameraButtonIcon} from '../common/icon';
+import {DEFAULT_IMAGE} from '@env';
 
 interface EditNicknameProps {
   imageUri: string | undefined;
@@ -82,7 +83,7 @@ const EditPicture: React.FC<EditNicknameProps> = ({imageUri, setImageUri}) => {
               }}
               onPress={showPhoto}>
               <Image
-                source={{uri: imageUri}}
+                source={{uri: `${imageUri ?? DEFAULT_IMAGE}`}}
                 style={{width: '100%', height: '100%', alignItems: 'center'}}
                 resizeMode="contain"
               />

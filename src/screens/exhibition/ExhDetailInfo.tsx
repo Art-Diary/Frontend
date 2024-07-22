@@ -39,6 +39,7 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {DEFAULT_IMAGE} from '@env';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -327,12 +328,12 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     <ContainerScroll scrollEventThrottle={200}>
       <TopView>
         <BackgroundImage
-          source={{uri: `data:image/png;base64,${data.poster}`}}
+          source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
           blurRadius={40}
           resizeMode="cover"
           alt={'이미지 읽기 실패'}>
           <ForegroundImage
-            source={{uri: `data:image/png;base64,${data.poster}`}}
+            source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
             resizeMode="contain"
             alt={'이미지 읽기 실패'}
           />
@@ -451,9 +452,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                   })
                 }>
                 <ReviewImage
-                  source={{
-                    uri: `data:image/png;base64,${item.thumbnail}`,
-                  }}
+                  source={{uri: `${item.thumbnail ?? DEFAULT_IMAGE}`}}
                   resizeMode="cover"
                   alt={'이미지 읽기 실패'}
                 />

@@ -1,3 +1,4 @@
+import {DEFAULT_IMAGE} from '@env';
 import React from 'react';
 import styled from 'styled-components/native';
 import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
@@ -11,12 +12,12 @@ const ThumbnailInfo: React.FC<ThumbnailProps> = ({thumbnail}) => {
     <Container>
       {/* 썸네일 */}
       <ThumbnailBackground
-        source={{uri: `data:image/png;base64,${thumbnail}`}}
+        source={{uri: `${thumbnail ?? DEFAULT_IMAGE}`}}
         blurRadius={40}
         resizeMode="cover"
         alt={'이미지 읽기 실패'}>
         <Thumbnail
-          source={{uri: `data:image/png;base64,${thumbnail}`}}
+          source={{uri: `${thumbnail ?? DEFAULT_IMAGE}`}}
           resizeMode="contain"
           alt={'이미지 읽기 실패'}
         />
