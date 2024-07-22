@@ -58,9 +58,9 @@ const MyDiaryListScreen = () => {
   }, [isError, isLoading]);
 
   const onPressButton = () => {
+    resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(false, null);
-    resetWriteInfo();
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

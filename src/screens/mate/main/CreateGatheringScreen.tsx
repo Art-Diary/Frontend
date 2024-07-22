@@ -8,7 +8,7 @@ import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {
   BACK_COLOR,
   DEFAULT_TEXT,

@@ -15,7 +15,7 @@ import {
   FONT_NAME,
 } from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
-import {dateToString} from '~/utils/Date';
+import {dateToString} from '~/utils/date';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '../common/CustomTouchable';
 

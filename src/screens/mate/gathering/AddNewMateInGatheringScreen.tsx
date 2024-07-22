@@ -11,7 +11,7 @@ import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {useAddNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import SearchNewMateListInGathering from './SearchNewMateListInGathering';

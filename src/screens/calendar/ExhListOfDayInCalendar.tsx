@@ -11,7 +11,7 @@ import {calendarColor} from './calendarColor';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
-import {changeDotToHyphen} from '~/utils/Date';
+import {changeDotToHyphen} from '~/utils/date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import {IPicker} from './CalendarScreen';

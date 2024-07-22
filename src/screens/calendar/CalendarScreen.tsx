@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {dateToString} from '~/utils/Date';
+import {dateToString} from '~/utils/date';
 import {calendarColor} from './calendarColor';
 import {
   useTabIdentifierActions,
@@ -11,7 +11,6 @@ import {useIsFocused} from '@react-navigation/native';
 import GatheringSelector from './GatheringSelector';
 import ExhListOfDayInCalendar from './ExhListOfDayInCalendar';
 import {useFetchCalendar} from '~/api/queries/calendar';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';

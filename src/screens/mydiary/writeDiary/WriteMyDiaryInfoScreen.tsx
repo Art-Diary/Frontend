@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Image, Platform} from 'react-native';
+import {Alert, Image, Linking} from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import BackView from '~/components/common/BackView';
@@ -13,13 +13,12 @@ import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import {
   useWriteMyDiaryActions,
   useWriteMyDiaryInfo,
 } from '~/zustand/mydiary/writeMyDiary';
 import {RootStackNavigationProp} from '~/App';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {
   CameraButtonIcon,
   EmptyStarIcon,
@@ -43,6 +42,8 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {showToast} from '~/components/common/modal/toastConfig';
+import {requestCameraPermission} from '~/utils/photo';
 
 // [WORD_LIMIT]
 const WriteMyDiaryInfoScreen = () => {
@@ -71,23 +72,15 @@ const WriteMyDiaryInfoScreen = () => {
     setImageUri(writeMyDiaryInfo.thumbnail ?? undefined);
   }, []);
 
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-        .then(result => {
-          if (result === RESULTS.DENIED || result === RESULTS.GRANTED) {
-            return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-          } else {
-            console.log(result);
-            throw new Error('카메라 지원 안 함');
-          }
-        })
-        .catch(console.error);
-    }
-  };
-
   const showPhoto = async () => {
-    await requestCameraPermission();
+    const result = await requestCameraPermission();
+
+    if (!result) {
+      Linking.openSettings().catch(() => {
+        showToast('설정으로 이동할 수 없습니다.');
+      });
+      return;
+    }
 
     const option: ImageLibraryOptions = {
       mediaType: 'photo',

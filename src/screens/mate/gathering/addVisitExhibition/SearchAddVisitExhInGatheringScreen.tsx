@@ -12,7 +12,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchExhResult from '~/components/exhSearch/SearchExhResult';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 
 const SearchAddVisitExhInGatheringScreen = () => {
   const queryClient = useQueryClient();

@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {changeDotToHyphen} from '~/utils/Date';
+import {changeDotToHyphen} from '~/utils/date';
 
 /** 혼자 방문한 날짜 목록 데이터 */
 interface AddScheduleState {

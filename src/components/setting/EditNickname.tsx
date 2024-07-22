@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';

@@ -36,9 +36,9 @@ const CalendarDiaryListScreen = () => {
   const [isUpdateClicked, setIsUpdateClicked] = useState<boolean>(false);
 
   const onPressButton = () => {
+    resetWriteInfo();
     updateIsUpdate(false);
     updateforIds(null, exhFromCalendarInfo.exhVisitId);
-    resetWriteInfo();
     navigation.navigate('WriteMyDiaryRoutes');
   };
 

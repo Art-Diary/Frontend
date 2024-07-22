@@ -17,7 +17,7 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {useIsFocused} from '@react-navigation/native';
-import {dateToString} from '~/utils/Date';
+import {dateToString} from '~/utils/date';
 //import ExhShareModal from './ExhShareModal';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';

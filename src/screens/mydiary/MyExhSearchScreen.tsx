@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {
   exhibitionQueryKeys,
   useFetchSearchExhInMyDiary,

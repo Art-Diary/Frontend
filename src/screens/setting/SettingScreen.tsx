@@ -1,19 +1,13 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import Header from '~/components/common/Header';
-import {
-  responseFont as rf,
-  heightSizePercentage as hp,
-  widthSizePercentage as wp,
-} from '~/components/common/ResponsiveSize';
+import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import ProfileNameTag from './nameTag/ProfileNameTag';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import notifee, {AndroidNotificationSetting} from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
-import {Linking, ScrollView} from 'react-native';
+import {Linking, PermissionsAndroid, Platform, ScrollView} from 'react-native';
 import {useQueryClient} from 'react-query';
 import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
@@ -25,6 +19,8 @@ import {
 } from '~/zustand/tabIdentifier';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import {SettingStackParamList} from '~/utils/stackTypes';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 const SettingScreen = () => {
   const queryClient = useQueryClient();
@@ -58,23 +54,45 @@ const SettingScreen = () => {
   };
 
   const handleMoveTo = async (moveTo: string) => {
-    // 알림 허용되어있는지 체크 후 알림 허용 페이지로 이동 또는 알림 설정 페이지로 이동
-    const enabled = await messaging().hasPermission();
-    const settings = await notifee.getNotificationSettings();
+    navigation.navigate('SettingRoutes', {
+      screen: moveTo as keyof SettingStackParamList,
+      params: undefined,
+    });
+  };
 
-    if (!enabled) {
-      Linking.openSettings();
-    }
-    if (settings.android.alarm !== AndroidNotificationSetting.ENABLED) {
-      await notifee.openAlarmPermissionSettings();
-    }
-    if (
-      enabled &&
-      settings.android.alarm === AndroidNotificationSetting.ENABLED
-    ) {
+  const handleMoveToAlarm = async (moveTo: string) => {
+    const checkNotification = async () => {
+      // 알림 허용되어있는지 체크 후 알림 허용 페이지로 이동 또는 알림 설정 페이지로 이동
+      const permission = PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS;
+
+      const hasPermission = await PermissionsAndroid.check(permission);
+
+      if (!hasPermission) {
+        if (Platform.OS === 'android' && Platform.Version >= 33) {
+          const result = await request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS);
+
+          if (result === RESULTS.GRANTED) {
+            console.log('POST_NOTIFICATIONS permission granted');
+            return true;
+          } else {
+            console.log('POST_NOTIFICATIONS permission denied');
+            return false;
+          }
+        }
+      }
+      return true;
+    };
+
+    const resultCheck = await checkNotification();
+
+    if (resultCheck) {
       navigation.navigate('SettingRoutes', {
         screen: moveTo as keyof SettingStackParamList,
         params: undefined,
+      });
+    } else {
+      Linking.openSettings().catch(() => {
+        showToast('설정으로 이동할 수 없습니다.');
       });
     }
   };
@@ -101,7 +119,7 @@ const SettingScreen = () => {
             />
             <GreyNameTag
               content="푸시 알림 설정"
-              handleTouch={() => handleMoveTo('AlarmSetting')}
+              handleTouch={() => handleMoveToAlarm('AlarmSetting')}
             />
             <GreyNameTag content="도움말" />
           </SettingWrapper>

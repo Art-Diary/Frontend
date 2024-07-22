@@ -24,7 +24,7 @@ import {
   FONT_NAME,
   ITEM_BORDER_WIDTH,
 } from '~/components/common/style';
-import {getDateDay} from '~/utils/Date';
+import {getDateDay} from '~/utils/date';
 import {MyVisitedDateType} from '~/utils/dataTypes';
 import {useMySoloMarkedDatesActions} from '~/zustand/mydiary/mySoloMarkedDates';
 import {
