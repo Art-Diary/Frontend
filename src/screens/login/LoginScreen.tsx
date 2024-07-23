@@ -32,6 +32,9 @@ import {
 import EmailDuplicateModal from './EmailDuplicateModal';
 import {LoginUserParams} from '~/api/auth';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import notifee, {EventDetail, EventType} from '@notifee/react-native';
+import pushNoti from '~/utils/pushNoti';
+import {Linking} from 'react-native';
 
 type LoginUserInfo = {
   email: string;
@@ -80,7 +83,49 @@ const LoginScreen = () => {
       }
     };
     checkUserId();
-  }, [navigation]);
+  }, []);
+
+  useEffect(() => {
+    const handlePressNotification = async (detail: EventDetail) => {
+      // 처리할 이벤트 추가
+      if (detail.notification?.data) {
+        const exhId = detail.notification?.data.exhId;
+        navigation.navigate('ExhDetailInfo', {
+          exhId: Number(exhId),
+        });
+      }
+    };
+
+    const handleDismissedNotification = (detail: EventDetail) => {
+      // noti 삭제
+      if (detail.notification?.id) {
+        notifee.cancelNotification(detail.notification.id);
+        notifee.cancelDisplayedNotification(detail.notification.id);
+      }
+    };
+
+    notifee.onForegroundEvent(async ({type, detail}) => {
+      if (type === EventType.PRESS) {
+        handlePressNotification(detail);
+      } else if (type === EventType.DISMISSED) {
+        handleDismissedNotification(detail);
+      }
+    });
+
+    notifee.onBackgroundEvent(async ({type, detail}) => {
+      if (type === EventType.PRESS) {
+        await Linking.openURL(
+          `artdiary://exhibition/${detail.notification?.data?.exhId}`,
+        );
+      } else if (type === EventType.DISMISSED) {
+        handleDismissedNotification(detail);
+      }
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      await pushNoti.displayNoti(remoteMessage);
+    });
+  }, []);
 
   const emailDuplicateModal = () => {
     // TODO

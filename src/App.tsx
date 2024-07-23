@@ -13,7 +13,7 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
 import MyExhSearchScreen from './screens/mydiary/MyExhSearchScreen';
@@ -40,7 +40,6 @@ import {RootStackParamList} from './utils/stackTypes';
 import SettingRoutes from './routes/setting/SettingRoutes';
 import messaging from '@react-native-firebase/messaging';
 import pushNoti from './utils/pushNoti';
-import notifee from '@notifee/react-native';
 import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox, PermissionsAndroid, Platform} from 'react-native';
