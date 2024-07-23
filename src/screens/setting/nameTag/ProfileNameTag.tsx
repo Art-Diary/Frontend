@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {useUserInfo} from '~/zustand/auth/auth';
+import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {FONT_NAME} from '~/components/common/style';
@@ -13,10 +13,26 @@ import {DEFAULT_TEXT, MIDDLE_GREY} from '~/components/common/colors';
 import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {useFetchUserInfo} from '~/api/queries/auth';
 
 const ProfileNameTag = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const userInfo = useUserInfo();
+  const {authInfo} = useUserInfo();
+  const {updateAuthInfo} = useUserActions();
+  const {refetch} = useFetchUserInfo();
+
+  const handleRefetch = async () => {
+    await refetch().then(result => {
+      const data = result.data;
+      updateAuthInfo({...data});
+    });
+  };
+
+  useEffect(() => {
+    if (authInfo.userId === -1) {
+      handleRefetch();
+    }
+  }, [authInfo.userId]);
 
   return (
     <Container>
@@ -26,7 +42,7 @@ const ProfileNameTag = () => {
         <Wrapper>
           <ProfileWrapper>
             <Profile
-              source={{uri: `${userInfo.authInfo.profile ?? DEFAULT_IMAGE}`}}
+              source={{uri: `${authInfo.profile ?? DEFAULT_IMAGE}`}}
               resizeMode="cover"
               alt={'이미지'}
             />
@@ -34,24 +50,22 @@ const ProfileNameTag = () => {
           <UserInfoColumn>
             <UserInfoRow>
               <NickName>
-                {!userInfo.authInfo.nickname ||
-                userInfo.authInfo.nickname === ''
+                {!authInfo.nickname || authInfo.nickname === ''
                   ? '홍길동'
-                  : userInfo.authInfo.nickname}
+                  : authInfo?.nickname}
               </NickName>
               <ArtWrapper>
                 <Art>
-                  {!userInfo.authInfo.favoriteArt ||
-                  userInfo.authInfo.favoriteArt === ''
+                  {!authInfo.favoriteArt || authInfo.favoriteArt === ''
                     ? '좋아하는 전시 분야'
-                    : userInfo.authInfo.favoriteArt}
+                    : authInfo?.favoriteArt}
                 </Art>
               </ArtWrapper>
             </UserInfoRow>
             <Email>
-              {!userInfo.authInfo.email || userInfo.authInfo.email === ''
+              {!authInfo.email || authInfo.email === ''
                 ? '이메일@이메일'
-                : userInfo.authInfo.email}
+                : authInfo.email}
             </Email>
           </UserInfoColumn>
           <CustomTouchable

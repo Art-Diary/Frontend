@@ -114,6 +114,12 @@ export default function App() {
 
   useEffect(() => {
     getPermission();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      pushNoti.displayNoti(remoteMessage);
+    });
+
+    return unsubscribe;
   }, []);
 
   return (
