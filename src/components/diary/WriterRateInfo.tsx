@@ -58,7 +58,6 @@ const Container = styled.View`
 
 const NicknameView = styled.View`
   flex-direction: row;
-  align-items: flex-end;
   gap: ${wp(1.5)}px;
 `;
 

@@ -9,7 +9,12 @@ import {
 import {checkBlankInKeyword} from '~/utils/keyword';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '../common/colors';
 
 interface EditNicknameProps {
   getNickname: string;
@@ -25,6 +30,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   setIsVerified,
   isVerified,
 }) => {
+  const maxInputLength = 10;
   const userInfo = useUserInfo();
   const {
     mutate: verifyNickname,
@@ -90,14 +96,20 @@ const EditNickname: React.FC<EditNicknameProps> = ({
         )}
       </SectionView>
       <ContentRow>
-        <Nickname
-          placeholderTextColor="#D3D3D3"
-          placeholder={
-            getNickname === '' ? '닉네임을 입력해주세요.' : getNickname
-          }
-          onChangeText={onChangeNickname}
-          value={getNickname}
-        />
+        <NicknameWrapper>
+          <Nickname
+            maxLength={maxInputLength}
+            placeholderTextColor="#D3D3D3"
+            placeholder={
+              getNickname === '' ? '닉네임을 입력해주세요.' : getNickname
+            }
+            onChangeText={onChangeNickname}
+            value={getNickname}
+          />
+          <CountText>
+            {getNickname.length} / {maxInputLength}
+          </CountText>
+        </NicknameWrapper>
         <CheckButton
           activeOpacity={0.6}
           isVerified={isVerified}
@@ -142,17 +154,30 @@ const SectionName = styled.Text<SectionNameProps>`
   font-family: ${FONT_NAME};
 `;
 
-const Nickname = styled.TextInput`
+const NicknameWrapper = styled.View`
   flex: 1;
-  font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
+  flex-direction: row;
   border-width: ${wp(0.3)}px;
   border-color: ${LIGHT_GREY};
   border-radius: ${wp(2)}px;
+  align-items: center;
+  justify-content: space-between;
   padding-left: ${wp(2.8)}px;
   padding-right: ${wp(2.8)}px;
-  width: 100%;
+`;
+
+const Nickname = styled.TextInput`
+  font-size: ${rf(16)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  width: 80%;
+`;
+
+const CountText = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MIDDLE_GREY};
+  text-align: center;
 `;
 
 interface CheckButtonProps {

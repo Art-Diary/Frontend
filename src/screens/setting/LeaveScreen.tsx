@@ -17,6 +17,7 @@ import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
+  MIDDLE_GREY,
 } from '~/components/common/colors';
 import {
   AREA_FONT_SIZE,
@@ -29,6 +30,7 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 
 // [WORD_LIMIT]
 const LeaveScreen = () => {
+  const maxInputLength = 100;
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [reasonKeyword, setReasonKeyword] = useState<string>('');
@@ -78,15 +80,20 @@ const LeaveScreen = () => {
         <ContentColumn>
           <SectionName>탈퇴 이유</SectionName>
           <ReasonView>
-            <ReasonScroll>
-              <ReasonInput
-                multiline={true}
-                placeholderTextColor="#D3D3D3"
-                placeholder={'탈퇴 이유를 작성해주세요.'}
-                onChangeText={onChangeReason}
-                value={reasonKeyword}
-              />
-            </ReasonScroll>
+            <ReasonInput
+              multiline={true}
+              maxLength={maxInputLength} // 글자 수 제한
+              placeholderTextColor="#D3D3D3"
+              placeholder={'탈퇴 이유를 작성해주세요.'}
+              onChangeText={onChangeReason}
+              value={reasonKeyword}
+              textAlignVertical={'top'}
+            />
+            <CountView>
+              <CountText>
+                {reasonKeyword.length} / {maxInputLength}
+              </CountText>
+            </CountView>
           </ReasonView>
         </ContentColumn>
         {/* 탈퇴 버튼 */}
@@ -139,14 +146,27 @@ const ReasonView = styled.View`
   height: ${hp(40)}px;
 `;
 
-const ReasonScroll = styled.ScrollView``;
-
 const ReasonInput = styled.TextInput`
+  height: 100%;
   font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2.9)}px;
   padding-right: ${wp(2.9)}px;
+`;
+
+const CountView = styled.View`
+  flex-direction: row;
+  width: 100%;
+  padding-top: ${hp(0.5)}px;
+  padding-right: ${wp(1)}px;
+  justify-content: flex-end;
+`;
+
+const CountText = styled.Text`
+  font-size: ${AREA_FONT_SIZE}px;
+  font-family: ${FONT_NAME};
+  color: ${MIDDLE_GREY};
 `;
 
 interface LeaveButtonProps {

@@ -2,7 +2,10 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
+import {
+  responseFont as rf,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
 import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -14,6 +17,7 @@ import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
+  MIDDLE_GREY,
 } from '~/components/common/colors';
 import {
   AREA_FONT_SIZE,
@@ -26,6 +30,7 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 
 // [WORD_LIMIT]
 const CreateGatheringScreen = () => {
+  const maxInputLength = 12;
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [gahteringKeyword, setGahteringKeyword] = useState<string>('');
@@ -75,12 +80,16 @@ const CreateGatheringScreen = () => {
           <ContentText>모임 이름</ContentText>
           <WriteView>
             <GatheringInput
+              maxLength={maxInputLength}
               multiline={false}
               placeholderTextColor="#D3D3D3"
               placeholder={'새로운 모임 이름을 작성해주세요.'}
               onChangeText={onChangeGathering}
               value={gahteringKeyword}
             />
+            <CountText>
+              {gahteringKeyword.length} / {maxInputLength}
+            </CountText>
           </WriteView>
         </ContentWrapper>
         {/* 모임 만들기 버튼 */}
@@ -130,15 +139,26 @@ const CreateButton = styled.Text`
 `;
 
 const WriteView = styled.View`
+  flex-direction: row;
   border-width: ${wp(0.33)}px;
   border-color: ${LIGHT_GREY};
   border-radius: ${BUTTON_RADIUS}px;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: ${wp(2.8)}px;
+  padding-right: ${wp(2.8)}px;
 `;
 
 const GatheringInput = styled.TextInput`
   font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  padding-left: ${wp(2.9)}px;
-  padding-right: ${wp(2.9)}px;
+  width: 80%;
+`;
+
+const CountText = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MIDDLE_GREY};
+  text-align: center;
 `;

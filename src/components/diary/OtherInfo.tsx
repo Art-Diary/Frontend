@@ -62,6 +62,7 @@ const ContentView = styled.View`
   justify-content: space-between;
   align-items: center;
   gap: ${wp(3)}px;
+  width: 30%;
 `;
 
 const LineView = styled.View`
