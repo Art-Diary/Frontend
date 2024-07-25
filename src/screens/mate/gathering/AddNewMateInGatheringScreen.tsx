@@ -106,6 +106,7 @@ const AddNewMateInGatheringScreen = () => {
         </SearchExhFrame>
         {/* 모임 메이트 추가 버튼 */}
         <ButtonTouch
+          activeOpacity={0.6}
           onPress={onPressCreate}
           disabled={selectedMate === -1 ? true : false}>
           <CreateButton isSelected={selectedMate === -1 ? false : true}>

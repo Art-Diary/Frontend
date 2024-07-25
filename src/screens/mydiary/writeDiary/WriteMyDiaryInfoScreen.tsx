@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Alert, Image, Platform, TouchableOpacity} from 'react-native';
+import {Alert, Image, Platform} from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import BackView from '~/components/common/BackView';
@@ -42,7 +42,9 @@ import {
   MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
+// [WORD_LIMIT]
 const WriteMyDiaryInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [titleKeyword, setTitleKeyword] = useState<string>('');
@@ -154,28 +156,28 @@ const WriteMyDiaryInfoScreen = () => {
           <HalfSection>
             <SectionName>별점</SectionName>
             <StarList>
-              <TouchableOpacity onPress={() => changeStarNum(1)}>
+              <CustomTouchable onPress={() => changeStarNum(1)}>
                 {starNum >= 1 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeStarNum(2)}>
+              </CustomTouchable>
+              <CustomTouchable onPress={() => changeStarNum(2)}>
                 {starNum >= 2 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeStarNum(3)}>
+              </CustomTouchable>
+              <CustomTouchable onPress={() => changeStarNum(3)}>
                 {starNum >= 3 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeStarNum(4)}>
+              </CustomTouchable>
+              <CustomTouchable onPress={() => changeStarNum(4)}>
                 {starNum >= 4 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeStarNum(5)}>
+              </CustomTouchable>
+              <CustomTouchable onPress={() => changeStarNum(5)}>
                 {starNum >= 5 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </TouchableOpacity>
+              </CustomTouchable>
             </StarList>
           </HalfSection>
           <HalfSection>
             <SectionName>공개 여부</SectionName>
-            <TouchableOpacity onPress={changeToggle}>
+            <CustomTouchable onPress={changeToggle}>
               {isPublic ? <PublicToggleIcon /> : <PrivateToggleIcon />}
-            </TouchableOpacity>
+            </CustomTouchable>
           </HalfSection>
         </SecondSection>
         <SayingSection>
@@ -195,11 +197,11 @@ const WriteMyDiaryInfoScreen = () => {
           <SectionName>대표사진</SectionName>
           <PutThumbnail>
             {!imageUri ? (
-              <TouchableOpacity style={{padding: 30}} onPress={showPhoto}>
+              <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
                 <CameraButtonIcon />
-              </TouchableOpacity>
+              </CustomTouchable>
             ) : (
-              <TouchableOpacity
+              <CustomTouchable
                 style={{
                   flex: 1,
                   alignItems: 'center',
@@ -213,15 +215,15 @@ const WriteMyDiaryInfoScreen = () => {
                   style={{width: '100%', height: '100%', alignItems: 'center'}}
                   resizeMode="contain"
                 />
-              </TouchableOpacity>
+              </CustomTouchable>
             )}
           </PutThumbnail>
         </ThumbnailSection>
         {/* 다음 버튼 */}
         {!checkBlankInKeyword(titleKeyword) && starNum > 0 ? (
-          <TouchableOpacity onPress={onClickNextButton}>
+          <CustomTouchable onPress={onClickNextButton}>
             <NextButton moveNext={true}>다음</NextButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         ) : (
           <NextButton moveNext={false}>다음</NextButton>
         )}

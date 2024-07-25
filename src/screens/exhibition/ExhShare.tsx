@@ -1,7 +1,8 @@
 import React from 'react';
-import {Share, TouchableOpacity} from 'react-native';
+import {Share} from 'react-native';
 import {createDynamicLink} from './Link';
 import {ExhShareButtonIcon} from '~/components/common/icon';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface ExhShareProps {
   poster: string;
@@ -22,9 +23,9 @@ const ExhShare: React.FC<ExhShareProps> = ({poster, exhId, exhName}) => {
   };
 
   return (
-    <TouchableOpacity onPress={handleShare}>
+    <CustomTouchable onPress={handleShare}>
       <ExhShareButtonIcon />
-    </TouchableOpacity>
+    </CustomTouchable>
   );
 };
 

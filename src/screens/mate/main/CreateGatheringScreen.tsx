@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
-import {Keyboard, TouchableOpacity} from 'react-native';
+import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -22,7 +22,9 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
+// [WORD_LIMIT]
 const CreateGatheringScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
@@ -82,9 +84,9 @@ const CreateGatheringScreen = () => {
           </WriteView>
         </ContentWrapper>
         {/* 모임 만들기 버튼 */}
-        <TouchableOpacity onPress={onPressCreate}>
+        <CustomTouchable onPress={onPressCreate}>
           <CreateButton>모임 만들기</CreateButton>
-        </TouchableOpacity>
+        </CustomTouchable>
       </Contents>
       {isLoadingOpen && <LoadingModal message={'모임 만들기 처리 중'} />}
     </Container>

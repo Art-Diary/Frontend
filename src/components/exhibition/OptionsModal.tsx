@@ -1,5 +1,4 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {
   widthSizePercentage as wp,
@@ -13,6 +12,7 @@ import {
   FONT_NAME,
 } from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import CustomTouchable from '../common/CustomTouchable';
 
 interface OptionsModalProps {
   handleCloseModal: () => void;
@@ -35,14 +35,14 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
       <Message>{message}</Message>
       <ButtonSection>
         <ButtonDetailSection>
-          <TouchableOpacity onPress={onPressYes}>
+          <CustomTouchable onPress={onPressYes}>
             <DeleteButton> 예 </DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ButtonDetailSection>
         <ButtonDetailSection>
-          <TouchableOpacity onPress={onPressNo}>
+          <CustomTouchable onPress={onPressNo}>
             <DeleteButton>아니요</DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ButtonDetailSection>
       </ButtonSection>
     </ConfirmationModal>

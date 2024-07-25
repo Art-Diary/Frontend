@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, BackHandler, Linking, Alert} from 'react-native';
+import {BackHandler, Linking, Alert, RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -40,6 +40,7 @@ import {
 } from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -88,6 +89,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const [avgNumber, setAvgNumber] = useState<number>(0);
   //const [sharedModal, setSharedModal] = useState<boolean>(false);
   const limit = 2; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
+  const [refreshing, setRefreshing] = useState(false);
 
   const {
     mutate: addLike,
@@ -109,6 +111,24 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
       refetchDiaryList();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    if (refreshing) {
+      handleRefetch();
+    }
+  }, [refreshing]);
+
+  const handleRefetch = async () => {
+    await refetch().then(async () => {
+      await refetchDiaryList().then(() => {
+        setRefreshing(false);
+      });
+    });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -246,9 +266,9 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
-  if (isDiaryListSuccess) {
-    console.log('다이어리 불러오기 성공');
-  }
+  // if (isDiaryListSuccess) {
+  //   console.log('다이어리 불러오기 성공');
+  // }
 
   const onPressHeart = (exhId: number) => {
     const tmp: number[] = [];
@@ -318,7 +338,11 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   };
 
   return (
-    <ContainerScroll scrollEventThrottle={200}>
+    <ContainerScroll
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+      scrollEventThrottle={200}>
       <TopView>
         <BackgroundImage
           source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
@@ -332,13 +356,13 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
           />
         </BackgroundImage>
         <TopLayer>
-          <TouchableOpacity onPress={handlePressBack}>
+          <CustomTouchable onPress={handlePressBack}>
             <BackButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
           <EmptyHeartContent>
-            <TouchableOpacity onPress={() => onPressHeart(exhId)}>
+            <CustomTouchable onPress={() => onPressHeart(exhId)}>
               {hearts ? <FullHeartIcon /> : <EmptyHeartIcon />}
-            </TouchableOpacity>
+            </CustomTouchable>
           </EmptyHeartContent>
         </TopLayer>
       </TopView>
@@ -346,14 +370,14 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         <NameView>
           <Title>{data.exhName}</Title>
           <IconView>
-            <TouchableOpacity
+            <CustomTouchable
               onPress={() =>
                 navigation.navigate('ExhToCal', {
                   exhId: data.exhId,
                 })
               }>
               <CalendarShareIcon />
-            </TouchableOpacity>
+            </CustomTouchable>
             <Bar>{'|'}</Bar>
 
             <ExhShare
@@ -363,10 +387,10 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
             />
 
             <Bar>{'|'}</Bar>
-            <TouchableOpacity onPress={exhToHomepage}>
+            <CustomTouchable onPress={exhToHomepage}>
               {/* // onPress={() => navigation.navigate('ExhToHomepage')}> */}
               <HomepageIcon />
-            </TouchableOpacity>
+            </CustomTouchable>
           </IconView>
         </NameView>
         <StateView>
@@ -406,14 +430,14 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         </Content>
         {/* 아이콘 */}
         {isReadable && (
-          <TouchableOpacity onPress={showMore}>
+          <CustomTouchable onPress={showMore}>
             <MoreContentsIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         )}
         {isMoreContent && (
-          <TouchableOpacity onPress={backToIntro}>
+          <CustomTouchable onPress={backToIntro}>
             <ReduceContentsIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         )}
       </IntroduceView>
       <ReView>
@@ -436,9 +460,9 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
         {diaryData &&
           diaryData.slice(0, limit).map((item: any, index: number) => (
-            <>
+            <ReViewWrapper key={index}>
               <ReViewList
-                key={index}
+                activeOpacity={0.6}
                 onPress={() =>
                   navigation.navigate('ExhToDiary', {
                     diary: item,
@@ -464,11 +488,10 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                   </TextView>
                 </ReviewTextView>
               </ReViewList>
-              <BorderView />
-            </>
+            </ReViewWrapper>
           ))}
         {avgNumber > limit && (
-          <MoreReview onPress={clickMoreReview}>
+          <MoreReview activeOpacity={0.6} onPress={clickMoreReview}>
             <MoreReviewTitle>{'기록들 더보기 >'}</MoreReviewTitle>
           </MoreReview>
         )}
@@ -623,12 +646,18 @@ const Content = styled.Text`
 `;
 
 // review section
+const ReViewWrapper = styled.View`
+  padding-top: ${wp(1)}px;
+  padding-bottom: ${wp(1)}px;
+  border-bottom-color: ${LIGHT_GREY};
+  border-bottom-width: ${wp(0.3)}px;
+`;
+
 const ReView = styled.View`
   flex-direction: column;
   align-items: center;
   width: 100%;
   padding: ${wp(5.2)}px;
-  gap: ${wp(2)}px;
 `;
 
 const TitleTopView = styled.View`
@@ -671,12 +700,6 @@ const ReViewList = styled.TouchableOpacity`
   padding-top: ${wp(1.4)}px;
   padding-bottom: ${wp(1.4)}px;
   gap: ${wp(2)}px;
-`;
-
-const BorderView = styled.View`
-  width: 100%;
-  background-color: ${LIGHT_GREY};
-  height: ${wp(0.3)}px;
 `;
 
 const ReviewImage = styled.Image`

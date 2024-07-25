@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Image, Platform, TouchableOpacity} from 'react-native';
+import {Alert, Image, Platform} from 'react-native';
 import {
   Asset,
   ImageLibraryOptions,
@@ -16,6 +16,7 @@ import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
 import {CameraButtonIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '../common/CustomTouchable';
 
 interface EditNicknameProps {
   imageUri: string | undefined;
@@ -69,11 +70,11 @@ const EditPicture: React.FC<EditNicknameProps> = ({imageUri, setImageUri}) => {
       <ProfileSection>
         <PutProfile>
           {imageUri === undefined ? (
-            <TouchableOpacity style={{padding: 30}} onPress={showPhoto}>
+            <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
               <CameraButtonIcon />
-            </TouchableOpacity>
+            </CustomTouchable>
           ) : (
-            <TouchableOpacity
+            <CustomTouchable
               style={{
                 flex: 1,
                 alignItems: 'center',
@@ -87,7 +88,7 @@ const EditPicture: React.FC<EditNicknameProps> = ({imageUri, setImageUri}) => {
                 style={{width: '100%', height: '100%', alignItems: 'center'}}
                 resizeMode="contain"
               />
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
         </PutProfile>
       </ProfileSection>

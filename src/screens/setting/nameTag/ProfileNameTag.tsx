@@ -5,18 +5,14 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {TouchableOpacity} from 'react-native';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {FONT_NAME} from '~/components/common/style';
-import {
-  DEFAULT_TEXT,
-  MAIN_COLOR,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DEFAULT_TEXT, MIDDLE_GREY} from '~/components/common/colors';
 import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const ProfileNameTag = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -58,7 +54,7 @@ const ProfileNameTag = () => {
                 : userInfo.authInfo.email}
             </Email>
           </UserInfoColumn>
-          <TouchableOpacity
+          <CustomTouchable
             onPress={() =>
               navigation.navigate('SettingRoutes', {
                 screen: 'EditProfile',
@@ -66,7 +62,7 @@ const ProfileNameTag = () => {
               })
             }>
             <ProfileUpdateIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         </Wrapper>
       </WordContainer>
     </Container>

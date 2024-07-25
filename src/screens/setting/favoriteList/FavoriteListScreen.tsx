@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
@@ -12,6 +11,7 @@ import {
 import FetchFavoriteList from './FetchFavoriteList';
 import {FONT_NAME} from '~/components/common/style';
 import {MAIN_COLOR} from '~/components/common/colors';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const FavoriteListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -26,9 +26,9 @@ const FavoriteListScreen = () => {
   return (
     <Container>
       <BackView title="좋아요 전시회" line={true}>
-        <TouchableOpacity onPress={onPressEditButton}>
+        <CustomTouchable onPress={onPressEditButton}>
           <EditText>편집</EditText>
-        </TouchableOpacity>
+        </CustomTouchable>
       </BackView>
 
       {/* body */}

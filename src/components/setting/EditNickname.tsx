@@ -18,6 +18,7 @@ interface EditNicknameProps {
   isVerified: boolean;
 }
 
+// [WORD_LIMIT]
 const EditNickname: React.FC<EditNicknameProps> = ({
   getNickname,
   setNickname,
@@ -98,6 +99,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
           value={getNickname}
         />
         <CheckButton
+          activeOpacity={0.6}
           isVerified={isVerified}
           disabled={isVerified}
           onPress={onPressVerify}>

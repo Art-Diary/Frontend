@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
@@ -19,6 +19,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface ExhMateInfo {
   userId: number;
@@ -62,34 +63,35 @@ const ExhMateList = () => {
   return (
     <Container>
       {/* 전시메이트 리스트 */}
-      <FlatList
-        data={exhMateList}
-        renderItem={({item, index}) => (
-          <TouchableOpacity key={index} onPress={() => pressExhMate(item)}>
-            <UserInfoWrapper>
-              <NameTag isSelected={true}>
-                <UserInfo>
-                  <ProfileWrapper>
-                    <Profile
-                      source={{uri: `${item.profile ?? DEFAULT_IMAGE}`}}
-                      resizeMode="cover"
-                      alt={'이미지 읽기 실패'}
-                    />
-                  </ProfileWrapper>
-                  <UserInfoColumn>
-                    <NickName>{item.nickname}</NickName>
-                    <Art>
-                      {item.favoriteArt === '.' || !item.favoriteArt
-                        ? '그외'
-                        : item.favoriteArt}
-                    </Art>
-                  </UserInfoColumn>
-                </UserInfo>
-              </NameTag>
-            </UserInfoWrapper>
-          </TouchableOpacity>
-        )}
-      />
+      <ScrollView>
+        {exhMateList.map((item: any, index: number) => {
+          return (
+            <CustomTouchable key={index} onPress={() => pressExhMate(item)}>
+              <UserInfoWrapper>
+                <NameTag isSelected={true}>
+                  <UserInfo>
+                    <ProfileWrapper>
+                      <Profile
+                        source={{uri: `${item.profile ?? DEFAULT_IMAGE}`}}
+                        resizeMode="cover"
+                        alt={'이미지 읽기 실패'}
+                      />
+                    </ProfileWrapper>
+                    <UserInfoColumn>
+                      <NickName>{item.nickname}</NickName>
+                      <Art>
+                        {item.favoriteArt === '.' || !item.favoriteArt
+                          ? '그외'
+                          : item.favoriteArt}
+                      </Art>
+                    </UserInfoColumn>
+                  </UserInfo>
+                </NameTag>
+              </UserInfoWrapper>
+            </CustomTouchable>
+          );
+        })}
+      </ScrollView>
     </Container>
   );
 };

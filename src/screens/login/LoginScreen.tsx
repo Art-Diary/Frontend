@@ -19,7 +19,6 @@ import {
   useUpdateAlarmToken,
 } from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
-import {TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {handleKakaoLogin} from './KakaoLogin';
 import messaging from '@react-native-firebase/messaging';
@@ -32,6 +31,7 @@ import {
 } from '~/components/common/icon';
 import EmailDuplicateModal from './EmailDuplicateModal';
 import {LoginUserParams} from '~/api/auth';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 type LoginUserInfo = {
   email: string;
@@ -182,7 +182,9 @@ const LoginScreen = () => {
   return (
     <Container>
       <Contents>
-        <ArtDiary>Art Diary</ArtDiary>
+        <ArtDiaryMainWrapper>
+          <ArtDiary>Art Diary</ArtDiary>
+        </ArtDiaryMainWrapper>
         <LoginWrapper>
           <GreyNameTag
             login={true}
@@ -203,9 +205,9 @@ const LoginScreen = () => {
             <KakaoLogoIcon />
           </GreyNameTag>
           {/* TODO 나중에 지우기 */}
-          <TouchableOpacity onPress={handleTester}>
+          <CustomTouchable onPress={handleTester}>
             <Tester>테스터 3</Tester>
-          </TouchableOpacity>
+          </CustomTouchable>
         </LoginWrapper>
       </Contents>
       <LineWrapper>
@@ -236,7 +238,6 @@ const Contents = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${hp(8.7)}px;
 `;
 
 const LineWrapper = styled.View`
@@ -251,6 +252,14 @@ const Line = styled.View`
   width: ${wp(6)}px;
 `;
 
+const ArtDiaryMainWrapper = styled.View`
+  height: 70%;
+  width: 100%;
+  padding-top: ${hp(7)}px;
+  align-items: center;
+  justify-content: center;
+`;
+
 const ArtDiary = styled.Text`
   font-size: ${rf(100)}px;
   color: white;
@@ -259,10 +268,12 @@ const ArtDiary = styled.Text`
 `;
 
 const LoginWrapper = styled.View`
+  height: 50%;
   align-items: center;
-  padding-left: ${wp(1)}px;
+  padding-top: ${hp(1)}px;
+  padding-left: ${wp(5.5)}px;
   width: 100%;
-  gap: ${hp(1)}px;
+  gap: ${hp(1.5)}px;
 `;
 
 const Tester = styled.Text`

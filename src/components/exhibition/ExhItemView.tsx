@@ -11,7 +11,8 @@ import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
 
-interface ExhInfo {
+export interface ExhInfo {
+  exhId: number;
   poster: string;
   exhName: string;
   gallery: string;
@@ -51,7 +52,10 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   return (
     <Wrapper>
       <ExhView noLine={noLine}>
-        <TouchView disabled={notTouchable} onPress={onTouch}>
+        <TouchView
+          disabled={notTouchable}
+          activeOpacity={0.6}
+          onPress={onTouch}>
           <Poster
             source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
             resizeMode="contain"

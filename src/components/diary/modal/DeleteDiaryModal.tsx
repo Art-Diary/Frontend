@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
 import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
@@ -15,6 +14,7 @@ import {
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 type DeleteInfo = {
   exhId: number;
@@ -61,9 +61,9 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   return (
     <ConfirmationModal handleCloseModal={handleCloseModal}>
       <Message>{message}</Message>
-      <TouchableOpacity onPress={() => deleteMyDiary()}>
+      <CustomTouchable onPress={() => deleteMyDiary()}>
         <DeleteButton>삭제</DeleteButton>
-      </TouchableOpacity>
+      </CustomTouchable>
     </ConfirmationModal>
   );
 };

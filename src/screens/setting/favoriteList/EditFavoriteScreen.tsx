@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {useDeleteLike} from '~/api/queries/exhibition';
@@ -17,6 +17,7 @@ import {FONT_NAME} from '~/components/common/style';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useFavoriteInfoList} from '~/zustand/setting/favoriteList';
 import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface Like {
   exhId: number;
@@ -105,9 +106,9 @@ const EditFavoriteScreen = () => {
   return (
     <Container>
       <BackView title="좋아요 전시회" line={true}>
-        <TouchableOpacity onPress={onPressComplete}>
+        <CustomTouchable onPress={onPressComplete}>
           <EditText>완료</EditText>
-        </TouchableOpacity>
+        </CustomTouchable>
       </BackView>
 
       {/* body */}
@@ -120,13 +121,13 @@ const EditFavoriteScreen = () => {
               noLine={index === exhList.length - 1 ? true : false}
               notTouchable={true}>
               <HeartView>
-                <TouchableOpacity onPress={() => onPressHeart(index)}>
+                <CustomTouchable onPress={() => onPressHeart(index)}>
                   {likeList[index]?.like ? (
                     <FullHeartIcon />
                   ) : (
                     <EmptyHeartIcon />
                   )}
-                </TouchableOpacity>
+                </CustomTouchable>
               </HeartView>
             </ExhItemView>
           )}

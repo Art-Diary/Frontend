@@ -4,7 +4,6 @@ import {RouteProp} from '@react-navigation/native';
 import DiaryList from '~/components/diary/DiaryList';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import BackView from '~/components/common/BackView';
-import {TouchableOpacity} from 'react-native';
 import {OptionBarIcon} from '~/components/common/icon';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {
@@ -22,6 +21,7 @@ import {
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 type RootStackParamList = {
   ExhToDiary: {diary: any};
@@ -59,9 +59,9 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
     <Container>
       <BackView line={false}>
         {showOptionBar && (
-          <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+          <CustomTouchable onPress={() => setIsModalOpen(true)}>
             <OptionBarIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         )}
       </BackView>
 
@@ -86,16 +86,16 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
 
       {isModalOpen && (
         <ConfirmationModal handleCloseModal={() => setIsModalOpen(false)}>
-          <TouchableOpacity onPress={clickUpdatePage}>
+          <CustomTouchable onPress={clickUpdatePage}>
             <Message>수정</Message>
-          </TouchableOpacity>
+          </CustomTouchable>
           <SeperateLine />
-          <TouchableOpacity onPress={clickDeletePage}>
+          <CustomTouchable onPress={clickDeletePage}>
             <Message>삭제</Message>
-          </TouchableOpacity>
-          <TouchableOpacity>
+          </CustomTouchable>
+          <CustomTouchable>
             <DeleteButton>취소</DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ConfirmationModal>
       )}
     </Container>

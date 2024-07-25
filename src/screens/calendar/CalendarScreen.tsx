@@ -15,6 +15,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
+import {RefreshControl} from 'react-native';
 
 export interface IPicker {
   label: string;
@@ -47,6 +48,7 @@ const CalendarScreen = () => {
   // 모임 선택 selector - value
   const [selectedValue, setSelectedValue] = useState<string>('-1');
   const [openLoading, setOpenLoading] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState(false);
   const {
     data: exhInfoOfDays,
     isLoading,
@@ -69,7 +71,7 @@ const CalendarScreen = () => {
       if (tabIdentifierInfo.tab !== 'calendar') {
         updateTab('calendar');
       }
-      refetch();
+      setRefreshing(true);
     }
   }, [isFocused, changeMonth, selectedValue]);
 
@@ -135,35 +137,55 @@ const CalendarScreen = () => {
     return 'black';
   };
 
+  const handleRefetch = async () => {
+    await refetch().then(() => {
+      setRefreshing(false);
+    });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
+
   return (
-    <Container>
-      <CustomCalendar
-        initDate={dateFromExhInfo ?? dateToString(new Date())}
-        onSelectedDate={setSelectedDate}
-        markedDates={markedDates}
-        setChangeMonth={setChangeMonth}>
-        <GatheringSelector
-          handleSelectorItems={setSelectorItems}
-          selectorItems={selectorItems}
-          handleSelectedValue={setSelectedValue}
-          selectedValue={selectedValue}
-        />
-      </CustomCalendar>
-      <ExhListOfDayInCalendar
-        selectedDate={selectedDate}
-        gatherId={Number(selectedValue)}
-        selectorItems={selectorItems}
-        exhListOfDay={exhInfoOfDays}
-      />
-      {openLoading && <LoadingModal message="일정 조회 중 :)" />}
-    </Container>
+    <RefreshView
+      data={['']}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+      }
+      renderItem={({}) => (
+        <>
+          <CustomCalendar
+            initDate={dateFromExhInfo ?? dateToString(new Date())}
+            onSelectedDate={setSelectedDate}
+            markedDates={markedDates}
+            setChangeMonth={setChangeMonth}>
+            <GatheringSelector
+              handleSelectorItems={setSelectorItems}
+              selectorItems={selectorItems}
+              handleSelectedValue={setSelectedValue}
+              selectedValue={selectedValue}
+              handleRefetch={handleRefetch}
+              refreshing={refreshing}
+            />
+          </CustomCalendar>
+          <ExhListOfDayInCalendar
+            selectedDate={selectedDate}
+            gatherId={Number(selectedValue)}
+            selectorItems={selectorItems}
+            exhListOfDay={exhInfoOfDays}
+          />
+          {/* {openLoading && <LoadingModal message="일정 조회 중 :)" />} */}
+        </>
+      )}
+    />
   );
 };
 
 export default CalendarScreen;
 
 /** style */
-const Container = styled.View`
+const RefreshView = styled.FlatList`
   flex: 1;
   flex-direction: column;
   background-color: ${BACK_COLOR};

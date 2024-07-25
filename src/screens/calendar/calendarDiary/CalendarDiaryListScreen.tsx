@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {useNavigation} from '@react-navigation/native';
@@ -24,6 +23,7 @@ import {
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const CalendarDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -55,13 +55,13 @@ const CalendarDiaryListScreen = () => {
       {/* header */}
       <BackView line={false}>
         <ButtonView>
-          <TouchableOpacity onPress={onPressButton}>
+          <CustomTouchable onPress={onPressButton}>
             <WriteDiaryButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
           {showOptionBar && (
-            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <CustomTouchable onPress={() => setIsModalOpen(true)}>
               <OptionBarIcon />
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
         </ButtonView>
       </BackView>
@@ -82,16 +82,16 @@ const CalendarDiaryListScreen = () => {
       />
       {isModalOpen && (
         <ConfirmationModal handleCloseModal={() => setIsModalOpen(false)}>
-          <TouchableOpacity onPress={clickUpdatePage}>
+          <CustomTouchable onPress={clickUpdatePage}>
             <Message>수정</Message>
-          </TouchableOpacity>
+          </CustomTouchable>
           <SeperateLine />
-          <TouchableOpacity onPress={clickDeletePage}>
+          <CustomTouchable onPress={clickDeletePage}>
             <Message>삭제</Message>
-          </TouchableOpacity>
-          <TouchableOpacity>
+          </CustomTouchable>
+          <CustomTouchable>
             <DeleteButton>취소</DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ConfirmationModal>
       )}
     </Container>

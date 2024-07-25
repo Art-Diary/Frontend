@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import styled from 'styled-components/native';
 import {
   heightSizePercentage as hp,
@@ -12,6 +12,7 @@ import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
 import {CameraButtonIcon} from '~/components/common/icon';
 import {ImageType} from './WriteMyDiaryContentsScreen';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 /**
  * TODO
@@ -54,9 +55,9 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   };
 
   const handlePhoto = () => (
-    <TouchableOpacity onPress={() => showPhoto(editorRef, setImages, images)}>
+    <CustomTouchable onPress={() => showPhoto(editorRef, setImages, images)}>
       <CameraButtonIcon />
-    </TouchableOpacity>
+    </CustomTouchable>
   );
 
   const changeFontColor = (color: string) => {
@@ -67,7 +68,11 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   };
 
   const handleFontColor = () => (
-    <FontColorTouch color={fontColor} onPress={() => setColorVisible(true)} />
+    <FontColorTouch
+      activeOpacity={0.6}
+      color={fontColor}
+      onPress={() => setColorVisible(true)}
+    />
   );
 
   const initialCSSText = {
@@ -98,6 +103,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
         <Contents isOverContent>
           {colors.map(color => (
             <FontColorTouch
+              activeOpacity={0.6}
               key={color}
               color={color}
               onPress={() => changeFontColor(color)}

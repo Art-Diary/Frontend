@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {useNavigation} from '@react-navigation/native';
@@ -28,6 +27,7 @@ import {useFetchMyDiaryList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import DiaryList from '~/components/diary/DiaryList';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 const MyDiaryListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -77,13 +77,13 @@ const MyDiaryListScreen = () => {
       {/* header */}
       <BackView line={false}>
         <ButtonView>
-          <TouchableOpacity onPress={onPressButton}>
+          <CustomTouchable onPress={onPressButton}>
             <WriteDiaryButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
           {showOptionBar && (
-            <TouchableOpacity onPress={() => setIsModalOpen(true)}>
+            <CustomTouchable onPress={() => setIsModalOpen(true)}>
               <OptionBarIcon />
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
         </ButtonView>
       </BackView>
@@ -113,16 +113,16 @@ const MyDiaryListScreen = () => {
       )}
       {isModalOpen && (
         <ConfirmationModal handleCloseModal={() => setIsModalOpen(false)}>
-          <TouchableOpacity onPress={clickUpdatePage}>
+          <CustomTouchable onPress={clickUpdatePage}>
             <Message>수정</Message>
-          </TouchableOpacity>
+          </CustomTouchable>
           <SeperateLine />
-          <TouchableOpacity onPress={clickDeletePage}>
+          <CustomTouchable onPress={clickDeletePage}>
             <Message>삭제</Message>
-          </TouchableOpacity>
-          <TouchableOpacity>
+          </CustomTouchable>
+          <CustomTouchable>
             <DeleteButton>취소</DeleteButton>
-          </TouchableOpacity>
+          </CustomTouchable>
         </ConfirmationModal>
       )}
       {isLoadingOpen && (

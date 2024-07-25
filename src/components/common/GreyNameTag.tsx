@@ -26,7 +26,7 @@ const GreyNameTag: React.FC<TagProps> = ({
 }) => {
   var height = rw(13.2);
   if (login) {
-    height = rw(12);
+    height = rw(13);
   }
   return (
     <Container>
@@ -42,7 +42,7 @@ const GreyNameTag: React.FC<TagProps> = ({
         />
       )}
       <WordContainer>
-        <TouchView onPress={handleTouch}>
+        <TouchView activeOpacity={0.6} onPress={handleTouch}>
           {children}
           <TitleText>{content}</TitleText>
         </TouchView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {
@@ -22,6 +22,7 @@ import {
   FONT_NAME,
   ITEM_BORDER_WIDTH,
 } from '~/components/common/style';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface CalendarProps {
   selectedDate: string;
@@ -90,9 +91,9 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
           <SelectedDateText>
             {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
           </SelectedDateText>
-          <TouchableOpacity onPress={onPressAddMyExh}>
+          <CustomTouchable onPress={onPressAddMyExh}>
             <AddMyExhButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         </SelectedDateView>
       </SelectedDateWrapper>
       {/* 전시회 리스트 */}
@@ -106,7 +107,7 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
             : []
         }
         renderItem={({item, index}) => (
-          <TouchableOpacity onPress={() => onPressExhItem(item)}>
+          <CustomTouchable onPress={() => onPressExhItem(item)}>
             <ExhItemView
               exhInfo={{...item}}
               noLine={
@@ -126,7 +127,7 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
                 </GatherWrapper>
               )}
             </ExhItemView>
-          </TouchableOpacity>
+          </CustomTouchable>
         )}
       />
     </>

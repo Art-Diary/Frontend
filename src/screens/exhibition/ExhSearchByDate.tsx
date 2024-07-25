@@ -1,4 +1,4 @@
-import {TouchableOpacity, Modal} from 'react-native';
+import {Modal} from 'react-native';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
@@ -15,6 +15,7 @@ import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {BackButtonIcon} from '~/components/common/icon';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface ExhSearchByDateProps {
   isVisible: boolean;
@@ -44,9 +45,9 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <Container>
         <Backview>
-          <TouchableOpacity onPress={onClose}>
+          <CustomTouchable onPress={onClose}>
             <BackButtonIcon />
-          </TouchableOpacity>
+          </CustomTouchable>
         </Backview>
         <ContentView>
           <TextView>{'날짜 선택'}</TextView>
@@ -61,9 +62,9 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
             <TextView>{selectedDate}</TextView>
           </DateView>
         </ContentView>
-        <TouchableOpacity onPress={onPressDate}>
+        <CustomTouchable onPress={onPressDate}>
           <CompleteButton>{'선택 완료'}</CompleteButton>
-        </TouchableOpacity>
+        </CustomTouchable>
       </Container>
     </Modal>
   );

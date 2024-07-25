@@ -5,7 +5,7 @@ import {
   responseFont as rf,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {TouchableOpacity} from 'react-native';
+import {RefreshControl, ScrollView} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchDiaryListForExh} from '~/api/queries/exhibition';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
@@ -18,6 +18,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 type RootStackParamList = {
   ExhToMoreReview: {exhId: number};
@@ -50,13 +51,7 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
   } = useFetchDiaryListForExh(exhId);
   const [total, setTotal] = useState<number>(0);
   const [numPages, setNumPages] = useState<number>(0);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTotal(diaryData.length);
-      setNumPages(Math.ceil(diaryData.length / limit));
-    }
-  }, [isSuccess, diaryData]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     //numPage 변경 후, 변경
@@ -65,9 +60,11 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
   }, [numPages]);
 
   useEffect(() => {
-    //기록들 평균
-    var tmp: number = 0;
     if (isSuccess) {
+      setTotal(diaryData.length);
+      setNumPages(Math.ceil(diaryData.length / limit));
+      //기록들 평균
+      var tmp: number = 0;
       diaryData.map((item: any) => (tmp += item.rate));
       console.log(
         '기록들 평균 확인',
@@ -86,6 +83,22 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
       updateVisitedExhId(exhId);
     }
   }, [isSuccess, diaryData]);
+
+  useEffect(() => {
+    if (refreshing) {
+      handleRefetch();
+    }
+  }, [refreshing]);
+
+  const handleRefetch = async () => {
+    await refetch().then(() => {
+      setRefreshing(false);
+    });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
 
   const changeDateType = (visitDate: string | undefined) => {
     if (visitDate === undefined) return '방문날짜모름';
@@ -118,64 +131,71 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
         </AvgText>
       </AvgRateView>
       <ReView>
-        {diaryData &&
-          diaryData
-            .slice(offset, offset + limit)
-            .map((item: any, index: number) => (
-              <>
-                <ReViewList
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate('ExhToDiary', {
-                      diary: item,
-                    })
-                  }>
-                  <ReviewImage
-                    source={{uri: `${item.thumbnail ?? DEFAULT_IMAGE}`}}
-                    resizeMode="cover"
-                    alt={'이미지 읽기 실패'}
-                  />
-                  <ReviewTextView>
-                    <ReviewTitle>
-                      {'"'}
-                      {item.title}
-                      {'"'}
-                    </ReviewTitle>
-                    <TextView>
-                      <SubTextView key={index}>
-                        <ReviewName>{item.nickname}</ReviewName>
-                        <ReviewRate>{showRate(item.rate)}</ReviewRate>
-                      </SubTextView>
-                      <ReviewDate>{changeDateType(item.writeDate)}</ReviewDate>
-                    </TextView>
-                  </ReviewTextView>
-                </ReViewList>
-                <BorderView />
-              </>
-            ))}
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }>
+          {diaryData &&
+            diaryData
+              .slice(offset, offset + limit)
+              .map((item: any, index: number) => (
+                <ReViewWrapper key={index}>
+                  <ReViewList
+                    activeOpacity={0.6}
+                    key={index}
+                    onPress={() =>
+                      navigation.navigate('ExhToDiary', {
+                        diary: item,
+                      })
+                    }>
+                    <ReviewImage
+                      source={{uri: `${item.thumbnail ?? DEFAULT_IMAGE}`}}
+                      resizeMode="cover"
+                      alt={'이미지 읽기 실패'}
+                    />
+                    <ReviewTextView>
+                      <ReviewTitle>
+                        {'"'}
+                        {item.title}
+                        {'"'}
+                      </ReviewTitle>
+                      <TextView>
+                        <SubTextView key={index}>
+                          <ReviewName>{item.nickname}</ReviewName>
+                          <ReviewRate>{showRate(item.rate)}</ReviewRate>
+                        </SubTextView>
+                        <ReviewDate>
+                          {changeDateType(item.writeDate)}
+                        </ReviewDate>
+                      </TextView>
+                    </ReviewTextView>
+                  </ReViewList>
+                </ReViewWrapper>
+              ))}
+        </ScrollView>
       </ReView>
       <PageNumberView>
-        <TouchableOpacity
+        <CustomTouchable
           onPress={() => setPage(page - 1)}
           disabled={page === 1}>
           <PageNumber>{'<'}</PageNumber>
-        </TouchableOpacity>
+        </CustomTouchable>
 
         {numPagesArr.map((item, index) => (
-          <TouchableOpacity key={index + 1} onPress={() => setPage(index + 1)}>
+          <CustomTouchable key={index + 1} onPress={() => setPage(index + 1)}>
             {index + 1 == page ? (
               <CurrentPageNumber>{index + 1}</CurrentPageNumber>
             ) : (
               <PageNumber>{index + 1}</PageNumber>
             )}
-          </TouchableOpacity>
+          </CustomTouchable>
         ))}
 
-        <TouchableOpacity
+        <CustomTouchable
           onPress={() => setPage(page + 1)}
           disabled={page === numPages}>
           <PageNumber>{'>'}</PageNumber>
-        </TouchableOpacity>
+        </CustomTouchable>
       </PageNumberView>
     </Container>
   );
@@ -222,11 +242,17 @@ const AvgText = styled.Text`
 `;
 
 // review list
+const ReViewWrapper = styled.View`
+  padding-top: ${wp(1)}px;
+  padding-bottom: ${wp(1)}px;
+  border-bottom-color: ${LIGHT_GREY};
+  border-bottom-width: ${wp(0.3)}px;
+`;
+
 const ReView = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  gap: ${wp(2)}px;
 `;
 
 const ReViewList = styled.TouchableOpacity`
@@ -236,12 +262,6 @@ const ReViewList = styled.TouchableOpacity`
   padding-top: ${wp(1.4)}px;
   padding-bottom: ${wp(1.4)}px;
   gap: ${wp(2)}px;
-`;
-
-const BorderView = styled.View`
-  width: 100%;
-  background-color: ${LIGHT_GREY};
-  height: ${wp(0.3)}px;
 `;
 
 const ReviewImage = styled.Image`

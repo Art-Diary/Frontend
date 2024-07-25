@@ -1,5 +1,4 @@
 import React, {ReactNode, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
 import {
@@ -10,6 +9,7 @@ import {
 import {dateToString} from '~/utils/Date';
 import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
+import CustomTouchable from './CustomTouchable';
 
 interface MarkedType {
   date: string;
@@ -170,7 +170,10 @@ const CustomCalendar: React.FC<CalendarProps> = ({
           isToday = itemDate === todayStr ? true : false;
         }
         return (
-          <CellTouchable key={rowIndex} onPress={() => handleDayPress(item)}>
+          <CellTouchable
+            key={rowIndex}
+            activeOpacity={0.6}
+            onPress={() => handleDayPress(item)}>
             <Circle isToday={isToday} isTouched={itemDate === selectedDate}>
               <CellText isTouched={itemDate === selectedDate}>
                 {item.day}
@@ -210,18 +213,18 @@ const CustomCalendar: React.FC<CalendarProps> = ({
     <Container>
       <CalHeader>
         <DateWrapper>
-          <TouchableOpacity onPress={goToPreviousMonth}>
+          <CustomTouchable onPress={goToPreviousMonth}>
             <ArrowLabel>&lt;</ArrowLabel>
-          </TouchableOpacity>
+          </CustomTouchable>
           <View style={{flexDirection: 'row'}}>
             {currentDate.getFullYear() !== new Date().getFullYear() && (
               <MonthLabel>{currentDate.getFullYear()}년 </MonthLabel>
             )}
             <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
           </View>
-          <TouchableOpacity onPress={goToNextMonth}>
+          <CustomTouchable onPress={goToNextMonth}>
             <ArrowLabel>&gt;</ArrowLabel>
-          </TouchableOpacity>
+          </CustomTouchable>
         </DateWrapper>
         {children}
       </CalHeader>

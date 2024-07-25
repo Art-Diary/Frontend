@@ -1,10 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Modal, Pressable, TouchableOpacity} from 'react-native';
+import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {LoginUserParams} from '~/api/auth';
 import {useSeparateSocialLogin, useUniteSocialLogin} from '~/api/queries/auth';
+import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
@@ -129,14 +130,14 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
           </MessageView>
           <TouchView>
             <ButtonDetailSection>
-              <TouchableOpacity onPress={() => socialLogin(false)}>
+              <CustomTouchable onPress={() => socialLogin(false)}>
                 <ButtonView>분리</ButtonView>
-              </TouchableOpacity>
+              </CustomTouchable>
             </ButtonDetailSection>
             <ButtonDetailSection>
-              <TouchableOpacity onPress={() => socialLogin(true)}>
+              <CustomTouchable onPress={() => socialLogin(true)}>
                 <ButtonView mainButton>통합</ButtonView>
-              </TouchableOpacity>
+              </CustomTouchable>
             </ButtonDetailSection>
           </TouchView>
         </Contents>

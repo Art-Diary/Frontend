@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '../../../components/common/modal/LoadingModal';
@@ -16,6 +16,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface SearchNewMateListProps {
   searchKeyword: string;
@@ -67,7 +68,7 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
         <FlatList
           data={mateList}
           renderItem={({item, index}) => (
-            <TouchableOpacity onPress={() => pressItem(item)}>
+            <CustomTouchable onPress={() => pressItem(item)}>
               <UserInfoWrapper>
                 <NameTag isSelected={item.userId === selectedMate}>
                   <UserInfo>
@@ -89,7 +90,7 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
                   </UserInfo>
                 </NameTag>
               </UserInfoWrapper>
-            </TouchableOpacity>
+            </CustomTouchable>
           )}
         />
       )}
