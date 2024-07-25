@@ -35,9 +35,9 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
         params: undefined,
       });
     } else {
+      resetWriteInfo();
       updateIsUpdate(false);
       updateInGathering(false, null);
-      resetWriteInfo();
       navigation.navigate('AddMyVisitDateRoutes');
     }
   };

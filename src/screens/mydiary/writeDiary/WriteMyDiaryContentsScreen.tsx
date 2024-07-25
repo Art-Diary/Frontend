@@ -11,13 +11,13 @@ import {
   useWriteMyDiaryActions,
   useWriteMyDiaryInfo,
 } from '~/zustand/mydiary/writeMyDiary';
-import {changeDotToHyphen, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import CustomDiaryEditor from './CustomDiaryEditor';
 import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {
@@ -78,6 +78,7 @@ const WriteMyDiaryContentsScreen = () => {
       setIsLoadingOpen(false);
     }
     if (isSuccessCreate || isSuccessUpdate) {
+      const diaryId = writeMyDiaryInfo.diaryId;
       if (isSuccessCreate) {
         showToast('다이어리 작성 완료!');
       } else if (isSuccessUpdate) {
@@ -102,7 +103,7 @@ const WriteMyDiaryContentsScreen = () => {
       } else if (tabIdentifier.tab === 'exhibition') {
         const data = resData.data;
         const filteredData = data.filter(
-          (value: any) => value.diaryId === writeMyDiaryInfo.diaryId,
+          (value: any) => value.diaryId === diaryId,
         )[0];
         navigation.navigate('ExhToDiary', {diary: filteredData});
       }

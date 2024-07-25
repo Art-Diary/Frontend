@@ -36,9 +36,9 @@ const GatheringDiaryListScreen = () => {
   const [isUpdateClicked, setIsUpdateClicked] = useState<boolean>(false);
 
   const onPressButton = () => {
+    resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(true, params.gatherId);
-    resetWriteInfo();
     navigation.navigate('AddMyVisitDateRoutes');
   };
 

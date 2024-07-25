@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {getDateDay} from '~/utils/Date';
+import {getDateDay} from '~/utils/date';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';

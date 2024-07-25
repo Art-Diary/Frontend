@@ -3,7 +3,7 @@ import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import CustomCalendar from '~/components/common/CustomCalendar';
-import {changeDotToHyphen, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,

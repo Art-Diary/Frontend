@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import AddVisitDate from '~/components/diary/AddVisitDate';
-import {changeDotToHyphen, dateToString} from '~/utils/Date';
+import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useAddNewDateOfExhGathering} from '~/api/queries/gathering';

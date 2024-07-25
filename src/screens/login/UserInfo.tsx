@@ -20,26 +20,25 @@ export const UserInfo = () => {
 
   useEffect(() => {
     if (isFocused) {
-      refetch();
+      refetch().then(result => {
+        const res = result.data;
+
+        console.log(res);
+        updateAuthInfo({
+          userId: res.userId,
+          nickname: res.nickname,
+          email: res.email,
+          profile: res.profile,
+          favoriteArt: res.favoriteArt,
+          alarm1: res.alarm1,
+          alarm2: res.alarm2,
+          alarm3: res.alarm3,
+          providerType: res.providerType,
+        });
+        navigation.navigate('Main');
+      });
     }
   }, [isFocused]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      updateAuthInfo({
-        userId: userInfo.userId,
-        nickname: userInfo.nickname,
-        email: userInfo.email,
-        profile: userInfo.profile,
-        favoriteArt: userInfo.favoriteArt,
-        alarm1: userInfo.alarm1,
-        alarm2: userInfo.alarm2,
-        alarm3: userInfo.alarm3,
-        providerType: userInfo.providerType,
-      });
-      navigation.navigate('Main');
-    }
-  }, [isSuccess, updateAuthInfo, userInfo, navigation]);
 
   if (isLoading) {
     return <LoadingModal message={'사용자 정보 조회 중 :)'} />;

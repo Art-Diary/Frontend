@@ -1,35 +1,28 @@
-import {Alert, Platform} from 'react-native';
+import {Alert, Linking} from 'react-native';
 import {
   Asset,
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import {PERMISSIONS, RESULTS, check, request} from 'react-native-permissions';
 import RNFS from 'react-native-fs';
 import {RichEditor} from 'react-native-pell-rich-editor';
 import {ImageType} from './WriteMyDiaryContentsScreen';
-
-const requestCameraPermission = async () => {
-  if (Platform.OS === 'android') {
-    check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE)
-      .then(result => {
-        if (result === RESULTS.DENIED || result === RESULTS.GRANTED) {
-          return request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-        } else {
-          console.log(result);
-          throw new Error('카메라 지원 안 함');
-        }
-      })
-      .catch(console.error);
-  }
-};
+import {showToast} from '~/components/common/modal/toastConfig';
+import {requestCameraPermission} from '~/utils/photo';
 
 export const showPhoto = async (
   editorRef: React.RefObject<RichEditor>,
   setImages: (info: ImageType[]) => void,
   images: ImageType[],
 ) => {
-  await requestCameraPermission();
+  const result = await requestCameraPermission();
+
+  if (!result) {
+    Linking.openSettings().catch(() => {
+      showToast('설정으로 이동할 수 없습니다.');
+    });
+    return;
+  }
 
   const option: ImageLibraryOptions = {
     mediaType: 'photo',

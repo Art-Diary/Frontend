@@ -6,6 +6,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {DASH_WIDTH, FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {checkBlankInKeyword} from '~/utils/keyword';
 
 interface SayingProps {
   saying: string;
@@ -20,7 +21,7 @@ const SayingInfo: React.FC<SayingProps> = ({saying, exhName}) => {
       <SayingContentView>
         <ContentText numberOfLines={8} haveSaying={saying}>
           <QuoteText>"</QuoteText>
-          {saying ?? '작성해주세요.'}
+          {!saying || checkBlankInKeyword(saying) ? '작성해주세요.' : saying}
           <QuoteText>"</QuoteText>
         </ContentText>
       </SayingContentView>

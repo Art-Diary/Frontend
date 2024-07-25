@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {dateToString} from '~/utils/Date';
+import {dateToString} from '~/utils/date';
 import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
 import CustomTouchable from './CustomTouchable';

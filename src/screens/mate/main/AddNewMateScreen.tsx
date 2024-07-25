@@ -10,7 +10,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchNewMateList from './SearchNewMateList';
 import {useAddNewMate} from '~/api/queries/mate';
-import {checkBlankInKeyword} from '~/utils/CheckKeyword';
+import {checkBlankInKeyword} from '~/utils/keyword';
 import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,

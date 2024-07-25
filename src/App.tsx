@@ -13,7 +13,7 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
 import MyExhSearchScreen from './screens/mydiary/MyExhSearchScreen';
@@ -40,7 +40,6 @@ import {RootStackParamList} from './utils/stackTypes';
 import SettingRoutes from './routes/setting/SettingRoutes';
 import messaging from '@react-native-firebase/messaging';
 import pushNoti from './utils/pushNoti';
-import notifee from '@notifee/react-native';
 import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox, PermissionsAndroid, Platform} from 'react-native';
@@ -58,42 +57,68 @@ LogBox.ignoreAllLogs();
 export default function App() {
   const hasAndroidPermission = async () => {
     //외부 스토리지를 읽고 쓰는 권한 가져오기
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
+    const permissionRead = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+    const permissionNoti = PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS;
 
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
+    const hasPermissionRead = await PermissionsAndroid.check(permissionRead);
+    const hasPermissionNoti = await PermissionsAndroid.check(permissionNoti);
+
+    const sdkVersion = Number(Platform.Version);
+
+    if (hasPermissionRead || hasPermissionNoti) {
       return true;
     }
-
-    const status = await PermissionsAndroid.request(permission);
-    return status === 'granted';
+    if (sdkVersion >= 33) {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      ).then(result => {
+        if (result === 'granted') {
+          console.log('POST_NOTIFICATIONS is granted.');
+        } else {
+          console.log('POST_NOTIFICATIONS is denied.');
+        }
+      });
+    }
+    if (Platform.OS === 'android') {
+      if (sdkVersion >= 33) {
+        await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+        ).then(result => {
+          if (result === 'granted') {
+            console.log('READ_MEDIA_IMAGES is granted.');
+          } else {
+            console.log('READ_MEDIA_IMAGES is denied.');
+          }
+        });
+      } else {
+        await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        ).then(result => {
+          if (result === 'granted') {
+            console.log('READ_EXTERNAL_STORAGE is granted.');
+          } else {
+            console.log('READ_EXTERNAL_STORAGE is denied.');
+          }
+        });
+      }
+    }
+    return true;
   };
 
-  const getPhotoWithPermission = async () => {
+  const getPermission = async () => {
     if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
       return;
     }
   };
 
   useEffect(() => {
-    getPhotoWithPermission();
-  }, []);
+    getPermission();
 
-  useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       pushNoti.displayNoti(remoteMessage);
     });
 
     return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    requestAboutAlarm();
-  }, []);
-
-  const requestAboutAlarm = useCallback(async () => {
-    const settings = await notifee.requestPermission();
-    const enabled = await messaging().hasPermission();
   }, []);
 
   return (
