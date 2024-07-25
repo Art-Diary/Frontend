@@ -1,29 +1,29 @@
 import React from 'react';
-import {RichEditor} from 'react-native-pell-rich-editor';
 import styled from 'styled-components/native';
-import FontFamilyStylesheet from '~/assets/fonts/stylesheet';
 import {DEFAULT_TEXT} from '../common/colors';
+import {StyleSheet} from 'react-native';
+import RenderHtml from 'react-native-render-html';
+import {
+  widthSizePercentage as wp,
+  responseFont as rf,
+} from '~/components/common/ResponsiveSize';
+import {FONT_NAME} from '../common/style';
 
 interface ContentsProps {
   contents: string;
 }
 
 const ContentsInfo: React.FC<ContentsProps> = ({contents}) => {
-  const initialCSSText = {
-    initialCSSText: `${FontFamilyStylesheet}`,
-    backgroundColor: 'white',
-    contentCSSText: `font-family: omyu_pretty; font-size: 24px; color: ${DEFAULT_TEXT}; height: 100%;`,
-  };
-
   return (
     <Container>
       {/* 내용 */}
       <ContentWrapper>
         <ContentScroll>
-          <RichEditor
-            editorStyle={initialCSSText}
-            initialContentHTML={contents} // 저장된 내용을 설정하여 출력
-            disabled // 수정 불가능하도록 설정
+          <RenderHtml
+            systemFonts={[FONT_NAME]}
+            baseStyle={styles.render}
+            contentWidth={wp(93)}
+            source={{html: contents}}
           />
         </ContentScroll>
       </ContentWrapper>
@@ -49,3 +49,13 @@ const ContentScroll = styled.ScrollView`
   height: 100%;
   width: 100%;
 `;
+
+const styles = StyleSheet.create({
+  render: {
+    fontFamily: FONT_NAME,
+    color: DEFAULT_TEXT,
+    fontSize: rf(17),
+    paddingHorizontal: wp(2),
+    paddingVertical: wp(1.5),
+  },
+});

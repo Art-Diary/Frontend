@@ -238,13 +238,6 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     };
   }, [handlePressBack]);
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
-    };
-  }, [handlePressBack]);
-
   if (isError) {
     return <ErrorMessageView message={'에러 발생 ;('} />;
   }

@@ -11,11 +11,12 @@ import {showPhoto} from './GetPhoto';
 import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
 import {CameraButtonIcon} from '~/components/common/icon';
+import {ImageType} from './WriteMyDiaryContentsScreen';
 
 /**
  * TODO
  * - 초기 로딩에는 사진 추가 시 스크롤이 안되고, 재로딩하면 스크롤이 된다. => 화면 높이 문제?
- * - 사진 첨부하고 위치 이런거 저장하고 표시했다가 보여주기. (일단 디비 저장)
+ * - [x] 사진 첨부하고 위치 이런거 저장하고 표시했다가 보여주기. (일단 디비 저장)
  * - 색상이 제대로 적용되도록 수정
  */
 
@@ -32,11 +33,15 @@ const colors = [
 interface EditorProps {
   handleEditorContent: (content: string) => void;
   editorContent: string;
+  setImages: (imageInfo: ImageType[]) => void;
+  images: ImageType[];
 }
 
 const CustomDiaryEditor: React.FC<EditorProps> = ({
   handleEditorContent,
   editorContent,
+  setImages,
+  images,
 }) => {
   const editorRef = useRef<RichEditor>(null);
   const scrollViewRef = useRef(null);
@@ -49,7 +54,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   };
 
   const handlePhoto = () => (
-    <TouchableOpacity onPress={() => showPhoto(editorRef)}>
+    <TouchableOpacity onPress={() => showPhoto(editorRef, setImages, images)}>
       <CameraButtonIcon />
     </TouchableOpacity>
   );

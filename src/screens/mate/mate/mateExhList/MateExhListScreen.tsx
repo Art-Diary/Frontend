@@ -11,14 +11,9 @@ import {
   BACK_COLOR,
   DEFAULT_TEXT,
   LIGHT_GREY,
-  MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
-import {
-  DASH_WIDTH,
-  FONT_NAME,
-  ITEM_BORDER_WIDTH,
-} from '~/components/common/style';
+import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 
 const MateExhListScreen = () => {
@@ -40,7 +35,7 @@ const MateExhListScreen = () => {
         {/* 메이트 정보 */}
         <UserWrapper>
           <UserInfo>
-            <ProfileWrapper isPresent={mateInfo.mateInfo.profile}>
+            <ProfileWrapper>
               <Profile
                 source={{uri: `${mateInfo.mateInfo.profile ?? DEFAULT_IMAGE}`}}
                 resizeMode="cover"
@@ -97,20 +92,13 @@ const UserInfo = styled.View`
   align-items: center;
 `;
 
-interface ProfileWrapperProps {
-  isPresent: boolean;
-}
-
-const ProfileWrapper = styled.View<ProfileWrapperProps>`
-  border-color: ${MAIN_COLOR};
+const ProfileWrapper = styled.View`
   border-radius: ${wp(50)}px;
   align-items: center;
   justify-content: center;
   width: ${wp(10)}px;
   height: ${wp(10)}px;
   overflow: hidden;
-  border-width: ${(props: ProfileWrapperProps) =>
-    props.isPresent ? `0px` : `${ITEM_BORDER_WIDTH}px`};
 `;
 
 const Profile = styled.Image`
