@@ -30,7 +30,7 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 
 // [WORD_LIMIT]
 const LeaveScreen = () => {
-  const maxInputLength = 10;
+  const maxInputLength = 100;
   const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [reasonKeyword, setReasonKeyword] = useState<string>('');

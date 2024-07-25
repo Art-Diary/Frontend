@@ -47,6 +47,8 @@ import {requestCameraPermission} from '~/utils/photo';
 
 // [WORD_LIMIT]
 const WriteMyDiaryInfoScreen = () => {
+  const titleMaxInputLength = 20;
+  const sayingMaxInputLength = 60;
   const navigation = useNavigation<RootStackNavigationProp>();
   const [titleKeyword, setTitleKeyword] = useState<string>('');
   const [starNum, setStarNum] = useState(0);
@@ -139,12 +141,18 @@ const WriteMyDiaryInfoScreen = () => {
       <BackView title="기록 작성" line={true} children={null} />
       <ContentsContainer>
         {/* 기록 정보 작성 */}
-        <WriteTitle
-          placeholderTextColor="#D3D3D3"
-          placeholder={'제목'}
-          onChangeText={onChangeTitle}
-          value={titleKeyword}
-        />
+        <WriteTitleWrapper>
+          <WriteTitle
+            maxLength={titleMaxInputLength}
+            placeholderTextColor="#D3D3D3"
+            placeholder={'제목'}
+            onChangeText={onChangeTitle}
+            value={titleKeyword}
+          />
+          <CountText>
+            {titleKeyword.length} / {titleMaxInputLength}
+          </CountText>
+        </WriteTitleWrapper>
         <SecondSection>
           <HalfSection>
             <SectionName>별점</SectionName>
@@ -174,10 +182,18 @@ const WriteMyDiaryInfoScreen = () => {
           </HalfSection>
         </SecondSection>
         <SayingSection>
-          <SectionName>한마디</SectionName>
+          <CountWrapper>
+            <SectionName>한마디</SectionName>
+            <CountText>
+              ( {sayingKeyword ? sayingKeyword.length : 0} /{' '}
+              {sayingMaxInputLength} )
+            </CountText>
+          </CountWrapper>
           <WriteSayingSection>
             <SectionName>"</SectionName>
             <WriteSaying
+              multiline={true}
+              maxLength={sayingMaxInputLength}
               placeholderTextColor={LIGHT_GREY}
               placeholder={!sayingKeyword ? '한마디' : ''}
               value={sayingKeyword}
@@ -250,11 +266,7 @@ const WriteTitle = styled.TextInput`
   font-size: ${rf(16)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  border-width: ${ITEM_BORDER_WIDTH}px;
-  border-color: ${LIGHT_GREY};
-  border-radius: ${BUTTON_RADIUS}px;
-  padding-left: ${wp(2.9)}px;
-  padding-right: ${wp(2.9)}px;
+  width: 80%;
 `;
 
 const SecondSection = styled.View`
@@ -339,4 +351,28 @@ const NextButton = styled.Text<NextButtonProps>`
   color: white;
   font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
+`;
+
+const WriteTitleWrapper = styled.View`
+  flex-direction: row;
+  border-width: ${wp(0.3)}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${wp(2)}px;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: ${wp(2.8)}px;
+  padding-right: ${wp(2.8)}px;
+`;
+
+const CountText = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MIDDLE_GREY};
+  text-align: center;
+`;
+
+const CountWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${wp(1)}px;
 `;

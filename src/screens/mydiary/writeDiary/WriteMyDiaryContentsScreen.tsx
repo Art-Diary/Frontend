@@ -35,7 +35,6 @@ export type ImageType = {
   uri: string;
 };
 
-// [WORD_LIMIT]
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [editorContent, setEditorContent] = useState('');
