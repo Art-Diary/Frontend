@@ -26,7 +26,6 @@ interface Like {
 
 const EditFavoriteScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [deleteList, setDeleteList] = useState<number[]>([]);
   const [likeList, setLikeList] = useState<Like[]>([]);
   const exhList = useFavoriteInfoList();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
@@ -35,7 +34,7 @@ const EditFavoriteScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useDeleteLike(deleteList);
+  } = useDeleteLike([]);
 
   useEffect(() => {
     var list: Like[] = [];
@@ -45,12 +44,6 @@ const EditFavoriteScreen = () => {
     }
     setLikeList(list);
   }, [exhList]);
-
-  useEffect(() => {
-    if (deleteList.length !== 0) {
-      deleteFavoriteList();
-    }
-  }, [deleteList]);
 
   useEffect(() => {
     if (isError) {
@@ -97,7 +90,7 @@ const EditFavoriteScreen = () => {
         result.push(likeList[i].exhId);
       }
     }
-    setDeleteList(result);
+    deleteFavoriteList(result);
     if (result.length === 0) {
       handleSuccess(true);
     }

@@ -1,5 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useQuery, useMutation, useQueryClient} from 'react-query';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+} from 'react-query';
 import {
   fetchSearchExh,
   fetchExhDetailInfo,
@@ -108,11 +113,13 @@ export const useFetchDiaryListForExh = (exhId: number) =>
     select: (res: any) => res.data,
   });
 
-export const useAddLike = (exhId: number) => {
+export const useAddLike = (
+  exhId: number,
+): UseMutationResult<any, any, number, unknown> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => fetchAddLike(exhId),
+  return useMutation<any, any, number, unknown>({
+    mutationFn: (exhId: number) => fetchAddLike(exhId),
     onError: err => {
       console.log(err);
       console.log('[AddLikeExhibition] error fetch favorite');
@@ -126,11 +133,14 @@ export const useAddLike = (exhId: number) => {
   });
 };
 
-export const useDeleteLike = (favoriteExhsList: number[]) => {
+export const useDeleteLike = (
+  favoriteExhsList: number[],
+): UseMutationResult<any, any, number[], unknown> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => fetchDeleteLike(favoriteExhsList),
+  return useMutation<any, any, number[], unknown>({
+    mutationFn: (favoriteExhsList: number[]) =>
+      fetchDeleteLike(favoriteExhsList),
     onError: err => {
       console.log(err);
       console.log('[DeleteLikeExhibition] error fetch delete favorite');

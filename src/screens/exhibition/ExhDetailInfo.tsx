@@ -1,46 +1,35 @@
 import React, {useEffect, useState} from 'react';
-import {BackHandler, Linking, Alert, RefreshControl} from 'react-native';
+import {Linking, Alert, RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {showToast} from '~/components/common/modal/toastConfig';
-import {RouteProp, useNavigation} from '@react-navigation/native';
+import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {
   useFetchDiaryListForExh,
   useFetchExhDetailInfo,
 } from '~/api/queries/exhibition';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
-import {useIsFocused} from '@react-navigation/native';
 import {dateToString} from '~/utils/date';
 //import ExhShareModal from './ExhShareModal';
-import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import ExhShare from './ExhShare';
-import {
-  BackButtonIcon,
-  EmptyHeartIcon,
-  FullHeartIcon,
-  EmptyStarIcon,
-  FullStarIcon,
-  MoreContentsIcon,
-  ReduceContentsIcon,
-  CalendarShareIcon,
-  HomepageIcon,
-} from '~/components/common/icon';
+import {CalendarShareIcon, HomepageIcon} from '~/components/common/icon';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
-import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import ExhDetailInfoIntro from './detail/ExhDetailInfoIntro';
+import ExhReviewList from './detail/ExhReviewList';
+import ExhDetailHeart from './detail/ExhDetailHeart';
+import {TRenderEngineProvider} from 'react-native-render-html';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -57,60 +46,42 @@ interface Props {
 
 const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
 
   const {exhId} = route.params;
   const {data, isLoading, isError, isSuccess, refetch} =
     useFetchExhDetailInfo(exhId);
-
   const {
     data: diaryData,
-    isLoading: isDiaryListLoading,
-    isError: isDiaryListError,
     isSuccess: isDiaryListSuccess,
+    isLoading: isDiaryListLoading,
     refetch: refetchDiaryList,
   } = useFetchDiaryListForExh(exhId);
 
-  const isFocused = useIsFocused();
-  const {updateVisitedExhId} = useVisitedExhIdActions(); //exhId 넘겨주기
-  const [currentDate, setCurrentDate] = useState(dateToString(new Date())); //현재 날짜
-  const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
-  const [deleteList, setDeleteList] = useState<number[]>([]);
-  const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
-  const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
-  const [isReadable, setIsReadable] = useState<boolean>(false); // 소개글 펼쳐보기 모달 확인용
-  const [exhState, setExhState] = useState<string>();
-  const [hearts, setHearts] = useState<boolean>();
-  const [intro, setIntro] = useState<string>();
-  const [tmp, setTmp] = useState<string>( // 소개 부분 [변경 예정]
-    'The Page Gallery is pleased to announce a solo exhibition by German artist André Butzer from November 9 to December 30. This will be the first solo exhibition in Asia in three years and the first for Korean audiences since Yuz Museum in Shanghai in 2020. The exhibition, which will be held at The Page Gallery East, consists of 15 major new works that span the artist"s oeuvre over the past 30 years. At the end of the 20th century, with the end of the Cold War and the sweep of industrialization.',
-  );
-  const [isMoreContent, setIsMoreContent] = useState<boolean>(false);
-  const [avgRate, setAvgRate] = useState<string>();
-  const [avgNumber, setAvgNumber] = useState<number>(0);
-  //const [sharedModal, setSharedModal] = useState<boolean>(false);
-  const limit = 2; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
   const [refreshing, setRefreshing] = useState(false);
-
-  const {
-    mutate: addLike,
-    isLoading: isLoadingLike,
-    isError: isErrorLike,
-    isSuccess: isSuccessLike,
-  } = useAddLike(favExhId);
-
-  const {
-    mutate: DeleteLike,
-    isLoading: isLoadingDislike,
-    isError: isErrorDislike,
-    isSuccess: isSuccessDislike,
-  } = useDeleteLike(deleteList);
+  const [openLoading, setOpenLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused) {
-      refetch();
       refetchDiaryList();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setOpenLoading(true);
+    } else {
+      setOpenLoading(false);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isDiaryListLoading) {
+      setOpenLoading(true);
+    } else {
+      setOpenLoading(false);
+    }
+  }, [isDiaryListLoading]);
 
   useEffect(() => {
     if (refreshing) {
@@ -119,10 +90,8 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   }, [refreshing]);
 
   const handleRefetch = async () => {
-    await refetch().then(async () => {
-      await refetchDiaryList().then(() => {
-        setRefreshing(false);
-      });
+    await refetchDiaryList().then(() => {
+      setRefreshing(false);
     });
   };
 
@@ -130,196 +99,21 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     setRefreshing(true);
   };
 
-  useEffect(() => {
-    if (isSuccess) {
-      setHearts(data.favoriteExh);
+  const checkExhState = (): string => {
+    const currentDate = dateToString(new Date());
 
-      if (currentDate > data.exhPeriodEnd) {
-        // 진행상황 확인
-        setExhState('종료');
-      } else if (
-        currentDate >= data.exhPeriodStart &&
-        currentDate <= data.exhPeriodEnd
-      ) {
-        setExhState('진행중');
-      } else if (currentDate < data.exhPeriodStart) {
-        setExhState('예정');
-      }
-
-      if (tmp.length > 300) {
-        //소개글 200자 이상일시 tmp.length ->data.intro.length로 바꿔야함 [변경 예정]
-        setIsReadable(true);
-        //let str: string[];
-        setIntro(tmp.substring(0, 300));
-      }
+    if (currentDate > data.exhPeriodEnd) {
+      // 진행상황 확인
+      return '종료';
+    } else if (
+      currentDate >= data.exhPeriodStart &&
+      currentDate <= data.exhPeriodEnd
+    ) {
+      return '진행중';
+    } else if (currentDate < data.exhPeriodStart) {
+      return '예정';
     }
-  }, [isSuccess, data]);
-
-  useEffect(() => {
-    //기록들 평균
-
-    var tmp: number = 0;
-    // if (diaryData.length > 1) {
-    if (isDiaryListSuccess) {
-      diaryData.map((item: any) => (tmp += item.rate));
-      console.log(
-        '기록들 평균 확인',
-        tmp,
-        diaryData.length,
-        tmp / diaryData.length,
-      );
-      setAvgNumber(diaryData.length);
-      if (tmp === 0) {
-        setAvgRate('기록이 아직 없습니다');
-      } else {
-        tmp = tmp / diaryData.length;
-        var avg: string = tmp.toFixed(2);
-        setAvgRate(avg);
-      }
-      updateVisitedExhId(exhId);
-    }
-  }, [isDiaryListSuccess, diaryData]);
-
-  useEffect(() => {
-    if (like) {
-      addLike();
-      setLike(false);
-    }
-  }, [like]);
-
-  useEffect(() => {
-    if (dislike) {
-      DeleteLike();
-      setDislike(false);
-    }
-  }, [dislike]);
-
-  useEffect(() => {
-    if (isErrorLike) {
-      console.log('좋아요 실패');
-    }
-    if (isLoadingLike) {
-      console.log('좋아요 로딩중');
-    }
-    if (isSuccessLike) {
-      console.log(favExhId);
-      console.log('좋아요 성공');
-    }
-
-    if (isErrorDislike) {
-      showToast('좋아요 삭제 실패했습니다.');
-    }
-    if (isLoadingDislike) {
-      console.log('좋아요 삭제 로딩중');
-    }
-    if (isSuccessDislike) {
-      console.log(favExhId);
-      console.log('좋아요 삭제');
-    }
-  }, [
-    isErrorLike,
-    isLoadingLike,
-    isSuccessLike,
-    isErrorDislike,
-    isLoadingDislike,
-    isSuccessDislike,
-  ]);
-
-  const handlePressBack = () => {
-    //BackButton
-    if (navigation?.canGoBack()) {
-      navigation.goBack();
-      return true;
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Main',
-            state: {
-              routes: [
-                {
-                  name: 'Exhibition',
-                  params: undefined,
-                },
-              ],
-            },
-          },
-        ],
-      });
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
-    };
-  }, [handlePressBack]);
-
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'로딩 중 :)'} />;
-  }
-
-  // if (isDiaryListSuccess) {
-  //   console.log('다이어리 불러오기 성공');
-  // }
-
-  const onPressHeart = (exhId: number) => {
-    const tmp: number[] = [];
-    setfavExhId(exhId);
-
-    if (!hearts) {
-      setLike(true);
-      setHearts(true);
-    } else {
-      tmp.push(exhId);
-      setDeleteList(tmp);
-      setDislike(true);
-      setHearts(false);
-    }
-  };
-
-  const showMore = () => {
-    setIntro(tmp);
-    setIsReadable(false);
-    setIsMoreContent(true);
-  };
-
-  const backToIntro = () => {
-    setIntro(tmp.substring(0, 300));
-    setIsReadable(true);
-    setIsMoreContent(false);
-  };
-
-  const changeDateType = (visitDate: string | undefined) => {
-    if (visitDate === undefined) return '방문날짜모름';
-    else return visitDate;
-  };
-
-  const showRate = (rate: string) => {
-    const result = [];
-    const rateInt = parseInt(rate);
-    let num = 0;
-    for (let i = 0; i < rateInt; i++) {
-      result.push(<FullStarIcon customHeight={2.55} key={`${num++}`} />);
-    }
-    for (let i = 0; i < 5 - rateInt; i++) {
-      result.push(<EmptyStarIcon customHeight={2.55} key={`${num++}`} />);
-    }
-    return result;
-  };
-
-  const clickMoreReview = () => {
-    console.log('더 많은 리뷰', exhId);
-    navigation.navigate('ExhToMoreReview', {
-      exhId: exhId,
-    });
+    return '';
   };
 
   const exhToHomepage = async () => {
@@ -338,165 +132,90 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   };
 
   return (
-    <ContainerScroll
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-      scrollEventThrottle={200}>
-      <TopView>
-        <BackgroundImage
-          source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
-          blurRadius={40}
-          resizeMode="cover"
-          alt={'이미지 읽기 실패'}>
-          <ForegroundImage
-            source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
-            resizeMode="contain"
-            alt={'이미지 읽기 실패'}
-          />
-        </BackgroundImage>
-        <TopLayer>
-          <CustomTouchable onPress={handlePressBack}>
-            <BackButtonIcon />
-          </CustomTouchable>
-          <EmptyHeartContent>
-            <CustomTouchable onPress={() => onPressHeart(exhId)}>
-              {hearts ? <FullHeartIcon /> : <EmptyHeartIcon />}
-            </CustomTouchable>
-          </EmptyHeartContent>
-        </TopLayer>
-      </TopView>
-      <InfoListView>
-        <NameView>
-          <Title>{data.exhName}</Title>
-          <IconView>
-            <CustomTouchable
-              onPress={() =>
-                navigation.navigate('ExhToCal', {
-                  exhId: data.exhId,
-                })
-              }>
-              <CalendarShareIcon />
-            </CustomTouchable>
-            <Bar>{'|'}</Bar>
-
-            <ExhShare
-              poster={data.poster}
-              exhId={data.exhId}
-              exhName={data.exhName}
-            />
-
-            <Bar>{'|'}</Bar>
-            <CustomTouchable onPress={exhToHomepage}>
-              {/* // onPress={() => navigation.navigate('ExhToHomepage')}> */}
-              <HomepageIcon />
-            </CustomTouchable>
-          </IconView>
-        </NameView>
-        <StateView>
-          <StateText state={exhState}>{exhState}</StateText>
-        </StateView>
-        <InfoView>
-          <InfoTitle>{'장소'}</InfoTitle>
-          <Info>{data.gallery}</Info>
-        </InfoView>
-        <InfoView>
-          <InfoTitle>{'일정'}</InfoTitle>
-          <Info>{data.exhPeriodStart + ' ~ ' + data.exhPeriodEnd}</Info>
-        </InfoView>
-        <InfoView>
-          <InfoTitle>{'작가'}</InfoTitle>
-          {!data.painter ? (
-            <Info>{'정보 없음'}</Info>
-          ) : (
-            <Info>{data.painter}</Info>
-          )}
-        </InfoView>
-        <InfoView>
-          <InfoTitle>{'관람료'}</InfoTitle>
-          <Info>
-            {data.fee}
-            {'원'}
-          </Info>
-        </InfoView>
-      </InfoListView>
-      <IntroduceView>
-        <Title>{'소개'}</Title>
-        <Content>
-          {'"'}
-          {intro}
-          {/* {data.intro} [변경 예정] */}
-          {'"'}
-        </Content>
-        {/* 아이콘 */}
-        {isReadable && (
-          <CustomTouchable onPress={showMore}>
-            <MoreContentsIcon />
-          </CustomTouchable>
-        )}
-        {isMoreContent && (
-          <CustomTouchable onPress={backToIntro}>
-            <ReduceContentsIcon />
-          </CustomTouchable>
-        )}
-      </IntroduceView>
-      <ReView>
-        <Title>{'기록'} </Title>
-        {avgNumber === 0 ? (
-          <TitleTopView>
-            <NonAvg> {'아직 기록이 없습니다.'}</NonAvg>
-          </TitleTopView>
-        ) : (
-          <AvgRateView>
-            <FullStarIcon customHeight={4.3} />
-            <AvgTitle>{avgRate}</AvgTitle>
-            <AvgText>
-              {'(기록 '}
-              {avgNumber}
-              {'개 평점)'}
-            </AvgText>
-          </AvgRateView>
-        )}
-
-        {diaryData &&
-          diaryData.slice(0, limit).map((item: any, index: number) => (
-            <ReViewWrapper key={index}>
-              <ReViewList
-                activeOpacity={0.6}
-                onPress={() =>
-                  navigation.navigate('ExhToDiary', {
-                    diary: item,
-                  })
-                }>
-                <ReviewImage
-                  source={{uri: `${item.thumbnail ?? DEFAULT_IMAGE}`}}
-                  resizeMode="cover"
+    <TRenderEngineProvider>
+      <ContainerScroll
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        scrollEventThrottle={200}>
+        {data && diaryData !== undefined && diaryData !== null && (
+          <>
+            <TopView>
+              <BackgroundImage
+                source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
+                blurRadius={40}
+                resizeMode="cover"
+                alt={'이미지 읽기 실패'}>
+                <ForegroundImage
+                  source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
+                  resizeMode="contain"
                   alt={'이미지 읽기 실패'}
                 />
-                <ReviewTextView>
-                  <ReviewTitle>
-                    {'"'}
-                    {item.title}
-                    {'"'}
-                  </ReviewTitle>
-                  <TextView>
-                    <SubTextView key={index}>
-                      <ReviewName>{item.nickname}</ReviewName>
-                      <ReviewRate>{showRate(item.rate)}</ReviewRate>
-                    </SubTextView>
-                    <ReviewDate>{changeDateType(item.writeDate)}</ReviewDate>
-                  </TextView>
-                </ReviewTextView>
-              </ReViewList>
-            </ReViewWrapper>
-          ))}
-        {avgNumber > limit && (
-          <MoreReview activeOpacity={0.6} onPress={clickMoreReview}>
-            <MoreReviewTitle>{'기록들 더보기 >'}</MoreReviewTitle>
-          </MoreReview>
+              </BackgroundImage>
+              <ExhDetailHeart exhId={exhId} hearState={data.favoriteExh} />
+            </TopView>
+            <InfoListView>
+              <NameView>
+                <Title>{data.exhName}</Title>
+                <IconView>
+                  <CustomTouchable
+                    onPress={() =>
+                      navigation.navigate('ExhToCal', {
+                        exhId: data.exhId,
+                      })
+                    }>
+                    <CalendarShareIcon />
+                  </CustomTouchable>
+                  <Bar>{'|'}</Bar>
+
+                  <ExhShare
+                    poster={data.poster}
+                    exhId={data.exhId}
+                    exhName={data.exhName}
+                  />
+
+                  <Bar>{'|'}</Bar>
+                  <CustomTouchable onPress={exhToHomepage}>
+                    {/* // onPress={() => navigation.navigate('ExhToHomepage')}> */}
+                    <HomepageIcon />
+                  </CustomTouchable>
+                </IconView>
+              </NameView>
+              <StateView>
+                <StateText state={checkExhState()}>{checkExhState()}</StateText>
+              </StateView>
+              <InfoView>
+                <InfoTitle>{'장소'}</InfoTitle>
+                <Info>{data.gallery}</Info>
+              </InfoView>
+              <InfoView>
+                <InfoTitle>{'일정'}</InfoTitle>
+                <Info>{data.exhPeriodStart + ' ~ ' + data.exhPeriodEnd}</Info>
+              </InfoView>
+              <InfoView>
+                <InfoTitle>{'작가'}</InfoTitle>
+                {!data.painter ? (
+                  <Info>{'정보 없음'}</Info>
+                ) : (
+                  <Info>{data.painter}</Info>
+                )}
+              </InfoView>
+              <InfoView>
+                <InfoTitle>{'관람료'}</InfoTitle>
+                <Info>
+                  {data.fee}
+                  {'원'}
+                </Info>
+              </InfoView>
+            </InfoListView>
+            {/* 소개 */}
+            <ExhDetailInfoIntro intro={data.intro} />
+            <ExhReviewList exhId={exhId} diaryData={diaryData} />
+          </>
         )}
-      </ReView>
-    </ContainerScroll>
+        {openLoading && <LoadingModal message="로딩 중 :)" />}
+      </ContainerScroll>
+    </TRenderEngineProvider>
   );
 };
 
@@ -513,6 +232,7 @@ const Title = styled.Text`
   font-size: ${rf(19)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+  line-height: ${wp(8)}px;
 `;
 
 // poster section
@@ -530,22 +250,6 @@ const ForegroundImage = styled.Image`
   width: 100%;
   height: 100%;
   align-items: center;
-`;
-
-const TopLayer = styled.View`
-  flex: 1;
-  flex-direction: row;
-  padding: ${wp(2.9)}px;
-  padding-right: ${wp(3.9)}px;
-  padding-bottom: ${wp(3.9)}px;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  justify-content: space-between;
-`;
-
-const EmptyHeartContent = styled.View`
-  justify-content: flex-end;
 `;
 
 // info section
@@ -621,143 +325,10 @@ const InfoTitle = styled.Text`
 `;
 
 const Info = styled.Text`
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
   font-size: ${rf(14.2)}px;
   color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-`;
-
-// introduce section
-const IntroduceView = styled.View`
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: ${wp(5.2)}px;
-  border-style: dashed;
-  border-bottom-width: ${DASH_WIDTH}px;
-  border-bottom-color: ${LIGHT_GREY};
-`;
-
-const Content = styled.Text`
-  font-size: ${rf(15)}px;
-  text-align: center;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-  padding: ${wp(4.5)}px;
-`;
-
-// review section
-const ReViewWrapper = styled.View`
-  padding-top: ${wp(1)}px;
-  padding-bottom: ${wp(1)}px;
-  border-bottom-color: ${LIGHT_GREY};
-  border-bottom-width: ${wp(0.3)}px;
-`;
-
-const ReView = styled.View`
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: ${wp(5.2)}px;
-`;
-
-const TitleTopView = styled.View`
-  align-items: center;
-  padding: ${wp(4.5)}px;
-`;
-
-const NonAvg = styled.Text`
-  font-size: ${rf(16)}px;
-  color: ${LIGHT_GREY};
-  font-family: ${FONT_NAME};
-`;
-
-const AvgRateView = styled.View`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  padding: ${wp(1.4)}px;
-  padding-bottom: ${wp(2.5)}px;
-  gap: ${wp(0.8)}px;
-`;
-
-const AvgTitle = styled.Text`
-  font-size: ${rf(20)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-`;
-
-const AvgText = styled.Text`
-  font-size: ${rf(17)}px;
-  color: ${LIGHT_GREY};
-  font-family: ${FONT_NAME};
-`;
-
-// review list
-const ReViewList = styled.TouchableOpacity`
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  padding-top: ${wp(1.4)}px;
-  padding-bottom: ${wp(1.4)}px;
-  gap: ${wp(2)}px;
-`;
-
-const ReviewImage = styled.Image`
-  width: ${wp(11)}px;
-  height: ${wp(11)}px;
-  border-radius: ${wp(50)}px; /* width의 절반을 사용하여 원형으로 만듦 */
-`;
-
-const ReviewTextView = styled.View`
-  flex: 1;
-  flex-direction: column;
-  gap: ${wp(1.2)}px;
-`;
-
-const ReviewTitle = styled.Text`
-  font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-`;
-
-const TextView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const SubTextView = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${wp(0.8)}px;
-`;
-
-const ReviewName = styled.Text`
-  font-size: ${rf(13.5)}px;
-  color: ${MIDDLE_GREY};
-  font-family: ${FONT_NAME};
-`;
-
-const ReviewRate = styled.View`
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ReviewDate = styled.Text`
-  font-size: ${rf(11)}px;
-  color: ${MIDDLE_GREY};
-  font-family: ${FONT_NAME};
-  align-items: center;
-`;
-
-// more review
-const MoreReview = styled.TouchableOpacity`
-  padding-top: ${wp(2.9)}px;
-`;
-
-const MoreReviewTitle = styled.Text`
-  font-size: ${rf(15)}px;
-  color: ${LIGHT_GREY};
   font-family: ${FONT_NAME};
 `;

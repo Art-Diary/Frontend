@@ -102,8 +102,10 @@ const GatheringSelector: React.FC<GatheringSelectorProps> = ({
         return wp(20);
       } else if (nameLength < 8) {
         return wp(30);
-      } else {
+      } else if (nameLength < 11) {
         return wp(36);
+      } else {
+        return wp(45);
       }
     } else {
       return wp(25);
