@@ -59,9 +59,9 @@ const ExhDetailInfoIntro: React.FC<Props> = ({intro}) => {
 
       {/* 아이콘 */}
       {memoizedHtmlContent && memoizedHtmlContent.length > 300 && (
-        <CustomTouchable onPress={isMoreContent ? backToIntro : showMore}>
+        <ArrowButton onPress={isMoreContent ? backToIntro : showMore}>
           {isMoreContent ? <ReduceContentsIcon /> : <MoreContentsIcon />}
-        </CustomTouchable>
+        </ArrowButton>
       )}
     </IntroduceView>
   );
@@ -81,6 +81,10 @@ const NotIntroText = styled.Text`
   font-size: ${rf(15)}px;
   color: ${LIGHT_GREY};
   font-family: ${FONT_NAME};
+`;
+
+const ArrowButton = styled.TouchableOpacity`
+  padding: ${wp(2)}px;
 `;
 
 // introduce section

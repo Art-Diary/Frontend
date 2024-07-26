@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Linking, Alert, RefreshControl} from 'react-native';
+import {BackHandler, Linking, RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -14,9 +14,6 @@ import {
 } from '~/api/queries/exhibition';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {dateToString} from '~/utils/date';
-//import ExhShareModal from './ExhShareModal';
-import ExhShare from './ExhShare';
-import {CalendarShareIcon, HomepageIcon} from '~/components/common/icon';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
@@ -25,11 +22,18 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
-import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhDetailInfoIntro from './detail/ExhDetailInfoIntro';
 import ExhReviewList from './detail/ExhReviewList';
 import ExhDetailHeart from './detail/ExhDetailHeart';
 import {TRenderEngineProvider} from 'react-native-render-html';
+import CustomTouchable from '~/components/common/CustomTouchable';
+import {
+  BackButtonIcon,
+  CalendarShareIcon,
+  HomepageIcon,
+} from '~/components/common/icon';
+import ExhShare from './ExhShare';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -99,6 +103,39 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     setRefreshing(true);
   };
 
+  const handlePressBack = () => {
+    //BackButton
+    if (navigation?.canGoBack()) {
+      navigation.goBack();
+      return true;
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Main',
+            state: {
+              routes: [
+                {
+                  name: 'Exhibition',
+                  params: undefined,
+                },
+              ],
+            },
+          },
+        ],
+      });
+      return true;
+    }
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
+    };
+  }, [handlePressBack]);
+
   const checkExhState = (): string => {
     const currentDate = dateToString(new Date());
 
@@ -116,10 +153,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     return '';
   };
 
-  const exhToHomepage = async () => {
-    //홈페이지 이동
-    const url = 'https://www.naver.com'; //[변경 예정] 해당 갤러리 홈페이지로 이동
-
+  const exhToHomepage = async (url: string) => {
     // 주어진 URL을 열 수 있는지 확인합니다.
     const supported = await Linking.canOpenURL(url);
 
@@ -127,7 +161,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
       // 주어진 URL을 엽니다.
       await Linking.openURL(url);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
+      showToast(`Don't know how to open this URL: ${url}`);
     }
   };
 
@@ -140,6 +174,31 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
         scrollEventThrottle={200}>
         {data && diaryData !== undefined && diaryData !== null && (
           <>
+            <TopLayer>
+              <CustomTouchable onPress={handlePressBack}>
+                <BackButtonIcon />
+              </CustomTouchable>
+              <IconView>
+                <CustomTouchable
+                  onPress={() =>
+                    navigation.navigate('ExhToCal', {
+                      exhId: exhId,
+                    })
+                  }>
+                  <CalendarShareIcon />
+                </CustomTouchable>
+                <ExhShare
+                  poster={data.poster}
+                  exhId={exhId}
+                  exhName={data.exhName}
+                />
+                {data.url && (
+                  <CustomTouchable onPress={() => exhToHomepage(data.url)}>
+                    <HomepageIcon />
+                  </CustomTouchable>
+                )}
+              </IconView>
+            </TopLayer>
             <TopView>
               <BackgroundImage
                 source={{uri: `${data.poster ?? DEFAULT_IMAGE}`}}
@@ -155,32 +214,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               <ExhDetailHeart exhId={exhId} hearState={data.favoriteExh} />
             </TopView>
             <InfoListView>
-              <NameView>
-                <Title>{data.exhName}</Title>
-                <IconView>
-                  <CustomTouchable
-                    onPress={() =>
-                      navigation.navigate('ExhToCal', {
-                        exhId: data.exhId,
-                      })
-                    }>
-                    <CalendarShareIcon />
-                  </CustomTouchable>
-                  <Bar>{'|'}</Bar>
-
-                  <ExhShare
-                    poster={data.poster}
-                    exhId={data.exhId}
-                    exhName={data.exhName}
-                  />
-
-                  <Bar>{'|'}</Bar>
-                  <CustomTouchable onPress={exhToHomepage}>
-                    {/* // onPress={() => navigation.navigate('ExhToHomepage')}> */}
-                    <HomepageIcon />
-                  </CustomTouchable>
-                </IconView>
-              </NameView>
+              <Title>{data.exhName}</Title>
               <StateView>
                 <StateText state={checkExhState()}>{checkExhState()}</StateText>
               </StateView>
@@ -235,6 +269,24 @@ const Title = styled.Text`
   line-height: ${wp(8)}px;
 `;
 
+const TopLayer = styled.View`
+  flex-direction: row;
+  justify-content: space-between; // 양 끝으로 버튼 배치
+  align-items: center;
+  padding-left: ${wp(3)}px;
+  padding-right: ${wp(3)}px;
+  padding-top: ${wp(2.3)}px;
+  padding-bottom: ${wp(2)}px;
+  width: 100%;
+`;
+
+const IconView = styled.View`
+  flex-direction: row;
+  gap: ${wp(2)}px;
+  justify-content: center;
+  align-items: center;
+`;
+
 // poster section
 const TopView = styled.View`
   flex: 1;
@@ -260,23 +312,6 @@ const InfoListView = styled.View`
   border-style: dashed;
   border-bottom-width: ${wp(0.4)}px;
   border-bottom-color: ${LIGHT_GREY};
-`;
-
-const NameView = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const IconView = styled.View`
-  flex-direction: row;
-  gap: ${wp(2)}px;
-  align-items: center;
-`;
-
-const Bar = styled.Text`
-  font-size: ${rf(19)}px;
-  color: ${LIGHT_GREY};
-  font-family: ${FONT_NAME};
 `;
 
 const StateView = styled.View`

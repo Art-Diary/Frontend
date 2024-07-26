@@ -6,11 +6,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
-import {
-  BackButtonIcon,
-  EmptyHeartIcon,
-  FullHeartIcon,
-} from '~/components/common/icon';
+import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface Props {
@@ -109,9 +105,6 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, hearState}) => {
 
   return (
     <TopLayer>
-      <CustomTouchable onPress={handlePressBack}>
-        <BackButtonIcon />
-      </CustomTouchable>
       <EmptyHeartContent>
         <CustomTouchable onPress={() => onPressHeart(exhId)}>
           {hearts ? <FullHeartIcon /> : <EmptyHeartIcon />}
@@ -128,14 +121,14 @@ const TopLayer = styled.View`
   flex: 1;
   flex-direction: row;
   padding: ${wp(2.9)}px;
-  padding-right: ${wp(3.9)}px;
   padding-bottom: ${wp(3.9)}px;
   width: 100%;
   height: 100%;
   position: absolute;
-  justify-content: space-between;
+  justify-content: flex-end;
 `;
 
 const EmptyHeartContent = styled.View`
+  flex-direction: column;
   justify-content: flex-end;
 `;
