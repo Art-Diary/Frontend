@@ -56,32 +56,36 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
           disabled={notTouchable}
           activeOpacity={0.6}
           onPress={onTouch}>
-          <Poster
-            source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
-            resizeMode="contain"
-            alt={'이미지 읽기 실패'}
-          />
-          <ExhInfo haveRate={haveRate} haveChildren={children}>
-            <ExhName numberOfLines={1} ellipsizeMode="tail">
-              {exhInfo.exhName}
-            </ExhName>
-            {!haveRate ? (
-              <>
-                <ExhGallery>{exhInfo.gallery}</ExhGallery>
-                <ExhDate>
-                  {changeExhDateFormat(
-                    exhInfo.exhPeriodStart,
-                    exhInfo.exhPeriodEnd,
-                  )}
-                </ExhDate>
-              </>
-            ) : (
-              <ExhRateWrapper>
-                <AvgRateStarIcon />
-                <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
-              </ExhRateWrapper>
-            )}
-          </ExhInfo>
+          <PosterWapper>
+            <Poster
+              source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
+              resizeMode="contain"
+              alt={'이미지 읽기 실패'}
+            />
+          </PosterWapper>
+          <ExhInfoWrapper>
+            <ExhInfo haveRate={haveRate} haveChildren={children}>
+              <ExhName numberOfLines={1} ellipsizeMode="tail">
+                {exhInfo.exhName}
+              </ExhName>
+              {!haveRate ? (
+                <>
+                  <ExhGallery>{exhInfo.gallery}</ExhGallery>
+                  <ExhDate>
+                    {changeExhDateFormat(
+                      exhInfo.exhPeriodStart,
+                      exhInfo.exhPeriodEnd,
+                    )}
+                  </ExhDate>
+                </>
+              ) : (
+                <ExhRateWrapper>
+                  <AvgRateStarIcon />
+                  <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
+                </ExhRateWrapper>
+              )}
+            </ExhInfo>
+          </ExhInfoWrapper>
         </TouchView>
         {children}
       </ExhView>
@@ -115,6 +119,7 @@ const ExhView = styled.View<ExhViewProps>`
 `;
 
 const TouchView = styled.TouchableOpacity`
+  flex: 1;
   flex-direction: row;
   gap: ${wp(2)}px;
 `;
@@ -124,8 +129,15 @@ interface ExhInfoProps {
   haveChildren: boolean;
 }
 
+const ExhInfoWrapper = styled.View`
+  flex: 1;
+  width: 100%;
+  height: 100%;
+`;
+
 const ExhInfo = styled.View<ExhInfoProps>`
-  width: ${(props: ExhInfoProps) => (props.haveChildren ? `66%` : `100%`)};
+  flex: 1;
+  width: ${(props: ExhInfoProps) => (props.haveChildren ? `80%` : `100%`)};
   padding-top: ${wp(3)}px;
   padding-bottom: ${wp(3)}px;
   flex-direction: column;
@@ -136,9 +148,12 @@ const ExhInfo = styled.View<ExhInfoProps>`
 `;
 
 const ExhName = styled.Text`
+  flex-shrink: 1;
+  flex-basis: 0%;
   font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+  line-height: ${wp(6)}px;
 `;
 
 const ExhGallery = styled.Text`
@@ -153,10 +168,15 @@ const ExhDate = styled.Text`
   font-family: ${FONT_NAME};
 `;
 
+const PosterWapper = styled.View`
+  height: 100%;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const Poster = styled.Image`
   width: ${wp(19)}px;
   height: ${wp(24)}px;
-  align-items: center;
 `;
 
 const ExhRateWrapper = styled.View`

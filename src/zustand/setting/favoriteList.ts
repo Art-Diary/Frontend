@@ -6,8 +6,8 @@ interface ExhInfo {
   poster: string;
   exhName: string;
   gallery: string;
-  exhPeriodStart: number[];
-  exhPeriodEnd: number[];
+  exhPeriodStart: string;
+  exhPeriodEnd: string;
 }
 
 interface FavoriteListState {

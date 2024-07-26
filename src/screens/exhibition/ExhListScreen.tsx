@@ -58,8 +58,6 @@ const ExhListScreen = () => {
   const [hearts, setHearts] = useState<Exhibition[]>([]);
   const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
   const [deleteList, setDeleteList] = useState<number[]>([]);
-  const [like, setLike] = useState<boolean>(false); //좋아요를 누르면 true
-  const [dislike, setDislike] = useState<boolean>(false); //삭제할때 true
   const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
   const [isCalendarModalVisible, setIsCalendarModalVisible] = useState(false); //달력 모달
   const [isNameVisible, setIsNameVisible] = useState(false);
@@ -100,7 +98,7 @@ const ExhListScreen = () => {
   } = useAddLike(favExhId);
 
   const {
-    mutate: DeleteLike,
+    mutate: deleteLike,
     isLoading: isLoadingDislike,
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
@@ -125,7 +123,7 @@ const ExhListScreen = () => {
         setIsDateVisible(false);
       }
 
-      refetch();
+      handleRefetch();
     }
   }, [isFocused]);
 
@@ -136,7 +134,9 @@ const ExhListScreen = () => {
   }, [refreshing]);
 
   const handleRefetch = async () => {
-    await refetch().then(() => {
+    await refetch().then(result => {
+      const resData = result.data;
+      setHearts(resData);
       setRefreshing(false);
     });
   };
@@ -192,20 +192,6 @@ const ExhListScreen = () => {
   }, [isSuccess, data]);
 
   useEffect(() => {
-    if (like) {
-      addLike();
-      setLike(false);
-    }
-  }, [like]);
-
-  useEffect(() => {
-    if (dislike) {
-      DeleteLike();
-      setDislike(false);
-    }
-  }, [dislike]);
-
-  useEffect(() => {
     if (isErrorLike) {
       //showToast('좋아요 실패했습니다.');
       console.log('좋아요 실패');
@@ -246,9 +232,6 @@ const ExhListScreen = () => {
 
   if (isLoading) {
     return <LoadingModal message={'로딩 중 :)'} />;
-  }
-  if (isSuccess) {
-    //console.log('석공:', data[0].poster);
   }
 
   //search Modal
@@ -298,15 +281,10 @@ const ExhListScreen = () => {
 
   //하트 클릭
   const onPressHeart = (exhId: number, index: number) => {
-    const tmp: number[] = [];
-    setfavExhId(exhId);
-
     if (!hearts[index].favoriteExh) {
-      setLike(true);
+      addLike(exhId);
     } else {
-      tmp.push(exhId);
-      setDeleteList(tmp);
-      setDislike(true);
+      deleteLike([exhId]);
     }
     const updatedItems = hearts.map((item: any) =>
       item.exhId === exhId ? {...item, favoriteExh: !item.favoriteExh} : item,
