@@ -118,15 +118,9 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
                   ? true
                   : false
               }
-              notTouchable={true}>
-              {gatherId === -2 && item.gatherName && (
-                <GatherWrapper>
-                  <GatherName color={findGatherColor(item.gatherId)}>
-                    {item.gatherName}
-                  </GatherName>
-                </GatherWrapper>
-              )}
-            </ExhItemView>
+              notTouchable={true}
+              gatherName={item.gatherName}
+              gatherColor={findGatherColor(item.gatherId)}></ExhItemView>
           </CustomTouchable>
         )}
       />
@@ -158,11 +152,6 @@ const SelectedDateText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-`;
-
-const GatherWrapper = styled.View`
-  padding-top: ${wp(1.6)}px;
-  align-items: center;
 `;
 
 interface GatherNameProps {
