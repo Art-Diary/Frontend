@@ -28,6 +28,8 @@ interface SearchExhListProps {
   notTouchable: boolean;
   onTouch?: (something: any) => void;
   haveRate?: boolean;
+  gatherName?: string;
+  gatherColor?: string;
 }
 
 const ExhItemView: React.FC<SearchExhListProps> = ({
@@ -37,6 +39,8 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   notTouchable,
   onTouch,
   haveRate,
+  gatherName,
+  gatherColor,
 }) => {
   const changeExhDateFormat = (
     exhPeriodStart: string,
@@ -77,6 +81,11 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
                       exhInfo.exhPeriodEnd,
                     )}
                   </ExhDate>
+                  {gatherName && (
+                    <GatherName color={gatherColor}>
+                      with {gatherName}
+                    </GatherName>
+                  )}
                 </>
               ) : (
                 <ExhRateWrapper>
@@ -137,7 +146,7 @@ const ExhInfoWrapper = styled.View`
 
 const ExhInfo = styled.View<ExhInfoProps>`
   flex: 1;
-  width: ${(props: ExhInfoProps) => (props.haveChildren ? `80%` : `100%`)};
+  width: 100%;
   padding-top: ${wp(3)}px;
   padding-bottom: ${wp(3)}px;
   flex-direction: column;
@@ -154,6 +163,18 @@ const ExhName = styled.Text`
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
+`;
+
+interface GatherNameProps {
+  color: string;
+}
+
+const GatherName = styled.Text<GatherNameProps>`
+  font-size: ${rf(12.2)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  color: ${(props: GatherNameProps) =>
+    props.color ? `${props.color}` : `${DEFAULT_TEXT}`};
 `;
 
 const ExhGallery = styled.Text`
