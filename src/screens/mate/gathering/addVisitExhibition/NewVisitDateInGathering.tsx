@@ -14,18 +14,13 @@ type MarkedType = {
   color: string[];
 };
 
-// TODO
-// type VisitInfo = {
-//   visitDate: string;
-//   exhVisitId: number;
-// };
-
-// interface NewDateProps {
-//   markedDates: VisitInfo[];
-// }
+type VisitInfo = {
+  visitDate: string;
+  exhVisitId: number;
+};
 
 interface NewDateProps {
-  markedDates: string[];
+  markedDates: VisitInfo[];
 }
 
 const NewVisitDateInGathering: React.FC<NewDateProps> = ({markedDates}) => {
@@ -66,10 +61,10 @@ const NewVisitDateInGathering: React.FC<NewDateProps> = ({markedDates}) => {
     addNewDateOfExhGathering();
   };
 
-  const markedDatesFormatChange = (markedDates: string[]): MarkedType[] => {
+  const markedDatesFormatChange = (markedDates: VisitInfo[]): MarkedType[] => {
     var dates: string[] = [];
     for (let i = 0; i < markedDates.length; i++) {
-      dates.push(markedDates[i]);
+      dates.push(markedDates[i].visitDate);
     }
     var list: MarkedType[] = [];
 
