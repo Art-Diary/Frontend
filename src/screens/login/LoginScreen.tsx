@@ -69,7 +69,7 @@ const LoginScreen = () => {
     const checkUserId = async () => {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const initInfo = await AsyncStorage.getItem('initInfo');
-      // TODO 출력 삭제
+      // TODO 삭제
       console.log('{login page}', initInfo, accessToken);
       if (accessToken && initInfo === 'true') {
         // 토큰 확인
@@ -128,8 +128,7 @@ const LoginScreen = () => {
   }, []);
 
   const emailDuplicateModal = () => {
-    // TODO
-    // 일단 모달로 확인
+    // 모달로 확인
     setDuplicateModalOpen(true);
   };
 
@@ -212,14 +211,14 @@ const LoginScreen = () => {
     return null;
   };
 
-  // TODO 나중에 지우기
+  // TODO 삭제
   useEffect(() => {
     if (isSuccessTest) {
       navigation.navigate('UserInfo');
     }
   }, [isSuccessTest]);
 
-  // TODO 나중에 지우기
+  // TODO 삭제
   const handleTester = async () => {
     testerLogin(3);
   };
@@ -249,7 +248,7 @@ const LoginScreen = () => {
             handleTouch={() => handleLogin('kakao')}>
             <KakaoLogoIcon />
           </GreyNameTag>
-          {/* TODO 나중에 지우기 */}
+          {/* TODO 삭제 */}
           <CustomTouchable onPress={handleTester}>
             <Tester>테스터 3</Tester>
           </CustomTouchable>

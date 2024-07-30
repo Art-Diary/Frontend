@@ -44,6 +44,7 @@ import {
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {requestCameraPermission} from '~/utils/photo';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // [WORD_LIMIT]
 const WriteMyDiaryInfoScreen = () => {
@@ -137,107 +138,116 @@ const WriteMyDiaryInfoScreen = () => {
   };
 
   return (
-    <Container>
-      <BackView title="기록 작성" line={true} children={null} />
-      <ContentsContainer>
-        {/* 기록 정보 작성 */}
-        <WriteTitleWrapper>
-          <WriteTitle
-            maxLength={titleMaxInputLength}
-            placeholderTextColor="#D3D3D3"
-            placeholder={'제목'}
-            onChangeText={onChangeTitle}
-            value={titleKeyword}
-          />
-          <CountText>
-            {titleKeyword.length} / {titleMaxInputLength}
-          </CountText>
-        </WriteTitleWrapper>
-        <SecondSection>
-          <HalfSection>
-            <SectionName>별점</SectionName>
-            <StarList>
-              <CustomTouchable onPress={() => changeStarNum(1)}>
-                {starNum >= 1 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </CustomTouchable>
-              <CustomTouchable onPress={() => changeStarNum(2)}>
-                {starNum >= 2 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </CustomTouchable>
-              <CustomTouchable onPress={() => changeStarNum(3)}>
-                {starNum >= 3 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </CustomTouchable>
-              <CustomTouchable onPress={() => changeStarNum(4)}>
-                {starNum >= 4 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </CustomTouchable>
-              <CustomTouchable onPress={() => changeStarNum(5)}>
-                {starNum >= 5 ? <FullStarIcon /> : <EmptyStarIcon />}
-              </CustomTouchable>
-            </StarList>
-          </HalfSection>
-          <HalfSection>
-            <SectionName>공개 여부</SectionName>
-            <CustomTouchable onPress={changeToggle}>
-              {isPublic ? <PublicToggleIcon /> : <PrivateToggleIcon />}
-            </CustomTouchable>
-          </HalfSection>
-        </SecondSection>
-        <SayingSection>
-          <CountWrapper>
-            <SectionName>한마디</SectionName>
-            <CountText>
-              ( {sayingKeyword ? sayingKeyword.length : 0} /{' '}
-              {sayingMaxInputLength} )
-            </CountText>
-          </CountWrapper>
-          <WriteSayingSection>
-            <SectionName>"</SectionName>
-            <WriteSaying
-              multiline={true}
-              maxLength={sayingMaxInputLength}
-              placeholderTextColor={LIGHT_GREY}
-              placeholder={!sayingKeyword ? '한마디' : ''}
-              value={sayingKeyword}
-              onChangeText={onChangeSaying}
+    <KeyboardAwareScrollView
+      style={{flex: 1, backgroundColor: BACK_COLOR}}
+      resetScrollToCoords={{x: 0, y: 0}}
+      contentContainerStyle={{flexGrow: 1}}>
+      <Container>
+        <BackView title="기록 작성" line={true} children={null} />
+        <ContentsContainer>
+          {/* 기록 정보 작성 */}
+          <WriteTitleWrapper>
+            <WriteTitle
+              maxLength={titleMaxInputLength}
+              placeholderTextColor="#D3D3D3"
+              placeholder={'제목'}
+              onChangeText={onChangeTitle}
+              value={titleKeyword}
             />
-            <SectionName>"</SectionName>
-          </WriteSayingSection>
-        </SayingSection>
-        <ThumbnailSection>
-          <SectionName>대표사진</SectionName>
-          <PutThumbnail>
-            {!imageUri ? (
-              <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
-                <CameraButtonIcon />
+            <CountText>
+              {titleKeyword.length} / {titleMaxInputLength}
+            </CountText>
+          </WriteTitleWrapper>
+          <SecondSection>
+            <HalfSection>
+              <SectionName>별점</SectionName>
+              <StarList>
+                <CustomTouchable onPress={() => changeStarNum(1)}>
+                  {starNum >= 1 ? <FullStarIcon /> : <EmptyStarIcon />}
+                </CustomTouchable>
+                <CustomTouchable onPress={() => changeStarNum(2)}>
+                  {starNum >= 2 ? <FullStarIcon /> : <EmptyStarIcon />}
+                </CustomTouchable>
+                <CustomTouchable onPress={() => changeStarNum(3)}>
+                  {starNum >= 3 ? <FullStarIcon /> : <EmptyStarIcon />}
+                </CustomTouchable>
+                <CustomTouchable onPress={() => changeStarNum(4)}>
+                  {starNum >= 4 ? <FullStarIcon /> : <EmptyStarIcon />}
+                </CustomTouchable>
+                <CustomTouchable onPress={() => changeStarNum(5)}>
+                  {starNum >= 5 ? <FullStarIcon /> : <EmptyStarIcon />}
+                </CustomTouchable>
+              </StarList>
+            </HalfSection>
+            <HalfSection>
+              <SectionName>공개 여부</SectionName>
+              <CustomTouchable onPress={changeToggle}>
+                {isPublic ? <PublicToggleIcon /> : <PrivateToggleIcon />}
               </CustomTouchable>
-            ) : (
-              <CustomTouchable
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '100%',
-                  height: '100%',
-                }}
-                onPress={showPhoto}>
-                <Image
-                  source={{uri: imageUri}}
-                  style={{width: '100%', height: '100%', alignItems: 'center'}}
-                  resizeMode="contain"
-                />
-              </CustomTouchable>
-            )}
-          </PutThumbnail>
-        </ThumbnailSection>
-        {/* 다음 버튼 */}
-        {!checkBlankInKeyword(titleKeyword) && starNum > 0 ? (
-          <CustomTouchable onPress={onClickNextButton}>
-            <NextButton moveNext={true}>다음</NextButton>
-          </CustomTouchable>
-        ) : (
-          <NextButton moveNext={false}>다음</NextButton>
-        )}
-      </ContentsContainer>
-    </Container>
+            </HalfSection>
+          </SecondSection>
+          <SayingSection>
+            <CountWrapper>
+              <SectionName>한마디</SectionName>
+              <CountText>
+                ( {sayingKeyword ? sayingKeyword.length : 0} /{' '}
+                {sayingMaxInputLength} )
+              </CountText>
+            </CountWrapper>
+            <WriteSayingSection>
+              <SectionName>"</SectionName>
+              <WriteSaying
+                multiline={true}
+                maxLength={sayingMaxInputLength}
+                placeholderTextColor={LIGHT_GREY}
+                placeholder={!sayingKeyword ? '한마디' : ''}
+                value={sayingKeyword}
+                onChangeText={onChangeSaying}
+              />
+              <SectionName>"</SectionName>
+            </WriteSayingSection>
+          </SayingSection>
+          <ThumbnailSection>
+            <SectionName>대표사진</SectionName>
+            <PutThumbnail>
+              {!imageUri ? (
+                <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
+                  <CameraButtonIcon />
+                </CustomTouchable>
+              ) : (
+                <CustomTouchable
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  onPress={showPhoto}>
+                  <Image
+                    source={{uri: imageUri}}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      alignItems: 'center',
+                    }}
+                    resizeMode="contain"
+                  />
+                </CustomTouchable>
+              )}
+            </PutThumbnail>
+          </ThumbnailSection>
+          {/* 다음 버튼 */}
+          {!checkBlankInKeyword(titleKeyword) && starNum > 0 ? (
+            <CustomTouchable onPress={onClickNextButton}>
+              <NextButton moveNext={true}>다음</NextButton>
+            </CustomTouchable>
+          ) : (
+            <NextButton moveNext={false}>다음</NextButton>
+          )}
+        </ContentsContainer>
+      </Container>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -336,6 +346,7 @@ const PutThumbnail = styled.View`
   background-color: rgba(217, 217, 217, 0.3);
   align-items: center;
   justify-content: center;
+  min-height: ${hp(43.5)}px;
 `;
 
 interface NextButtonProps {

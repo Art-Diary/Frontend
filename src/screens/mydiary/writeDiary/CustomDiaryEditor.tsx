@@ -15,10 +15,9 @@ import {ImageType} from './WriteMyDiaryContentsScreen';
 import CustomTouchable from '~/components/common/CustomTouchable';
 
 /**
- * TODO
- * - 초기 로딩에는 사진 추가 시 스크롤이 안되고, 재로딩하면 스크롤이 된다. => 화면 높이 문제?
+ * - [x] 초기 로딩에는 사진 추가 시 스크롤이 안되고, 재로딩하면 스크롤이 된다. => 화면 높이 문제? => 사진 뒤에 엔터 추가로 해결
  * - [x] 사진 첨부하고 위치 이런거 저장하고 표시했다가 보여주기. (일단 디비 저장)
- * - 색상이 제대로 적용되도록 수정
+ * - [-] 색상이 제대로 적용되도록 수정
  */
 
 const colors = [
@@ -45,7 +44,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
   images,
 }) => {
   const editorRef = useRef<RichEditor>(null);
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   const [fontColor, setFontColor] = useState('#3c4045');
   const [colorVisible, setColorVisible] = useState(false);
 
@@ -81,11 +80,21 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
     contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
   };
 
+  const handleCursorPosition = (y: number) => {
+    // 커서 위치 변화 시 호출되는 콜백
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        y: Math.max(0, y - 100), // 커서 위치로 스크롤 (여기서 100은 오프셋을 의미)
+        animated: true,
+      });
+    }
+  };
+
   return (
     <Container>
       <ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={styles.scrollContainer}
-        // contentContainerStyle={{maxHeight: '100%'}}
         style={styles.scrollView}>
         <RichEditor
           ref={editorRef}
@@ -94,9 +103,11 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
           initialHeight={250}
           style={styles.editor}
           placeholder="전시회 감상 기록을 작성해주세요."
-          onChange={descriptionText => {
-            handleContentChange(descriptionText);
-          }}
+          onChange={handleContentChange}
+          onCursorPosition={y => handleCursorPosition(y)}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
         />
       </ScrollView>
       {colorVisible && (
@@ -144,6 +155,7 @@ export default CustomDiaryEditor;
 
 const Container = styled.View`
   flex: 1;
+  min-height: ${hp(52.5)}px;
   background-color: ${BACK_COLOR};
   border-radius: ${BUTTON_RADIUS}px;
   border-width: ${wp(0.5)}px;
