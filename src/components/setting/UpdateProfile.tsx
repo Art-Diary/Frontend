@@ -31,6 +31,8 @@ import {
 import {GoogleLogoIcon, KakaoLogoIcon, NaverLogoIcon} from '../common/icon';
 import {changeImageSize} from '~/utils/resizeImage';
 import CustomTouchable from '../common/CustomTouchable';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {View} from 'react-native';
 
 type InitProfile = {
   favoriteArt: string;
@@ -134,49 +136,54 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
   };
 
   return (
-    <Container>
-      <BackView title={title} line={true} />
+    <KeyboardAwareScrollView
+      style={{flex: 1, backgroundColor: BACK_COLOR}}
+      resetScrollToCoords={{x: 0, y: 0}}
+      contentContainerStyle={{flexGrow: 1}}>
+      <Container>
+        <BackView title={title} line={true} />
 
-      {/* body */}
-      <Contents>
-        {/* 닉네임 */}
-        <EditNickname
-          getNickname={nicknameKeyword}
-          setNickname={setNicknameKeyword}
-          isVerified={isVerified}
-          setIsVerified={setIsVerified}
-        />
-        {/* 좋아하는 전시 분야 */}
-        <EditArtCategory getValue={art} setValue={setArt} />
-        {/* 프로필 */}
-        <EditPicture imageUri={imageUri} setImageUri={setImageUri} />
-        {/* 이메일 */}
-        <ContentColumn>
-          <SectionName>이메일</SectionName>
-          <BoxView color={true}>
-            {initProfile.providerType === 'naver' ? (
-              <NaverLogoIcon customHeight={2.6} />
-            ) : initProfile.providerType === 'gmail' ||
-              initProfile.providerType === 'google' ? (
-              <GoogleLogoIcon customHeight={2.6} />
-            ) : initProfile.providerType === 'kakao' ? (
-              <KakaoLogoIcon customHeight={2.6} />
-            ) : (
-              <></>
-            )}
-            <EmailText>{initProfile.email}</EmailText>
-          </BoxView>
-        </ContentColumn>
-        {/* 완료 버튼 */}
-        <CustomTouchable onPress={onPressComplete}>
-          <CompleteButton
-            complete={nicknameKeyword !== '' && art !== '' && isVerified}>
-            완료
-          </CompleteButton>
-        </CustomTouchable>
-      </Contents>
-      {isLoadingOpen && <LoadingModal message={'정보 수정 중 :)'} />}
-    </Container>
+        {/* body */}
+        <Contents>
+          {/* 닉네임 */}
+          <EditNickname
+            getNickname={nicknameKeyword}
+            setNickname={setNicknameKeyword}
+            isVerified={isVerified}
+            setIsVerified={setIsVerified}
+          />
+          {/* 좋아하는 전시 분야 */}
+          <EditArtCategory getValue={art} setValue={setArt} />
+          {/* 프로필 */}
+          <EditPicture imageUri={imageUri} setImageUri={setImageUri} />
+          {/* 이메일 */}
+          <ContentColumn>
+            <SectionName>이메일</SectionName>
+            <BoxView color={true}>
+              {initProfile.providerType === 'naver' ? (
+                <NaverLogoIcon customHeight={2.6} />
+              ) : initProfile.providerType === 'gmail' ||
+                initProfile.providerType === 'google' ? (
+                <GoogleLogoIcon customHeight={2.6} />
+              ) : initProfile.providerType === 'kakao' ? (
+                <KakaoLogoIcon customHeight={2.6} />
+              ) : (
+                <></>
+              )}
+              <EmailText>{initProfile.email}</EmailText>
+            </BoxView>
+          </ContentColumn>
+          {/* 완료 버튼 */}
+          <CustomTouchable onPress={onPressComplete}>
+            <CompleteButton
+              complete={nicknameKeyword !== '' && art !== '' && isVerified}>
+              완료
+            </CompleteButton>
+          </CustomTouchable>
+        </Contents>
+        {isLoadingOpen && <LoadingModal message={'정보 수정 중 :)'} />}
+      </Container>
+    </KeyboardAwareScrollView>
   );
 };
 

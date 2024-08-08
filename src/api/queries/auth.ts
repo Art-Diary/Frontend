@@ -132,11 +132,9 @@ export const useLoginUser = (): UseMutationResult<
     onError: err => {
       console.log(err);
       console.log('[Login] error Login');
-      // console.log('[Login] error Login +', providerType);
     },
     onSuccess: async (res: any) => {
       const resData = res.data;
-      // TODO
       try {
         await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
@@ -161,7 +159,6 @@ export const useUniteSocialLogin = () => {
     },
     onSuccess: async (res: any) => {
       const resData = res.data;
-      // TODO
       try {
         await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
@@ -186,7 +183,6 @@ export const useSeparateSocialLogin = () => {
     },
     onSuccess: async (res: any) => {
       const resData = res.data;
-      // TODO
       try {
         await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(
@@ -215,7 +211,7 @@ export const useUpdateAlarmToken = () => {
   });
 };
 
-// TODO
+// TODO 삭제
 export const useLoginTest = () => {
   return useMutation({
     mutationFn: (userId: number) => loginUserTest(userId),
@@ -225,7 +221,6 @@ export const useLoginTest = () => {
     },
     onSuccess: async (res: any) => {
       const resData = res.data;
-      // TODO
       try {
         await AsyncStorage.setItem('accessToken', resData.accessToken);
         await AsyncStorage.setItem(

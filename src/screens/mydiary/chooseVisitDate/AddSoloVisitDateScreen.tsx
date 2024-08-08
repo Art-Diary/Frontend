@@ -72,7 +72,7 @@ const AddSoloVisitDateScreen = () => {
       }
       updateVisitDates(dateList);
       showToast('방문 날짜를 추가했습니다');
-      // TODO 다음 페이지로 이동 => 이전 페이지로 이동되도록
+      // [-] 다음 페이지로 이동 => 이전 페이지로 이동되도록
       navigation.goBack();
     }
   }, [isError, isSuccess]);

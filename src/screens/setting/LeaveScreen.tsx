@@ -120,8 +120,7 @@ const Container = styled.View`
 const Contents = styled.View`
   flex: 1;
   width: 100%;
-  height: 100%;
-  flex-direction: column;
+  min-height: 93.2%;
   background-color: ${BACK_COLOR};
   padding: ${wp(4)}px;
 `;

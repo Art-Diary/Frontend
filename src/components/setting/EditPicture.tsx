@@ -93,7 +93,7 @@ export default EditPicture;
 
 const ContentColumn = styled.View`
   flex: 1;
-  flex-direction: column;
+  min-height: ${hp(41)}px; // 고정 높이 또는 최소 높이 설정
   width: 100%;
   gap: ${hp(1.7)}px;
 `;
