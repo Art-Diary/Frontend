@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
@@ -34,7 +34,9 @@ import {
   ImageLibraryOptions,
   launchImageLibrary,
 } from 'react-native-image-picker';
-import {useAddExhibitionActions} from '~/zustand/exhibition/addExhibition';
+import {useCreateRegExh} from '~/api/queries/regexh';
+import {changeImageSize} from '~/utils/resizeImage';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 const ExhAddFormScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -54,8 +56,14 @@ const ExhAddFormScreen = () => {
   const [regPosterUri, setRegPosterUri] = useState<string | undefined>(
     undefined,
   );
-  const {updateRegExhData} = useAddExhibitionActions();
+  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   // create api
+  const {
+    mutate: createRegExh,
+    isLoading: isLoading,
+    isError: isError,
+    isSuccess: isSuccess,
+  } = useCreateRegExh();
 
   const onChangeExhName = useCallback((text: string) => {
     setRegExhNameKeyword(text);
@@ -126,16 +134,16 @@ const ExhAddFormScreen = () => {
       showToast('전시회 제목을 입력해주세요.');
       return;
     }
-    // 전시회 장소 -
-    if (checkBlankInKeyword(regGalleryKeyword)) {
-      showToast('전시회 장소를 선택해주세요.');
-      return;
-    }
-    // 전시회 일정 -
-    if (checkBlankInKeyword(regExhNameKeyword)) {
-      showToast('전시회 일정을 입력해주세요.');
-      return;
-    }
+    // // 전시회 장소 -
+    // if (checkBlankInKeyword(regGalleryKeyword)) {
+    //   showToast('전시회 장소를 선택해주세요.');
+    //   return;
+    // }
+    // // 전시회 일정 -
+    // if (checkBlankInKeyword(regExhNameKeyword)) {
+    //   showToast('전시회 일정을 입력해주세요.');
+    //   return;
+    // }
     // 전시회 작가
     if (checkBlankInKeyword(regPainterKeyword)) {
       showToast('전시회 작가를 입력해주세요.');
@@ -161,21 +169,49 @@ const ExhAddFormScreen = () => {
       showToast('전시회 포스터를 첨부해주세요.');
       return;
     }
-    updateRegExhData({
-      regExhName: regExhNameKeyword,
-      regGallery: '알 수 없음',
-      regExhPeriodStart: '2024-08-01', //
-      regExhPeriodEnd: '2024-08-30', //
-      regPainter: regPainterKeyword,
-      regFee: Number(regFeeKeyword),
-      regIntro: regIntroKeyword,
-      regUrl: regUrlKeyword,
-      regPoster: regPosterUri,
-      regArt: undefined,
-      regDate: '2024-08-30', //
-    });
-    // navigation.navigate(); // 설정 페이지의 등록한 전시회 페이지로 이동
+    makeFormData();
   };
+
+  const makeFormData = async () => {
+    const formData = new FormData();
+
+    console.log(Number(regFeeKeyword));
+    formData.append('regExhName', regExhNameKeyword);
+    formData.append('regGallery', '알 수 없음');
+    formData.append('regExhPeriodStart', '2024-08-01');
+    formData.append('regExhPeriodEnd', '2024-08-30');
+    formData.append('regPainter', regPainterKeyword);
+    formData.append('regFee', Number(regFeeKeyword));
+    formData.append('regArt', undefined);
+    formData.append('regDate', '2024-08-19 21:39:01');
+
+    if (regIntroKeyword) {
+      formData.append('regIntro', regIntroKeyword);
+    }
+    if (regUrlKeyword) {
+      formData.append('regUrl', regUrlKeyword);
+    }
+    if (regPosterUri && regPosterUri.indexOf('file:///') !== -1) {
+      const resultResizedImage = await changeImageSize(regPosterUri);
+      formData.append('regPoster', resultResizedImage);
+    }
+    createRegExh({formData});
+  };
+
+  useEffect(() => {
+    if (isError) {
+      showToast('전시회 등록 작성을 실패했습니다.');
+    }
+    if (isLoading) {
+      setIsLoadingOpen(true);
+    }
+    if (!isLoading) {
+      setIsLoadingOpen(false);
+    }
+    if (isSuccess) {
+      // navigation.navigate(); // 설정 페이지의 등록한 전시회 페이지로 이동
+    }
+  }, [isError, isLoading, isSuccess]);
 
   return (
     <KeyboardAwareScrollView
@@ -299,6 +335,7 @@ const ExhAddFormScreen = () => {
           </CustomTouchable>
         </ContentsContainer>
       </Container>
+      {isLoadingOpen && <LoadingModal message={'전시회 등록 요청 중 :)'} />}
     </KeyboardAwareScrollView>
   );
 };

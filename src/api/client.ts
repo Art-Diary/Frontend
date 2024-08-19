@@ -40,9 +40,9 @@ client.interceptors.response.use(
   async err => {
     const {config, response} = err;
 
-    if (!response) {
-      throw new Error('[response] do not have response data');
-    }
+    // if (!response) {
+    //   throw new Error('[response] do not have response data');
+    // }
     /** 1 */
     if (
       config.url === `/users/reissue` ||
