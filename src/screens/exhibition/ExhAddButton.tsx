@@ -10,7 +10,7 @@ const ExhAddButton = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const onPressButton = () => {
-    // navigation.navigate('');
+    navigation.navigate('ExhAddForm');
   };
 
   return (
