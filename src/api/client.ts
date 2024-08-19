@@ -38,13 +38,17 @@ client.interceptors.request.use(async config => {
 client.interceptors.response.use(
   res => res,
   async err => {
-    const {
-      config,
-      response: {status},
-    } = err;
+    const {config, response} = err;
 
+    // if (!response) {
+    //   throw new Error('[response] do not have response data');
+    // }
     /** 1 */
-    if (config.url === `/users/reissue` || status !== 401 || config.sent) {
+    if (
+      config.url === `/users/reissue` ||
+      response.status !== 401 ||
+      config.sent
+    ) {
       if (config.url === `/users/reissue`) {
         // reissue error -> go to login page
         await AsyncStorage.removeItem('accessToken');
