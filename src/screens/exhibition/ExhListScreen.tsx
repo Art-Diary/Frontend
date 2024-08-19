@@ -41,6 +41,7 @@ import {BACK_COLOR, BORDER_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import ExhAddButton from './ExhAddButton';
 
 interface Exhibition {
   exhId: number;
@@ -406,85 +407,93 @@ const ExhListScreen = () => {
       </Header>
 
       {/* body */}
-      <OptionContainer
-        haveOption={
-          isDateVisible ||
-          isNameVisible ||
-          isFieldVisible ||
-          isPriceVisible ||
-          isStateVisible
-        }>
+      <ContentsWrapper>
+        <OptionContainer
+          haveOption={
+            isDateVisible ||
+            isNameVisible ||
+            isFieldVisible ||
+            isPriceVisible ||
+            isStateVisible
+          }>
+          <ScrollView
+            horizontal={true}
+            pagingEnabled={false}
+            showsHorizontalScrollIndicator={true}>
+            {isDateVisible && (
+              <OptionView activeOpacity={0.6} onPress={() => deleteDate()}>
+                <OptionText>{selectedDate}</OptionText>
+                <OptionText isDeleteText> x</OptionText>
+              </OptionView>
+            )}
+            {isNameVisible && (
+              <OptionView activeOpacity={0.6} onPress={() => deleteName()}>
+                <OptionText>{selectedName}</OptionText>
+                <OptionText isDeleteText> x</OptionText>
+              </OptionView>
+            )}
+            {isFieldVisible &&
+              selectedField?.map((item: string) => (
+                <OptionView
+                  activeOpacity={0.6}
+                  onPress={() => deleteField(item)}>
+                  <OptionText>{item}</OptionText>
+                  <OptionText isDeleteText> x</OptionText>
+                </OptionView>
+              ))}
+            {isPriceVisible && (
+              <OptionView activeOpacity={0.6} onPress={() => deletePrice()}>
+                <OptionText>{selectedPrice}</OptionText>
+                <OptionText isDeleteText> x</OptionText>
+              </OptionView>
+            )}
+            {isStateVisible &&
+              selectedState?.map((item: string) => (
+                <OptionView
+                  activeOpacity={0.6}
+                  onPress={() => deleteState(item)}>
+                  <OptionText key={item}>{item}</OptionText>
+                  <OptionText isDeleteText> x</OptionText>
+                </OptionView>
+              ))}
+          </ScrollView>
+        </OptionContainer>
         <ScrollView
-          horizontal={true}
-          pagingEnabled={false}
-          showsHorizontalScrollIndicator={true}>
-          {isDateVisible && (
-            <OptionView activeOpacity={0.6} onPress={() => deleteDate()}>
-              <OptionText>{selectedDate}</OptionText>
-              <OptionText isDeleteText> x</OptionText>
-            </OptionView>
-          )}
-          {isNameVisible && (
-            <OptionView activeOpacity={0.6} onPress={() => deleteName()}>
-              <OptionText>{selectedName}</OptionText>
-              <OptionText isDeleteText> x</OptionText>
-            </OptionView>
-          )}
-          {isFieldVisible &&
-            selectedField?.map((item: string) => (
-              <OptionView activeOpacity={0.6} onPress={() => deleteField(item)}>
-                <OptionText>{item}</OptionText>
-                <OptionText isDeleteText> x</OptionText>
-              </OptionView>
-            ))}
-          {isPriceVisible && (
-            <OptionView activeOpacity={0.6} onPress={() => deletePrice()}>
-              <OptionText>{selectedPrice}</OptionText>
-              <OptionText isDeleteText> x</OptionText>
-            </OptionView>
-          )}
-          {isStateVisible &&
-            selectedState?.map((item: string) => (
-              <OptionView activeOpacity={0.6} onPress={() => deleteState(item)}>
-                <OptionText key={item}>{item}</OptionText>
-                <OptionText isDeleteText> x</OptionText>
-              </OptionView>
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+          style={{flex: 1}}
+          scrollEventThrottle={200}>
+          {data &&
+            data.map((item: any, index: number) => (
+              <ExhItemView
+                key={index}
+                exhInfo={{...item}}
+                noLine={index === data.length - 1 ? true : false}
+                notTouchable={false}
+                onTouch={() =>
+                  navigation.navigate('ExhDetailInfo', {
+                    exhId: item.exhId,
+                  })
+                }>
+                <EmptyHeartContent>
+                  <CustomTouchable
+                    onPress={() => onPressHeart(item.exhId, index)}>
+                    {hearts &&
+                    hearts.length === data.length &&
+                    hearts[index].favoriteExh ? (
+                      <FullHeartIcon />
+                    ) : (
+                      <EmptyHeartIcon />
+                    )}
+                  </CustomTouchable>
+                </EmptyHeartContent>
+              </ExhItemView>
             ))}
         </ScrollView>
-      </OptionContainer>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-        style={{flex: 1}}
-        scrollEventThrottle={200}>
-        {data &&
-          data.map((item: any, index: number) => (
-            <ExhItemView
-              key={index}
-              exhInfo={{...item}}
-              noLine={index === data.length - 1 ? true : false}
-              notTouchable={false}
-              onTouch={() =>
-                navigation.navigate('ExhDetailInfo', {
-                  exhId: item.exhId,
-                })
-              }>
-              <EmptyHeartContent>
-                <CustomTouchable
-                  onPress={() => onPressHeart(item.exhId, index)}>
-                  {hearts &&
-                  hearts.length === data.length &&
-                  hearts[index].favoriteExh ? (
-                    <FullHeartIcon />
-                  ) : (
-                    <EmptyHeartIcon />
-                  )}
-                </CustomTouchable>
-              </EmptyHeartContent>
-            </ExhItemView>
-          ))}
-      </ScrollView>
+
+        <ExhAddButton />
+      </ContentsWrapper>
     </Container>
   );
 };
@@ -495,6 +504,10 @@ export default ExhListScreen;
 const Container = styled.View`
   flex: 1;
   background-color: ${BACK_COLOR};
+`;
+
+const ContentsWrapper = styled.View`
+  flex: 1;
 `;
 
 interface OptionContainerProps {
