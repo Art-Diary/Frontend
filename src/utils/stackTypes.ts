@@ -33,6 +33,10 @@ export type RootStackParamList = {
     screen: keyof SettingStackParamList;
     params: SettingStackParamList[keyof SettingStackParamList];
   };
+  RegisterNewExhScreen: undefined;
+  PreviewRegExh: {
+    rExhId: number;
+  };
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;

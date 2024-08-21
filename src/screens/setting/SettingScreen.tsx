@@ -83,6 +83,10 @@ const SettingScreen = () => {
       return true;
     };
 
+    const handleMoveToRegister = () => {
+      navigation.navigate('RegisterNewExhScreen');
+    };
+
     const resultCheck = await checkNotification();
 
     if (resultCheck) {
@@ -120,6 +124,10 @@ const SettingScreen = () => {
             <GreyNameTag
               content="푸시 알림 설정"
               handleTouch={() => handleMoveToAlarm('AlarmSetting')}
+            />
+            <GreyNameTag
+              content="전시회 등록 확인"
+              handleTouch={() => navigation.navigate('RegisterNewExhScreen')}
             />
             <GreyNameTag content="도움말" />
           </SettingWrapper>
