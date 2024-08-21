@@ -44,6 +44,7 @@ import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 import {setNavigator} from './api/navigationService';
+import ExhAddFormScreen from './screens/exhibition/ExhAddFormScreen';
 import RegisterNewExhScreen from './screens/setting/RegisterNewExhScreen';
 import PreviewRegExh from './screens/setting/PreviewRegExh';
 
@@ -160,6 +161,7 @@ export default function App() {
             <Stack.Screen name="ExhToDiaryBack" component={ExhToDiaryBack} />
             <Stack.Screen name="ExhToCal" component={ExhToCal} />
             <Stack.Screen name="ExhToMoreReview" component={ExhToMoreReview} />
+            <Stack.Screen name="ExhAddForm" component={ExhAddFormScreen} />
             {/* [캘린더] 선택한 날짜의 전시회의 기록 목록 앞/뒤 화면 */}
             <Stack.Screen
               name="CalendarDiaryRoutes"

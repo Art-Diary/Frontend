@@ -55,6 +55,7 @@ export type RootStackParamList = {
   ExhToMoreReview: {
     exhId: number;
   };
+  ExhAddForm: undefined;
   //CalendarSearch: undefined;
   // login
   Login: undefined;

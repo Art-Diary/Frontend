@@ -9,6 +9,7 @@ import {
   ClassifyButton,
   EmptyHeart,
   EmptyStar,
+  ExhPlus,
   ExhShareButton,
   FullHeart,
   FullStar,
@@ -195,6 +196,11 @@ export const HomepageIcon = () => {
 export const CameraButtonIcon = () => {
   const height = rw(5.5);
   return <CameraButton width={100 * (height / 100)} height={height} />;
+};
+
+export const ExhPlusIcon = () => {
+  const height = rw(13);
+  return <ExhPlus width={100 * (height / 100)} height={height} />;
 };
 
 /** bottom nav */
