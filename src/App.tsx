@@ -45,6 +45,8 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 import {setNavigator} from './api/navigationService';
 import ExhAddFormScreen from './screens/exhibition/ExhAddFormScreen';
+import RegisterNewExhScreen from './screens/setting/RegisterNewExhScreen';
+import PreviewRegExh from './screens/setting/PreviewRegExh';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -178,6 +180,11 @@ export default function App() {
             <Stack.Screen name="MateDiaryRoutes" component={MateDiaryRoutes} />
             {/* [설정] 프로필 수정, 좋아요, 알림 설정, 회원 탈퇴 */}
             <Stack.Screen name="SettingRoutes" component={SettingRoutes} />
+            <Stack.Screen
+              name="RegisterNewExhScreen"
+              component={RegisterNewExhScreen}
+            />
+            <Stack.Screen name="PreviewRegExh" component={PreviewRegExh} />
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
