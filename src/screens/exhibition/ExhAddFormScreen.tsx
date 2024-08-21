@@ -9,6 +9,7 @@ import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
+  MIDDLE_GREY,
 } from '~/components/common/colors';
 import BackView from '~/components/common/BackView';
 import {CameraButtonIcon} from '~/components/common/icon';
@@ -37,14 +38,16 @@ import {
 import {useCreateRegExh} from '~/api/queries/regexh';
 import {changeImageSize} from '~/utils/resizeImage';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import ExhSelectPeriod from './ExhSelectPeriodModal';
+import {changeDotToHyphen} from '~/utils/date';
 
 const ExhAddFormScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const feeMaxInputLength = 10;
   const [regExhNameKeyword, setRegExhNameKeyword] = useState<string>('');
   const [regGalleryKeyword, setRegGallery] = useState<string>('');
-  const [regStartDateKeyword, setStartDateGallery] = useState<string>('');
-  const [regEndDateKeyword, setEndDateGallery] = useState<string>('');
+  const [regStartDateKeyword, setStartDateKeyword] = useState<string>('');
+  const [regEndDateKeyword, setEndDateKeyword] = useState<string>('');
   const [regPainterKeyword, setRegPainterKeyword] = useState<string>('');
   const [regFeeKeyword, setRegFeeKeyword] = useState<string>('');
   const [regUrlKeyword, setRegUrlKeyword] = useState<string | undefined>(
@@ -57,6 +60,7 @@ const ExhAddFormScreen = () => {
     undefined,
   );
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState(false); // 일정 선택 모달
   // create api
   const {
     mutate: createRegExh,
@@ -86,6 +90,19 @@ const ExhAddFormScreen = () => {
   }, []);
 
   const openSearchGalleryModal = () => {};
+
+  const handleCloseSelectPeriodModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleOpenSelectPeriodModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleSelectedPeriod = (startDate: string, endDate: string) => {
+    setStartDateKeyword(startDate);
+    setEndDateKeyword(endDate);
+  };
 
   const showPhoto = async () => {
     const result = await requestCameraPermission();
@@ -139,11 +156,11 @@ const ExhAddFormScreen = () => {
     //   showToast('전시회 장소를 선택해주세요.');
     //   return;
     // }
-    // // 전시회 일정 -
-    // if (checkBlankInKeyword(regExhNameKeyword)) {
-    //   showToast('전시회 일정을 입력해주세요.');
-    //   return;
-    // }
+    // 전시회 일정 -
+    if (regStartDateKeyword === '' || regEndDateKeyword === '') {
+      showToast('전시회 일정을 선택해주세요.');
+      return;
+    }
     // 전시회 작가
     if (checkBlankInKeyword(regPainterKeyword)) {
       showToast('전시회 작가를 입력해주세요.');
@@ -178,8 +195,11 @@ const ExhAddFormScreen = () => {
     console.log(Number(regFeeKeyword));
     formData.append('regExhName', regExhNameKeyword);
     formData.append('regGallery', '알 수 없음');
-    formData.append('regExhPeriodStart', '2024-08-01');
-    formData.append('regExhPeriodEnd', '2024-08-30');
+    formData.append(
+      'regExhPeriodStart',
+      changeDotToHyphen(regStartDateKeyword),
+    );
+    formData.append('regExhPeriodEnd', changeDotToHyphen(regEndDateKeyword));
     formData.append('regPainter', regPainterKeyword);
     formData.append('regFee', Number(regFeeKeyword));
     formData.append('regArt', undefined);
@@ -231,17 +251,34 @@ const ExhAddFormScreen = () => {
               onChangeText={onChangeExhName}
             />
           </RowSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 장소 */}
           <RowSectionWrapper>
-            <SectionName>전시회 장소 추가</SectionName>
-            <SectionName>장소 선택 구현 예정</SectionName>
+            <SectionName>전시회 장소</SectionName>
+            <DateText>장소 선택 구현 예정</DateText>
           </RowSectionWrapper>
-          {/* 전시회 제목 */}
-          <RowSectionWrapper>
-            <SectionName>전시회 일정</SectionName>
-            <SectionName>일정 선택 구현 예정</SectionName>
-          </RowSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 일정 */}
+          <CustomTouchable onPress={handleOpenSelectPeriodModal}>
+            <RowSectionWrapper>
+              <SectionName>전시회 일정</SectionName>
+              {regStartDateKeyword === '' || regEndDateKeyword === '' ? (
+                <DateText>일정 선택</DateText>
+              ) : (
+                <DateText>
+                  {regStartDateKeyword} ~ {regEndDateKeyword}
+                </DateText>
+              )}
+            </RowSectionWrapper>
+          </CustomTouchable>
+          {isModalVisible && (
+            <ExhSelectPeriod
+              isVisible={isModalVisible}
+              onClose={handleCloseSelectPeriodModal}
+              startPeriod={regStartDateKeyword}
+              endPeriod={regEndDateKeyword}
+              handleSelectedPeriod={handleSelectedPeriod}
+            />
+          )}
+          {/* 전시회 작가 */}
           <ColSectionWrapper>
             <SectionName>전시회 작가</SectionName>
             <RowSectionWrapper sectionName={'painter'}>
@@ -254,7 +291,7 @@ const ExhAddFormScreen = () => {
               />
             </RowSectionWrapper>
           </ColSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 관람료 */}
           <RowSectionWrapper>
             <SectionName>전시회 관람료</SectionName>
             <FeeWrapper>
@@ -269,7 +306,7 @@ const ExhAddFormScreen = () => {
               <SectionName>원</SectionName>
             </FeeWrapper>
           </RowSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 홈페이지 링크 */}
           <ColSectionWrapper>
             <SectionName>전시회 홈페이지 링크</SectionName>
             <RowSectionWrapper sectionName={'url'}>
@@ -282,7 +319,7 @@ const ExhAddFormScreen = () => {
               />
             </RowSectionWrapper>
           </ColSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 소개 */}
           <ColSectionWrapper>
             <SectionName>소개</SectionName>
             <WriteIntroWrapper>
@@ -298,7 +335,7 @@ const ExhAddFormScreen = () => {
               <SectionName>"</SectionName>
             </WriteIntroWrapper>
           </ColSectionWrapper>
-          {/* 전시회 제목 */}
+          {/* 전시회 포스터 */}
           <ColSectionWrapper>
             <SectionName>포스터</SectionName>
             <PutThumbnail>
@@ -364,6 +401,12 @@ const ContentsContainer = styled.View`
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+`;
+
+const DateText = styled.Text`
+  font-size: ${rf(15.5)}px;
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
 `;
 

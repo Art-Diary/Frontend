@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {dateToString} from '~/utils/date';
+import {dateToString, days, months} from '~/utils/date';
 import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
 import CustomTouchable from './CustomTouchable';
@@ -28,23 +28,6 @@ interface Matrix {
   day: number | null;
   isInCurrentMonth: boolean;
 }
-
-const days = ['일', '월', '화', '수', '목', '금', '토'];
-
-const months = [
-  '01',
-  '02',
-  '03',
-  '04',
-  '05',
-  '06',
-  '07',
-  '08',
-  '09',
-  '10',
-  '11',
-  '12',
-];
 
 const CustomCalendar: React.FC<CalendarProps> = ({
   initDate,
