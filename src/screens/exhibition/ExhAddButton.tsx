@@ -29,9 +29,10 @@ export default ExhAddButton;
 /** style */
 const TopLayer = styled.View`
   flex: 1;
-  flex-direction: row;
+  flex-direction: column;
   padding: ${wp(2.9)}px;
   padding-bottom: ${wp(3.9)}px;
+  padding-right: ${wp(13)}px;
   width: 100%;
   height: 100%;
   position: absolute;
@@ -39,6 +40,6 @@ const TopLayer = styled.View`
 `;
 
 const EmptyHeartContent = styled.View`
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-end;
 `;

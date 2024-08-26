@@ -1,7 +1,5 @@
 import React, {ReactNode, useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
@@ -37,28 +35,28 @@ import {
 } from 'react-native-image-picker';
 import {changeImageSize} from '~/utils/resizeImage';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import {changeDotToHyphen} from '~/utils/date';
-import ExhSelectPeriod from '~/screens/exhibition/ExhSelectPeriodModal';
+import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
+import ExhSelectPeriod from './ExhSelectPeriodModal';
 
 type RegExhDataSetType = {
   regExhName: string;
-  setRegExhName: (name: string) => void;
+  setRegExhName: (text: string) => void;
   regGallery: string;
-  setRegGallery: (name: string) => void;
+  setRegGallery: (text: string) => void;
   regStartDate: string;
-  setRegStartDate: (name: string) => void;
+  setRegStartDate: (text: string) => void;
   regEndDate: string;
-  setRegEndDate: (name: string) => void;
+  setRegEndDate: (text: string) => void;
   regPainter: string;
-  setRegPainter: (name: string) => void;
+  setRegPainter: (text: string) => void;
   regFee: string;
-  setRegFee: (name: string) => void;
+  setRegFee: (text: string) => void;
   regUrl: string | undefined;
-  setRegUrl: (name: string | undefined) => void;
+  setRegUrl: (text: string | undefined) => void;
   regIntro: string | undefined;
-  setRegIntro: (name: string | undefined) => void;
+  setRegIntro: (text: string | undefined) => void;
   regPosterUri: string | undefined;
-  setRegPosterUri: (name: string | undefined) => void;
+  setRegPosterUri: (text: string | undefined) => void;
 };
 
 type RequestApiType = {
@@ -83,7 +81,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
 }) => {
   const feeMaxInputLength = 10;
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
-  const [isModalVisible, setIsModalVisible] = useState(false); // 일정 선택 모달
+  const [isPeriodModalVisible, setIsPeriodModalVisible] = useState(false); // 일정 선택 모달
 
   useEffect(() => {
     if (requestData.isLoading) {
@@ -96,6 +94,10 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
 
   const onChangeExhName = useCallback((text: string) => {
     regExhData.setRegExhName(text);
+  }, []);
+
+  const onChangeGallery = useCallback((text: string) => {
+    regExhData.setRegGallery(text);
   }, []);
 
   const onChangePainter = useCallback((text: string) => {
@@ -114,15 +116,12 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
     regExhData.setRegUrl(text);
   }, []);
 
-  // TODO 구현 예정
-  const openSearchGalleryModal = () => {};
-
   const handleCloseSelectPeriodModal = () => {
-    setIsModalVisible(false);
+    setIsPeriodModalVisible(false);
   };
 
   const handleOpenSelectPeriodModal = () => {
-    setIsModalVisible(true);
+    setIsPeriodModalVisible(true);
   };
 
   const handleSelectedPeriod = (startDate: string, endDate: string) => {
@@ -177,11 +176,11 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       showToast('전시회 제목을 입력해주세요.');
       return;
     }
-    // TODO 구현 예정
-    // if (checkBlankInKeyword(regGalleryKeyword)) {
-    //   showToast('전시회 장소를 선택해주세요.');
-    //   return;
-    // }
+    // 전시회 장소
+    if (checkBlankInKeyword(regExhData.regGallery)) {
+      showToast('전시회 장소를 선택해주세요.');
+      return;
+    }
     // 전시회 일정
     if (regExhData.regStartDate === '' || regExhData.regEndDate === '') {
       showToast('전시회 일정을 선택해주세요.');
@@ -219,7 +218,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
     const formData = new FormData();
 
     formData.append('regExhName', regExhData.regExhName);
-    formData.append('regGallery', '알 수 없음');
+    formData.append('regGallery', regExhData.regGallery);
     formData.append(
       'regExhPeriodStart',
       changeDotToHyphen(regExhData.regStartDate),
@@ -231,7 +230,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
     formData.append('regPainter', regExhData.regPainter);
     formData.append('regFee', Number(regExhData.regFee));
     formData.append('regArt', undefined);
-    formData.append('regDate', '2024-08-19 21:39:01');
+    formData.append('regDate', changeDateTimeFormat(new Date()));
 
     if (regExhData.regIntro) {
       formData.append('regIntro', regExhData.regIntro);
@@ -274,10 +273,18 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
             />
           </RowSectionWrapper>
           {/* 전시회 장소 */}
-          <RowSectionWrapper>
+          <ColSectionWrapper>
             <SectionName>전시회 장소</SectionName>
-            <DateText>장소 선택 구현 예정</DateText>
-          </RowSectionWrapper>
+            <RowSectionWrapper sectionName={'gallery'}>
+              <WriteInfo
+                multiline={true}
+                placeholderTextColor={LIGHT_GREY}
+                placeholder={'장소 입력'}
+                value={regExhData.regGallery}
+                onChangeText={onChangeGallery}
+              />
+            </RowSectionWrapper>
+          </ColSectionWrapper>
           {/* 전시회 일정 */}
           <CustomTouchable onPress={handleOpenSelectPeriodModal}>
             <RowSectionWrapper>
@@ -292,9 +299,9 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
               )}
             </RowSectionWrapper>
           </CustomTouchable>
-          {isModalVisible && (
+          {isPeriodModalVisible && (
             <ExhSelectPeriod
-              isVisible={isModalVisible}
+              isVisible={isPeriodModalVisible}
               onClose={handleCloseSelectPeriodModal}
               startPeriod={regExhData.regStartDate}
               endPeriod={regExhData.regEndDate}
@@ -479,13 +486,15 @@ const RowSectionWrapper = styled.View<SectionProps>`
   padding-top: ${(props: SectionProps) =>
     props.sectionName === 'exhName' ||
     props.sectionName === 'url' ||
-    props.sectionName === 'painter'
+    props.sectionName === 'painter' ||
+    props.sectionName === 'gallery'
       ? `0px`
       : `${wp(2.9)}px`};
   padding-bottom: ${(props: SectionProps) =>
     props.sectionName === 'exhName' ||
     props.sectionName === 'url' ||
-    props.sectionName === 'painter'
+    props.sectionName === 'painter' ||
+    props.sectionName === 'gallery'
       ? `0px`
       : `${wp(2.9)}px`};
 `;
