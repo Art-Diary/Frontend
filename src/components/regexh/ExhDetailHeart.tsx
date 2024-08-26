@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {BackHandler} from 'react-native';
 import styled from 'styled-components/native';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -11,13 +10,13 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface Props {
   exhId: number;
-  hearState: boolean;
+  heartState: boolean;
 }
 
-const ExhDetailHeart: React.FC<Props> = ({exhId, hearState}) => {
+const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [deleteList, setDeleteList] = useState<number[]>([]);
-  const [hearts, setHearts] = useState<boolean>(hearState);
+  const [hearts, setHearts] = useState<boolean>(heartState);
   const {
     mutate: addLike,
     isLoading: isLoadingLike,
@@ -30,6 +29,10 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, hearState}) => {
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
   } = useDeleteLike(deleteList);
+
+  useEffect(() => {
+    setHearts(heartState);
+  }, [heartState]);
 
   useEffect(() => {
     if (isErrorLike) {
@@ -61,39 +64,6 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, hearState}) => {
     isLoadingDislike,
     isSuccessDislike,
   ]);
-
-  const handlePressBack = () => {
-    //BackButton
-    if (navigation?.canGoBack()) {
-      navigation.goBack();
-      return true;
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [
-          {
-            name: 'Main',
-            state: {
-              routes: [
-                {
-                  name: 'Exhibition',
-                  params: undefined,
-                },
-              ],
-            },
-          },
-        ],
-      });
-      return true;
-    }
-  };
-
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
-    };
-  }, [handlePressBack]);
 
   const onPressHeart = (exhId: number) => {
     if (!hearts) {
