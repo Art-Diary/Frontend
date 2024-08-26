@@ -199,7 +199,7 @@ export const CameraButtonIcon = () => {
 };
 
 export const ExhPlusIcon = () => {
-  const height = rw(13);
+  const height = rw(10);
   return <ExhPlus width={100 * (height / 100)} height={height} />;
 };
 
