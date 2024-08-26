@@ -6,11 +6,7 @@ export const fetchRegExhs = (isAdmin: boolean) =>
     params: {isAdmin},
   });
 
-export type CreateRegExhParams = {
-  formData: FormData | null;
-};
-
-export const createRegExh = (createRegExhParams: CreateRegExhParams) =>
-  client.post(`/regexh`, createRegExhParams.formData, {
+export const createRegExh = (formData: FormData | null) =>
+  client.post(`/regexh`, formData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
