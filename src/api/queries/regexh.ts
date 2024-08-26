@@ -5,7 +5,7 @@ import {
   useQueryClient,
   UseMutationResult,
 } from 'react-query';
-import {createRegExh, CreateRegExhParams, fetchRegExhs} from '../regexh';
+import {createRegExh, fetchRegExhs} from '../regexh';
 
 export const regexhQueryKeys = createQueryKeys('regexh', {
   fetchRegExhs: (isAdmin: boolean) => ['fetchRegExhs', isAdmin],
@@ -28,14 +28,13 @@ export const usefetchRegExhs = (isAdmin: boolean) =>
 export const useCreateRegExh = (): UseMutationResult<
   any,
   any,
-  CreateRegExhParams,
+  FormData | null,
   unknown
 > => {
   const queryClient = useQueryClient();
 
-  return useMutation<any, any, CreateRegExhParams, unknown>({
-    mutationFn: (createRegExhParams: CreateRegExhParams) =>
-      createRegExh(createRegExhParams),
+  return useMutation<any, any, FormData | null, unknown>({
+    mutationFn: (formData: FormData | null) => createRegExh(formData),
     onError: err => {
       console.log(err);
       console.log('[ExhAddFormScreen] error create ExhAddForm');
