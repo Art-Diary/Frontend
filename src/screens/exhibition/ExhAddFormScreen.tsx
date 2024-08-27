@@ -4,6 +4,7 @@ import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateRegExh} from '~/api/queries/regexh';
 import RegExhFormFrame from '~/components/regexh/RegExhFormFrame';
+import RegExhPreviewModal from './RegExhPreviewModal';
 
 const ExhAddFormScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -18,6 +19,10 @@ const ExhAddFormScreen = () => {
   const [regPosterUri, setRegPosterUri] = useState<string | undefined>(
     undefined,
   );
+
+  const [regExhFormdata, setRegExhFormdata] = useState<FormData | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState<boolean>(false);
+
   // create api
   const {
     mutate: createRegExh,
@@ -31,35 +36,80 @@ const ExhAddFormScreen = () => {
       showToast('전시회 등록 작성을 실패했습니다.');
     }
     if (isSuccess) {
-      // navigation.navigate(); // 설정 페이지의 등록한 전시회 페이지로 이동
+      // 설정 페이지의 등록한 전시회 페이지로 이동
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'Main',
+            state: {
+              routes: [
+                {
+                  name: 'Setting',
+                  params: undefined,
+                },
+              ],
+            },
+          },
+          {
+            name: 'RegisterNewExhScreen',
+          },
+        ],
+      });
     }
   }, [isError, isSuccess]);
 
   return (
-    <RegExhFormFrame
-      formState={'create'}
-      regExhData={{
-        regExhName,
-        setRegExhName,
-        regGallery,
-        setRegGallery,
-        regStartDate,
-        setRegStartDate,
-        regEndDate,
-        setRegEndDate,
-        regPainter,
-        setRegPainter,
-        regFee,
-        setRegFee,
-        regUrl,
-        setRegUrl,
-        regIntro,
-        setRegIntro,
-        regPosterUri,
-        setRegPosterUri,
-      }}
-      requestData={{isLoading: isLoading, createApi: createRegExh}}
-    />
+    <>
+      <RegExhFormFrame
+        formState={'create'}
+        regExhData={{
+          regExhName,
+          setRegExhName,
+          regGallery,
+          setRegGallery,
+          regStartDate,
+          setRegStartDate,
+          regEndDate,
+          setRegEndDate,
+          regPainter,
+          setRegPainter,
+          regFee,
+          setRegFee,
+          regUrl,
+          setRegUrl,
+          regIntro,
+          setRegIntro,
+          regPosterUri,
+          setRegPosterUri,
+        }}
+        requestData={{
+          isLoading: isLoading,
+          createRequest: {
+            setRegExhFormdata: setRegExhFormdata,
+            setIsPreviewModalOpen: setIsPreviewModalOpen,
+          },
+        }}
+      />
+      {isPreviewModalOpen && (
+        <RegExhPreviewModal
+          isVisible={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          regExhData={{
+            regExhName,
+            regGallery,
+            regStartDate,
+            regEndDate,
+            regPainter,
+            regFee,
+            regUrl,
+            regIntro,
+            regPosterUri,
+          }}
+          createApi={() => createRegExh(regExhFormdata)}
+        />
+      )}
+    </>
   );
 };
 
