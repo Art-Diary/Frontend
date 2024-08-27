@@ -10,3 +10,14 @@ export const createRegExh = (formData: FormData | null) =>
   client.post(`/regexh`, formData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+
+export type UpdateRegExhByAdminType = {
+  regExhId: number;
+  formData: FormData | null;
+};
+
+export const updateRegExhByAdmin = (updateData: UpdateRegExhByAdminType) => [
+  client.patch(`/regexh/${updateData.regExhId}/comments`, updateData.formData, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  }),
+];
