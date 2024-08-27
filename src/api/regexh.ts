@@ -10,3 +10,6 @@ export const createRegExh = (formData: FormData | null) =>
   client.post(`/regexh`, formData, {
     headers: {'Content-Type': 'multipart/form-data'},
   });
+
+export const fetchRegExhDetail = (regExhId: number) =>
+  client.get(`/regexh/${regExhId}`, {});

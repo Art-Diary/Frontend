@@ -34,8 +34,8 @@ export type RootStackParamList = {
     params: SettingStackParamList[keyof SettingStackParamList];
   };
   RegisterNewExhScreen: undefined;
-  PreviewRegExh: {
-    rExhId: number;
+  CheckRegExh: {
+    regExhId: number;
   };
   // calendar
   CalendarDiaryRoutes: undefined;
