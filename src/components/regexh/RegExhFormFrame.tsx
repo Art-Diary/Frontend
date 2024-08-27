@@ -59,9 +59,14 @@ type RegExhDataSetType = {
   setRegPosterUri: (text: string | undefined) => void;
 };
 
+type CreateApiType = {
+  setRegExhFormdata: (formData: FormData | null) => void;
+  setIsPreviewModalOpen: (state: boolean) => void;
+};
+
 type RequestApiType = {
   isLoading: boolean;
-  createApi?: (formData: FormData | null) => void;
+  createRequest?: CreateApiType;
   // 사용자 업데이트 api
   // 관리자 업데이트 api
 };
@@ -245,8 +250,9 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       const resultResizedImage = await changeImageSize(regExhData.regPosterUri);
       formData.append('regPoster', resultResizedImage);
     }
-    if (formState === 'create' && requestData.createApi) {
-      requestData.createApi(formData);
+    if (formState === 'create' && requestData.createRequest) {
+      requestData.createRequest.setRegExhFormdata(formData);
+      requestData.createRequest.setIsPreviewModalOpen(true);
     } else if (formState === 'updateByUser') {
       // 사용자 업데이트
     } else {
