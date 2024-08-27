@@ -7,6 +7,7 @@ import {
 } from 'react-query';
 import {
   createRegExh,
+  fetchRegExhDetail,
   fetchRegExhs,
   updateRegExhByAdmin,
   UpdateRegExhByAdminType,
@@ -14,6 +15,7 @@ import {
 
 export const regexhQueryKeys = createQueryKeys('regexh', {
   fetchRegExhs: (isAdmin: boolean) => ['fetchRegExhs', isAdmin],
+  fetchRegExhDetail: (regExhId: number) => ['fetchRegExhDetail', regExhId],
 });
 
 export const usefetchRegExhs = (isAdmin: boolean) =>
@@ -50,6 +52,20 @@ export const useCreateRegExh = (): UseMutationResult<
     },
   });
 };
+
+export const usefetchRegExhDetail = (regExhId: number) =>
+  useQuery({
+    queryKey: regexhQueryKeys.fetchRegExhDetail(regExhId).queryKey,
+    queryFn: () => fetchRegExhDetail(regExhId),
+    staleTime: 500000,
+    onError: err => {
+      console.log('[FetchRegExhDetail] error fetch RegExhDetail');
+    },
+    onSuccess: () => {
+      console.log('[FetchRegExhDetail] success fetch RegExhDetail');
+    },
+    select: (res: any) => res.data,
+  });
 
 export const useUpdateRegExhByAdmin = (): UseMutationResult<
   any,

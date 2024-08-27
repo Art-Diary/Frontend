@@ -118,11 +118,11 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
                       ? navigation.navigate('ConfirmRegExhScreen', {
                           rExhId: item.regExhId,
                         })
-                      : navigation.navigate('PreviewRegExh', {
-                          rExhId: item.regExhId,
+                      : navigation.navigate('CheckRegExh', {
+                          regExhId: item.regExhId,
                         });
                   }}>
-                  <Category key={index}>
+                  <Category>
                     <CategoryNormal>
                       <RExhNumber>{item.no}</RExhNumber>
                     </CategoryNormal>

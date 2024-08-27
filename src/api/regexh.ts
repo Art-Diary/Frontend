@@ -11,6 +11,9 @@ export const createRegExh = (formData: FormData | null) =>
     headers: {'Content-Type': 'multipart/form-data'},
   });
 
+export const fetchRegExhDetail = (regExhId: number) =>
+  client.get(`/regexh/${regExhId}`, {});
+
 export type UpdateRegExhByAdminType = {
   regExhId: number;
   formData: FormData | null;

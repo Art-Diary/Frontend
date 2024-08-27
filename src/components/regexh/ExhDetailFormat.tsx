@@ -129,7 +129,7 @@ const ExhDetailFormat: React.FC<Props> = ({data, state, exhId}) => {
                 {'원'}
               </Info>
             </InfoView>
-            {state == '미리보기' && (
+            {state == '미리보기' && data.url != '홈페이지 정보 없음.' && (
               <InfoView>
                 <InfoTitle>{'홈페이지'}</InfoTitle>
                 <TouchableOpacity onPress={() => exhToHomepage(data.url)}>
@@ -250,7 +250,7 @@ const StateText = styled.Text<StateTextProps>`
 const InfoView = styled.View`
   flex-direction: row;
   gap: ${wp(5)}px;
-  width: ${wp(80)}px;
+  width: ${wp(70)}px;
 `;
 
 const InfoTitle = styled.Text`

@@ -36,8 +36,8 @@ export type RootStackParamList = {
   RegisterNewExhScreen: {
     isAdmin: boolean;
   };
-  PreviewRegExh: {
-    rExhId: number;
+  CheckRegExh: {
+    regExhId: number;
   };
   ConfirmRegExhScreen: {
     rExhId: number;
