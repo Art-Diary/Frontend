@@ -97,12 +97,13 @@ const RegisterNewExhScreen = () => {
               .slice(offset, offset + limit)
               .map((item: any, index: number) => (
                 <TouchableOpacity
+                  key={index}
                   onPress={() =>
-                    navigation.navigate('PreviewRegExh', {
-                      rExhId: item.regExhId,
+                    navigation.navigate('CheckRegExh', {
+                      regExhId: item.regExhId,
                     })
                   }>
-                  <Category key={index}>
+                  <Category>
                     <CategoryNormal>
                       <RExhNumber>{item.no}</RExhNumber>
                     </CategoryNormal>
