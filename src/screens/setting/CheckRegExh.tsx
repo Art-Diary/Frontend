@@ -11,7 +11,12 @@ import {RootStackNavigationProp} from '~/App';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import {BackButtonIcon, OptionBarIcon} from '~/components/common/icon';
+import {
+  BackButtonIcon,
+  EditRegExhIcon,
+  OptionBarIcon,
+  TrashRegExhIcon,
+} from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
 import {usefetchRegExhDetail} from '~/api/queries/regexh';
 import {DEFAULT_IMAGE} from '@env';
@@ -22,6 +27,8 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
+import {EditRegExh, TrashRegExh} from '~/assets/images';
+import RegExhOptionsModal from '~/components/setting/RegExhOptionsModal';
 
 type RootStackParamList = {
   CheckRegExh: {regExhId: number};
@@ -43,6 +50,8 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
+  const [isEditModal, setIsEditModal] = useState<boolean>(false);
+  const [isTrashModal, setIsTrashModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -89,6 +98,32 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
     };
   }, [handlePressBack]);
 
+  const OpenEditModal = () => {
+    setIsEditModal(true);
+  };
+
+  const OpenTrashModal = () => {
+    setIsTrashModal(true);
+  };
+
+  const onPressEditYes = () => {
+    setIsEditModal(false);
+    //수정페이지이동
+  };
+
+  const onPressTrashYes = () => {
+    setIsTrashModal(false);
+    //삭제
+  };
+
+  const onPressEditNo = () => {
+    setIsEditModal(false);
+  };
+
+  const onPressTrashNo = () => {
+    setIsTrashModal(false);
+  };
+
   return (
     <TRenderEngineProvider>
       <ContainerScroll
@@ -106,9 +141,36 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
               <TopCenterView>
                 <Title> {'전시회 등록 확인'}</Title>
               </TopCenterView>
-              <CustomTouchable>
-                <OptionBarIcon />
-              </CustomTouchable>
+              {!data.regState && (
+                <OptionView>
+                  <CustomTouchable onPress={OpenEditModal}>
+                    <EditRegExhIcon />
+                    {isEditModal && (
+                      <RegExhOptionsModal
+                        handleCloseModal={onPressEditNo}
+                        onPressYes={() => onPressEditYes()}
+                        onPressNo={() => onPressEditNo()}
+                        message="등록한 전시회 정보를 수정할까요?"
+                        yes="예"
+                        no="아니오"
+                      />
+                    )}
+                  </CustomTouchable>
+                  <CustomTouchable onPress={OpenTrashModal}>
+                    <TrashRegExhIcon />
+                    {isTrashModal && (
+                      <RegExhOptionsModal
+                        handleCloseModal={onPressTrashNo}
+                        onPressYes={() => onPressTrashYes()}
+                        onPressNo={() => onPressTrashNo()}
+                        message="등록한 전시회 정보를 삭제할까요? 삭제시 복구할 수 없습니다"
+                        yes="삭제"
+                        no="취소"
+                      />
+                    )}
+                  </CustomTouchable>
+                </OptionView>
+              )}
             </TopLayer>
             {/**전시 상세정보 */}
             <ExhDetailFormat
@@ -149,7 +211,7 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
                   </StateView>
                   <CommentView>
                     <CommentBorderView>
-                      <RegDateText>{data.regComment}</RegDateText>
+                      <RegCommentText>{data.regComment}</RegCommentText>
                     </CommentBorderView>
                   </CommentView>
                 </StateCommentView>
@@ -184,6 +246,13 @@ const TopLayer = styled.View`
 
 const TopCenterView = styled.View`
   flex: 1;
+`;
+
+const OptionView = styled.View`
+  flex-direction: row;
+  gap: ${wp(3)}px;
+  padding-right: ${wp(2)}px;
+  align-items: center;
 `;
 
 const Title = styled.Text`
@@ -249,10 +318,17 @@ const CommentView = styled.View`
   padding: ${wp(2)}px;
 `;
 
+const RegCommentText = styled.Text`
+  font-size: ${rf(14)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  line-height: ${wp(8)}px;
+`;
+
 const CommentBorderView = styled.View`
   align-items: center;
   width: 100%;
-  border-color: ${LIGHT_GREY};
+  border-color: ${'#ff6f6180'};
   border-width: ${wp(0.3)}px;
   border-radius: ${wp(5)}px;
 `;
