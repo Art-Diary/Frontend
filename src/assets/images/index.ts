@@ -37,6 +37,8 @@ export {default as SearchDateCalendar} from './search_date_calendar.svg';
 export {default as ExhShareButton} from './exh_share_button.svg';
 export {default as CameraButton} from './camera_button.svg';
 export {default as ExhPlus} from './exh_plus.svg';
+export {default as TrashRegExh} from './trash_reg_exh.svg';
+export {default as EditRegExh} from './edit_reg_exh.svg';
 
 // social icon
 export {default as GoogleLogo} from './google_logo.svg';
