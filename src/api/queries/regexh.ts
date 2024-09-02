@@ -15,7 +15,11 @@ import {
 
 export const regexhQueryKeys = createQueryKeys('regexh', {
   fetchRegExhs: (isAdmin: boolean) => ['fetchRegExhs', isAdmin],
-  fetchRegExhDetail: (regExhId: number) => ['fetchRegExhDetail', regExhId],
+  fetchRegExhDetail: (regExhId: number, isAdmin: boolean) => [
+    'fetchRegExhDetail',
+    regExhId,
+    isAdmin,
+  ],
 });
 
 export const usefetchRegExhs = (isAdmin: boolean) =>
@@ -53,10 +57,10 @@ export const useCreateRegExh = (): UseMutationResult<
   });
 };
 
-export const usefetchRegExhDetail = (regExhId: number) =>
+export const usefetchRegExhDetail = (regExhId: number, isAdmin: boolean) =>
   useQuery({
-    queryKey: regexhQueryKeys.fetchRegExhDetail(regExhId).queryKey,
-    queryFn: () => fetchRegExhDetail(regExhId),
+    queryKey: regexhQueryKeys.fetchRegExhDetail(regExhId, isAdmin).queryKey,
+    queryFn: () => fetchRegExhDetail(regExhId, isAdmin),
     staleTime: 500000,
     onError: err => {
       console.log('[FetchRegExhDetail] error fetch RegExhDetail');

@@ -116,7 +116,7 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
                   onPress={() => {
                     isAdmin
                       ? navigation.navigate('ConfirmRegExhScreen', {
-                          rExhId: item.regExhId,
+                          regExhId: item.regExhId,
                         })
                       : navigation.navigate('CheckRegExh', {
                           regExhId: item.regExhId,

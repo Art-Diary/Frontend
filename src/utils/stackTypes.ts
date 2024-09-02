@@ -40,7 +40,7 @@ export type RootStackParamList = {
     regExhId: number;
   };
   ConfirmRegExhScreen: {
-    rExhId: number;
+    regExhId: number;
   };
   // calendar
   CalendarDiaryRoutes: undefined;

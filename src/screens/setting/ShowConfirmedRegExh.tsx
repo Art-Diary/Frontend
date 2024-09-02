@@ -6,14 +6,12 @@ import {
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {BackButtonIcon, OptionBarIcon} from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
-import {usefetchRegExhDetail} from '~/api/queries/regexh';
 import {DEFAULT_IMAGE} from '@env';
 import {
   DEFAULT_TEXT,
@@ -22,43 +20,35 @@ import {
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
-
-type RootStackParamList = {
-  CheckRegExh: {regExhId: number};
-};
-
-type CheckRegExhRouteProp = RouteProp<RootStackParamList, 'CheckRegExh'>;
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+} from 'react-query';
 
 interface Props {
-  route: CheckRegExhRouteProp;
+  regExhId: number;
+  regExhInfo: any;
+  refetch: <TPageData>(
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
+  ) => Promise<QueryObserverResult<any, unknown>>;
 }
 
-const CheckRegExh: React.FC<Props> = ({route}) => {
+const ShowConfirmedRegExh: React.FC<Props> = ({
+  regExhId,
+  regExhInfo,
+  refetch,
+}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
 
-  const {regExhId} = route.params;
-  const {data, isLoading, isError, isSuccess, refetch} = usefetchRegExhDetail(
-    regExhId,
-    false,
-  );
-
   const [refreshing, setRefreshing] = useState(false);
-  const [openLoading, setOpenLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused) {
       refetch();
     }
   }, [isFocused]);
-
-  useEffect(() => {
-    if (isLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
-    }
-  }, [isLoading]);
 
   useEffect(() => {
     if (refreshing) {
@@ -98,74 +88,72 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
         scrollEventThrottle={200}>
-        {data && (
-          <>
-            {/*전시회 세부정보 */}
-            <TopLayer>
-              <CustomTouchable onPress={handlePressBack}>
-                <BackButtonIcon />
-              </CustomTouchable>
-              <TopCenterView>
-                <Title> {'전시회 등록 확인'}</Title>
-              </TopCenterView>
-              <CustomTouchable>
-                <OptionBarIcon />
-              </CustomTouchable>
-            </TopLayer>
-            {/**전시 상세정보 */}
-            <ExhDetailFormat
-              data={{
-                exhName: data.regExhName,
-                gallery: data.regGallery,
-                exhPeriodStart: data.regExhPeriodStart,
-                exhPeriodEnd: data.regExhPeriodEnd,
-                poster: data.regPosterUri ?? DEFAULT_IMAGE,
-                painter: data.regPainter,
-                fee: Number(data.regFee),
-                url: data.regUrl ?? '홈페이지 정보 없음.',
-                intro: data.regIntro ?? '전시회 소개 없음.',
-                favoriteExh: null,
-              }}
-              state={'미리보기'}
-              exhId={null}
-            />
-            {/*전시 등록 현황 */}
-            <RegExhStateView>
-              <Title>{'등록현황'}</Title>
-              <StateView>
-                <StateText>{'등록현황'}</StateText>
-                {data.regState ? (
-                  <CompletedText>{'등록 완료'}</CompletedText>
-                ) : (
-                  <StandbyText>{'등록 대기'}</StandbyText>
-                )}
-              </StateView>
-              <StateView>
-                <StateText>{'등록 요청 날짜'}</StateText>
-                <RegDateText>{data.regDate}</RegDateText>
-              </StateView>
-              {data.regComment && (
-                <StateCommentView>
-                  <StateView>
-                    <StateText>{'코멘트'}</StateText>
-                  </StateView>
-                  <CommentView>
-                    <CommentBorderView>
-                      <RegDateText>{data.regComment}</RegDateText>
-                    </CommentBorderView>
-                  </CommentView>
-                </StateCommentView>
+        <>
+          {/*전시회 세부정보 */}
+          <TopLayer>
+            <CustomTouchable onPress={handlePressBack}>
+              <BackButtonIcon />
+            </CustomTouchable>
+            <TopCenterView>
+              <Title> {'전시회 등록 확인'}</Title>
+            </TopCenterView>
+            <CustomTouchable>
+              <OptionBarIcon />
+            </CustomTouchable>
+          </TopLayer>
+          {/**전시 상세정보 */}
+          <ExhDetailFormat
+            data={{
+              exhName: regExhInfo.regExhName,
+              gallery: regExhInfo.regGallery,
+              exhPeriodStart: regExhInfo.regExhPeriodStart,
+              exhPeriodEnd: regExhInfo.regExhPeriodEnd,
+              poster: regExhInfo.regPosterUri ?? DEFAULT_IMAGE,
+              painter: regExhInfo.regPainter,
+              fee: Number(regExhInfo.regFee),
+              url: regExhInfo.regUrl ?? '홈페이지 정보 없음.',
+              intro: regExhInfo.regIntro ?? '전시회 소개 없음.',
+              favoriteExh: null,
+            }}
+            state={'미리보기'}
+            exhId={null}
+          />
+          {/*전시 등록 현황 */}
+          {/* TODO 공통 컴포넌트로 분리되면 수정 */}
+          <RegExhStateView>
+            <Title>{'등록현황'}</Title>
+            <StateView>
+              <StateText>{'등록현황'}</StateText>
+              {regExhInfo.regState ? (
+                <CompletedText>{'등록 완료'}</CompletedText>
+              ) : (
+                <StandbyText>{'등록 대기'}</StandbyText>
               )}
-            </RegExhStateView>
-          </>
-        )}
-        {openLoading && <LoadingModal message="로딩 중 :)" />}
+            </StateView>
+            <StateView>
+              <StateText>{'등록 요청 날짜'}</StateText>
+              <RegDateText>{regExhInfo.regDate}</RegDateText>
+            </StateView>
+            {regExhInfo.regComment && (
+              <StateCommentView>
+                <StateView>
+                  <StateText>{'코멘트'}</StateText>
+                </StateView>
+                <CommentView>
+                  <CommentBorderView>
+                    <RegDateText>{regExhInfo.regComment}</RegDateText>
+                  </CommentBorderView>
+                </CommentView>
+              </StateCommentView>
+            )}
+          </RegExhStateView>
+        </>
       </ContainerScroll>
     </TRenderEngineProvider>
   );
 };
 
-export default CheckRegExh;
+export default ShowConfirmedRegExh;
 
 /** style */
 const ContainerScroll = styled.ScrollView`
