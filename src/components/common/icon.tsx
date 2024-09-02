@@ -38,6 +38,8 @@ import {
   SearchDateCalendar,
   WriteDiaryButton,
   WriterPencil,
+  EditRegExh,
+  TrashRegExh,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
@@ -201,6 +203,16 @@ export const CameraButtonIcon = () => {
 export const ExhPlusIcon = () => {
   const height = rw(10);
   return <ExhPlus width={100 * (height / 100)} height={height} />;
+};
+
+export const EditRegExhIcon = () => {
+  const height = rw(5);
+  return <EditRegExh width={100 * (height / 100)} height={height} />;
+};
+
+export const TrashRegExhIcon = () => {
+  const height = rw(5.5);
+  return <TrashRegExh width={100 * (height / 100)} height={height} />;
 };
 
 /** bottom nav */
