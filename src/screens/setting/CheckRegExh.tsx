@@ -45,8 +45,10 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
   const isFocused = useIsFocused();
 
   const {regExhId} = route.params;
-  const {data, isLoading, isError, isSuccess, refetch} =
-    usefetchRegExhDetail(regExhId);
+  const {data, isLoading, isError, isSuccess, refetch} = usefetchRegExhDetail(
+    regExhId,
+    false,
+  );
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);

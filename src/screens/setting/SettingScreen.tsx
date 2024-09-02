@@ -83,10 +83,6 @@ const SettingScreen = () => {
       return true;
     };
 
-    const handleMoveToRegister = () => {
-      navigation.navigate('RegisterNewExhScreen');
-    };
-
     const resultCheck = await checkNotification();
 
     if (resultCheck) {
@@ -127,7 +123,19 @@ const SettingScreen = () => {
             />
             <GreyNameTag
               content="전시회 등록 확인"
-              handleTouch={() => navigation.navigate('RegisterNewExhScreen')}
+              handleTouch={() =>
+                navigation.navigate('RegisterNewExhScreen', {
+                  isAdmin: false,
+                })
+              }
+            />
+            <GreyNameTag
+              content="전시회 등록 확인 (관리자)"
+              handleTouch={() =>
+                navigation.navigate('RegisterNewExhScreen', {
+                  isAdmin: true,
+                })
+              }
             />
             <GreyNameTag content="도움말" />
           </SettingWrapper>

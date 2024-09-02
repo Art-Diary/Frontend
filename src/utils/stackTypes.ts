@@ -33,8 +33,13 @@ export type RootStackParamList = {
     screen: keyof SettingStackParamList;
     params: SettingStackParamList[keyof SettingStackParamList];
   };
-  RegisterNewExhScreen: undefined;
+  RegisterNewExhScreen: {
+    isAdmin: boolean;
+  };
   CheckRegExh: {
+    regExhId: number;
+  };
+  ConfirmRegExhScreen: {
     regExhId: number;
   };
   // calendar

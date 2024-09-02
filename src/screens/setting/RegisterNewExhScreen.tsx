@@ -21,11 +21,26 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 //import {BACK_COLOR,  DEFAULT_TEXT} from './colors';
 
-const RegisterNewExhScreen = () => {
-  const {data, isLoading, isError, isSuccess, refetch} = usefetchRegExhs(false);
+type RootStackParamList = {
+  RegisterNewExhScreen: {isAdmin: boolean};
+};
+
+type RegisterNewExhScreenProp = RouteProp<
+  RootStackParamList,
+  'RegisterNewExhScreen'
+>;
+
+interface Props {
+  route: RegisterNewExhScreenProp;
+}
+
+const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
+  const {isAdmin} = route.params;
+  const {data, isLoading, isError, isSuccess, refetch} =
+    usefetchRegExhs(isAdmin);
   const navigation = useNavigation<RootStackNavigationProp>();
   const limit = 5; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
   const [page, setPage] = useState<number>(1); //현재 페이지
@@ -72,7 +87,9 @@ const RegisterNewExhScreen = () => {
 
   return (
     <Container>
-      <BackView title={'전시회 등록 확인'} line={true}></BackView>
+      <BackView
+        title={'전시회 등록 확인' + (isAdmin && ' (관리자)')}
+        line={true}></BackView>
       <RegExhList>
         <Category>
           <CategoryNormal>
@@ -98,11 +115,15 @@ const RegisterNewExhScreen = () => {
               .map((item: any, index: number) => (
                 <TouchableOpacity
                   key={index}
-                  onPress={() =>
-                    navigation.navigate('CheckRegExh', {
-                      regExhId: item.regExhId,
-                    })
-                  }>
+                  onPress={() => {
+                    isAdmin
+                      ? navigation.navigate('ConfirmRegExhScreen', {
+                          regExhId: item.regExhId,
+                        })
+                      : navigation.navigate('CheckRegExh', {
+                          regExhId: item.regExhId,
+                        });
+                  }}>
                   <Category>
                     <CategoryNormal>
                       <RExhNumber>{item.no}</RExhNumber>

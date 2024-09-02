@@ -37,6 +37,7 @@ import {changeImageSize} from '~/utils/resizeImage';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
 import ExhSelectPeriod from './ExhSelectPeriodModal';
+import {UpdateRegExhByAdminType} from '~/api/regexh';
 
 type RegExhDataSetType = {
   regExhName: string;
@@ -57,6 +58,7 @@ type RegExhDataSetType = {
   setRegIntro: (text: string | undefined) => void;
   regPosterUri: string | undefined;
   setRegPosterUri: (text: string | undefined) => void;
+  regComment?: string | undefined; // 관리자 업데이트일 경우에 해당
 };
 
 type CreateApiType = {
@@ -64,11 +66,19 @@ type CreateApiType = {
   setIsPreviewModalOpen: (state: boolean) => void;
 };
 
+type UpdateByAdminApiType = {
+  regExhId: number;
+  updateByAdminApi: (updateData: UpdateRegExhByAdminType) => void;
+};
+
 type RequestApiType = {
   isLoading: boolean;
+  // 사용자 추가 api
   createRequest?: CreateApiType;
-  // 사용자 업데이트 api
   // 관리자 업데이트 api
+  updateByAdminRequest?: UpdateByAdminApiType;
+  // 사용자 업데이트 api
+  //  - 여기에 추가해주세용
 };
 
 interface RegExhFormFrameProps {
@@ -235,8 +245,10 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
     formData.append('regPainter', regExhData.regPainter);
     formData.append('regFee', Number(regExhData.regFee));
     formData.append('regArt', undefined);
-    formData.append('regDate', changeDateTimeFormat(new Date()));
 
+    if (formState !== 'updateByAdmin') {
+      formData.append('regDate', changeDateTimeFormat(new Date()));
+    }
     if (regExhData.regIntro) {
       formData.append('regIntro', regExhData.regIntro);
     }
@@ -255,8 +267,15 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       requestData.createRequest.setIsPreviewModalOpen(true);
     } else if (formState === 'updateByUser') {
       // 사용자 업데이트
-    } else {
+    } else if (formState === 'updateByAdmin') {
       // 관리자 업데이트
+      if (regExhData.regComment) {
+        formData.append('regComment', regExhData.regComment);
+      }
+      requestData.updateByAdminRequest?.updateByAdminApi({
+        regExhId: requestData.updateByAdminRequest?.regExhId,
+        formData,
+      });
     }
   };
 
@@ -339,12 +358,15 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 onChangeText={onChangeFee}
                 value={regExhData.regFee}
               />
-              <SectionName>원</SectionName>
+              <SectionName color={'default'}>원</SectionName>
             </FeeWrapper>
           </RowSectionWrapper>
           {/* 전시회 홈페이지 링크 */}
           <ColSectionWrapper>
-            <SectionName>전시회 홈페이지 링크</SectionName>
+            <SectionView>
+              <SectionName>전시회 홈페이지 링크</SectionName>
+              <SectionName color={'grey'}>(선택)</SectionName>
+            </SectionView>
             <RowSectionWrapper sectionName={'url'}>
               <WriteInfo
                 multiline={true}
@@ -357,7 +379,10 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
           </ColSectionWrapper>
           {/* 전시회 소개 */}
           <ColSectionWrapper>
-            <SectionName>소개</SectionName>
+            <SectionView>
+              <SectionName>소개</SectionName>
+              <SectionName color={'grey'}>(선택)</SectionName>
+            </SectionView>
             <WriteIntroWrapper>
               <SectionName>"</SectionName>
               <WriteInfo
@@ -435,15 +460,29 @@ const ContentsContainer = styled.View`
   gap: ${hp(1.6)}px;
 `;
 
-const SectionName = styled.Text`
+const SectionView = styled.View`
+  flex-direction: row;
+  gap: ${hp(0.3)}px;
+`;
+
+interface SectionColorProps {
+  color: string;
+}
+
+const SectionName = styled.Text<SectionColorProps>`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+  color: ${(props: SectionColorProps) =>
+    props.color === 'grey'
+      ? `${LIGHT_GREY}`
+      : props.color === 'default'
+        ? `${DEFAULT_TEXT}`
+        : `${MIDDLE_GREY}`};
 `;
 
 const DateText = styled.Text`
   font-size: ${rf(15.5)}px;
-  color: ${MIDDLE_GREY};
+  color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
@@ -457,11 +496,10 @@ const WriteIntroWrapper = styled.View`
 `;
 
 const PutThumbnail = styled.View`
-  flex: 1;
   background-color: rgba(217, 217, 217, 0.3);
   align-items: center;
   justify-content: center;
-  min-height: ${hp(35)}px;
+  height: ${hp(35)}px;
 `;
 
 const ConfirmButton = styled.Text`
