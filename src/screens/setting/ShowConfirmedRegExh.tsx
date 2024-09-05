@@ -29,7 +29,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import RegExhOptionsModal from '~/components/setting/RegExhOptionsModal';
+import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
 
 interface Props {
   regExhId: number;
