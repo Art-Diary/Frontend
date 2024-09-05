@@ -53,6 +53,7 @@ const ExhAddFormScreen = () => {
           },
           {
             name: 'RegisterNewExhScreen',
+            params: {isAdmin: false},
           },
         ],
       });
