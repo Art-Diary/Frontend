@@ -37,7 +37,7 @@ import {changeImageSize} from '~/utils/resizeImage';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
 import ExhSelectPeriod from './ExhSelectPeriodModal';
-import {UpdateRegExhByAdminType} from '~/api/regexh';
+import {UpdateRegExhByAdminType, UpdateRegExhByUserType} from '~/api/regexh';
 
 type RegExhDataSetType = {
   regExhName: string;
@@ -71,6 +71,11 @@ type UpdateByAdminApiType = {
   updateByAdminApi: (updateData: UpdateRegExhByAdminType) => void;
 };
 
+type UpdateByUserApiType = {
+  regExhId: number;
+  updateByUserApi: (updateData: UpdateRegExhByUserType) => void;
+};
+
 type RequestApiType = {
   isLoading: boolean;
   // 사용자 추가 api
@@ -78,6 +83,7 @@ type RequestApiType = {
   // 관리자 업데이트 api
   updateByAdminRequest?: UpdateByAdminApiType;
   // 사용자 업데이트 api
+  updateByUserRequest?: UpdateByUserApiType;
   //  - 여기에 추가해주세용
 };
 
@@ -106,6 +112,11 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       setIsLoadingOpen(false);
     }
   }, [requestData.isLoading]);
+
+  useEffect(() => {
+    console.log('requestData:', requestData);
+    console.log('regExhData:', regExhData);
+  }, [requestData]);
 
   const onChangeExhName = useCallback((text: string) => {
     regExhData.setRegExhName(text);
@@ -267,6 +278,10 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       requestData.createRequest.setIsPreviewModalOpen(true);
     } else if (formState === 'updateByUser') {
       // 사용자 업데이트
+      requestData.updateByUserRequest?.updateByUserApi({
+        regExhId: requestData.updateByUserRequest?.regExhId,
+        formData,
+      });
     } else if (formState === 'updateByAdmin') {
       // 관리자 업데이트
       if (regExhData.regComment) {
@@ -476,8 +491,8 @@ const SectionName = styled.Text<SectionColorProps>`
     props.color === 'grey'
       ? `${LIGHT_GREY}`
       : props.color === 'default'
-        ? `${DEFAULT_TEXT}`
-        : `${MIDDLE_GREY}`};
+      ? `${DEFAULT_TEXT}`
+      : `${MIDDLE_GREY}`};
 `;
 
 const DateText = styled.Text`

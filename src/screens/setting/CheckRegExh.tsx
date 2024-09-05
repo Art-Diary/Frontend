@@ -28,7 +28,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {EditRegExh, TrashRegExh} from '~/assets/images';
-import RegExhOptionsModal from '~/components/setting/RegExhOptionsModal';
+import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
 
 type RootStackParamList = {
   CheckRegExh: {regExhId: number};
@@ -54,6 +54,13 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
   const [openLoading, setOpenLoading] = useState<boolean>(false);
   const [isEditModal, setIsEditModal] = useState<boolean>(false);
   const [isTrashModal, setIsTrashModal] = useState<boolean>(false);
+  const [regExhInfo, setRegExhInfo] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setRegExhInfo(data);
+    }
+  }, [data, isSuccess]);
 
   useEffect(() => {
     if (isFocused) {
@@ -110,12 +117,16 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
 
   const onPressEditYes = () => {
     setIsEditModal(false);
+
     //수정페이지이동
+    navigation.navigate('EditRegExhByUser', {
+      regExhInfo: data,
+    });
   };
 
   const onPressTrashYes = () => {
-    setIsTrashModal(false);
     //삭제
+    setIsTrashModal(false);
   };
 
   const onPressEditNo = () => {
