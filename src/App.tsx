@@ -48,6 +48,7 @@ import ExhAddFormScreen from './screens/exhibition/ExhAddFormScreen';
 import RegisterNewExhScreen from './screens/setting/RegisterNewExhScreen';
 import CheckRegExh from './screens/setting/CheckRegExh';
 import ConfirmRegExhScreen from './screens/setting/ConfirmRegExhScreen';
+import EditRegExhByUser from './screens/setting/EditRegExhByUser';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -190,6 +191,10 @@ export default function App() {
               component={ConfirmRegExhScreen}
             />
             <Stack.Screen name="CheckRegExh" component={CheckRegExh} />
+            <Stack.Screen
+              name="EditRegExhByUser"
+              component={EditRegExhByUser}
+            />
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />

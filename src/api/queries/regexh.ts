@@ -11,6 +11,8 @@ import {
   fetchRegExhs,
   updateRegExhByAdmin,
   UpdateRegExhByAdminType,
+  updateRegExhByUser,
+  UpdateRegExhByUserType,
 } from '../regexh';
 
 export const regexhQueryKeys = createQueryKeys('regexh', {
@@ -60,6 +62,7 @@ export const usefetchRegExhDetail = (regExhId: number, isAdmin: boolean) =>
     queryFn: () => fetchRegExhDetail(regExhId, isAdmin),
     staleTime: 500000,
     onError: err => {
+      console.log(err);
       console.log('[FetchRegExhDetail] error fetch RegExhDetail');
     },
     onSuccess: () => {
@@ -85,6 +88,28 @@ export const useUpdateRegExhByAdmin = (): UseMutationResult<
     },
     onSuccess: () => {
       console.log('[UpdateRegExhByAdmin] success update RegExhByAdmin');
+      // TODO queryClient.invalidateQueries();
+    },
+  });
+};
+
+export const useUpdateRegExhByUser = (): UseMutationResult<
+  any,
+  any,
+  UpdateRegExhByUserType,
+  unknown
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<any, any, UpdateRegExhByUserType, unknown>({
+    mutationFn: (updateData: UpdateRegExhByUserType) =>
+      updateRegExhByUser(updateData),
+    onError: err => {
+      console.log(err);
+      console.log('[ExhAddFormScreen] error create ExhAddForm By User');
+    },
+    onSuccess: () => {
+      console.log('[ExhAddFormScreen] success create ExhAddForm By User');
       // TODO queryClient.invalidateQueries();
     },
   });
