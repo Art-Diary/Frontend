@@ -10,6 +10,7 @@ type AuthInfo = {
   alarm2: boolean;
   alarm3: boolean;
   providerType: string;
+  role: string;
 };
 
 interface AuthState {
@@ -33,6 +34,7 @@ const useAuth = create<AuthState>(set => ({
     alarm2: false,
     alarm3: false,
     providerType: '',
+    role: 'USER',
   },
   actions: {
     updateAuthInfo: authInfo =>
@@ -47,6 +49,7 @@ const useAuth = create<AuthState>(set => ({
           alarm2: authInfo.alarm2,
           alarm3: authInfo.alarm3,
           providerType: authInfo.providerType,
+          role: authInfo.role,
         },
       })),
     updateAlarm1: alarm1 =>
@@ -61,6 +64,7 @@ const useAuth = create<AuthState>(set => ({
           alarm2: state.authInfo.alarm2,
           alarm3: state.authInfo.alarm3,
           providerType: state.authInfo.providerType,
+          role: state.authInfo.role,
         },
       })),
     updateAlarm2: alarm2 =>
@@ -75,6 +79,7 @@ const useAuth = create<AuthState>(set => ({
           alarm2: alarm2,
           alarm3: state.authInfo.alarm3,
           providerType: state.authInfo.providerType,
+          role: state.authInfo.role,
         },
       })),
     updateAlarm3: alarm3 =>
@@ -89,6 +94,7 @@ const useAuth = create<AuthState>(set => ({
           alarm2: state.authInfo.alarm2,
           alarm3: alarm3,
           providerType: state.authInfo.providerType,
+          role: state.authInfo.role,
         },
       })),
   },

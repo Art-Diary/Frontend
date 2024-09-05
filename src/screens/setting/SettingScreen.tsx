@@ -21,12 +21,14 @@ import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import {SettingStackParamList} from '~/utils/stackTypes';
 import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {showToast} from '~/components/common/modal/toastConfig';
+import {useUserInfo} from '~/zustand/auth/auth';
 
 const SettingScreen = () => {
   const queryClient = useQueryClient();
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
+  const userInfo = useUserInfo();
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions();
 
@@ -129,14 +131,16 @@ const SettingScreen = () => {
                 })
               }
             />
-            <GreyNameTag
-              content="전시회 등록 확인 (관리자)"
-              handleTouch={() =>
-                navigation.navigate('RegisterNewExhScreen', {
-                  isAdmin: true,
-                })
-              }
-            />
+            {userInfo.authInfo.role === 'ADMIN' && (
+              <GreyNameTag
+                content="전시회 등록 확인 (관리자)"
+                handleTouch={() =>
+                  navigation.navigate('RegisterNewExhScreen', {
+                    isAdmin: true,
+                  })
+                }
+              />
+            )}
             <GreyNameTag content="도움말" />
           </SettingWrapper>
           {/* 회원정보 */}

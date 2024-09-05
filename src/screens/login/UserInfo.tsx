@@ -34,6 +34,7 @@ export const UserInfo = () => {
           alarm2: res.alarm2,
           alarm3: res.alarm3,
           providerType: res.providerType,
+          role: res.roleType,
         });
         navigation.navigate('Main');
       });

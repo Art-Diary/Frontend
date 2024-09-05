@@ -88,7 +88,7 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
   return (
     <Container>
       <BackView
-        title={'전시회 등록 확인' + (isAdmin && ' (관리자)')}
+        title={'전시회 등록 확인' + (isAdmin ? ' (관리자)' : '')}
         line={true}></BackView>
       <RegExhList>
         <Category>

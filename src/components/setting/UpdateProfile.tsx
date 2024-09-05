@@ -102,6 +102,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
         alarm2: data.alarm2,
         alarm3: data.alarm3,
         providerType: data.providerType,
+        role: data.roleType,
       });
       showToast(messages.successMsg);
       if (navigateTo === 'back') {
