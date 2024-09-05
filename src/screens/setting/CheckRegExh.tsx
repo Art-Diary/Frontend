@@ -18,7 +18,7 @@ import {
   TrashRegExhIcon,
 } from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
-import {usefetchRegExhDetail} from '~/api/queries/regexh';
+import {useDeleteRegExh, usefetchRegExhDetail} from '~/api/queries/regexh';
 import {DEFAULT_IMAGE} from '@env';
 import {
   DEFAULT_TEXT,
@@ -29,6 +29,7 @@ import {
 import {FONT_NAME} from '~/components/common/style';
 import {EditRegExh, TrashRegExh} from '~/assets/images';
 import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
+import {deleteRegExh} from '~/api/regexh';
 
 type RootStackParamList = {
   CheckRegExh: {regExhId: number};
@@ -49,6 +50,13 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
     regExhId,
     false,
   );
+  //삭제
+  const {
+    mutate: DeleteRegExh,
+    isLoading: isDeleteLoading,
+    isError: isDeleteError,
+    isSuccess: isDeleteSuccess,
+  } = useDeleteRegExh(regExhId);
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
@@ -126,6 +134,7 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
 
   const onPressTrashYes = () => {
     //삭제
+    // DeleteRegExh();
     setIsTrashModal(false);
   };
 
