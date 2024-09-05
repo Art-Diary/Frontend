@@ -42,6 +42,9 @@ export type RootStackParamList = {
   ConfirmRegExhScreen: {
     regExhId: number;
   };
+  EditRegExhByUser: {
+    regExhInfo: any;
+  };
   // calendar
   CalendarDiaryRoutes: undefined;
   CalendarDiaryBack: undefined;

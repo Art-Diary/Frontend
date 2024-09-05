@@ -26,3 +26,14 @@ export const updateRegExhByAdmin = (updateData: UpdateRegExhByAdminType) => [
     headers: {'Content-Type': 'multipart/form-data'},
   }),
 ];
+
+export type UpdateRegExhByUserType = {
+  regExhId: number;
+  formData: FormData | null;
+};
+
+export const updateRegExhByUser = (updateData: UpdateRegExhByUserType) => [
+  client.patch(`/regexh/${updateData.regExhId}`, updateData.formData, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  }),
+];
