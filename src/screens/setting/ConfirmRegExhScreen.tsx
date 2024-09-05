@@ -28,21 +28,33 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
     true,
   );
   const [regExhInfo, setRegExhInfo] = useState<any | null>(null);
-  const [previewPage, setPreviewPage] = useState<boolean>(false);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
 
+  const handleRefetch = async () => {
+    await refetch().then(res => {
+      setRegExhInfo(res.data);
+      setIsLoadingOpen(false);
+    });
+  };
+
+  useEffect(() => {
+    if (forUpdate) {
+      setIsUpdate(true);
+    }
+  }, [forUpdate]);
+
   useEffect(() => {
     if (isFocused) {
-      refetch().then(res => {
-        setRegExhInfo(res.data);
-      });
+      handleRefetch();
     }
   }, [isFocused]);
 
   useEffect(() => {
     if (isSuccess) {
       setRegExhInfo(data);
+      setIsUpdate(!data.regState);
     }
   }, [data, isSuccess]);
 
@@ -57,15 +69,22 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
     }
   }, [isError, isLoading]);
 
+  const handleCompleteUpdate = async () => {
+    setIsLoadingOpen(true);
+    setIsUpdate(false);
+    setRegExhInfo(null);
+    await handleRefetch();
+  };
+
   return (
     <>
       {regExhInfo &&
-        (!regExhInfo.regState || forUpdate || !previewPage ? (
+        (isUpdate ? (
           // regState == false 또는 forUpdate == true면 등록 화면 보여주기
           <ConfirmRegExh
             regExhId={regExhId}
             regExhInfo={regExhInfo}
-            handlePreviewPage={() => setPreviewPage(true)}
+            handleIsUpdate={handleCompleteUpdate}
           />
         ) : (
           // regState == true면 미리보기 화면 보여주기
@@ -73,6 +92,7 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
             regExhId={regExhId}
             regExhInfo={regExhInfo}
             refetch={refetch}
+            handleMoveToUpdatePage={() => setIsUpdate(true)}
           />
         ))}
 

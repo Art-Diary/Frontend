@@ -25,13 +25,13 @@ import {
 interface Props {
   regExhId: number;
   regExhInfo: any;
-  handlePreviewPage: () => void;
+  handleIsUpdate: () => void;
 }
 
 const ConfirmRegExh: React.FC<Props> = ({
   regExhId,
   regExhInfo,
-  handlePreviewPage,
+  handleIsUpdate,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
@@ -77,7 +77,7 @@ const ConfirmRegExh: React.FC<Props> = ({
     }
     if (isSuccess) {
       // 등록 결과 보기로 이동
-      handlePreviewPage();
+      handleIsUpdate();
     }
   }, [isError, isSuccess]);
 

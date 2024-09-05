@@ -37,12 +37,14 @@ interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<any, unknown>>;
+  handleMoveToUpdatePage: () => void;
 }
 
 const ShowConfirmedRegExh: React.FC<Props> = ({
   regExhId,
   regExhInfo,
   refetch,
+  handleMoveToUpdatePage,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
@@ -98,11 +100,9 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
 
   const onPressEditYes = () => {
     setIsEditModal(false);
+
     //수정페이지이동
-    navigation.navigate('ConfirmRegExhScreen', {
-      regExhId: regExhId,
-      forUpdate: true,
-    });
+    handleMoveToUpdatePage();
   };
 
   const onPressTrashYes = () => {
