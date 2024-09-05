@@ -230,8 +230,8 @@ const StateText = styled.Text<StateTextProps>`
     props.state === '진행중'
       ? `${MAIN_COLOR}`
       : props.state === '종료'
-      ? `${MIDDLE_GREY}`
-      : '#fee500'};
+        ? `${MIDDLE_GREY}`
+        : '#fee500'};
   font-family: ${FONT_NAME};
   padding-top: ${wp(1.1)}px;
   padding-bottom: ${wp(0.6)}px;
@@ -241,8 +241,8 @@ const StateText = styled.Text<StateTextProps>`
     props.state === '진행중'
       ? `${MAIN_COLOR}`
       : props.state === '종료'
-      ? `${MIDDLE_GREY}`
-      : '#fee500'};
+        ? `${MIDDLE_GREY}`
+        : '#fee500'};
   border-width: ${wp(0.3)}px;
   border-radius: ${wp(50)}px;
 `;

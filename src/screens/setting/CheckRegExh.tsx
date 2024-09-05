@@ -192,7 +192,7 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
                 gallery: data.regGallery,
                 exhPeriodStart: data.regExhPeriodStart,
                 exhPeriodEnd: data.regExhPeriodEnd,
-                poster: data.regPosterUri ?? DEFAULT_IMAGE,
+                poster: data.regPoster ?? DEFAULT_IMAGE,
                 painter: data.regPainter,
                 fee: Number(data.regFee),
                 url: data.regUrl ?? '홈페이지 정보 없음.',

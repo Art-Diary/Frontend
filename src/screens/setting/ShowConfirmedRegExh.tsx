@@ -10,7 +10,11 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import {BackButtonIcon, OptionBarIcon} from '~/components/common/icon';
+import {
+  BackButtonIcon,
+  EditRegExhIcon,
+  TrashRegExhIcon,
+} from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
@@ -25,6 +29,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
+import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
 
 interface Props {
   regExhId: number;
@@ -32,15 +37,19 @@ interface Props {
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<any, unknown>>;
+  handleMoveToUpdatePage: () => void;
 }
 
 const ShowConfirmedRegExh: React.FC<Props> = ({
   regExhId,
   regExhInfo,
   refetch,
+  handleMoveToUpdatePage,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
+  const [isEditModal, setIsEditModal] = useState<boolean>(false);
+  const [isTrashModal, setIsTrashModal] = useState<boolean>(false);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -81,6 +90,34 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
     };
   }, [handlePressBack]);
 
+  const openEditModal = () => {
+    setIsEditModal(true);
+  };
+
+  const openTrashModal = () => {
+    setIsTrashModal(true);
+  };
+
+  const onPressEditYes = () => {
+    setIsEditModal(false);
+
+    //수정페이지이동
+    handleMoveToUpdatePage();
+  };
+
+  const onPressTrashYes = () => {
+    setIsTrashModal(false);
+    //삭제
+  };
+
+  const onPressEditNo = () => {
+    setIsEditModal(false);
+  };
+
+  const onPressTrashNo = () => {
+    setIsTrashModal(false);
+  };
+
   return (
     <TRenderEngineProvider>
       <ContainerScroll
@@ -97,9 +134,34 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
             <TopCenterView>
               <Title> {'전시회 등록 확인'}</Title>
             </TopCenterView>
-            <CustomTouchable>
-              <OptionBarIcon />
-            </CustomTouchable>
+            <OptionVeiw>
+              <CustomTouchable onPress={openEditModal}>
+                {isEditModal && (
+                  <RegExhOptionsModal
+                    handleCloseModal={onPressEditNo}
+                    onPressYes={() => onPressEditYes()}
+                    onPressNo={() => onPressEditNo()}
+                    message="등록한 전시회 정보를 수정할까요?"
+                    yes="예"
+                    no="아니오"
+                  />
+                )}
+                <EditRegExhIcon />
+              </CustomTouchable>
+              <CustomTouchable onPress={openTrashModal}>
+                <TrashRegExhIcon />
+                {isTrashModal && (
+                  <RegExhOptionsModal
+                    handleCloseModal={onPressTrashNo}
+                    onPressYes={() => onPressTrashYes()}
+                    onPressNo={() => onPressTrashNo()}
+                    message="등록한 전시회 정보를 삭제할까요? 삭제시 복구할 수 없습니다"
+                    yes="삭제"
+                    no="취소"
+                  />
+                )}
+              </CustomTouchable>
+            </OptionVeiw>
           </TopLayer>
           {/**전시 상세정보 */}
           <ExhDetailFormat
@@ -108,7 +170,7 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
               gallery: regExhInfo.regGallery,
               exhPeriodStart: regExhInfo.regExhPeriodStart,
               exhPeriodEnd: regExhInfo.regExhPeriodEnd,
-              poster: regExhInfo.regPosterUri ?? DEFAULT_IMAGE,
+              poster: regExhInfo.regPoster ?? DEFAULT_IMAGE,
               painter: regExhInfo.regPainter,
               fee: Number(regExhInfo.regFee),
               url: regExhInfo.regUrl ?? '홈페이지 정보 없음.',
@@ -245,4 +307,11 @@ const CommentBorderView = styled.View`
   border-color: ${LIGHT_GREY};
   border-width: ${wp(0.3)}px;
   border-radius: ${wp(5)}px;
+`;
+
+const OptionVeiw = styled.View`
+  align-items: center;
+  flex-direction: row;
+  gap: ${wp(3)}px;
+  padding-right: ${wp(1.5)}px;
 `;
