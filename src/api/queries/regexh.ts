@@ -74,7 +74,7 @@ export const useUpdateRegExhByAdmin = (): UseMutationResult<
   UpdateRegExhByAdminType,
   unknown
 > => {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   return useMutation<any, any, UpdateRegExhByAdminType, unknown>({
     mutationFn: (updateData: UpdateRegExhByAdminType) =>
