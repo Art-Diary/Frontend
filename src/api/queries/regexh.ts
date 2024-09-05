@@ -42,8 +42,6 @@ export const useCreateRegExh = (): UseMutationResult<
   FormData | null,
   unknown
 > => {
-  const queryClient = useQueryClient();
-
   return useMutation<any, any, FormData | null, unknown>({
     mutationFn: (formData: FormData | null) => createRegExh(formData),
     onError: err => {
@@ -52,7 +50,6 @@ export const useCreateRegExh = (): UseMutationResult<
     },
     onSuccess: () => {
       console.log('[ExhAddFormScreen] success create ExhAddForm');
-      // TODO queryClient.invalidateQueries();
     },
   });
 };
@@ -84,10 +81,10 @@ export const useUpdateRegExhByAdmin = (): UseMutationResult<
       updateRegExhByAdmin(updateData),
     onError: err => {
       console.log(err);
-      console.log('[ExhAddFormScreen] error create ExhAddForm');
+      console.log('[UpdateRegExhByAdmin] error update RegExhByAdmin');
     },
     onSuccess: () => {
-      console.log('[ExhAddFormScreen] success create ExhAddForm');
+      console.log('[UpdateRegExhByAdmin] success update RegExhByAdmin');
       // TODO queryClient.invalidateQueries();
     },
   });

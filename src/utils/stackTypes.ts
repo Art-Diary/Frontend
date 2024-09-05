@@ -41,6 +41,7 @@ export type RootStackParamList = {
   };
   ConfirmRegExhScreen: {
     regExhId: number;
+    forUpdate: boolean;
   };
   // calendar
   CalendarDiaryRoutes: undefined;

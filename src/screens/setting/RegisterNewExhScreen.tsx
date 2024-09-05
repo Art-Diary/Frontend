@@ -21,7 +21,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
-import {RouteProp, useNavigation} from '@react-navigation/native';
+import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
 //import {BACK_COLOR,  DEFAULT_TEXT} from './colors';
 
 type RootStackParamList = {
@@ -48,12 +48,23 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
   const [numPagesArr, setNumPagesArr] = useState<number[]>([]);
   const [numPages, setNumPages] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
+  const isFocused = useIsFocused();
+  const [regExhInfo, setRegExhInfo] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch().then(res => {
+        setRegExhInfo(res.data);
+      });
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (isSuccess) {
+      setRegExhInfo(data);
       setNumPages(Math.ceil(data.length / limit));
     }
-  }, [data]);
+  }, [data, isSuccess]);
 
   useEffect(() => {
     //numPage 변경 후, 변경
@@ -109,8 +120,8 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
-          {data &&
-            data
+          {regExhInfo &&
+            regExhInfo
               .slice(offset, offset + limit)
               .map((item: any, index: number) => (
                 <TouchableOpacity
@@ -119,6 +130,7 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
                     isAdmin
                       ? navigation.navigate('ConfirmRegExhScreen', {
                           regExhId: item.regExhId,
+                          forUpdate: false,
                         })
                       : navigation.navigate('CheckRegExh', {
                           regExhId: item.regExhId,

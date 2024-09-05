@@ -25,9 +25,14 @@ import {
 interface Props {
   regExhId: number;
   regExhInfo: any;
+  handlePreviewPage: () => void;
 }
 
-const ConfirmRegExh: React.FC<Props> = ({regExhId, regExhInfo}) => {
+const ConfirmRegExh: React.FC<Props> = ({
+  regExhId,
+  regExhInfo,
+  handlePreviewPage,
+}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const [regExhName, setRegExhName] = useState<string>('');
@@ -62,6 +67,7 @@ const ConfirmRegExh: React.FC<Props> = ({regExhId, regExhInfo}) => {
       setRegUrl(regExhInfo.regUrl);
       setRegIntro(regExhInfo.regIntro);
       setRegPosterUri(regExhInfo.regPoster);
+      setRegComment(regExhInfo.regComment);
     }
   }, [regExhInfo]);
 
@@ -70,8 +76,8 @@ const ConfirmRegExh: React.FC<Props> = ({regExhId, regExhInfo}) => {
       showToast('전시회 등록을 실패했습니다.');
     }
     if (isSuccess) {
-      // 설정 페이지의 등록한 전시회 페이지로 이동
-      navigation.goBack();
+      // 등록 결과 보기로 이동
+      handlePreviewPage();
     }
   }, [isError, isSuccess]);
 

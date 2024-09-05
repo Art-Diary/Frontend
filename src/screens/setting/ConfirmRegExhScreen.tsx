@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {RouteProp} from '@react-navigation/native';
+import {RouteProp, useIsFocused} from '@react-navigation/native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {usefetchRegExhDetail} from '~/api/queries/regexh';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -7,7 +7,7 @@ import ConfirmRegExh from './ConfirmRegExh';
 import ShowConfirmedRegExh from './ShowConfirmedRegExh';
 
 type RootStackParamList = {
-  ConfirmRegExhScreen: {regExhId: number};
+  ConfirmRegExhScreen: {regExhId: number; forUpdate: boolean};
 };
 
 type ConfirmRegExhScreenProp = RouteProp<
@@ -20,15 +20,25 @@ interface Props {
 }
 
 const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
-  const {regExhId} = route.params;
+  const isFocused = useIsFocused();
+  const {regExhId, forUpdate} = route.params;
   // fetch api
   const {data, isLoading, isError, isSuccess, refetch} = usefetchRegExhDetail(
     regExhId,
     true,
   );
   const [regExhInfo, setRegExhInfo] = useState<any | null>(null);
+  const [previewPage, setPreviewPage] = useState<boolean>(false);
 
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isFocused) {
+      refetch().then(res => {
+        setRegExhInfo(res.data);
+      });
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -50,9 +60,13 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
   return (
     <>
       {regExhInfo &&
-        (!regExhInfo.regState ? (
-          // regState == false면 등록 화면 보여주기
-          <ConfirmRegExh regExhId={regExhId} regExhInfo={regExhInfo} />
+        (!regExhInfo.regState || forUpdate || !previewPage ? (
+          // regState == false 또는 forUpdate == true면 등록 화면 보여주기
+          <ConfirmRegExh
+            regExhId={regExhId}
+            regExhInfo={regExhInfo}
+            handlePreviewPage={() => setPreviewPage(true)}
+          />
         ) : (
           // regState == true면 미리보기 화면 보여주기
           <ShowConfirmedRegExh
