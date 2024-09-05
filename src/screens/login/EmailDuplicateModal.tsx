@@ -59,6 +59,7 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
       alarm2: data.alarm2,
       alarm3: data.alarm3,
       providerType: data.providerType,
+      role: data.roleType,
     });
   };
 

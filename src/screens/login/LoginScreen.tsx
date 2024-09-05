@@ -158,6 +158,7 @@ const LoginScreen = () => {
         alarm2: data.alarm2,
         alarm3: data.alarm3,
         providerType: data.providerType,
+        role: data.roleType,
       });
       navigation.navigate(data.initInfo ? 'Main' : 'InitProfile');
     }
