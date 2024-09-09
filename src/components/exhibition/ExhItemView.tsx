@@ -125,6 +125,8 @@ const ExhView = styled.View<ExhViewProps>`
   padding-bottom: ${wp(3)}px;
   padding-right: ${wp(3)}px;
   width: 100%;
+  margin-bottom: ${(props: ExhViewProps) =>
+    props.noLine ? `${hp(3)}px` : `0px`};
 `;
 
 const TouchView = styled.TouchableOpacity`
