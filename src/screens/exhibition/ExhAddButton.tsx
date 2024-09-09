@@ -32,7 +32,7 @@ const TopLayer = styled.View`
   flex-direction: column;
   padding: ${wp(2.9)}px;
   padding-bottom: ${wp(3.9)}px;
-  padding-right: ${wp(13)}px;
+  padding-right: ${wp(5)}px;
   width: 100%;
   height: 100%;
   position: absolute;

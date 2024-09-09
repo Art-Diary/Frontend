@@ -10,11 +10,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import {
-  BackButtonIcon,
-  EditRegExhIcon,
-  TrashRegExhIcon,
-} from '~/components/common/icon';
+import {BackButtonIcon, EditRegExhIcon} from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
@@ -49,7 +45,6 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const [isEditModal, setIsEditModal] = useState<boolean>(false);
-  const [isTrashModal, setIsTrashModal] = useState<boolean>(false);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -94,10 +89,6 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
     setIsEditModal(true);
   };
 
-  const openTrashModal = () => {
-    setIsTrashModal(true);
-  };
-
   const onPressEditYes = () => {
     setIsEditModal(false);
 
@@ -105,17 +96,8 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
     handleMoveToUpdatePage();
   };
 
-  const onPressTrashYes = () => {
-    setIsTrashModal(false);
-    //삭제
-  };
-
   const onPressEditNo = () => {
     setIsEditModal(false);
-  };
-
-  const onPressTrashNo = () => {
-    setIsTrashModal(false);
   };
 
   return (
@@ -147,19 +129,6 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
                   />
                 )}
                 <EditRegExhIcon />
-              </CustomTouchable>
-              <CustomTouchable onPress={openTrashModal}>
-                <TrashRegExhIcon />
-                {isTrashModal && (
-                  <RegExhOptionsModal
-                    handleCloseModal={onPressTrashNo}
-                    onPressYes={() => onPressTrashYes()}
-                    onPressNo={() => onPressTrashNo()}
-                    message="등록한 전시회 정보를 삭제할까요? 삭제시 복구할 수 없습니다"
-                    yes="삭제"
-                    no="취소"
-                  />
-                )}
               </CustomTouchable>
             </OptionVeiw>
           </TopLayer>
