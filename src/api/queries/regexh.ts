@@ -72,6 +72,19 @@ export const usefetchRegExhDetail = (regExhId: number, isAdmin: boolean) =>
     select: (res: any) => res.data,
   });
 
+export const useDeleteRegExh = (regExhId: number) => {
+  return useMutation({
+    mutationFn: () => deleteRegExh(regExhId),
+    onError: err => {
+      console.log(err);
+      console.log('[DeleteRegExh] error delete DeleteRegExh');
+    },
+    onSuccess: () => {
+      console.log('[DeleteRegExh] success delete DeleteRegExh');
+    },
+  });
+};
+
 export const useUpdateRegExhByAdmin = (): UseMutationResult<
   any,
   any,
@@ -112,19 +125,6 @@ export const useUpdateRegExhByUser = (): UseMutationResult<
     onSuccess: () => {
       console.log('[ExhAddFormScreen] success create ExhAddForm By User');
       // TODO queryClient.invalidateQueries();
-    },
-  });
-};
-
-export const useDeleteRegExh = (regExhId: number) => {
-  return useMutation({
-    mutationFn: () => deleteRegExh(regExhId),
-    onError: err => {
-      console.log(err);
-      console.log('[DeleteRegExh] error delete DeleteRegExh');
-    },
-    onSuccess: () => {
-      console.log('[DeleteRegExh] success delete DeleteRegExh');
     },
   });
 };

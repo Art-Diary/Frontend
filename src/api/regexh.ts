@@ -37,3 +37,6 @@ export const updateRegExhByUser = (updateData: UpdateRegExhByUserType) => [
     headers: {'Content-Type': 'multipart/form-data'},
   }),
 ];
+
+export const deleteRegExh = (regExhId: number) =>
+  client.delete(`/regexh/${regExhId}`);
