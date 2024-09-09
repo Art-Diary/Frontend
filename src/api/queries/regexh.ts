@@ -7,6 +7,7 @@ import {
 } from 'react-query';
 import {
   createRegExh,
+  deleteRegExh,
   fetchRegExhDetail,
   fetchRegExhs,
   updateRegExhByAdmin,
@@ -70,6 +71,19 @@ export const usefetchRegExhDetail = (regExhId: number, isAdmin: boolean) =>
     },
     select: (res: any) => res.data,
   });
+
+export const useDeleteRegExh = (regExhId: number) => {
+  return useMutation({
+    mutationFn: () => deleteRegExh(regExhId),
+    onError: err => {
+      console.log(err);
+      console.log('[DeleteRegExh] error delete DeleteRegExh');
+    },
+    onSuccess: () => {
+      console.log('[DeleteRegExh] success delete DeleteRegExh');
+    },
+  });
+};
 
 export const useUpdateRegExhByAdmin = (): UseMutationResult<
   any,

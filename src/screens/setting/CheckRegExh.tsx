@@ -18,7 +18,7 @@ import {
   TrashRegExhIcon,
 } from '~/components/common/icon';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
-import {usefetchRegExhDetail} from '~/api/queries/regexh';
+import {useDeleteRegExh, usefetchRegExhDetail} from '~/api/queries/regexh';
 import {DEFAULT_IMAGE} from '@env';
 import {
   DEFAULT_TEXT,
@@ -29,6 +29,8 @@ import {
 import {FONT_NAME} from '~/components/common/style';
 import {EditRegExh, TrashRegExh} from '~/assets/images';
 import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
+import {deleteRegExh} from '~/api/regexh';
+import {showToast} from '~/components/common/modal/toastConfig';
 
 type RootStackParamList = {
   CheckRegExh: {regExhId: number};
@@ -49,6 +51,13 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
     regExhId,
     false,
   );
+  //삭제
+  const {
+    mutate: DeleteRegExh,
+    isLoading: isDeleteLoading,
+    isError: isDeleteError,
+    isSuccess: isDeleteSuccess,
+  } = useDeleteRegExh(regExhId);
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
@@ -107,6 +116,17 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
     };
   }, [handlePressBack]);
 
+  useEffect(() => {
+    if (isDeleteError) {
+      showToast('삭제 실패. 다시 시도하세요');
+    }
+    if (isDeleteSuccess) {
+      // 설정 페이지의 등록한 전시회 페이지로 이동
+      navigation.goBack();
+      showToast('성공적으로 삭제됐습니다.');
+    }
+  }, [isDeleteError, isDeleteSuccess]);
+
   const OpenEditModal = () => {
     setIsEditModal(true);
   };
@@ -126,6 +146,7 @@ const CheckRegExh: React.FC<Props> = ({route}) => {
 
   const onPressTrashYes = () => {
     //삭제
+    DeleteRegExh();
     setIsTrashModal(false);
   };
 
