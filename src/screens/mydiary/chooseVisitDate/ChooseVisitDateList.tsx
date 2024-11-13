@@ -147,7 +147,12 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
     <Container>
       {/* 날짜 목록 */}
       <AddDateGroupView>
-        <GroupText>방문 날짜</GroupText>
+        <GroupTextWrapper>
+          <GroupText flag>방문 날짜</GroupText>
+          {writeMyDiaryInfo.isUpdate && (
+            <GroupText>전시회 방문 날짜를 수정할 수 있습니다.</GroupText>
+          )}
+        </GroupTextWrapper>
         {value !== null &&
           (value === -1 ||
             myStoredDateListOfExh[value].gatherName === undefined) && (
@@ -162,22 +167,29 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
             <SelectMsgText>모임을 선택해 주세요.</SelectMsgText>
           </SelectMsgView>
         ) : (
-          <FlatList
-            data={getVisitDates(value)}
-            renderItem={({item}) => (
-              <CustomTouchable onPress={() => onPressVisitDate(item)}>
-                <DateView
-                  key={item.index}
-                  isSelected={item.index === selectedItemIndex}>
-                  <DateText>
-                    {item.visitDate === null
-                      ? '기억 안 남'
-                      : item.visitDate + ' (' + item.weekday + ')'}
-                  </DateText>
-                </DateView>
-              </CustomTouchable>
+          <>
+            {getVisitDates(value).length == 0 && (
+              <SelectMsgView>
+                <SelectMsgText>방문 날짜를 추가해주세요.</SelectMsgText>
+              </SelectMsgView>
             )}
-          />
+            <FlatList
+              data={getVisitDates(value)}
+              renderItem={({item}) => (
+                <CustomTouchable onPress={() => onPressVisitDate(item)}>
+                  <DateView
+                    key={item.index}
+                    isSelected={item.index === selectedItemIndex}>
+                    <DateText>
+                      {item.visitDate === null
+                        ? '기억 안 남'
+                        : item.visitDate + ' (' + item.weekday + ')'}
+                    </DateText>
+                  </DateView>
+                </CustomTouchable>
+              )}
+            />
+          </>
         )}
       </Dates>
       {selectedItemIndex !== null ? (
@@ -206,9 +218,22 @@ const AddDateGroupView = styled.View`
   align-items: center;
 `;
 
-const GroupText = styled.Text`
-  font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+const GroupTextWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: ${hp(1.5)}px;
+`;
+
+interface GroupProps {
+  flag: boolean;
+}
+
+const GroupText = styled.Text<GroupProps>`
+  font-size: ${(props: GroupProps) =>
+    props.flag ? `${AREA_FONT_SIZE}px` : `${rf(13)}px`};
+  color: ${(props: GroupProps) =>
+    props.flag ? `${DEFAULT_TEXT}` : `${MIDDLE_GREY}`};
   font-family: ${FONT_NAME};
   padding-top: ${hp(0.9)}px;
 `;

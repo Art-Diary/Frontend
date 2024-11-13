@@ -25,6 +25,7 @@ import {
   FullStarIcon,
   PrivateToggleIcon,
   PublicToggleIcon,
+  ThumbnailTrashRegExhIcon,
 } from '~/components/common/icon';
 import {
   AREA_FONT_SIZE,
@@ -126,6 +127,18 @@ const WriteMyDiaryInfoScreen = () => {
   }, []);
 
   const onClickNextButton = async () => {
+    if (checkBlankInKeyword(titleKeyword)) {
+      showToast('제목 작성해주세요.');
+      return;
+    }
+    if (starNum == 0) {
+      showToast('별점 선택해주세요.');
+      return;
+    }
+    if (!sayingKeyword || checkBlankInKeyword(sayingKeyword)) {
+      showToast('한마디 작성해주세요.');
+      return;
+    }
     updateforDetailInfo(
       titleKeyword,
       starNum,
@@ -137,6 +150,10 @@ const WriteMyDiaryInfoScreen = () => {
     navigation.navigate('WriteMyDiaryContents');
   };
 
+  const onClickTrash = async () => {
+    setImageUri(undefined);
+  };
+
   return (
     <KeyboardAwareScrollView
       style={{flex: 1, backgroundColor: BACK_COLOR}}
@@ -146,21 +163,32 @@ const WriteMyDiaryInfoScreen = () => {
         <BackView title="기록 작성" line={true} children={null} />
         <ContentsContainer>
           {/* 기록 정보 작성 */}
-          <WriteTitleWrapper>
-            <WriteTitle
+          <TitleSection>
+            <CountWrapper>
+              <SectionWapper>
+                <SectionStar>*</SectionStar>
+                <SectionName>제목</SectionName>
+              </SectionWapper>
+              <CountText>
+                ( {titleKeyword ? titleKeyword.length : 0} /{' '}
+                {titleMaxInputLength} )
+              </CountText>
+            </CountWrapper>
+            <WriteSaying
+              multiline={true}
               maxLength={titleMaxInputLength}
-              placeholderTextColor="#D3D3D3"
-              placeholder={'제목'}
-              onChangeText={onChangeTitle}
+              placeholderTextColor={LIGHT_GREY}
+              placeholder={!titleKeyword ? '제목' : ''}
               value={titleKeyword}
+              onChangeText={onChangeTitle}
             />
-            <CountText>
-              {titleKeyword.length} / {titleMaxInputLength}
-            </CountText>
-          </WriteTitleWrapper>
+          </TitleSection>
           <SecondSection>
             <HalfSection>
-              <SectionName>별점</SectionName>
+              <SectionWapper>
+                <SectionStar>*</SectionStar>
+                <SectionName>별점</SectionName>
+              </SectionWapper>
               <StarList>
                 <CustomTouchable onPress={() => changeStarNum(1)}>
                   {starNum >= 1 ? <FullStarIcon /> : <EmptyStarIcon />}
@@ -188,7 +216,10 @@ const WriteMyDiaryInfoScreen = () => {
           </SecondSection>
           <SayingSection>
             <CountWrapper>
-              <SectionName>한마디</SectionName>
+              <SectionWapper>
+                <SectionStar>*</SectionStar>
+                <SectionName>한마디</SectionName>
+              </SectionWapper>
               <CountText>
                 ( {sayingKeyword ? sayingKeyword.length : 0} /{' '}
                 {sayingMaxInputLength} )
@@ -208,7 +239,14 @@ const WriteMyDiaryInfoScreen = () => {
             </WriteSayingSection>
           </SayingSection>
           <ThumbnailSection>
-            <SectionName>대표사진</SectionName>
+            <SectionWapper>
+              <SectionName>대표사진</SectionName>
+              {imageUri && (
+                <CustomTouchable onPress={onClickTrash}>
+                  <ThumbnailTrashRegExhIcon />
+                </CustomTouchable>
+              )}
+            </SectionWapper>
             <PutThumbnail>
               {!imageUri ? (
                 <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
@@ -238,13 +276,9 @@ const WriteMyDiaryInfoScreen = () => {
             </PutThumbnail>
           </ThumbnailSection>
           {/* 다음 버튼 */}
-          {!checkBlankInKeyword(titleKeyword) && starNum > 0 ? (
-            <CustomTouchable onPress={onClickNextButton}>
-              <NextButton moveNext={true}>다음</NextButton>
-            </CustomTouchable>
-          ) : (
-            <NextButton moveNext={false}>다음</NextButton>
-          )}
+          <CustomTouchable onPress={onClickNextButton}>
+            <NextButton moveNext={true}>다음</NextButton>
+          </CustomTouchable>
         </ContentsContainer>
       </Container>
     </KeyboardAwareScrollView>
@@ -308,6 +342,16 @@ const StarList = styled.View`
   align-items: center;
 `;
 
+const TitleSection = styled.View`
+  flex-direction: column;
+  border-width: ${ITEM_BORDER_WIDTH}px;
+  border-color: ${LIGHT_GREY};
+  border-radius: ${BUTTON_RADIUS}px;
+  width: 100%;
+  padding: ${wp(2.9)}px;
+  gap: ${hp(1)}px;
+`;
+
 const SayingSection = styled.View`
   flex-direction: column;
   border-width: ${ITEM_BORDER_WIDTH}px;
@@ -315,7 +359,7 @@ const SayingSection = styled.View`
   border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
   padding: ${wp(2.9)}px;
-  gap: ${hp(1.6)}px;
+  gap: ${hp(1)}px;
 `;
 
 const WriteSayingSection = styled.View`
@@ -327,6 +371,8 @@ const WriteSaying = styled.TextInput`
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-right: 0%;
+  padding-top: 0%;
+  padding-bottom: 0%;
   max-width: 97%;
 `;
 
@@ -386,4 +432,18 @@ const CountWrapper = styled.View`
   flex-direction: row;
   align-items: center;
   gap: ${wp(1)}px;
+`;
+
+const SectionWapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${wp(1)}px;
+`;
+
+const SectionStar = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MAIN_COLOR};
+  text-align: center;
 `;

@@ -1,5 +1,5 @@
 import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useFetchGatheringDiaryList} from '~/api/queries/gathering';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
@@ -27,12 +27,14 @@ interface FetchGatheringDiaryListProps {
   fetchInfo: FetchInfo;
   deleteActions: DeleteActions;
   updateActions: UpdateActions;
+  pageNum: number;
 }
 
 const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
   fetchInfo,
   deleteActions,
   updateActions,
+  pageNum,
 }) => {
   const isFocused = useIsFocused();
   const {
@@ -41,10 +43,12 @@ const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
     isError,
     refetch,
   } = useFetchGatheringDiaryList(fetchInfo.gatherId, fetchInfo.exhId);
+  const [first, setFirst] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
       refetch();
+      setFirst(false);
     }
   }, [isFocused]);
 
@@ -68,6 +72,9 @@ const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
         <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
       ) : (
         <DiaryList
+          pageNum={pageNum}
+          first={first}
+          handleFirst={() => setFirst(true)}
           diaryList={gatheringDiaryList}
           deleteActions={deleteActions}
           updateActions={updateActions}

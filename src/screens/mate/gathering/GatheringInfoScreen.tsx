@@ -144,7 +144,7 @@ const GatheringInfoScreen = () => {
     });
     navigation.navigate('GatheringRoutes', {
       screen: 'GatheringDiaryList',
-      params: undefined,
+      params: {pageNum: 0},
     });
   };
 

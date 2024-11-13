@@ -60,7 +60,10 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
       exhItem.gatherId ?? null,
       exhItem.exhVisitId ?? null,
     );
-    navigation.navigate('CalendarDiaryRoutes');
+    navigation.navigate('CalendarDiaryRoutes', {
+      screen: 'CalendarDiaryList',
+      params: {pageNum: 0},
+    });
   };
 
   const onPressAddMyExh = () => {

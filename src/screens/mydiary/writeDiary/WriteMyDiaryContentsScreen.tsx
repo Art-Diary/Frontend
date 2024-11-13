@@ -28,6 +28,10 @@ import {
 } from '~/components/common/style';
 import {changeImageSize} from '~/utils/resizeImage';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {
+  useRememberDiaryNumActions,
+  useRememberDiaryNumInfo,
+} from '~/zustand/mydiary/rememberDiaryNum';
 
 export type ImageType = {
   // 첨부한 사진 타입
@@ -44,6 +48,9 @@ const WriteMyDiaryContentsScreen = () => {
   const {resetWriteInfo, updateforContent} = useWriteMyDiaryActions();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [images, setImages] = useState<ImageType[]>([]); // 작성한 글에 첨부한 사진들
+  const {updateDiaryNum} = useRememberDiaryNumActions();
+  const diaryNum = useRememberDiaryNumInfo().diaryNum;
+  const [pageNum, setPageNum] = useState<number>(0);
   // post
   const {
     mutate: createMyDiary,
@@ -62,6 +69,13 @@ const WriteMyDiaryContentsScreen = () => {
   useEffect(() => {
     setEditorContent(writeMyDiaryInfo.contents ?? '');
   }, []);
+
+  useEffect(() => {
+    if (diaryNum !== -1) {
+      setPageNum(diaryNum);
+      updateDiaryNum(-1);
+    }
+  }, [diaryNum]);
 
   useEffect(() => {
     if (isErrorCreate) {
@@ -88,16 +102,32 @@ const WriteMyDiaryContentsScreen = () => {
         navigation.reset({
           // [내 기록] 기록 목록 화면으로 이동
           index: 0,
-          routes: [{name: 'Main'}, {name: 'MyDiaryRoutes'}],
+          routes: [
+            {name: 'Main'},
+            {
+              name: 'MyDiaryRoutes',
+              state: {
+                routes: [
+                  {
+                    name: 'MyDiaryList',
+                    params: {pageNum: pageNum},
+                  },
+                ],
+              },
+            },
+          ],
         });
       } else if (tabIdentifier.tab === 'calendar') {
         // [캘린더] 기록 목록 화면으로 이동
-        navigation.navigate('CalendarDiaryRoutes');
+        navigation.navigate('CalendarDiaryRoutes', {
+          screen: 'CalendarDiaryList',
+          params: {pageNum: pageNum},
+        });
       } else if (tabIdentifier.tab === 'gathering') {
-        // [캘린더] 기록 목록 화면으로 이동
+        // [모임] 기록 목록 화면으로 이동
         navigation.navigate('GatheringRoutes', {
           screen: 'GatheringDiaryList',
-          params: undefined,
+          params: {pageNum: pageNum},
         });
       } else if (tabIdentifier.tab === 'exhibition') {
         const data = resData.data;
@@ -121,6 +151,10 @@ const WriteMyDiaryContentsScreen = () => {
   };
 
   const onClickNextButton = async () => {
+    if (checkBlankInKeyword(editorContent)) {
+      showToast('내용 작성해주세요.');
+      return;
+    }
     const resultFormData = await makeFormData();
     if (writeMyDiaryInfo.isUpdate) {
       updateMyDiary({
@@ -193,13 +227,9 @@ const WriteMyDiaryContentsScreen = () => {
           setImages={setImages}
           images={images}
         />
-        {!checkBlankInKeyword(editorContent) ? (
-          <CustomTouchable onPress={onClickNextButton}>
-            <NextButton moveNext={true}>완료</NextButton>
-          </CustomTouchable>
-        ) : (
-          <NextButton moveNext={false}>완료</NextButton>
-        )}
+        <CustomTouchable onPress={onClickNextButton}>
+          <NextButton moveNext={true}>완료</NextButton>
+        </CustomTouchable>
       </ContentsContainer>
       {isLoadingOpen && <LoadingModal message={'다이어리 저장 중 :)'} />}
     </Container>

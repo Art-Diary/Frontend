@@ -30,7 +30,10 @@ const MyExhList = () => {
 
   const onPress = (exhId: number) => {
     updateVisitedExhId(exhId);
-    navigation.navigate('MyDiaryRoutes');
+    navigation.navigate('MyDiaryRoutes', {
+      screen: 'MyDiaryList',
+      params: {pageNum: 0},
+    });
   };
 
   return (

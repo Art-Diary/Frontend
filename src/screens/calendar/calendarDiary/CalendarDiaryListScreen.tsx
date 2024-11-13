@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
@@ -24,8 +24,19 @@ import {
 } from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {CalendarDiaryStackParamList} from '~/utils/stackTypes';
 
-const CalendarDiaryListScreen = () => {
+type CalendarDiaryProps = RouteProp<
+  CalendarDiaryStackParamList,
+  'CalendarDiaryList'
+>;
+
+interface Props {
+  route: CalendarDiaryProps;
+}
+
+const CalendarDiaryListScreen: React.FC<Props> = ({route}) => {
+  const {pageNum} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const exhFromCalendarInfo = useExhFromCalendarInfo();
   const {updateIsUpdate, updateforIds, resetWriteInfo} =
@@ -68,6 +79,7 @@ const CalendarDiaryListScreen = () => {
 
       {/* body */}
       <CalendarDiaryList
+        pageNum={pageNum}
         deleteActions={{
           handleShowOptionBar: setShowOptionBar,
           isDeleteModalOpen: isDeleteModalOpen,
