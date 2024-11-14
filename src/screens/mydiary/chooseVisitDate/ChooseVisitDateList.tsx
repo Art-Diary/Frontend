@@ -102,7 +102,7 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
     // 혼자 방문한 날짜 리스트 추출
     var dates = [];
 
-    if (value === null || value === -1) {
+    if (value === null || myStoredDateListOfExh.length === 0) {
       updateVisitDates([]);
     } else {
       for (let index = 0; index < myStoredDateListOfExh.length; index++) {
@@ -126,7 +126,7 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
   const getVisitDates = (value: number | null): DateValue[] => {
     var visitDateInfoList: DateValue[] = [];
 
-    if (value === null || value === -1) {
+    if (value === null || myStoredDateListOfExh.length === 0) {
       return visitDateInfoList;
     }
     const dateInfoList = myStoredDateListOfExh[value].dateInfoList;
@@ -153,13 +153,11 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
             <GroupText>전시회 방문 날짜를 수정할 수 있습니다.</GroupText>
           )}
         </GroupTextWrapper>
-        {value !== null &&
-          (value === -1 ||
-            myStoredDateListOfExh[value].gatherName === undefined) && (
-            <CustomTouchable onPress={onPressAddDate}>
-              <AddDateText>추가</AddDateText>
-            </CustomTouchable>
-          )}
+        {value !== null && value === 0 && (
+          <CustomTouchable onPress={onPressAddDate}>
+            <AddDateText>추가</AddDateText>
+          </CustomTouchable>
+        )}
       </AddDateGroupView>
       <Dates>
         {value === null ? (
@@ -167,29 +165,27 @@ const ChooseVisitDateList: React.FC<VisitDatesProps> = ({
             <SelectMsgText>모임을 선택해 주세요.</SelectMsgText>
           </SelectMsgView>
         ) : (
-          <>
-            {getVisitDates(value).length == 0 && (
+          <FlatList
+            data={getVisitDates(value)}
+            renderItem={({item}) => (
+              <CustomTouchable onPress={() => onPressVisitDate(item)}>
+                <DateView
+                  key={item.index}
+                  isSelected={item.index === selectedItemIndex}>
+                  <DateText>
+                    {item.visitDate === null
+                      ? '기억 안 남'
+                      : item.visitDate + ' (' + item.weekday + ')'}
+                  </DateText>
+                </DateView>
+              </CustomTouchable>
+            )}
+            ListEmptyComponent={
               <SelectMsgView>
                 <SelectMsgText>방문 날짜를 추가해주세요.</SelectMsgText>
               </SelectMsgView>
-            )}
-            <FlatList
-              data={getVisitDates(value)}
-              renderItem={({item}) => (
-                <CustomTouchable onPress={() => onPressVisitDate(item)}>
-                  <DateView
-                    key={item.index}
-                    isSelected={item.index === selectedItemIndex}>
-                    <DateText>
-                      {item.visitDate === null
-                        ? '기억 안 남'
-                        : item.visitDate + ' (' + item.weekday + ')'}
-                    </DateText>
-                  </DateView>
-                </CustomTouchable>
-              )}
-            />
-          </>
+            }
+          />
         )}
       </Dates>
       {selectedItemIndex !== null ? (

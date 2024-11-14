@@ -36,7 +36,7 @@ const ChooseVisitDateScreen = () => {
     if (!storedDateListOfExh) {
       return [];
     }
-    gatherNameList.push({label: '개인', value: -1});
+    gatherNameList.push({label: '개인', value: 0});
     for (let index = 0; index < storedDateListOfExh.length; index++) {
       if (storedDateListOfExh[index].gatherName) {
         gatherNameList.push({
