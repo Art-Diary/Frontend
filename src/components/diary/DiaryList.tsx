@@ -17,7 +17,7 @@ import WriterRateInfo from '~/components/diary/WriterRateInfo';
 import OtherInfo from '~/components/diary/OtherInfo';
 import SayingInfo from '~/components/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useDiaryBackActions} from '~/zustand/common/diaryBack';
@@ -25,6 +25,8 @@ import {useUserInfo} from '~/zustand/auth/auth';
 import DeleteDiaryModal from './modal/DeleteDiaryModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
+import {showToast} from '../common/modal/toastConfig';
+import {useRememberDiaryNumActions} from '~/zustand/mydiary/rememberDiaryNum';
 
 type DeleteActions = {
   handleShowOptionBar: (show: boolean) => void; // 내가 작성한 기록만 옵션바가 보이도록
@@ -40,15 +42,21 @@ type UpdateActions = {
 };
 
 interface DiaryListProps {
+  pageNum: number;
   diaryList: any[];
   deleteActions?: DeleteActions;
   updateActions?: UpdateActions;
+  first: boolean;
+  handleFirst: () => void;
 }
 
 const DiaryList: React.FC<DiaryListProps> = ({
+  pageNum,
   diaryList,
   deleteActions,
   updateActions,
+  first,
+  handleFirst,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateBackInfo} = useDiaryBackActions();
@@ -56,7 +64,8 @@ const DiaryList: React.FC<DiaryListProps> = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const {authInfo} = useUserInfo();
-  const [currentPage, setCurrentPage] = useState(0);
+  const {updateDiaryNum} = useRememberDiaryNumActions();
+  const [currentPage, setCurrentPage] = useState(pageNum);
   const {
     updateIsUpdate,
     updateforIds,
@@ -65,6 +74,19 @@ const DiaryList: React.FC<DiaryListProps> = ({
     updateInGathering,
   } = useWriteMyDiaryActions();
   const tabIdentifier = useTabIdentifierInfo();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused && !first) {
+      const itemWidth = wp(100);
+      const scrollToX = pageNum * itemWidth;
+
+      scrollViewRef.current?.scrollTo({x: scrollToX, animated: true});
+      setCurrentPage(pageNum);
+      updateDiaryNum(0);
+      handleFirst();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (deleteActions) {
@@ -97,6 +119,7 @@ const DiaryList: React.FC<DiaryListProps> = ({
         updateInGathering(false, null);
         updateActions.handleUpdateClicked();
         updateActions.handleCloseOptionModal();
+        updateDiaryNum(currentPage);
         if (
           tabIdentifier.tab === 'mydiary' ||
           tabIdentifier.tab === 'gathering'
@@ -117,9 +140,15 @@ const DiaryList: React.FC<DiaryListProps> = ({
       writeDate: item.writeDate,
     });
     if (tabIdentifierInfo.tab === 'mydiary') {
-      navigation.navigate('MyDiaryBack');
+      navigation.navigate('MyDiaryRoutes', {
+        screen: 'MyDiaryBack',
+        params: undefined,
+      });
     } else if (tabIdentifierInfo.tab === 'calendar') {
-      navigation.navigate('CalendarDiaryBack');
+      navigation.navigate('CalendarDiaryRoutes', {
+        screen: 'CalendarDiaryBack',
+        params: undefined,
+      });
     } else if (tabIdentifierInfo.tab === 'mate') {
       navigation.navigate('MateDiaryBack');
     } else if (tabIdentifierInfo.tab === 'gathering') {
@@ -142,8 +171,15 @@ const DiaryList: React.FC<DiaryListProps> = ({
   };
 
   const handleDeletePage = (pageIndex: number) => {
-    handleIsDeleted(diaryList.length - 1 === pageIndex);
-    deleteActions?.handleCloseOptionModal();
+    if (diaryList.length == 1) {
+      // 하나 남은 기록을 삭제할 경우, 내 리고 페이지로 이동
+      deleteActions?.handleCloseOptionModal();
+      showToast('이 전시회 기록이 모두 삭제되었습니다.');
+      navigation.goBack();
+    } else {
+      handleIsDeleted(diaryList.length - 1 === pageIndex);
+      deleteActions?.handleCloseOptionModal();
+    }
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

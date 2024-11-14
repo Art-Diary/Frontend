@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {useDeleteMyDiary} from '~/api/queries/mydiary';
-import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
+import {
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
@@ -61,9 +64,18 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   return (
     <ConfirmationModal handleCloseModal={handleCloseModal}>
       <Message>{message}</Message>
-      <CustomTouchable onPress={() => deleteMyDiary()}>
-        <DeleteButton>삭제</DeleteButton>
-      </CustomTouchable>
+      <TouchView>
+        <ButtonDetailSection>
+          <CustomTouchable onPress={() => deleteMyDiary()}>
+            <DeleteButton>삭제</DeleteButton>
+          </CustomTouchable>
+        </ButtonDetailSection>
+        <ButtonDetailSection>
+          <CustomTouchable onPress={handleCloseModal}>
+            <DeleteButton mainButton>취소</DeleteButton>
+          </CustomTouchable>
+        </ButtonDetailSection>
+      </TouchView>
     </ConfirmationModal>
   );
 };
@@ -87,4 +99,15 @@ const DeleteButton = styled.Text`
   background-color: ${MAIN_COLOR};
   padding: ${BUTTON_PADDING}px;
   border-radius: ${BUTTON_RADIUS}px;
+`;
+
+const TouchView = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: ${wp(1.5)}px;
+`;
+
+const ButtonDetailSection = styled.View`
+  width: 50%;
 `;

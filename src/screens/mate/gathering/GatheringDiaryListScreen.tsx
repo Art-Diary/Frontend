@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -24,8 +24,19 @@ import {
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {GatheringStackParamList} from '~/utils/stackTypes';
 
-const GatheringDiaryListScreen = () => {
+type GatheringDiaryListProps = RouteProp<
+  GatheringStackParamList,
+  'GatheringDiaryList'
+>;
+
+interface Props {
+  route: GatheringDiaryListProps;
+}
+
+const GatheringDiaryListScreen: React.FC<Props> = ({route}) => {
+  const {pageNum} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const {params} = useGatheringListParamsInfo();
   const {updateIsUpdate, updateInGathering, resetWriteInfo} =
@@ -68,6 +79,7 @@ const GatheringDiaryListScreen = () => {
 
       {/* body */}
       <FetchGatheringDiaryList
+        pageNum={pageNum}
         fetchInfo={{gatherId: params.gatherId, exhId: params.exhId}}
         deleteActions={{
           handleShowOptionBar: setShowOptionBar,

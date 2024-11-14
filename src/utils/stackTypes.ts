@@ -1,7 +1,7 @@
 // types.ts
 export type GatheringStackParamList = {
   GatheringInfo: undefined;
-  GatheringDiaryList: undefined;
+  GatheringDiaryList: {pageNum: number};
   GatheringDiaryBack: undefined;
   SearchAddVisitExhInGathering: undefined;
   NewVisitDateOfExhInGathering: undefined;
@@ -16,13 +16,24 @@ export type SettingStackParamList = {
   LeaveArtDiary: undefined;
 };
 
+export type MyDiaryStackParamList = {
+  MyDiaryList: {pageNum: number};
+  MyDiaryBack: undefined;
+};
+
+export type CalendarDiaryStackParamList = {
+  CalendarDiaryList: {pageNum: number};
+  CalendarDiaryBack: undefined;
+};
+
 export type RootStackParamList = {
   Main: undefined;
   // mydiary
   MyExhibitionSearch: undefined;
-  MyDiaryRoutes: undefined;
-  MyDiaryBack: undefined;
-  MyDiaryList: undefined;
+  MyDiaryRoutes: {
+    screen: keyof MyDiaryStackParamList;
+    params: MyDiaryStackParamList[keyof MyDiaryStackParamList];
+  };
   AddMyVisitDateRoutes: undefined;
   ChooseVisitDate: undefined;
   AddSoloVisitDate: undefined;
@@ -47,8 +58,10 @@ export type RootStackParamList = {
     regExhInfo: any;
   };
   // calendar
-  CalendarDiaryRoutes: undefined;
-  CalendarDiaryBack: undefined;
+  CalendarDiaryRoutes: {
+    screen: keyof CalendarDiaryStackParamList;
+    params: CalendarDiaryStackParamList[keyof CalendarDiaryStackParamList];
+  };
   // exhibition
   ExhibitionSearch: undefined;
   ExhDetailInfo: {

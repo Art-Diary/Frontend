@@ -215,6 +215,11 @@ export const TrashRegExhIcon = () => {
   return <TrashRegExh width={100 * (height / 100)} height={height} />;
 };
 
+export const ThumbnailTrashRegExhIcon = () => {
+  const height = rw(5);
+  return <TrashRegExh width={100 * (height / 100)} height={height} />;
+};
+
 /** bottom nav */
 export const OffCalendarIcon = () => {
   const height = hp(5);

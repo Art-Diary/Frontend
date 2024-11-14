@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {OptionBarIcon, WriteDiaryButtonIcon} from '~/components/common/icon';
@@ -28,8 +28,16 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import DiaryList from '~/components/diary/DiaryList';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {MyDiaryStackParamList} from '~/utils/stackTypes';
 
-const MyDiaryListScreen = () => {
+type MyDiaryListScreenProps = RouteProp<MyDiaryStackParamList, 'MyDiaryList'>;
+
+interface Props {
+  route: MyDiaryListScreenProps;
+}
+
+const MyDiaryListScreen: React.FC<Props> = ({route}) => {
+  const {pageNum} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const {updateIsUpdate, updateInGathering, resetWriteInfo} =
@@ -45,12 +53,14 @@ const MyDiaryListScreen = () => {
   } = useFetchMyDiaryList(visitedExhId);
   const [isLoadingOpen, setIsLoadingOpen] = useState(false);
   const [haveError, setHaveError] = useState(false);
+  const [first, setFirst] = useState(false);
 
   useEffect(() => {
     if (isError) {
       setHaveError(true);
     }
     if (isLoading) {
+      setFirst(false);
       setIsLoadingOpen(true);
     } else {
       setIsLoadingOpen(false);
@@ -97,6 +107,9 @@ const MyDiaryListScreen = () => {
         <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
       ) : (
         <DiaryList
+          pageNum={pageNum}
+          first={first}
+          handleFirst={() => setFirst(true)}
           diaryList={myDiaryList}
           deleteActions={{
             handleShowOptionBar: setShowOptionBar,
@@ -120,7 +133,7 @@ const MyDiaryListScreen = () => {
           <CustomTouchable onPress={clickDeletePage}>
             <Message>삭제</Message>
           </CustomTouchable>
-          <CustomTouchable>
+          <CustomTouchable onPress={() => setIsModalOpen(false)}>
             <DeleteButton>취소</DeleteButton>
           </CustomTouchable>
         </ConfirmationModal>

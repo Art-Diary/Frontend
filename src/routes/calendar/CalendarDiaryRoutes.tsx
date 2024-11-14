@@ -2,8 +2,9 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CalendarDiaryListScreen from '~/screens/calendar/calendarDiary/CalendarDiaryListScreen';
 import CalendarDiaryBackScreen from '~/screens/calendar/calendarDiary/CalendarDiaryBackScreen';
+import {CalendarDiaryStackParamList} from '~/utils/stackTypes';
 
-const CalendarDiary = createNativeStackNavigator();
+const CalendarDiary = createNativeStackNavigator<CalendarDiaryStackParamList>();
 
 const CalendarDiaryRoutes = () => {
   return (
