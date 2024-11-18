@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import {heightSizePercentage as hp} from '~/components/common/ResponsiveSize';
 
 interface ThumbnailProps {
-  thumbnail: string;
+  thumbnail: string | undefined;
 }
 
 const ThumbnailInfo: React.FC<ThumbnailProps> = ({thumbnail}) => {

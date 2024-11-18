@@ -133,7 +133,10 @@ export const useDeleteMyDiary = (exhId: number, diaryId: number) => {
             exhFromCalendarInfo.gatherId,
           ).queryKey,
         );
-      } else if (tabIdentifierInfo.tab === 'exhibition') {
+      } else if (
+        tabIdentifierInfo.tab === 'exhibition' ||
+        tabIdentifierInfo.tab === 'exhibitionMoreReview'
+      ) {
         queryClient.invalidateQueries(
           exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
         );
@@ -217,7 +220,10 @@ export const useUpdateMyDiary = (
         queryClient.invalidateQueries(
           mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
         );
-      } else if (tabIdentifierInfo.tab === 'exhibition') {
+      } else if (
+        tabIdentifierInfo.tab === 'exhibition' ||
+        tabIdentifierInfo.tab === 'exhibitionMoreReview'
+      ) {
         queryClient.invalidateQueries(
           exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
         );

@@ -92,6 +92,7 @@ const WriteMyDiaryContentsScreen = () => {
     }
     if (isSuccessCreate || isSuccessUpdate) {
       const diaryId = writeMyDiaryInfo.diaryId;
+      const isUpdate = writeMyDiaryInfo.isUpdate;
       if (isSuccessCreate) {
         showToast('다이어리 작성 완료!');
       } else if (isSuccessUpdate) {
@@ -129,12 +130,27 @@ const WriteMyDiaryContentsScreen = () => {
           screen: 'GatheringDiaryList',
           params: {pageNum: pageNum},
         });
-      } else if (tabIdentifier.tab === 'exhibition') {
-        const data = resData.data;
-        const filteredData = data.filter(
-          (value: any) => value.diaryId === diaryId,
-        )[0];
-        navigation.navigate('ExhToDiary', {diary: filteredData});
+      } else if (
+        tabIdentifier.tab === 'exhibition' ||
+        tabIdentifier.tab === 'exhibitionMoreReview'
+      ) {
+        // [전시회] 전시회 페이지의 기록 목록 화면으로 이동
+        if (isUpdate) {
+          const data = resData.data;
+          const filteredData = data.filter(
+            (value: any) => value.diaryId === diaryId,
+          )[0];
+          navigation.navigate('ExhToDiary', {diary: filteredData});
+        } else {
+          navigation.navigate(
+            tabIdentifier.tab === 'exhibition'
+              ? 'ExhDetailInfo'
+              : 'ExhToMoreReview',
+            {
+              exhId: visitedExhId,
+            },
+          );
+        }
       }
     }
   }, [

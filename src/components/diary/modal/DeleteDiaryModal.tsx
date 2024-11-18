@@ -55,7 +55,10 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
       handleCloseModal();
       showToast('기록을 삭제했습니다.');
       handleSuccessDelete();
-      if (tabIdentifierInfo.tab === 'exhibition') {
+      if (
+        tabIdentifierInfo.tab === 'exhibition' ||
+        tabIdentifierInfo.tab === 'exhibitionMoreReview'
+      ) {
         navigation.goBack();
       }
     }
