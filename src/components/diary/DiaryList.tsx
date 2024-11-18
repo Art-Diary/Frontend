@@ -42,12 +42,12 @@ type UpdateActions = {
 };
 
 interface DiaryListProps {
-  pageNum: number;
+  pageNum?: number;
   diaryList: any[];
   deleteActions?: DeleteActions;
   updateActions?: UpdateActions;
-  first: boolean;
-  handleFirst: () => void;
+  first?: boolean;
+  handleFirst?: () => void;
 }
 
 const DiaryList: React.FC<DiaryListProps> = ({
@@ -65,7 +65,7 @@ const DiaryList: React.FC<DiaryListProps> = ({
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const {authInfo} = useUserInfo();
   const {updateDiaryNum} = useRememberDiaryNumActions();
-  const [currentPage, setCurrentPage] = useState(pageNum);
+  const [currentPage, setCurrentPage] = useState(pageNum ?? 0);
   const {
     updateIsUpdate,
     updateforIds,
@@ -77,7 +77,7 @@ const DiaryList: React.FC<DiaryListProps> = ({
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (isFocused && !first) {
+    if (isFocused && !first && pageNum && handleFirst) {
       const itemWidth = wp(100);
       const scrollToX = pageNum * itemWidth;
 
@@ -137,7 +137,7 @@ const DiaryList: React.FC<DiaryListProps> = ({
   const onPressBack = (item: any) => {
     updateBackInfo({
       contents: item.contents,
-      writeDate: item.writeDate,
+      writeDate: item.initDate,
     });
     if (tabIdentifierInfo.tab === 'mydiary') {
       navigation.navigate('MyDiaryRoutes', {
@@ -156,7 +156,10 @@ const DiaryList: React.FC<DiaryListProps> = ({
         screen: 'GatheringDiaryBack',
         params: undefined,
       });
-    } else if (tabIdentifierInfo.tab === 'exhibition') {
+    } else if (
+      tabIdentifierInfo.tab === 'exhibition' ||
+      tabIdentifierInfo.tab === 'exhibitionMoreReview'
+    ) {
       navigation.navigate('ExhToDiaryBack');
     }
   };
@@ -175,7 +178,12 @@ const DiaryList: React.FC<DiaryListProps> = ({
       // 하나 남은 기록을 삭제할 경우, 내 리고 페이지로 이동
       deleteActions?.handleCloseOptionModal();
       showToast('이 전시회 기록이 모두 삭제되었습니다.');
-      navigation.goBack();
+      if (
+        tabIdentifierInfo.tab !== 'exhibition' &&
+        tabIdentifierInfo.tab !== 'exhibitionMoreReview'
+      ) {
+        navigation.goBack();
+      }
     } else {
       handleIsDeleted(diaryList.length - 1 === pageIndex);
       deleteActions?.handleCloseOptionModal();

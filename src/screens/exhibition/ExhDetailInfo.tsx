@@ -24,6 +24,10 @@ import {
 import ExhShare from './ExhShare';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -54,11 +58,16 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
 
   useEffect(() => {
     if (isFocused) {
       refetchDiaryList();
       refetch();
+      if (tabIdentifierInfo.tab !== 'exhibition') {
+        updateTab('exhibition');
+      }
     }
   }, [isFocused]);
 

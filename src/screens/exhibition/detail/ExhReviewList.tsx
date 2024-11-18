@@ -3,11 +3,16 @@ import styled from 'styled-components/native';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
-import {EmptyStarIcon, FullStarIcon} from '~/components/common/icon';
+import {
+  EmptyStarIcon,
+  FullStarIcon,
+  WriteDiaryButtonIcon,
+} from '~/components/common/icon';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
@@ -15,6 +20,8 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
+import CustomTouchable from '~/components/common/CustomTouchable';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 
 interface Props {
   exhId: number;
@@ -26,7 +33,9 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
   const {updateVisitedExhId} = useVisitedExhIdActions(); //exhId 넘겨주기
   const [avgRate, setAvgRate] = useState<string>();
   const [avgNumber, setAvgNumber] = useState<number>(0);
-  const limit = 2; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
+  const limit = 4; // 한 페이지에 보이는 리뷰 개수
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
 
   useEffect(() => {
     var tmp: number = 0;
@@ -73,12 +82,26 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
     });
   };
 
+  const onPressButton = () => {
+    resetWriteInfo();
+    updateIsUpdate(false);
+    updateInGathering(false, null);
+    navigation.navigate('AddMyVisitDateRoutes');
+  };
+
   return (
     <ReView>
-      <Title>{'기록'}</Title>
+      <TitleWrapper>
+        <TitleView>
+          <Title>{'기록'}</Title>
+        </TitleView>
+        <CustomTouchable onPress={onPressButton}>
+          <WriteDiaryButtonIcon />
+        </CustomTouchable>
+      </TitleWrapper>
       {avgNumber === 0 ? (
         <TitleTopView>
-          <NonAvg> {'아직 기록이 없습니다.'}</NonAvg>
+          <NonAvg> {'기록이 아직 없습니다.'}</NonAvg>
         </TitleTopView>
       ) : (
         <AvgRateView>
@@ -136,6 +159,20 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
 export default ExhReviewList;
 
 /** style */
+const TitleWrapper = styled.View`
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  padding: ${wp(1.4)}px;
+  justify-content: space-between;
+  padding-right: ${wp(4)}px;
+`;
+
+const TitleView = styled.View`
+  align-items: center;
+  width: 100%;
+`;
+
 const Title = styled.Text`
   font-size: ${rf(19)}px;
   color: ${DEFAULT_TEXT};
@@ -156,6 +193,7 @@ const ReView = styled.View`
   align-items: center;
   width: 100%;
   padding: ${wp(5.2)}px;
+  margin-bottom: ${hp(2)}px;
 `;
 
 const TitleTopView = styled.View`
