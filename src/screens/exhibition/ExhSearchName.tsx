@@ -17,6 +17,8 @@ import {
   useFetchSearchContentList,
 } from '~/api/queries/exhibition';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import SearchContentsListScreen from './SearchContentsListScreen';
+import ExhListBySearchContentsScreen from './ExhListBySearchContentsScreen';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -36,6 +38,7 @@ const ExhSearchName = () => {
   const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
   const [searchContentId, setSearchContentId] = useState<number>(-1);
   const limit = 10; //보여주는 검색 기록 개수
+  const [currentPage, setCurrentPage] = useState<boolean>(false); // 최근 기록한 검색어(false), 검색 결과 전시회 리스트(true) 분별 용도
   //검색 기록 추가
   const {
     mutate: fetchAddSearchContent,
@@ -56,9 +59,13 @@ const ExhSearchName = () => {
 
     if (content) {
       fetchAddSearchContent();
-      setCheck(true);
+      //setCheck(true);
     }
   }, [content]);
+
+  useEffect(() => {
+    //console.log(Object.keys(examples).length);
+  }, [examples]);
 
   useEffect(() => {
     if (check) {
@@ -78,7 +85,8 @@ const ExhSearchName = () => {
     } else {
       setContent(searchKeyword);
       //setKeyword(searchKeyword);
-      updateSearchName(searchKeyword);
+      setCurrentPage(true);
+      //updateSearchName(searchKeyword);
     }
     Keyboard.dismiss();
   };
@@ -101,8 +109,19 @@ const ExhSearchName = () => {
         searchKeyword={searchKeyword}
         onPressSearch={onPressSearch}
         handleSearchKeyword={setSearchKeyword}>
-        <PreSearch>{'최근검색기록'}</PreSearch>
-        {examples &&
+        {/* <ExhListBySearchContentsScreen searchContent={content} /> */}
+        {/* <SearchContentsListScreen /> */}
+        {currentPage ? (
+          <ExhListBySearchContentsScreen searchContent={content} />
+        ) : (
+          <SearchContentsListScreen
+            currentPage={currentPage}
+            handlePage={setCurrentPage}
+          />
+        )}
+
+        {/* <PreSearch>{'최근검색기록'}</PreSearch>
+        {examples && Object.keys(examples).length ? (
           examples.slice(0, limit).map((item: any, index: number) => (
             <PreSearchView key={index}>
               <CustomTouchable
@@ -113,7 +132,12 @@ const ExhSearchName = () => {
                 <PreSearchList>{'X'}</PreSearchList>
               </CustomTouchable>
             </PreSearchView>
-          ))}
+          ))
+        ) : (
+          <PreSearchView>
+            <PreSearch>{'최근검색기록이 없습니다.'}</PreSearch>
+          </PreSearchView>
+        )} */}
       </SearchExhFrame>
     </Container>
   );

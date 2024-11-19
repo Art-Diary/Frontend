@@ -16,6 +16,7 @@ import {
   fetchSearchContentList,
   fetchAddSearchContent,
   fetchDeleteSearchContent,
+  fetchExhListBySearchContent,
 } from '../exhibition';
 
 export const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -39,6 +40,10 @@ export const exhibitionQueryKeys = createQueryKeys('exhibition', {
     gatherId,
   ],
   fetchSearchContentList: () => ['fetchSearchContentList'],
+  fetchExhListBySearchContent: (searchName?: string) => [
+    'fetchExhListBySearchContent',
+    searchName,
+  ],
 });
 
 export const useFetchSearchExhInMyDiary = (searchName: string) =>
@@ -79,6 +84,23 @@ export const useFetchSearchExh = (
     },
     onSuccess: () => {
       console.log('[FetchSearchExh] success fetch SearchExh');
+    },
+    select: (res: any) => res.data,
+  });
+
+export const useFetchExhListBySearchContent = (searchName: string | null) =>
+  useQuery({
+    queryKey: [
+      exhibitionQueryKeys.fetchExhListBySearchContent().queryKey,
+      searchName,
+    ],
+    queryFn: () => fetchExhListBySearchContent(searchName),
+    staleTime: 500000,
+    onError: err => {
+      console.log('[FetchExhBySearchContent] error fetch ExhList', searchName);
+    },
+    onSuccess: () => {
+      console.log('[FetchExhBySearchContent] success fetch ExhList');
     },
     select: (res: any) => res.data,
   });

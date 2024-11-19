@@ -16,6 +16,9 @@ export const fetchSearchExh = (
   });
 };
 
+export const fetchExhListBySearchContent = (searchName: string | null) =>
+  client.get(`/exhibitions/search`, {params: {searchName}});
+
 export const fetchAllExh = () => client.get(`/exhibitions`);
 
 /* 전시회 상세 정보 */
