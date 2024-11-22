@@ -14,11 +14,13 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 interface SearchProps {
   currentPage: boolean;
   handlePage: (value: boolean) => void;
+  changeContent: (value: string) => void;
 }
 
 const SearchContentsListScreen: React.FC<SearchProps> = ({
   currentPage,
   handlePage,
+  changeContent,
 }) => {
   const currentTime = new Date();
   const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
@@ -69,7 +71,7 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
   const onPressPreSearch = (text: string) => {
     //setKeyword(text);
     handlePage(true);
-    setContent(text);
+    changeContent(text);
     // updateSearchName(text);
   };
 

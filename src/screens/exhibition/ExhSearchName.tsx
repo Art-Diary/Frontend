@@ -23,7 +23,7 @@ import ExhListBySearchContentsScreen from './ExhListBySearchContentsScreen';
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  // const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>('');
   const {updateSearchName} = useSearchNameActions();
   //search_list 가져오기
   const {
@@ -59,7 +59,9 @@ const ExhSearchName = () => {
 
     if (content) {
       fetchAddSearchContent();
-      //setCheck(true);
+      setContent(content); //setCheck(true);
+      setSearchKeyword(content);
+      console.log('content?', content);
     }
   }, [content]);
 
@@ -91,16 +93,16 @@ const ExhSearchName = () => {
     Keyboard.dismiss();
   };
 
-  const onPressPreSearch = (text: string) => {
+  /* const onPressPreSearch = (text: string) => {
     //setKeyword(text);
-    setContent(text);
-    updateSearchName(text);
+    //setContent(text);
+    //updateSearchName(text);
   };
 
   const onPressDelete = (searchId: number) => {
     //searchList에서 삭제할 기록 searchId
     setSearchContentId(searchId);
-  };
+  };*/
 
   return (
     <Container>
@@ -117,6 +119,7 @@ const ExhSearchName = () => {
           <SearchContentsListScreen
             currentPage={currentPage}
             handlePage={setCurrentPage}
+            changeContent={setContent}
           />
         )}
 
