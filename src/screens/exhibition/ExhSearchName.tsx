@@ -59,8 +59,8 @@ const ExhSearchName = () => {
 
     if (content) {
       fetchAddSearchContent();
-      setContent(content); //setCheck(true);
-      setSearchKeyword(content);
+      // setContent(content); //setCheck(true);
+      // setSearchKeyword(content);
       console.log('content?', content);
     }
   }, [content]);
@@ -86,7 +86,7 @@ const ExhSearchName = () => {
       showToast('다시 검색해 주세요.');
     } else {
       setContent(searchKeyword);
-      //setKeyword(searchKeyword);
+      // setKeyword(searchKeyword);
       setCurrentPage(true);
       //updateSearchName(searchKeyword);
     }
@@ -120,6 +120,7 @@ const ExhSearchName = () => {
             currentPage={currentPage}
             handlePage={setCurrentPage}
             changeContent={setContent}
+            // setSearchKeyword 추가
           />
         )}
 

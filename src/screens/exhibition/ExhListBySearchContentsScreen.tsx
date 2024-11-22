@@ -16,7 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 
 interface SearchProps {
-  searchContent?: string;
+  searchContent: string;
 }
 
 const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
@@ -37,7 +37,7 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     isError,
     isSuccess,
     refetch,
-  } = useFetchExhListBySearchContent(content);
+  } = useFetchExhListBySearchContent(searchContent);
 
   //검색 기록 추가
   const {
@@ -53,13 +53,6 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     isError: isErrorDeleteSearch,
     isSuccess: isSuccessDeleteSearch,
   } = useFetchDeleteSearchContent(searchContentId);
-
-  useEffect(() => {
-    //확인
-    if (searchContent) {
-      setContent(searchContent);
-    }
-  }, [searchContent]);
 
   // useEffect(() => {
   //   //DB에서 데이터 추가 or 업데이트
