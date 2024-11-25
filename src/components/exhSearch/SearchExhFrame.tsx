@@ -7,7 +7,8 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
-import {SearchButtonIcon} from '../common/icon';
+import {SearchButtonIcon, DeleteButtonIcon} from '../common/icon';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -15,6 +16,8 @@ interface SearchExhFrameProps {
   handleSearchKeyword: (keyword: string) => void;
   children: ReactNode;
   searchMessage?: string;
+  deleteButton: boolean;
+  handleCurrentPage?: (currentPage: boolean) => void;
 }
 
 const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
@@ -23,22 +26,37 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
   handleSearchKeyword,
   children,
   searchMessage,
+  deleteButton,
+  handleCurrentPage,
 }) => {
   const onChangeText = useCallback((text: string) => {
     handleSearchKeyword(text);
   }, []);
 
+  const onPressDelete = () => {
+    handleSearchKeyword('');
+    // handleCurrentPage(false);
+    //searchList에서 삭제할 기록 searchId
+    //setSearchContentId(searchId);
+  };
   return (
     <ContentsContainer>
       {/* 검색창 */}
       <SearchContainer>
         <SearchView>
-          <SearchWord
-            onSubmitEditing={onPressSearch} // 키보드 상에서 엔터 누르면 확인 버튼 누르는 것과 같음.
-            onChangeText={onChangeText}
-            placeholder={searchMessage ?? '전시회를 검색하세요'}
-            value={searchKeyword}
-          />
+          <WordContent>
+            <SearchWord
+              onSubmitEditing={onPressSearch} // 키보드 상에서 엔터 누르면 확인 버튼 누르는 것과 같음.
+              onChangeText={onChangeText}
+              placeholder={!searchKeyword ? searchMessage : ''}
+              value={searchKeyword}
+            />
+            {deleteButton && (
+              <DeleteIconTouch onPress={onPressDelete}>
+                <DeleteButtonIcon />
+              </DeleteIconTouch>
+            )}
+          </WordContent>
           <SearchIconTouch activeOpacity={0.6} onPress={onPressSearch}>
             <SearchButtonIcon />
           </SearchIconTouch>
@@ -82,9 +100,19 @@ const SearchIconTouch = styled.TouchableOpacity`
   padding-top: ${hp(2.4)}px;
 `;
 
+const DeleteIconTouch = styled.TouchableOpacity`
+  align-self: center;
+`;
+
 const SearchWord = styled.TextInput`
-  flex: 1;
+  //flex: 1;
   font-size: ${rf(15.2)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+  //padding-right: ${wp(0)}px;
+  // padding-right: 0%;
+`;
+
+const WordContent = styled.View`
+  flex-direction: row;
 `;

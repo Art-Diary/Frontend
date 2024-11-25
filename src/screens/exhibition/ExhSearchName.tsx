@@ -16,15 +16,21 @@ import {
   useFetchDeleteSearchContent,
   useFetchSearchContentList,
 } from '~/api/queries/exhibition';
-import CustomTouchable from '~/components/common/CustomTouchable';
 import SearchContentsListScreen from './SearchContentsListScreen';
 import ExhListBySearchContentsScreen from './ExhListBySearchContentsScreen';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
   const {updateSearchName} = useSearchNameActions();
+  const currentTime = new Date();
+  const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
+  const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
+  const [searchContentId, setSearchContentId] = useState<number>(-1);
+  const limit = 10; //보여주는 검색 기록 개수
+  const [currentPage, setCurrentPage] = useState<boolean>(false); // 최근 기록한 검색어(false), 검색 결과 전시회 리스트(true) 분별 용도
   //search_list 가져오기
   const {
     data: examples,
@@ -33,12 +39,6 @@ const ExhSearchName = () => {
     isSuccess,
     refetch,
   } = useFetchSearchContentList();
-  const currentTime = new Date();
-  const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
-  const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
-  const [searchContentId, setSearchContentId] = useState<number>(-1);
-  const limit = 10; //보여주는 검색 기록 개수
-  const [currentPage, setCurrentPage] = useState<boolean>(false); // 최근 기록한 검색어(false), 검색 결과 전시회 리스트(true) 분별 용도
   //검색 기록 추가
   const {
     mutate: fetchAddSearchContent,
@@ -60,7 +60,7 @@ const ExhSearchName = () => {
     if (content) {
       fetchAddSearchContent();
       // setContent(content); //setCheck(true);
-      // setSearchKeyword(content);
+      setSearchKeyword(content);
       console.log('content?', content);
     }
   }, [content]);
@@ -81,6 +81,10 @@ const ExhSearchName = () => {
     }
   }, [searchContentId]);
 
+  // useEffect(() => {
+  //   setContent(searchKeyword);
+  // }, [searchKeyword]);
+
   const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
@@ -93,6 +97,9 @@ const ExhSearchName = () => {
     Keyboard.dismiss();
   };
 
+  if (isLoading) {
+    return <LoadingModal message={'로딩 중 :)'} />;
+  }
   /* const onPressPreSearch = (text: string) => {
     //setKeyword(text);
     //setContent(text);
@@ -108,9 +115,12 @@ const ExhSearchName = () => {
     <Container>
       <BackView line={false} children={null} />
       <SearchExhFrame
-        searchKeyword={searchKeyword}
+        searchKeyword={content}
         onPressSearch={onPressSearch}
-        handleSearchKeyword={setSearchKeyword}>
+        handleSearchKeyword={setContent}
+        searchMessage={'전시회를 검색하세요'}
+        deleteButton={true}
+        handleCurrentPage={setCurrentPage}>
         {/* <ExhListBySearchContentsScreen searchContent={content} /> */}
         {/* <SearchContentsListScreen /> */}
         {currentPage ? (
