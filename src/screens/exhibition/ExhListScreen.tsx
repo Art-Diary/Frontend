@@ -58,7 +58,6 @@ const ExhListScreen = () => {
   const isFocused = useIsFocused();
   const [hearts, setHearts] = useState<Exhibition[]>([]);
   const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
-  const [deleteList, setDeleteList] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
   const [isCalendarModalVisible, setIsCalendarModalVisible] = useState(false); //달력 모달
   const [isNameVisible, setIsNameVisible] = useState(false);
@@ -96,14 +95,14 @@ const ExhListScreen = () => {
     isLoading: isLoadingLike,
     isError: isErrorLike,
     isSuccess: isSuccessLike,
-  } = useAddLike(favExhId);
+  } = useAddLike();
 
   const {
     mutate: deleteLike,
     isLoading: isLoadingDislike,
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
-  } = useDeleteLike(deleteList);
+  } = useDeleteLike();
 
   useEffect(() => {
     if (isFocused) {
