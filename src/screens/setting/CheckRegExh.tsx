@@ -17,7 +17,7 @@ import {
   OptionBarIcon,
   TrashRegExhIcon,
 } from '~/components/common/icon';
-import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
+import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {useDeleteRegExh, usefetchRegExhDetail} from '~/api/queries/regexh';
 import {DEFAULT_IMAGE} from '@env';
 import {
@@ -28,7 +28,7 @@ import {
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {EditRegExh, TrashRegExh} from '~/assets/images';
-import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
+import RegExhOptionsModal from '~/components/exhibition/RegExhOptionsModal';
 import {deleteRegExh} from '~/api/regexh';
 import {showToast} from '~/components/common/modal/toastConfig';
 
