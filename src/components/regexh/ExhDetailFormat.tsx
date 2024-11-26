@@ -1,25 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {
-  BackHandler,
-  Linking,
-  RefreshControl,
-  TouchableOpacity,
-} from 'react-native';
+import React from 'react';
+import {Linking, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
 import {dateToString} from '~/utils/date';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
-  BORDER_COLOR,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
@@ -47,9 +39,6 @@ interface Props {
 }
 
 const ExhDetailFormat: React.FC<Props> = ({data, state, exhId}) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const isFocused = useIsFocused();
-
   const checkExhState = (): string => {
     const currentDate = dateToString(new Date());
 
@@ -114,14 +103,12 @@ const ExhDetailFormat: React.FC<Props> = ({data, state, exhId}) => {
               <InfoTitle>{'일정'}</InfoTitle>
               <Info>{data.exhPeriodStart + ' ~ ' + data.exhPeriodEnd}</Info>
             </InfoView>
-            <InfoView>
-              <InfoTitle>{'작가'}</InfoTitle>
-              {!data.painter ? (
-                <Info>{'정보 없음'}</Info>
-              ) : (
+            {data.painter && (
+              <InfoView>
+                <InfoTitle>{'작가'}</InfoTitle>
                 <Info>{data.painter}</Info>
-              )}
-            </InfoView>
+              </InfoView>
+            )}
             <InfoView>
               <InfoTitle>{'관람료'}</InfoTitle>
               <Info>
@@ -230,8 +217,8 @@ const StateText = styled.Text<StateTextProps>`
     props.state === '진행중'
       ? `${MAIN_COLOR}`
       : props.state === '종료'
-        ? `${MIDDLE_GREY}`
-        : '#fee500'};
+      ? `${MIDDLE_GREY}`
+      : '#fee500'};
   font-family: ${FONT_NAME};
   padding-top: ${wp(1.1)}px;
   padding-bottom: ${wp(0.6)}px;
@@ -241,8 +228,8 @@ const StateText = styled.Text<StateTextProps>`
     props.state === '진행중'
       ? `${MAIN_COLOR}`
       : props.state === '종료'
-        ? `${MIDDLE_GREY}`
-        : '#fee500'};
+      ? `${MIDDLE_GREY}`
+      : '#fee500'};
   border-width: ${wp(0.3)}px;
   border-radius: ${wp(50)}px;
 `;

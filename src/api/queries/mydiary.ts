@@ -13,6 +13,7 @@ import {
   fetchMyDiaryList,
   fetchMyExhList,
   fetchMyStoredDateListOfExh,
+  MyExhVisitDate,
   UpdateDiaryParams,
   updateMyDiary,
 } from '../mydiary';
@@ -163,12 +164,14 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   });
 };
 
-export const useAddMyExhVisitDate = (
-  exhId: number,
-  visitDate: string | null,
-) => {
-  return useMutation({
-    mutationFn: () => addMyExhVisitDate({exhId, visitDate}),
+export const useAddMyExhVisitDate = (): UseMutationResult<
+  any,
+  any,
+  MyExhVisitDate,
+  unknown
+> => {
+  return useMutation<any, any, MyExhVisitDate, unknown>({
+    mutationFn: (addDate: MyExhVisitDate) => addMyExhVisitDate(addDate),
     onError: err => {
       console.log(err);
       console.log('[AddSoloVisitDateScreen] error fetch AddSoloVisitDate');
