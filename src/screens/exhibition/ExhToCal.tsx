@@ -35,10 +35,9 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   const {exhId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  const [isForgot, setIsForgot] = useState(false);
-  const visitedExhId = exhId;
   const [markedDates, setMarkedDates] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); //날짜 선택 누를 시,모달 오픈
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 날짜 선택 완료 누를 시,모달 오픈
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState<boolean>(false); // 날짜 선택 누를 시,모달 오픈
   const {updateDate} = useDateFromExhActions();
   const isFocused = useIsFocused();
 
@@ -55,10 +54,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     isLoading,
     isError,
     isSuccess,
-  } = useAddMyExhVisitDate(
-    visitedExhId,
-    isForgot ? null : changeDotToHyphen(selectedDate),
-  );
+  } = useAddMyExhVisitDate();
 
   useEffect(() => {
     if (isFocused) {
@@ -83,19 +79,15 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   useEffect(() => {
     if (isError) {
       showToast('방문 가능한 날짜가 아닙니다');
+      setIsCheckModalOpen(false);
     }
     if (isSuccess) {
-      showToast('방문 날짜를 추가했습니다');
       setIsModalOpen(true);
     }
   }, [isError, isSuccess]);
 
   const onSelectedDate = (selectedDate: string) => {
     setSelectedDate(selectedDate);
-  };
-
-  const onClickNextButton = () => {
-    addMyExhVisitDate();
   };
 
   const markedDatesFormatChange = (markedDates: string[]): MarkedType[] => {
@@ -113,12 +105,8 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     return list;
   };
 
-  const optionsModalClose = () => {
-    setIsModalOpen(false);
-  };
-
   const onPressYes = () => {
-    optionsModalClose();
+    setIsModalOpen(false);
     updateDate(selectedDate);
     navigation.reset({
       index: 0,
@@ -139,8 +127,19 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   };
 
   const onPressNo = () => {
-    optionsModalClose();
-    navigation.goBack();
+    setIsModalOpen(false);
+    setIsCheckModalOpen(false);
+    setMarkedDates([...markedDates, selectedDate]);
+  };
+
+  const onClickNextButton = () => {
+    setIsCheckModalOpen(true);
+  };
+  const onPressCheckYes = () => {
+    addMyExhVisitDate({exhId, visitDate: changeDotToHyphen(selectedDate)});
+  };
+  const onPressCheckNo = () => {
+    setIsCheckModalOpen(false);
   };
 
   return (
@@ -148,10 +147,18 @@ const ExhToCal: React.FC<Props> = ({route}) => {
       <BackView line={false} children={null} />
       {isModalOpen && (
         <OptionsModal
-          handleCloseModal={optionsModalClose}
-          onPressYes={() => onPressYes()}
-          onPressNo={() => onPressNo()}
+          handleCloseModal={onPressNo}
+          onPressYes={onPressYes}
+          onPressNo={onPressNo}
           message="캘린더로 이동할까요?"
+        />
+      )}
+      {isCheckModalOpen && (
+        <OptionsModal
+          handleCloseModal={onPressCheckNo}
+          onPressYes={onPressCheckYes}
+          onPressNo={onPressCheckNo}
+          message="해당 날짜로 정하겠습니까?"
         />
       )}
       <AddVisitDate

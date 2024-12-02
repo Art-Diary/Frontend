@@ -11,7 +11,7 @@ export const fetchMyStoredDateListOfExh = (exhId: number) =>
 export const addMyExhVisitDate = (myExhVisitDateInfo: MyExhVisitDate) =>
   client.post(`/myexhs`, myExhVisitDateInfo);
 
-interface MyExhVisitDate {
+export interface MyExhVisitDate {
   exhId: number;
   visitDate: string | null;
 }
