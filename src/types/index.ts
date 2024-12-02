@@ -35,3 +35,9 @@ export interface MarkedType {
   date: string;
   color: string[];
 }
+
+export type ImageType = {
+  // 첨부한 사진 타입
+  base64: string;
+  uri: string;
+};

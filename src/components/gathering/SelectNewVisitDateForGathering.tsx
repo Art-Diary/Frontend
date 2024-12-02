@@ -36,7 +36,7 @@ const SelectNewVisitDateForGathering: React.FC<SelectNewVIsitDateProps> = ({
     isError,
     isSuccess,
     refetch,
-  } = useFetchStoredDateOfExhInGroup(exhId, gatherId);
+  } = useFetchStoredDateOfExhInGroup(exhId, gatherId); // TODO 404 확인
 
   useEffect(() => {
     refetch();
