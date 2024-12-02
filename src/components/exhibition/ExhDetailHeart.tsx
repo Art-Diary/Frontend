@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -14,21 +12,21 @@ interface Props {
 }
 
 const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const [deleteList, setDeleteList] = useState<number[]>([]);
   const [hearts, setHearts] = useState<boolean>(heartState);
   const {
     mutate: addLike,
     isLoading: isLoadingLike,
     isError: isErrorLike,
     isSuccess: isSuccessLike,
-  } = useAddLike(exhId);
+    error: errorLike,
+  } = useAddLike();
   const {
     mutate: deleteLike,
     isLoading: isLoadingDislike,
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
-  } = useDeleteLike(deleteList);
+    error: errorDislike,
+  } = useDeleteLike();
 
   useEffect(() => {
     setHearts(heartState);
@@ -36,34 +34,39 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
 
   useEffect(() => {
     if (isErrorLike) {
-      console.log('좋아요 실패');
+      const statusCode = errorLike.response?.status;
+      if (statusCode === 409) {
+        showToast('이미 좋아요 설정 완료했습니다.');
+      } else {
+        showToast('재접속해주세요.');
+      }
     }
     if (isLoadingLike) {
-      console.log('좋아요 로딩중');
+      console.log('좋아요 설정 로딩 중');
     }
     if (isSuccessLike) {
       setHearts(true);
-      console.log('좋아요 성공 (exhId:', exhId, ')');
+      console.log('좋아요 성공 (exhId: ' + exhId + ')');
     }
+  }, [isErrorLike, isLoadingLike, isSuccessLike]);
 
+  useEffect(() => {
     if (isErrorDislike) {
-      showToast('좋아요 삭제 실패했습니다.');
+      const statusCode = errorDislike.response?.status;
+      if (statusCode === 409) {
+        showToast('이미 좋아요 해제 완료했습니다.');
+      } else {
+        showToast('재접속해주세요.');
+      }
     }
     if (isLoadingDislike) {
-      console.log('좋아요 삭제 로딩중');
+      console.log('좋아요 해제 로딩 중');
     }
     if (isSuccessDislike) {
       setHearts(false);
-      console.log('좋아요 삭제 (exhId:', exhId, ')');
+      console.log('좋아요 해제 (exhId: ' + exhId + ')');
     }
-  }, [
-    isErrorLike,
-    isLoadingLike,
-    isSuccessLike,
-    isErrorDislike,
-    isLoadingDislike,
-    isSuccessDislike,
-  ]);
+  }, [isErrorDislike, isLoadingDislike, isSuccessDislike]);
 
   const onPressHeart = (exhId: number) => {
     if (!hearts) {

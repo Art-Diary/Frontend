@@ -35,7 +35,6 @@ interface MarkedType {
 const AddSoloVisitDateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  const [isForgot, setIsForgot] = useState(false);
   const visitedExhId = useVisitedExhIdInfo().exhId;
   const mySoloMarkedDatesInfo = useMySoloMarkedDatesInfo();
   // 혼자 방문한 날짜 가져오기
@@ -48,16 +47,7 @@ const AddSoloVisitDateScreen = () => {
     isError,
     isSuccess,
     data: resData,
-  } = useAddMyExhVisitDate(
-    visitedExhId,
-    isForgot ? null : changeDotToHyphen(selectedDate),
-  );
-
-  useEffect(() => {
-    if (isForgot) {
-      addMyExhVisitDate();
-    }
-  }, [isForgot]);
+  } = useAddMyExhVisitDate();
 
   useEffect(() => {
     if (isError) {
@@ -82,11 +72,14 @@ const AddSoloVisitDateScreen = () => {
   };
 
   const onClickNextButton = () => {
-    addMyExhVisitDate();
+    addMyExhVisitDate({
+      exhId: visitedExhId,
+      visitDate: changeDotToHyphen(selectedDate),
+    });
   };
 
   const onClickForgotButton = () => {
-    setIsForgot(true);
+    addMyExhVisitDate({exhId: visitedExhId, visitDate: null});
   };
 
   const markedDatesFormatChange = (markedDates: string[]): MarkedType[] => {
@@ -160,6 +153,7 @@ const ForgetText = styled.Text<ForgotProps>`
   color: ${(props: ForgotProps) =>
     props.haveForgot ? `${LIGHT_GREY}` : `${MAIN_COLOR}`};
   font-family: ${FONT_NAME};
-  border-bottom-color: ${MAIN_COLOR};
+  border-bottom-color: ${(props: ForgotProps) =>
+    props.haveForgot ? `${LIGHT_GREY}` : `${MAIN_COLOR}`};
   border-bottom-width: ${ITEM_BORDER_WIDTH}px;
 `;

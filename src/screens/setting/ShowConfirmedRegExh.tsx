@@ -11,7 +11,7 @@ import {RootStackNavigationProp} from '~/App';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {BackButtonIcon, EditRegExhIcon} from '~/components/common/icon';
-import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
+import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
   DEFAULT_TEXT,
@@ -25,7 +25,7 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import RegExhOptionsModal from '~/components/regexh/RegExhOptionsModal';
+import RegExhOptionsModal from '~/components/exhibition/RegExhOptionsModal';
 
 interface Props {
   regExhId: number;

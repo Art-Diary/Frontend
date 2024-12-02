@@ -10,3 +10,17 @@ export type VisitedDateInfo = {
   exhVisitId: number;
   visitDate: string;
 };
+
+export type ExhDetailInfo = {
+  exhId: number;
+  exhName: string;
+  gallery: string;
+  exhPeriodStart: string;
+  exhPeriodEnd: string;
+  painter?: string;
+  fee: number;
+  intro?: string;
+  url?: string;
+  poster: string;
+  art?: string;
+};

@@ -12,7 +12,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
+import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 
 type RegExhDataType = {
   regExhName: string;

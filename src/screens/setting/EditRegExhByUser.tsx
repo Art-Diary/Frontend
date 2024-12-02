@@ -1,15 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useUpdateRegExhByUser} from '~/api/queries/regexh';
-import RegExhFormFrame from '~/components/regexh/RegExhFormFrame';
-import {
-  responseFont as rf,
-  heightSizePercentage as hp,
-  widthSizePercentage as wp,
-} from '~/components/common/ResponsiveSize';
+import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
 
 type RootStackParamList = {
   EditRegExhByUser: {regExhInfo: any};
@@ -74,32 +69,33 @@ const EditRegExhByUser: React.FC<Props> = ({route}) => {
 
   return (
     <Container>
-      <RegExhFormFrame
+      <ExhFormFrame
         formState={'updateByUser'}
-        regExhData={{
-          regExhName,
-          setRegExhName,
-          regGallery,
-          setRegGallery,
-          regStartDate,
-          setRegStartDate,
-          regEndDate,
-          setRegEndDate,
-          regPainter,
-          setRegPainter,
-          regFee,
-          setRegFee,
-          regUrl,
-          setRegUrl,
-          regIntro,
-          setRegIntro,
-          regPosterUri,
-          setRegPosterUri,
+        exhData={{
+          exhName: regExhName,
+          setExhName: setRegExhName,
+          gallery: regGallery,
+          setGallery: setRegGallery,
+          startDate: regStartDate,
+          setStartDate: setRegStartDate,
+          endDate: regEndDate,
+          setEndDate: setRegEndDate,
+          painter: regPainter,
+          setPainter: setRegPainter,
+          fee: regFee,
+          setFee: setRegFee,
+          url: regUrl,
+          setUrl: setRegUrl,
+          intro: regIntro,
+          setIntro: setRegIntro,
+          posterUri: regPosterUri,
+          setPosterUri: setRegPosterUri,
         }}
         requestData={{
           isLoading: isLoading,
           updateByUserRequest: {regExhId, updateByUserApi: updateRegExh},
-        }}></RegExhFormFrame>
+        }}
+      />
     </Container>
   );
 };

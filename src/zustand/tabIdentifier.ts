@@ -6,6 +6,7 @@ type TabName =
   | 'mate'
   | 'gathering'
   | 'exhibition'
+  | 'exhibitionMoreReview'
   | 'setting';
 
 /** 캘린더와 내 기록 구분 */

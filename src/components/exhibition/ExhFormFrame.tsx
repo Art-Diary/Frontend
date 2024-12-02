@@ -38,27 +38,28 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
 import ExhSelectPeriod from './ExhSelectPeriodModal';
 import {UpdateRegExhByAdminType, UpdateRegExhByUserType} from '~/api/regexh';
+import {UpdateExhDetailType} from '~/api/exhibition';
 
-type RegExhDataSetType = {
-  regExhName: string;
-  setRegExhName: (text: string) => void;
-  regGallery: string;
-  setRegGallery: (text: string) => void;
-  regStartDate: string;
-  setRegStartDate: (text: string) => void;
-  regEndDate: string;
-  setRegEndDate: (text: string) => void;
-  regPainter: string;
-  setRegPainter: (text: string) => void;
-  regFee: string;
-  setRegFee: (text: string) => void;
-  regUrl: string | undefined;
-  setRegUrl: (text: string | undefined) => void;
-  regIntro: string | undefined;
-  setRegIntro: (text: string | undefined) => void;
-  regPosterUri: string | undefined;
-  setRegPosterUri: (text: string | undefined) => void;
-  regComment?: string | undefined; // 관리자 업데이트일 경우에 해당
+type ExhDataSetType = {
+  exhName: string;
+  setExhName: (text: string) => void;
+  gallery: string;
+  setGallery: (text: string) => void;
+  startDate: string;
+  setStartDate: (text: string) => void;
+  endDate: string;
+  setEndDate: (text: string) => void;
+  painter?: string;
+  setPainter: (text: string) => void;
+  fee: string;
+  setFee: (text: string) => void;
+  url: string | undefined;
+  setUrl: (text: string | undefined) => void;
+  intro: string | undefined;
+  setIntro: (text: string | undefined) => void;
+  posterUri: string | undefined;
+  setPosterUri: (text: string | undefined) => void;
+  regComment?: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
 };
 
 type CreateApiType = {
@@ -76,6 +77,11 @@ type UpdateByUserApiType = {
   updateByUserApi: (updateData: UpdateRegExhByUserType) => void;
 };
 
+type updateExhDetailByAdminApiType = {
+  exhId: number;
+  updateByAdminApi: (updateData: UpdateExhDetailType) => void;
+};
+
 type RequestApiType = {
   isLoading: boolean;
   // 사용자 추가 api
@@ -84,20 +90,26 @@ type RequestApiType = {
   updateByAdminRequest?: UpdateByAdminApiType;
   // 사용자 업데이트 api
   updateByUserRequest?: UpdateByUserApiType;
-  //  - 여기에 추가해주세용
+  // 관리자의 전시회 상세 정보 업데이트 api
+  updateExhDetailByAdminRequest?: updateExhDetailByAdminApiType;
+  // - 추가는 여기에 추가해주세용
 };
 
-interface RegExhFormFrameProps {
+interface ExhFormFrameProps {
   children?: ReactNode;
-  formState: 'create' | 'updateByUser' | 'updateByAdmin';
-  regExhData: RegExhDataSetType;
+  formState:
+    | 'create'
+    | 'updateByUser'
+    | 'updateByAdmin'
+    | 'updateExhDetailByAdmin';
+  exhData: ExhDataSetType;
   requestData: RequestApiType;
 }
 
-const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
+const ExhFormFrame: React.FC<ExhFormFrameProps> = ({
   children,
   formState,
-  regExhData,
+  exhData,
   requestData,
 }) => {
   const feeMaxInputLength = 10;
@@ -113,33 +125,28 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
     }
   }, [requestData.isLoading]);
 
-  useEffect(() => {
-    console.log('requestData:', requestData);
-    console.log('regExhData:', regExhData);
-  }, [requestData]);
-
   const onChangeExhName = useCallback((text: string) => {
-    regExhData.setRegExhName(text);
+    exhData.setExhName(text);
   }, []);
 
   const onChangeGallery = useCallback((text: string) => {
-    regExhData.setRegGallery(text);
+    exhData.setGallery(text);
   }, []);
 
   const onChangePainter = useCallback((text: string) => {
-    regExhData.setRegPainter(text);
+    exhData.setPainter(text);
   }, []);
 
   const onChangeFee = useCallback((text: string) => {
-    regExhData.setRegFee(text);
+    exhData.setFee(text);
   }, []);
 
   const onChangeIntro = useCallback((text: string) => {
-    regExhData.setRegIntro(text);
+    exhData.setIntro(text);
   }, []);
 
   const onChangeUrl = useCallback((text: string) => {
-    regExhData.setRegUrl(text);
+    exhData.setUrl(text);
   }, []);
 
   const handleCloseSelectPeriodModal = () => {
@@ -151,8 +158,8 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
   };
 
   const handleSelectedPeriod = (startDate: string, endDate: string) => {
-    regExhData.setRegStartDate(startDate);
-    regExhData.setRegEndDate(endDate);
+    exhData.setStartDate(startDate);
+    exhData.setEndDate(endDate);
   };
 
   const showPhoto = async () => {
@@ -180,16 +187,16 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
 
       const imageUri = uris[0].uri;
 
-      regExhData.setRegPosterUri(imageUri);
+      exhData.setPosterUri(imageUri);
     }
   };
 
-  const checkFeeNumber = (regFee: string) => {
-    if (checkBlankInKeyword(regFee)) {
+  const checkFeeNumber = (fee: string) => {
+    if (checkBlankInKeyword(fee)) {
       return false;
     }
     try {
-      Number(regFee);
+      Number(fee);
     } catch (e) {
       return false;
     }
@@ -198,42 +205,42 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
 
   const checkForm = () => {
     // 전시회 이름
-    if (checkBlankInKeyword(regExhData.regExhName)) {
+    if (checkBlankInKeyword(exhData.exhName)) {
       showToast('전시회 제목을 입력해주세요.');
       return;
     }
     // 전시회 장소
-    if (checkBlankInKeyword(regExhData.regGallery)) {
+    if (checkBlankInKeyword(exhData.gallery)) {
       showToast('전시회 장소를 선택해주세요.');
       return;
     }
     // 전시회 일정
-    if (regExhData.regStartDate === '' || regExhData.regEndDate === '') {
+    if (exhData.startDate === '' || exhData.endDate === '') {
       showToast('전시회 일정을 선택해주세요.');
       return;
     }
     // 전시회 작가
-    if (checkBlankInKeyword(regExhData.regPainter)) {
+    if (exhData.painter && checkBlankInKeyword(exhData.painter)) {
       showToast('전시회 작가를 입력해주세요.');
       return;
     }
     // 전시회 관람료
-    if (!checkFeeNumber(regExhData.regFee)) {
+    if (!checkFeeNumber(exhData.fee)) {
       showToast('전시회 관람료를 입력해주세요.');
       return;
     }
     // 전시회 홈페이지 링크
-    if (regExhData.regUrl && checkBlankInKeyword(regExhData.regUrl)) {
+    if (exhData.url && checkBlankInKeyword(exhData.url)) {
       showToast('전시회 홈페이지 링크를 확인해주세요.');
       return;
     }
     // 전시회 소개글
-    if (regExhData.regIntro && checkBlankInKeyword(regExhData.regIntro)) {
+    if (exhData.intro && checkBlankInKeyword(exhData.intro)) {
       showToast('전시회 소개글을 확인해주세요.');
       return;
     }
     // 포스터
-    if (!regExhData.regPosterUri) {
+    if (!exhData.posterUri) {
       showToast('전시회 포스터를 첨부해주세요.');
       return;
     }
@@ -242,36 +249,37 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
 
   const makeFormData = async () => {
     const formData = new FormData();
+    const forExhDatil = formState === 'updateExhDetailByAdmin';
 
-    formData.append('regExhName', regExhData.regExhName);
-    formData.append('regGallery', regExhData.regGallery);
+    formData.append(forExhDatil ? 'exhName' : 'regExhName', exhData.exhName);
+    formData.append(forExhDatil ? 'gallery' : 'regGallery', exhData.gallery);
     formData.append(
-      'regExhPeriodStart',
-      changeDotToHyphen(regExhData.regStartDate),
+      forExhDatil ? 'exhPeriodStart' : 'regExhPeriodStart',
+      changeDotToHyphen(exhData.startDate),
     );
     formData.append(
-      'regExhPeriodEnd',
-      changeDotToHyphen(regExhData.regEndDate),
+      forExhDatil ? 'exhPeriodEnd' : 'regExhPeriodEnd',
+      changeDotToHyphen(exhData.endDate),
     );
-    formData.append('regPainter', regExhData.regPainter);
-    formData.append('regFee', Number(regExhData.regFee));
-    formData.append('regArt', undefined);
+    formData.append(forExhDatil ? 'painter' : 'regPainter', exhData.painter);
+    formData.append(forExhDatil ? 'fee' : 'regFee', Number(exhData.fee));
+    formData.append(forExhDatil ? 'art' : 'regArt', undefined); // TODO
 
-    if (formState !== 'updateByAdmin') {
+    if (
+      formState !== 'updateByAdmin' &&
+      formState !== 'updateExhDetailByAdmin'
+    ) {
       formData.append('regDate', changeDateTimeFormat(new Date()));
     }
-    if (regExhData.regIntro) {
-      formData.append('regIntro', regExhData.regIntro);
+    if (exhData.intro) {
+      formData.append(forExhDatil ? 'intro' : 'regIntro', exhData.intro);
     }
-    if (regExhData.regUrl) {
-      formData.append('regUrl', regExhData.regUrl);
+    if (exhData.url) {
+      formData.append(forExhDatil ? 'url' : 'regUrl', exhData.url);
     }
-    if (
-      regExhData.regPosterUri &&
-      regExhData.regPosterUri.indexOf('file:///') !== -1
-    ) {
-      const resultResizedImage = await changeImageSize(regExhData.regPosterUri);
-      formData.append('regPoster', resultResizedImage);
+    if (exhData.posterUri && exhData.posterUri.indexOf('file:///') !== -1) {
+      const resultResizedImage = await changeImageSize(exhData.posterUri);
+      formData.append(forExhDatil ? 'poster' : 'regPoster', resultResizedImage);
     }
     if (formState === 'create' && requestData.createRequest) {
       requestData.createRequest.setRegExhFormdata(formData);
@@ -284,11 +292,16 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
       });
     } else if (formState === 'updateByAdmin') {
       // 관리자 업데이트
-      if (regExhData.regComment) {
-        formData.append('regComment', regExhData.regComment);
+      if (exhData.regComment) {
+        formData.append('regComment', exhData.regComment);
       }
       requestData.updateByAdminRequest?.updateByAdminApi({
         regExhId: requestData.updateByAdminRequest?.regExhId,
+        formData,
+      });
+    } else if (formState === 'updateExhDetailByAdmin') {
+      requestData.updateExhDetailByAdminRequest?.updateByAdminApi({
+        exhId: requestData.updateExhDetailByAdminRequest?.exhId,
         formData,
       });
     }
@@ -308,7 +321,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
               multiline={true}
               placeholderTextColor={LIGHT_GREY}
               placeholder={'전시회 제목 (정확한 전시명 표기)'}
-              value={regExhData.regExhName}
+              value={exhData.exhName}
               onChangeText={onChangeExhName}
             />
           </RowSectionWrapper>
@@ -320,7 +333,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 multiline={true}
                 placeholderTextColor={LIGHT_GREY}
                 placeholder={'장소 입력'}
-                value={regExhData.regGallery}
+                value={exhData.gallery}
                 onChangeText={onChangeGallery}
               />
             </RowSectionWrapper>
@@ -329,12 +342,11 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
           <CustomTouchable onPress={handleOpenSelectPeriodModal}>
             <RowSectionWrapper>
               <SectionName>전시회 일정</SectionName>
-              {regExhData.regStartDate === '' ||
-              regExhData.regEndDate === '' ? (
+              {exhData.startDate === '' || exhData.endDate === '' ? (
                 <DateText>일정 선택</DateText>
               ) : (
                 <DateText>
-                  {regExhData.regStartDate} ~ {regExhData.regEndDate}
+                  {exhData.startDate} ~ {exhData.endDate}
                 </DateText>
               )}
             </RowSectionWrapper>
@@ -343,8 +355,8 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
             <ExhSelectPeriod
               isVisible={isPeriodModalVisible}
               onClose={handleCloseSelectPeriodModal}
-              startPeriod={regExhData.regStartDate}
-              endPeriod={regExhData.regEndDate}
+              startPeriod={exhData.startDate}
+              endPeriod={exhData.endDate}
               handleSelectedPeriod={handleSelectedPeriod}
             />
           )}
@@ -356,7 +368,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 multiline={true}
                 placeholderTextColor={LIGHT_GREY}
                 placeholder={'작가 입력'}
-                value={regExhData.regPainter}
+                value={exhData.painter}
                 onChangeText={onChangePainter}
               />
             </RowSectionWrapper>
@@ -371,7 +383,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 placeholderTextColor={DEFAULT_TEXT}
                 placeholder={'-'}
                 onChangeText={onChangeFee}
-                value={regExhData.regFee}
+                value={exhData.fee}
               />
               <SectionName color={'default'}>원</SectionName>
             </FeeWrapper>
@@ -387,7 +399,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 multiline={true}
                 placeholderTextColor={LIGHT_GREY}
                 placeholder={'홈페이지 링크 입력'}
-                value={regExhData.regUrl}
+                value={exhData.url}
                 onChangeText={onChangeUrl}
               />
             </RowSectionWrapper>
@@ -404,8 +416,8 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                 sectionName={'intro'}
                 multiline={true}
                 placeholderTextColor={LIGHT_GREY}
-                placeholder={!regExhData.regIntro ? '소개글 입력' : ''}
-                value={regExhData.regIntro}
+                placeholder={!exhData.intro ? '소개글 입력' : ''}
+                value={exhData.intro}
                 onChangeText={onChangeIntro}
               />
               <SectionName>"</SectionName>
@@ -415,7 +427,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
           <ColSectionWrapper>
             <SectionName>포스터</SectionName>
             <PutThumbnail>
-              {!regExhData.regPosterUri ? (
+              {!exhData.posterUri ? (
                 <CustomTouchable style={{padding: 30}} onPress={showPhoto}>
                   <CameraButtonIcon />
                 </CustomTouchable>
@@ -430,7 +442,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
                   }}
                   onPress={showPhoto}>
                   <Image
-                    source={{uri: regExhData.regPosterUri}}
+                    source={{uri: exhData.posterUri}}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -454,7 +466,7 @@ const RegExhFormFrame: React.FC<RegExhFormFrameProps> = ({
   );
 };
 
-export default RegExhFormFrame;
+export default ExhFormFrame;
 
 /** style */
 const Container = styled.View`

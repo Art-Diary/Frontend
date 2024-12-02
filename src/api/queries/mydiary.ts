@@ -13,6 +13,7 @@ import {
   fetchMyDiaryList,
   fetchMyExhList,
   fetchMyStoredDateListOfExh,
+  MyExhVisitDate,
   UpdateDiaryParams,
   updateMyDiary,
 } from '../mydiary';
@@ -133,7 +134,10 @@ export const useDeleteMyDiary = (exhId: number, diaryId: number) => {
             exhFromCalendarInfo.gatherId,
           ).queryKey,
         );
-      } else if (tabIdentifierInfo.tab === 'exhibition') {
+      } else if (
+        tabIdentifierInfo.tab === 'exhibition' ||
+        tabIdentifierInfo.tab === 'exhibitionMoreReview'
+      ) {
         queryClient.invalidateQueries(
           exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
         );
@@ -160,12 +164,14 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   });
 };
 
-export const useAddMyExhVisitDate = (
-  exhId: number,
-  visitDate: string | null,
-) => {
-  return useMutation({
-    mutationFn: () => addMyExhVisitDate({exhId, visitDate}),
+export const useAddMyExhVisitDate = (): UseMutationResult<
+  any,
+  any,
+  MyExhVisitDate,
+  unknown
+> => {
+  return useMutation<any, any, MyExhVisitDate, unknown>({
+    mutationFn: (addDate: MyExhVisitDate) => addMyExhVisitDate(addDate),
     onError: err => {
       console.log(err);
       console.log('[AddSoloVisitDateScreen] error fetch AddSoloVisitDate');
@@ -217,7 +223,10 @@ export const useUpdateMyDiary = (
         queryClient.invalidateQueries(
           mydiaryQueryKeys.fetchMyDiaryList(exhId).queryKey,
         );
-      } else if (tabIdentifierInfo.tab === 'exhibition') {
+      } else if (
+        tabIdentifierInfo.tab === 'exhibition' ||
+        tabIdentifierInfo.tab === 'exhibitionMoreReview'
+      ) {
         queryClient.invalidateQueries(
           exhibitionQueryKeys.fetchDiaryListForExh(exhId).queryKey,
         );

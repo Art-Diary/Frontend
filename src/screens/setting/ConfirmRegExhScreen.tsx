@@ -81,6 +81,7 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
       {regExhInfo &&
         (isUpdate ? (
           // regState == false 또는 forUpdate == true면 등록 화면 보여주기
+          // 관리자 확인용 - 코멘트 등록
           <ConfirmRegExh
             regExhId={regExhId}
             regExhInfo={regExhInfo}
@@ -88,6 +89,7 @@ const ConfirmRegExhScreen: React.FC<Props> = ({route}) => {
           />
         ) : (
           // regState == true면 미리보기 화면 보여주기
+          // 관리자 확인용 - 등록된 전시회 확인 페이지
           <ShowConfirmedRegExh
             regExhId={regExhId}
             regExhInfo={regExhInfo}

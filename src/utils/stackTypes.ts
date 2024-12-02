@@ -1,3 +1,5 @@
+import {ExhDetailInfo} from './dataTypes';
+
 // types.ts
 export type GatheringStackParamList = {
   GatheringInfo: undefined;
@@ -78,6 +80,9 @@ export type RootStackParamList = {
     exhId: number;
   };
   ExhAddForm: undefined;
+  ExhDetailEdit: {
+    exhDetailInfo: ExhDetailInfo;
+  };
   //CalendarSearch: undefined;
   // login
   Login: undefined;

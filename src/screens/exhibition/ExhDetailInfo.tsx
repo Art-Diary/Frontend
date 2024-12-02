@@ -19,11 +19,17 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   BackButtonIcon,
   CalendarShareIcon,
+  EditRegExhIcon,
   HomepageIcon,
 } from '~/components/common/icon';
 import ExhShare from './ExhShare';
 import {showToast} from '~/components/common/modal/toastConfig';
-import ExhDetailFormat from '~/components/regexh/ExhDetailFormat';
+import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
+import {useUserInfo} from '~/zustand/auth/auth';
+import {
+  useTabIdentifierActions,
+  useTabIdentifierInfo,
+} from '~/zustand/tabIdentifier';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number};
@@ -40,6 +46,7 @@ interface Props {
 
 const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const userInfo = useUserInfo();
   const isFocused = useIsFocused();
 
   const {exhId} = route.params;
@@ -54,11 +61,16 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
 
   const [refreshing, setRefreshing] = useState(false);
   const [openLoading, setOpenLoading] = useState<boolean>(false);
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
 
   useEffect(() => {
     if (isFocused) {
       refetchDiaryList();
       refetch();
+      if (tabIdentifierInfo.tab !== 'exhibition') {
+        updateTab('exhibition');
+      }
     }
   }, [isFocused]);
 
@@ -139,6 +151,10 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
     }
   };
 
+  const handleEditExhInfo = () => {
+    navigation.navigate('ExhDetailEdit', {exhDetailInfo: data});
+  };
+
   return (
     <TRenderEngineProvider>
       <ContainerScroll
@@ -170,6 +186,11 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                 {data.url && (
                   <CustomTouchable onPress={() => exhToHomepage(data.url)}>
                     <HomepageIcon />
+                  </CustomTouchable>
+                )}
+                {userInfo.authInfo.role === 'ADMIN' && (
+                  <CustomTouchable onPress={handleEditExhInfo}>
+                    <EditRegExhIcon />
                   </CustomTouchable>
                 )}
               </IconView>

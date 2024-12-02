@@ -33,6 +33,16 @@ export const fetchStoredDateOfExhInGroup = (
   gatherId: number | null,
 ) => client.get(`/exhibitions/${exhId}/date`, {params: {gatherId}});
 
+export type UpdateExhDetailType = {
+  exhId: number;
+  formData: FormData | null;
+};
+
+export const updateExhDetailInfo = (data: UpdateExhDetailType) =>
+  client.patch(`/exhibitions/${data.exhId}`, data.formData, {
+    headers: {'Content-Type': 'multipart/form-data'},
+  });
+
 /** 전시회 좋아요 API */
 export const fetchLikeList = () => client.get(`/favorites`);
 
