@@ -113,29 +113,30 @@ export const useFetchDiaryListForExh = (exhId: number) =>
     select: (res: any) => res.data,
   });
 
-export const useAddLike = (
-  exhId: number,
-): UseMutationResult<any, any, number, unknown> => {
+export const useAddLike = (): UseMutationResult<any, any, number, unknown> => {
   const queryClient = useQueryClient();
 
   return useMutation<any, any, number, unknown>({
     mutationFn: (exhId: number) => fetchAddLike(exhId),
     onError: err => {
       console.log(err);
-      console.log('[AddLikeExhibition] error fetch favorite');
+      console.log('[AddLikeExhibition] error create favorite');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(
         exhibitionQueryKeys.fetchLikeList().queryKey,
       );
-      console.log('[AddLikeExhibition] success fetch favorite');
+      console.log('[AddLikeExhibition] success create favorite');
     },
   });
 };
 
-export const useDeleteLike = (
-  favoriteExhsList: number[],
-): UseMutationResult<any, any, number[], unknown> => {
+export const useDeleteLike = (): UseMutationResult<
+  any,
+  any,
+  number[],
+  unknown
+> => {
   const queryClient = useQueryClient();
 
   return useMutation<any, any, number[], unknown>({
@@ -143,13 +144,13 @@ export const useDeleteLike = (
       fetchDeleteLike(favoriteExhsList),
     onError: err => {
       console.log(err);
-      console.log('[DeleteLikeExhibition] error fetch delete favorite');
+      console.log('[DeleteLikeExhibition] error delete favorite');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(
         exhibitionQueryKeys.fetchLikeList().queryKey,
       );
-      console.log('[DeleteLikeExhibition] success fetch delete favorite');
+      console.log('[DeleteLikeExhibition] success delete favorite');
     },
   });
 };

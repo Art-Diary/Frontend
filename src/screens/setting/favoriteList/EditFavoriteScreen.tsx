@@ -34,7 +34,7 @@ const EditFavoriteScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useDeleteLike([]);
+  } = useDeleteLike();
 
   useEffect(() => {
     var list: Like[] = [];
