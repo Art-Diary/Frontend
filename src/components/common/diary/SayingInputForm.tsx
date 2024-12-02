@@ -15,6 +15,7 @@ import {
   DEFAULT_TEXT,
   MAIN_COLOR,
   MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
 
 interface SayingInputFormProps {
@@ -107,7 +108,7 @@ const SectionStar = styled.Text`
 
 const BodyWrapper = styled.View`
   flex-direction: row;
-  background-color: #f6f0f0;
+  background-color: ${TEXTINPUTFORM_COLOR};
   border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
   padding: ${wp(2.9)}px;

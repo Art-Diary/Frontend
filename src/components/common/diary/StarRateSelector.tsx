@@ -65,7 +65,6 @@ const Container = styled.View`
   width: 100%;
   background-color: ${BACK_COLOR};
   justify-content: space-between;
-  /* gap: ${wp(1.3)}px; */
 `;
 
 const SectionWapper = styled.View`
@@ -90,7 +89,6 @@ const SectionStar = styled.Text`
 
 const StarList = styled.View`
   flex-direction: row;
-  background-color: #f6f0f0;
   border-radius: ${BUTTON_RADIUS}px;
   align-items: center;
   padding: ${wp(2.9)}px;

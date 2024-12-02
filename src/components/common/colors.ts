@@ -4,3 +4,4 @@ export const DEFAULT_TEXT = '#3c4045';
 export const BORDER_COLOR = '#D3D3D3';
 export const MIDDLE_GREY = '#979797';
 export const MAIN_COLOR = '#ff6f61';
+export const TEXTINPUTFORM_COLOR = '#f6f0f0';

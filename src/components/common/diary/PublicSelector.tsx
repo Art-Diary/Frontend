@@ -71,7 +71,6 @@ const SectionName = styled.Text`
 
 const BodyWrapper = styled.View`
   flex-direction: row;
-  background-color: #f6f0f0;
   border-radius: ${BUTTON_RADIUS}px;
   align-items: center;
   padding: ${wp(2.9)}px;

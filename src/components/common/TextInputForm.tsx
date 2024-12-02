@@ -15,6 +15,7 @@ import {
   DEFAULT_TEXT,
   MAIN_COLOR,
   MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
 
 interface TextInputFormProps {
@@ -72,7 +73,6 @@ export default TextInputForm;
 
 /** style */
 const Container = styled.View`
-  flex: 1;
   flex-direction: column;
   width: 100%;
   background-color: ${BACK_COLOR};
@@ -114,7 +114,7 @@ const SectionStar = styled.Text`
 
 const BodyWrapper = styled.View`
   flex-direction: column;
-  background-color: #f6f0f0;
+  background-color: ${TEXTINPUTFORM_COLOR};
   border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
   padding: ${wp(2.9)}px;

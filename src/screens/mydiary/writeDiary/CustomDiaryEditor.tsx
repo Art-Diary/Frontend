@@ -76,7 +76,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
 
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
-    backgroundColor: '#f7eceb',
+    backgroundColor: '#f6eceb',
     contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
   };
 
@@ -200,14 +200,14 @@ const styles = StyleSheet.create({
     fontSize: 100,
     borderTopLeftRadius: BUTTON_RADIUS,
     borderTopRightRadius: BUTTON_RADIUS,
-    backgroundColor: '#f7eceb',
+    backgroundColor: '#f6eceb',
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 8,
     paddingRight: 8,
   },
   toolbar: {
-    backgroundColor: '#f7eceb',
+    backgroundColor: '#f6eceb',
     borderBottomLeftRadius: BUTTON_RADIUS,
     borderBottomRightRadius: BUTTON_RADIUS,
     borderColor: LIGHT_GREY, // 툴바 경계 색 변경

@@ -10,7 +10,12 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {
+  BACK_COLOR,
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+  TEXTINPUTFORM_COLOR,
+} from '~/components/common/colors';
 import CustomTouchable from './CustomTouchable';
 import {CameraButtonIcon, ThumbnailTrashRegExhIcon} from './icon';
 import {requestCameraPermission} from '~/utils/photo';
@@ -155,7 +160,7 @@ const SectionStar = styled.Text`
 
 const ImageWapper = styled.View`
   flex: 1;
-  background-color: #f6f0f0;
+  background-color: ${TEXTINPUTFORM_COLOR};
   align-items: center;
   justify-content: center;
   min-height: ${hp(43.5)}px;
