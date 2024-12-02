@@ -138,7 +138,7 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
                 </ReviewTitle>
                 <TextView>
                   <SubTextView key={index}>
-                    <ReviewName>{item.nickname}</ReviewName>
+                    <ReviewName>{item.nickname ?? '전시 메이트'}</ReviewName>
                     <ReviewRate>{showRate(item.rate)}</ReviewRate>
                   </SubTextView>
                   <ReviewDate>{changeDateType(item.writeDate)}</ReviewDate>

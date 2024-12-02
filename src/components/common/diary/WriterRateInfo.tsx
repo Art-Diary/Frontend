@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../style';
-import {DEFAULT_TEXT, MIDDLE_GREY} from '../colors';
+import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../colors';
 import {EmptyStarIcon, FullStarIcon, WriterIcon} from '../icon';
 
 interface WriterRateProps {
@@ -33,7 +33,9 @@ const WriterRateInfo: React.FC<WriterRateProps> = ({nickname, rate}) => {
       {/* 닉네임 */}
       <NicknameView>
         <WriterIcon />
-        <NicknameText>{nickname}</NicknameText>
+        <NicknameText nickname={nickname}>
+          {nickname ?? '전시 메이트'}
+        </NicknameText>
       </NicknameView>
       {/* 별점 */}
       <RateView>
@@ -61,9 +63,14 @@ const NicknameView = styled.View`
   gap: ${wp(1.5)}px;
 `;
 
-const NicknameText = styled.Text`
+interface NicknameTextProps {
+  nickname: string | undefined;
+}
+
+const NicknameText = styled.Text<NicknameTextProps>`
   font-size: ${rf(15.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${(props: NicknameTextProps) =>
+    props.nickname ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};
 `;
 
