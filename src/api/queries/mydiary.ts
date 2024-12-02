@@ -151,6 +151,7 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
     queryKey: mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId).queryKey,
     queryFn: () => fetchMyStoredDateListOfExh(exhId),
     staleTime: 500000,
+    enabled: exhId !== 0, // exhId가 0이 아닐 때만 실행
     onError: err => {
       console.log(err);
       console.log('[ChooseVisitDateScreen] error fetch MyStoredDateListOfExh');
@@ -164,12 +165,11 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
   });
 };
 
-export const useAddMyExhVisitDate = (): UseMutationResult<
-  any,
-  any,
-  MyExhVisitDate,
-  unknown
-> => {
+export const useAddMyExhVisitDate = (
+  exhId: number,
+): UseMutationResult<any, any, MyExhVisitDate, unknown> => {
+  const queryClient = useQueryClient();
+
   return useMutation<any, any, MyExhVisitDate, unknown>({
     mutationFn: (addDate: MyExhVisitDate) => addMyExhVisitDate(addDate),
     onError: err => {
@@ -177,6 +177,9 @@ export const useAddMyExhVisitDate = (): UseMutationResult<
       console.log('[AddSoloVisitDateScreen] error fetch AddSoloVisitDate');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId).queryKey,
+      );
       console.log('[AddSoloVisitDateScreen] success fetch AddSoloVisitDate');
     },
   });

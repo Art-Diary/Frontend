@@ -4,15 +4,15 @@ import {useNavigation} from '@react-navigation/native';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import VisitedExhListFrame from '~/components/diary/VisitedExhListFrame';
 import {RootStackNavigationProp} from '~/App';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {BACK_COLOR} from '~/components/common/colors';
+import VisitedExhListFrame from './VisitedExhListFrame';
 
-const MyExhList = () => {
+const MyVisitedExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
+  const {data: myExhList, isLoading, isError} = useFetchMyExhList();
 
   if (isError) {
     return (
@@ -44,7 +44,7 @@ const MyExhList = () => {
   );
 };
 
-export default MyExhList;
+export default MyVisitedExhList;
 
 /** style */
 const Contents = styled.View`

@@ -5,7 +5,7 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useFetchMateExhList} from '~/api/queries/mate';
 import {useMateInfo} from '~/zustand/mate/mate';
-import VisitedExhListFrame from '~/components/diary/VisitedExhListFrame';
+import VisitedExhListFrame from '~/components/mydiary/VisitedExhListFrame';
 import {useQueryMateDiaryActions} from '~/zustand/mate/queryMateDiary';
 import {RefreshControl} from 'react-native';
 import styled from 'styled-components/native';

@@ -86,7 +86,7 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
     resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(false, null);
-    navigation.navigate('AddMyVisitDateRoutes');
+    navigation.navigate('CreateExhVisitedDate', {exhId: exhId});
   };
 
   return (

@@ -3,7 +3,7 @@ import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryListInCalendar} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import DiaryList from '~/components/diary/DiaryList';
+import DiaryList from '~/components/common/diary/DiaryList';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 import {useIsFocused} from '@react-navigation/native';
 

@@ -8,18 +8,14 @@ import {
 } from '~/api/queries/mydiary';
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
-import AddVisitDate from '~/components/diary/AddVisitDate';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {calendarColor} from '~/screens/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import {MyVisitedDateType, VisitedDateInfo} from '~/utils/dataTypes';
-
-interface MarkedType {
-  date: string;
-  color: string[];
-}
+import ExhAddVisitDateCalendarFrame from '~/components/exhibition/ExhAddVisitDateCalendarFrame';
+import {MarkedType} from '~/types';
 
 type RootStackParamList = {
   ExhToCal: {exhId: number};
@@ -54,7 +50,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     isLoading,
     isError,
     isSuccess,
-  } = useAddMyExhVisitDate();
+  } = useAddMyExhVisitDate(exhId);
 
   useEffect(() => {
     if (isFocused) {
@@ -161,7 +157,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
           message="해당 날짜로 정하겠습니까?"
         />
       )}
-      <AddVisitDate
+      <ExhAddVisitDateCalendarFrame
         markedDates={markedDatesFormatChange(markedDates)}
         selectedDate={selectedDate}
         onSelectedDate={onSelectedDate}

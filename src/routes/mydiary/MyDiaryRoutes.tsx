@@ -1,7 +1,7 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MyDiaryListScreen from '~/screens/mydiary/myDiaryList/MyDiaryListScreen';
-import MyDiaryBackScreen from '~/screens/mydiary/myDiaryList/MyDiaryBackScreen';
+import MyDiaryListScreen from '~/screens/mydiary/MyDiaryListScreen';
+import MyDiaryBackScreen from '~/screens/mydiary/MyDiaryBackScreen';
 import {MyDiaryStackParamList} from '~/utils/stackTypes';
 
 const MyDiary = createNativeStackNavigator<MyDiaryStackParamList>();

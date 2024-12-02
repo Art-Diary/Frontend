@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useFetchGatheringDiaryList} from '~/api/queries/gathering';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import DiaryList from '~/components/diary/DiaryList';
+import DiaryList from '~/components/common/diary/DiaryList';
 
 type FetchInfo = {
   gatherId: number;

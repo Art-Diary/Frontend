@@ -5,9 +5,9 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT, MIDDLE_GREY} from '../common/colors';
-import {EmptyStarIcon, FullStarIcon, WriterIcon} from '../common/icon';
+import {FONT_NAME} from '../style';
+import {DEFAULT_TEXT, MIDDLE_GREY} from '../colors';
+import {EmptyStarIcon, FullStarIcon, WriterIcon} from '../icon';
 
 interface WriterRateProps {
   nickname: string;

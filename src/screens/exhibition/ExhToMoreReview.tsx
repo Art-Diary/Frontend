@@ -170,7 +170,7 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(false, null);
-    navigation.navigate('AddMyVisitDateRoutes');
+    navigation.navigate('CreateExhVisitedDate', {exhId: exhId});
   };
 
   return (

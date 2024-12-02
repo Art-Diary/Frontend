@@ -5,7 +5,7 @@ import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
 import {useGatheringListParamsInfo} from '~/zustand/gathering/gathering';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
-import FetchGatheringDiaryList from './FetchGatheringDiaryList';
+import FetchGatheringDiaryList from '~/components/gathering/FetchGatheringDiaryList';
 import {OptionBarIcon, WriteDiaryButtonIcon} from '~/components/common/icon';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {
@@ -50,7 +50,10 @@ const GatheringDiaryListScreen: React.FC<Props> = ({route}) => {
     resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(true, params.gatherId);
-    navigation.navigate('AddMyVisitDateRoutes');
+    navigation.navigate('CreateExhVisitedDate', {
+      exhId: params.exhId,
+      isInGathering: true,
+    });
   };
 
   const clickDeletePage = () => {

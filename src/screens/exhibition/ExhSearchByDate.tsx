@@ -2,7 +2,6 @@ import {Modal} from 'react-native';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import CustomCalendar from '~/components/common/CustomCalendar';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {
   AREA_FONT_SIZE,
@@ -16,6 +15,7 @@ import {BackButtonIcon} from '~/components/common/icon';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import CalendarSelectDateFrame from '~/components/common/CalendarSelectDateFrame';
 
 interface ExhSearchByDateProps {
   isVisible: boolean;
@@ -29,8 +29,6 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
 }) => {
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  // 월 변경 화살표 클릭 인식을 위한 상태 변화
-  const [changeMonth, setChangeMonth] = useState(dateToString(new Date()));
   const {date: dateFromExhInfo} = useDateFromExhInfo();
   const {updateAddDate} = useAddScheduleActions();
 
@@ -51,16 +49,12 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
         </Backview>
         <ContentView>
           <TextView>{'날짜 선택'}</TextView>
-          <CustomCalendar
+          <CalendarSelectDateFrame
             initDate={dateFromExhInfo ?? dateToString(new Date())}
-            onSelectedDate={setSelectedDate}
             markedDates={[]}
-            setChangeMonth={setChangeMonth}
+            selectedDate={selectedDate}
+            onSelectedDate={setSelectedDate}
           />
-          <DateView>
-            <TextView>{'선택한 날짜'}</TextView>
-            <TextView>{selectedDate}</TextView>
-          </DateView>
         </ContentView>
         <CustomTouchable onPress={onPressDate}>
           <CompleteButton>{'선택 완료'}</CompleteButton>
@@ -95,12 +89,6 @@ const ContentView = styled.View`
   padding-right: ${wp(0.4)}px;
   padding-top: ${wp(2.9)}px;
   gap: ${wp(3.3)}px;
-`;
-
-const DateView = styled.View`
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 const TextView = styled.Text`

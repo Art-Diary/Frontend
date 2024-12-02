@@ -26,7 +26,7 @@ import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryList} from '~/api/queries/mydiary';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import DiaryList from '~/components/diary/DiaryList';
+import DiaryList from '~/components/common/diary/DiaryList';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {MyDiaryStackParamList} from '~/utils/stackTypes';
 
@@ -71,7 +71,7 @@ const MyDiaryListScreen: React.FC<Props> = ({route}) => {
     resetWriteInfo();
     updateIsUpdate(false);
     updateInGathering(false, null);
-    navigation.navigate('AddMyVisitDateRoutes');
+    navigation.navigate('CreateExhVisitedDate', {exhId: visitedExhId});
   };
 
   const clickDeletePage = () => {

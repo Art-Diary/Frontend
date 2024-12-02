@@ -10,19 +10,10 @@ import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
-
-export interface ExhInfo {
-  exhId: number;
-  poster: string;
-  exhName: string;
-  gallery: string;
-  exhPeriodStart: string;
-  exhPeriodEnd: string;
-  rate?: number;
-}
+import {ExhInfoForList} from '~/types';
 
 interface SearchExhListProps {
-  exhInfo: ExhInfo;
+  exhInfo: ExhInfoForList;
   children?: ReactNode;
   noLine?: boolean;
   notTouchable: boolean;
@@ -159,8 +150,6 @@ const ExhInfo = styled.View<ExhInfoProps>`
 `;
 
 const ExhName = styled.Text`
-  flex-shrink: 1;
-  flex-basis: 0%;
   font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};

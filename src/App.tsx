@@ -16,9 +16,7 @@ import {
 import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
-import MyExhSearchScreen from './screens/mydiary/MyExhSearchScreen';
 import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
-import AddMyVisitDateRoutes from './routes/mydiary/AddMyVisitDateRoutes';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from './components/common/modal/toastConfig';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
@@ -50,6 +48,7 @@ import CheckRegExh from './screens/setting/CheckRegExh';
 import ConfirmRegExhScreen from './screens/setting/ConfirmRegExhScreen';
 import EditRegExhByUser from './screens/setting/EditRegExhByUser';
 import ExhDetailEditScreen from './screens/exhibition/ExhDetailEditScreen';
+import CreateExhVisitedDateScreen from './screens/mydiary/CreateExhVisitedDateScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -144,19 +143,15 @@ export default function App() {
             <Stack.Screen name="Main" component={BottomRoutes} />
             {/* [내 기록] 전시회 추가 화면 */}
             <Stack.Screen
-              name="MyExhibitionSearch"
-              component={MyExhSearchScreen}
+              name="CreateExhVisitedDate"
+              component={CreateExhVisitedDateScreen}
             />
             {/* [내 기록] 한 전시회의 기록 목록 화면 */}
-            <Stack.Screen name="MyDiaryRoutes" component={MyDiaryRoutes} />
-            <Stack.Screen
-              name="AddMyVisitDateRoutes"
-              component={AddMyVisitDateRoutes}
-            />
             <Stack.Screen
               name="WriteMyDiaryRoutes"
               component={WriteMyDiaryRoutes}
             />
+            <Stack.Screen name="MyDiaryRoutes" component={MyDiaryRoutes} />
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
             <Stack.Screen name="ExhDetailInfo" component={ExhDetailInfo} />

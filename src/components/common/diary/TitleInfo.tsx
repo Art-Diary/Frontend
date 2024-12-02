@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {responseFont as rf} from '~/components/common/ResponsiveSize';
-import {DEFAULT_TEXT} from '../common/colors';
-import {FONT_NAME} from '../common/style';
+import {DEFAULT_TEXT} from '../colors';
+import {FONT_NAME} from '../style';
 
 interface TitleProps {
   diaryInfo: any;
