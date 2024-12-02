@@ -1,7 +1,6 @@
 import React, {ReactNode} from 'react';
 import {View} from 'react-native';
 import styled from 'styled-components/native';
-import CustomCalendar from '~/components/common/CustomCalendar';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
@@ -18,13 +17,10 @@ import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 import {dateToString} from '~/utils/date';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '../common/CustomTouchable';
+import CalendarFrame from '../common/CalendarFrame';
+import {MarkedType} from '~/types';
 
-interface MarkedType {
-  date: string;
-  color: string[];
-}
-
-interface AddVisitDateProps {
+interface ExhAddVisitDateProps {
   markedDates: MarkedType[];
   selectedDate: string;
   onSelectedDate: (selectedDate: string) => void;
@@ -33,7 +29,7 @@ interface AddVisitDateProps {
   selectedMssg?: string;
 }
 
-const AddVisitDate: React.FC<AddVisitDateProps> = ({
+const ExhAddVisitDateCalendarFrame: React.FC<ExhAddVisitDateProps> = ({
   markedDates,
   selectedDate,
   onSelectedDate,
@@ -56,7 +52,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
       {/* 방문 날짜 선택 */}
       <GroupText>방문 날짜 선택</GroupText>
       {/* 커스텀 캘린더 */}
-      <CustomCalendar
+      <CalendarFrame
         initDate={dateFromExhInfo ?? dateToString(new Date())}
         onSelectedDate={onSelectedDate}
         markedDates={markedDates}
@@ -81,7 +77,7 @@ const AddVisitDate: React.FC<AddVisitDateProps> = ({
   );
 };
 
-export default AddVisitDate;
+export default ExhAddVisitDateCalendarFrame;
 
 /** style */
 const ContentsContainer = styled.View`

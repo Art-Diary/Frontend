@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
 import {
@@ -7,20 +7,16 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {dateToString, days, months} from '~/utils/date';
-import {DEFAULT_TEXT, MAIN_COLOR} from './colors';
-import {FONT_NAME, ITEM_BORDER_WIDTH} from './style';
+import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR, MIDDLE_GREY} from './colors';
+import {FONT_NAME} from './style';
 import CustomTouchable from './CustomTouchable';
-
-interface MarkedType {
-  date: string;
-  color: string[];
-}
+import {MarkedType} from '~/types';
 
 interface CalendarProps {
-  initDate: string;
-  onSelectedDate: (selectedDate: string) => void;
-  markedDates: MarkedType[];
-  setChangeMonth?: (changeMonth: string) => void;
+  initDate: string; // 초기 날짜
+  onSelectedDate: (selectedDate: string) => void; // 선택 날짜 set
+  markedDates: MarkedType[]; // 마크 표시된 날짜 리스트
+  setChangeMonth?: (changeMonth: string) => void; // 달 바꿈 set
   children?: ReactNode;
 }
 
@@ -29,7 +25,7 @@ interface Matrix {
   isInCurrentMonth: boolean;
 }
 
-const CustomCalendar: React.FC<CalendarProps> = ({
+const CalendarFrame: React.FC<CalendarProps> = ({
   initDate,
   onSelectedDate,
   markedDates,
@@ -45,6 +41,15 @@ const CustomCalendar: React.FC<CalendarProps> = ({
     ),
   ); // 현재 월
   const [selectedDate, setSelectedDate] = useState<string>(initDate); // 선택한 날짜
+
+  useEffect(() => {
+    const date: Date = new Date(
+      Number(splitDate[0]),
+      Number(splitDate[1]) - 1,
+      Number(splitDate[2]),
+    );
+    setCurrentDate(date);
+  }, [initDate]);
 
   const goToNextMonth = () => {
     setCurrentDate(
@@ -172,8 +177,8 @@ const CustomCalendar: React.FC<CalendarProps> = ({
                             itemDate === selectedDate && markedDates
                               ? 'white'
                               : markedDates
-                                ? color
-                                : 'white'
+                              ? color
+                              : 'white'
                           }
                         />
                       );
@@ -185,7 +190,12 @@ const CustomCalendar: React.FC<CalendarProps> = ({
         );
       });
       return (
-        <View style={{flexDirection: 'row'}} key={colIndex}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+          key={colIndex}>
           {colItems}
         </View>
       );
@@ -209,12 +219,14 @@ const CustomCalendar: React.FC<CalendarProps> = ({
             <ArrowLabel>&gt;</ArrowLabel>
           </CustomTouchable>
         </DateWrapper>
-        {children}
       </CalHeader>
+      {children}
       {/* 요일 */}
       <WeekDayView>
         {days.map((day, index) => (
-          <CellText key={index}>{day}</CellText>
+          <WeekDayCell key={index}>
+            <CellText isDay>{day}</CellText>
+          </WeekDayCell>
         ))}
       </WeekDayView>
       {/* 날짜 */}
@@ -223,19 +235,14 @@ const CustomCalendar: React.FC<CalendarProps> = ({
   );
 };
 
-export default CustomCalendar;
+export default CalendarFrame;
 
 /** style */
 const Container = styled.View`
   flex-direction: column;
-  background-color: rgb(255, 255, 255);
-  border-radius: ${wp(2)}px;
+  background-color: ${BACK_COLOR};
   width: 100%;
   padding-top: ${hp(1.8)}px;
-  padding-bottom: ${hp(2.2)}px;
-  padding-left: ${wp(2.9)}px;
-  padding-right: ${wp(2.9)}px;
-  gap: ${hp(1.5)}px;
 `;
 
 const CalHeader = styled.View`
@@ -250,7 +257,9 @@ const CalHeader = styled.View`
 const DateWrapper = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${wp(2.5)}px;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: ${hp(1.5)}px;
 `;
 
 const ArrowLabel = styled.Text`
@@ -262,31 +271,29 @@ const ArrowLabel = styled.Text`
 `;
 
 const MonthLabel = styled.Text`
-  font-size: ${rf(15.8)}px;
+  font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
 `;
 
 const CalendarView = styled.View`
   justify-content: space-between;
-  height: ${hp(38)}px;
+  height: ${hp(31)}px;
 `;
 
 const WeekDayView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-left: ${wp(4.3)}px;
-  padding-right: ${wp(4.3)}px;
-  padding-top: ${hp(0.5)}px;
-  padding-bottom: ${hp(1.9)}px;
-  border-color: #e9e9e9;
-  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
+`;
+
+const WeekDayCell = styled.View`
+  align-items: center;
+  width: ${wp(7.5)}px;
+  height: ${wp(7.5)}px;
 `;
 
 const CellTouchable = styled.TouchableOpacity`
-  flex: 1;
-  flex-direction: column;
   align-items: center;
 `;
 
@@ -294,12 +301,17 @@ interface CircleProps {
   isToday: boolean;
   isTouched: boolean;
   color: string;
+  isDay: boolean;
 }
 
 const CellText = styled.Text<CircleProps>`
   color: ${(props: CircleProps) =>
-    props.isTouched ? 'white' : `${DEFAULT_TEXT}`};
-  font-size: ${rf(13)}px;
+    props.isTouched
+      ? 'white'
+      : props.isDay
+      ? `${MIDDLE_GREY}`
+      : `${DEFAULT_TEXT}`};
+  font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
 `;
 
@@ -324,7 +336,7 @@ const Circle = styled.View<CircleProps>`
   border-radius: ${wp(50)}px;
   border-width: ${wp(0.3)}px;
   border-color: ${(props: CircleProps) =>
-    !props.isTouched && props.isToday ? `${MAIN_COLOR}` : 'white'};
+    !props.isTouched && props.isToday ? `${MAIN_COLOR}` : `${BACK_COLOR}`};
   background-color: ${(props: CircleProps) =>
-    props.isTouched ? `${MAIN_COLOR}` : 'white'};
+    props.isTouched ? `${MAIN_COLOR}` : `${BACK_COLOR}`};
 `;

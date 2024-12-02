@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {DEFAULT_TEXT} from '../common/colors';
+import {DEFAULT_TEXT} from '../colors';
 import {StyleSheet} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import {
   widthSizePercentage as wp,
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
-import {FONT_NAME} from '../common/style';
+import {FONT_NAME} from '../style';
 
 interface ContentsProps {
   contents: string;

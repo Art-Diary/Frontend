@@ -3,7 +3,7 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useFetchMateDiaryList} from '~/api/queries/mate';
 import {useQueryMateDiaryInfo} from '~/zustand/mate/queryMateDiary';
-import DiaryList from '~/components/diary/DiaryList';
+import DiaryList from '~/components/common/diary/DiaryList';
 import {useIsFocused} from '@react-navigation/native';
 
 const FetchMateDiaryList = () => {

@@ -2,16 +2,16 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {Shadow} from 'react-native-shadow-2';
-import ContentsInfo from '~/components/diary/ContentsInfo';
+import ContentsInfo from '~/components/common/diary/ContentsInfo';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useDiaryBackInfo} from '~/zustand/common/diaryBack';
-import LoadingModal from '../common/modal/LoadingModal';
-import {FONT_NAME} from '../common/style';
-import {LIGHT_GREY} from '../common/colors';
+import LoadingModal from '../modal/LoadingModal';
+import {FONT_NAME} from '../style';
+import {LIGHT_GREY} from '../colors';
 
 const DiaryBackFrame = () => {
   const {backInfo} = useDiaryBackInfo();

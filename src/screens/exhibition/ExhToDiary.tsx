@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RouteProp} from '@react-navigation/native';
-import DiaryList from '~/components/diary/DiaryList';
+import DiaryList from '~/components/common/diary/DiaryList';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import BackView from '~/components/common/BackView';
 import {OptionBarIcon} from '~/components/common/icon';

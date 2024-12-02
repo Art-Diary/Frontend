@@ -5,9 +5,9 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {PrivateToggleIcon, PublicToggleIcon} from '../common/icon';
-import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
-import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
+import {PrivateToggleIcon, PublicToggleIcon} from '../icon';
+import {FONT_NAME, ITEM_BORDER_WIDTH} from '../style';
+import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../colors';
 
 interface OtherProps {
   gatherName: string | null;

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {BackHandler, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
-import MyExhListScreen from '~/screens/mydiary/MyExhListScreen';
+import MyVisitedExhListScreen from '~/screens/mydiary/MyVisitedExhListScreen';
 import ExhListScreen from '~/screens/exhibition/ExhListScreen';
 import CalendarScreen from '~/screens/calendar/CalendarScreen';
 import SettingScreen from '~/screens/setting/SettingScreen';
@@ -118,7 +118,7 @@ const BottomRoutes = () => {
         backBehavior="none">
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
         <Tab.Screen name="Calendar" component={CalendarScreen} />
-        <Tab.Screen name="Diary" component={MyExhListScreen} />
+        <Tab.Screen name="Diary" component={MyVisitedExhListScreen} />
         <Tab.Screen name="Mate" component={MateMainScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />
       </Tab.Navigator>

@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Header from '~/components/common/Header';
 import {RootStackNavigationProp} from '~/App';
-import MyExhList from './MyExhList';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
@@ -11,13 +10,17 @@ import {
 import {AddMyExhButtonIcon} from '~/components/common/icon';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
+import MyVisitedExhList from '~/components/mydiary/MyVisitedExhList';
 
-const MyExhListScreen = () => {
+const MyVisitedExhListScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions();
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
 
   useEffect(() => {
     if (isFocused) {
@@ -28,24 +31,31 @@ const MyExhListScreen = () => {
     }
   }, [isFocused]);
 
+  const onPressAddButtom = () => {
+    resetWriteInfo();
+    updateIsUpdate(false);
+    updateInGathering(false, null);
+    navigation.navigate('CreateExhVisitedDate', {exhId: undefined});
+  };
+
   return (
     <Container>
       {/* <RefreshControl onRefresh={refresh} refreshing={isRefreshing} /> */}
       {/* header */}
       <Header title={'내 기록'}>
-        <CustomTouchable
-          onPress={() => navigation.navigate('MyExhibitionSearch')}>
+        {/* noLine isMain */}
+        <CustomTouchable onPress={onPressAddButtom}>
           <AddMyExhButtonIcon />
         </CustomTouchable>
       </Header>
 
       {/* body */}
-      <MyExhList />
+      <MyVisitedExhList />
     </Container>
   );
 };
 
-export default MyExhListScreen;
+export default MyVisitedExhListScreen;
 
 /** style */
 const Container = styled.View`

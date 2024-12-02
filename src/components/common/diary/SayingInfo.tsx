@@ -4,8 +4,8 @@ import {
   responseFont as rf,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {DASH_WIDTH, FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {DASH_WIDTH, FONT_NAME} from '../style';
+import {DEFAULT_TEXT, LIGHT_GREY} from '../colors';
 import {checkBlankInKeyword} from '~/utils/keyword';
 
 interface SayingProps {

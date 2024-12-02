@@ -48,7 +48,8 @@ export const useFetchSearchExhInMyDiary = (searchName: string) =>
     enabled: false,
     queryKey: exhibitionQueryKeys.fetchSearchExhInMyDiary(searchName).queryKey,
     queryFn: () => fetchSearchExh(searchName, null, null, null, null),
-    staleTime: 500000,
+    staleTime: 0, // 데이터를 항상 오래된 상태로 간주하여 강제로 refetch 되도록 설정
+    cacheTime: 0, // 캐시가 오래되지 않도록 설정
     onError: err => {
       console.log('error fetch SearchExh');
     },
@@ -90,6 +91,7 @@ export const useFetchExhDetailInfo = (exhId: number) =>
     queryKey: exhibitionQueryKeys.fetchExhDetailInfo(exhId).queryKey,
     queryFn: () => fetchExhDetailInfo(exhId),
     staleTime: 500000,
+    enabled: exhId !== 0, // exhId가 0이 아닐 때만 실행
     onError: err => {
       console.log(err);
       console.log('[ExhDetailInfoScreen] error fetch ExhDetailInfo');
@@ -183,6 +185,7 @@ export const useFetchStoredDateOfExhInGroup = (
     ],
     queryFn: () => fetchStoredDateOfExhInGroup(exhId, gatherId),
     staleTime: 500000,
+    enabled: !exhId && !gatherId,
     onError: err => {
       console.log(err);
       console.log(

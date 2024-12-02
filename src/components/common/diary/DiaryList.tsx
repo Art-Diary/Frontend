@@ -5,27 +5,27 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import ThumbnailInfo from '~/components/diary/ThumbnailInfo';
-import TitleInfo from '~/components/diary/TitleInfo';
+import ThumbnailInfo from '~/components/common/diary/ThumbnailInfo';
+import TitleInfo from '~/components/common/diary/TitleInfo';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import WriterRateInfo from '~/components/diary/WriterRateInfo';
-import OtherInfo from '~/components/diary/OtherInfo';
-import SayingInfo from '~/components/diary/SayingInfo';
+import WriterRateInfo from '~/components/common/diary/WriterRateInfo';
+import OtherInfo from '~/components/common/diary/OtherInfo';
+import SayingInfo from '~/components/common/diary/SayingInfo';
 import {Shadow} from 'react-native-shadow-2';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useDiaryBackActions} from '~/zustand/common/diaryBack';
 import {useUserInfo} from '~/zustand/auth/auth';
-import DeleteDiaryModal from './modal/DeleteDiaryModal';
+import DeleteDiaryModal from '../../mydiary/modal/DeleteDiaryModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
-import {showToast} from '../common/modal/toastConfig';
+import {showToast} from '../modal/toastConfig';
 import {useRememberDiaryNumActions} from '~/zustand/mydiary/rememberDiaryNum';
 
 type DeleteActions = {
@@ -120,11 +120,17 @@ const DiaryList: React.FC<DiaryListProps> = ({
         updateActions.handleUpdateClicked();
         updateActions.handleCloseOptionModal();
         updateDiaryNum(currentPage);
-        if (
-          tabIdentifier.tab === 'mydiary' ||
-          tabIdentifier.tab === 'gathering'
-        ) {
-          navigation.navigate('AddMyVisitDateRoutes');
+        if (tabIdentifier.tab === 'mydiary') {
+          navigation.navigate('CreateExhVisitedDate', {
+            exhId: visitedExhId,
+            exhVisitId: diaryList[currentPage].exhVisitId,
+          });
+        } else if (tabIdentifier.tab === 'gathering') {
+          navigation.navigate('CreateExhVisitedDate', {
+            exhId: visitedExhId,
+            exhVisitId: diaryList[currentPage].exhVisitId,
+            isInGathering: true,
+          });
         } else {
           navigation.navigate('WriteMyDiaryRoutes');
         }

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import CustomCalendar from '~/components/common/CustomCalendar';
 import {dateToString} from '~/utils/date';
 import {calendarColor} from './calendarColor';
 import {
@@ -15,16 +14,13 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import {RefreshControl} from 'react-native';
+import {MarkedType} from '~/types';
+import CalendarFrame from '~/components/common/CalendarFrame';
 
 export interface IPicker {
   label: string;
   value: string;
   image: {};
-}
-
-interface MarkedType {
-  date: string;
-  color: string[];
 }
 
 const CalendarScreen = () => {
@@ -58,8 +54,8 @@ const CalendarScreen = () => {
     Number(selectedValue) === -1
       ? 'alone'
       : Number(selectedValue) === -2
-        ? 'all'
-        : 'gather',
+      ? 'all'
+      : 'gather',
     Number(selectedValue) > -1 ? Number(selectedValue) : null,
     Number(changeMonth.split('.')[0]),
     Number(changeMonth.split('.')[1]),
@@ -154,7 +150,7 @@ const CalendarScreen = () => {
       }
       renderItem={({}) => (
         <>
-          <CustomCalendar
+          <CalendarFrame
             initDate={dateFromExhInfo ?? dateToString(new Date())}
             onSelectedDate={setSelectedDate}
             markedDates={markedDates}
@@ -167,7 +163,7 @@ const CalendarScreen = () => {
               handleRefetch={handleRefetch}
               refreshing={refreshing}
             />
-          </CustomCalendar>
+          </CalendarFrame>
           <ExhListOfDayInCalendar
             selectedDate={selectedDate}
             gatherId={Number(selectedValue)}

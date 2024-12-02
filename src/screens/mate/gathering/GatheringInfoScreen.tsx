@@ -14,7 +14,7 @@ import {
 } from '~/api/queries/gathering';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
-import ExhItemView, {ExhInfo} from '~/components/exhibition/ExhItemView';
+import ExhItemView from '~/components/exhibition/ExhItemView';
 import {Modal, Pressable, RefreshControl, ScrollView} from 'react-native';
 import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -48,6 +48,7 @@ import {
 import {Shadow} from 'react-native-shadow-2';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {ExhInfoForList} from '~/types';
 
 const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -130,12 +131,12 @@ const GatheringInfoScreen = () => {
   const pressNewExh = () => {
     // 모임에 새로운 전시회 일정 추가
     navigation.navigate('GatheringRoutes', {
-      screen: 'SearchAddVisitExhInGathering',
-      params: undefined,
+      screen: 'CreateExhVisitDateInGathering',
+      params: {gatherId: enterGatheringInfo.gatherId},
     });
   };
 
-  const pressExh = (item: ExhInfo) => {
+  const pressExh = (item: ExhInfoForList) => {
     // 모임의 기록으로 넘어가기
     updateVisitedExhId(item.exhId);
     updateGatheringListParams({
@@ -250,7 +251,7 @@ const GatheringInfoScreen = () => {
               <ScrollView>
                 {gatheringInfo &&
                   gatheringInfo.exhibitions.map(
-                    (item: ExhInfo, index: number) => {
+                    (item: ExhInfoForList, index: number) => {
                       return (
                         <ExhItemView
                           key={index}

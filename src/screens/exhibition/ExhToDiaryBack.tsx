@@ -1,5 +1,5 @@
 import React from 'react';
-import DiaryBackFrame from '~/components/diary/DiaryBackFrame';
+import DiaryBackFrame from '~/components/common/diary/DiaryBackFrame';
 
 const ExhToDiaryBack = () => {
   return <DiaryBackFrame />;

@@ -5,9 +5,8 @@ export type GatheringStackParamList = {
   GatheringInfo: undefined;
   GatheringDiaryList: {pageNum: number};
   GatheringDiaryBack: undefined;
-  SearchAddVisitExhInGathering: undefined;
-  NewVisitDateOfExhInGathering: undefined;
   AddNewMateInGathering: undefined;
+  CreateExhVisitDateInGathering: {gatherId: number};
 };
 
 export type SettingStackParamList = {
@@ -31,16 +30,17 @@ export type CalendarDiaryStackParamList = {
 export type RootStackParamList = {
   Main: undefined;
   // mydiary
-  MyExhibitionSearch: undefined;
+  CreateExhVisitedDate: {
+    exhId?: number;
+    exhVisitId?: number;
+    isInGathering?: boolean;
+  };
+  WriteMyDiaryRoutes: undefined;
+  WriteMyDiaryContents: undefined;
   MyDiaryRoutes: {
     screen: keyof MyDiaryStackParamList;
     params: MyDiaryStackParamList[keyof MyDiaryStackParamList];
   };
-  AddMyVisitDateRoutes: undefined;
-  ChooseVisitDate: undefined;
-  AddSoloVisitDate: undefined;
-  WriteMyDiaryRoutes: undefined;
-  WriteMyDiaryContents: undefined;
   //setting
   SettingRoutes: {
     screen: keyof SettingStackParamList;

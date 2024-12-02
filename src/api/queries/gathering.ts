@@ -1,7 +1,8 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, useQuery} from 'react-query';
+import {useMutation, UseMutationResult, useQuery} from 'react-query';
 import {
   addNewDateOfExhGathering,
+  AddNewDateOfExhGatheringType,
   addNewMateInGathering,
   createGathering,
   deleteGathering,
@@ -98,13 +99,15 @@ export const useDeleteGathering = (gatherId: number) => {
   });
 };
 
-export const useAddNewDateOfExhGathering = (
-  gatherId: number,
-  exhId: number,
-  visitDate: string,
-) => {
-  return useMutation({
-    mutationFn: () => addNewDateOfExhGathering(gatherId, exhId, visitDate),
+export const useAddNewDateOfExhGathering = (): UseMutationResult<
+  any,
+  any,
+  AddNewDateOfExhGatheringType,
+  unknown
+> => {
+  return useMutation<any, any, AddNewDateOfExhGatheringType, unknown>({
+    mutationFn: (data: AddNewDateOfExhGatheringType) =>
+      addNewDateOfExhGathering(data),
     onError: err => {
       console.log(err);
       console.log(
