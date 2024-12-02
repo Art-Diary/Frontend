@@ -206,12 +206,12 @@ export const ExhPlusIcon = () => {
 };
 
 export const EditRegExhIcon = () => {
-  const height = rw(5);
+  const height = rw(4.7);
   return <EditRegExh width={100 * (height / 100)} height={height} />;
 };
 
 export const TrashRegExhIcon = () => {
-  const height = rw(5.5);
+  const height = rw(5.3);
   return <TrashRegExh width={100 * (height / 100)} height={height} />;
 };
 

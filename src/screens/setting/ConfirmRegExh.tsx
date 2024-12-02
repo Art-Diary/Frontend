@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useUpdateRegExhByAdmin} from '~/api/queries/regexh';
-import RegExhFormFrame from '~/components/regexh/RegExhFormFrame';
+import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
 import {
   AREA_FONT_SIZE,
   BUTTON_RADIUS,
@@ -86,27 +86,27 @@ const ConfirmRegExh: React.FC<Props> = ({
   }, []);
 
   return (
-    <RegExhFormFrame
+    <ExhFormFrame
       formState={'updateByAdmin'}
-      regExhData={{
-        regExhName,
-        setRegExhName,
-        regGallery,
-        setRegGallery,
-        regStartDate,
-        setRegStartDate,
-        regEndDate,
-        setRegEndDate,
-        regPainter,
-        setRegPainter,
-        regFee,
-        setRegFee,
-        regUrl,
-        setRegUrl,
-        regIntro,
-        setRegIntro,
-        regPosterUri,
-        setRegPosterUri,
+      exhData={{
+        exhName: regExhName,
+        setExhName: setRegExhName,
+        gallery: regGallery,
+        setGallery: setRegGallery,
+        startDate: regStartDate,
+        setStartDate: setRegStartDate,
+        endDate: regEndDate,
+        setEndDate: setRegEndDate,
+        painter: regPainter,
+        setPainter: setRegPainter,
+        fee: regFee,
+        setFee: setRegFee,
+        url: regUrl,
+        setUrl: setRegUrl,
+        intro: regIntro,
+        setIntro: setRegIntro,
+        posterUri: regPosterUri,
+        setPosterUri: setRegPosterUri,
         regComment,
       }}
       requestData={{
@@ -129,7 +129,7 @@ const ConfirmRegExh: React.FC<Props> = ({
           />
         </RowSectionWrapper>
       </ColSectionWrapper>
-    </RegExhFormFrame>
+    </ExhFormFrame>
   );
 };
 

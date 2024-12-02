@@ -16,6 +16,8 @@ import {
   fetchSearchContentList,
   fetchAddSearchContent,
   fetchDeleteSearchContent,
+  updateExhDetailInfo,
+  UpdateExhDetailType,
 } from '../exhibition';
 
 export const exhibitionQueryKeys = createQueryKeys('exhibition', {
@@ -194,6 +196,19 @@ export const useFetchStoredDateOfExhInGroup = (
     },
     select: (res: any) => res.data,
   });
+
+export const useUpdateExhDetailInfo = () => {
+  return useMutation({
+    mutationFn: (data: UpdateExhDetailType) => updateExhDetailInfo(data),
+    onError: err => {
+      console.log(err);
+      console.log('[UpdateExhDetailInfo] error Update Exh Detail Info');
+    },
+    onSuccess: () => {
+      console.log('[UpdateExhDetailInfo] success Update Exh Detail Info');
+    },
+  });
+};
 
 export const useFetchSearchContentList = () =>
   useQuery({
