@@ -117,7 +117,11 @@ const BottomRoutes = () => {
         })}
         backBehavior="none">
         <Tab.Screen name="Exhibition" component={ExhListScreen} />
-        <Tab.Screen name="Calendar" component={CalendarScreen} />
+        <Tab.Screen
+          name="Calendar"
+          component={CalendarScreen}
+          initialParams={{modalOpen: false}}
+        />
         <Tab.Screen name="Diary" component={MyVisitedExhListScreen} />
         <Tab.Screen name="Mate" component={MateMainScreen} />
         <Tab.Screen name="Setting" component={SettingScreen} />

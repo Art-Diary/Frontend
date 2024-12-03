@@ -2,7 +2,7 @@ import {createQueryKeys} from '@lukemorales/query-key-factory';
 import {useQuery} from 'react-query';
 import {fetchCalendar} from '../calendar';
 
-const calendarQueryKeys = createQueryKeys('calendar', {
+export const calendarQueryKeys = createQueryKeys('calendar', {
   fetchCalendar: (
     kind: string,
     gatherId: number | null,

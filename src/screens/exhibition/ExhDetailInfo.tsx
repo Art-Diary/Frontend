@@ -32,7 +32,7 @@ import {
 } from '~/zustand/tabIdentifier';
 
 type RootStackParamList = {
-  ExhDetailInfo: {exhId: number};
+  ExhDetailInfo: {exhId: number; modalOpen?: boolean};
 };
 
 type ExhDetailInfoScreenRouteProp = RouteProp<
@@ -50,6 +50,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const isFocused = useIsFocused();
 
   const {exhId} = route.params;
+  const {modalOpen} = route.params;
   const {data, isLoading, isError, isSuccess, refetch} =
     useFetchExhDetailInfo(exhId);
   const {
@@ -109,7 +110,14 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   const handlePressBack = () => {
     //BackButton
     if (navigation?.canGoBack()) {
-      navigation.goBack();
+      if (modalOpen) {
+        navigation.navigate('Main', {
+          screen: 'Calendar',
+          params: {modalOpen: true},
+        });
+      } else {
+        navigation.goBack();
+      }
       return true;
     } else {
       navigation.reset({
@@ -170,14 +178,16 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
                 <BackButtonIcon />
               </CustomTouchable>
               <IconView>
-                <CustomTouchable
-                  onPress={() =>
-                    navigation.navigate('ExhToCal', {
-                      exhId: exhId,
-                    })
-                  }>
-                  <CalendarShareIcon />
-                </CustomTouchable>
+                {!modalOpen && (
+                  <CustomTouchable
+                    onPress={() =>
+                      navigation.navigate('ExhToCal', {
+                        exhId: exhId,
+                      })
+                    }>
+                    <CalendarShareIcon />
+                  </CustomTouchable>
+                )}
                 <ExhShare
                   poster={data.poster}
                   exhId={exhId}
@@ -196,10 +206,17 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
               </IconView>
             </TopLayer>
             {/**전시 상세정보 */}
-            <ExhDetailFormat data={data} state={'전시정보'} exhId={exhId} />
+            <ExhDetailFormat
+              data={data}
+              state={'전시정보'}
+              exhId={exhId}
+              modalOpen={modalOpen}
+            />
 
             {/*전시 리뷰 */}
-            <ExhReviewList exhId={exhId} diaryData={diaryData} />
+            {!modalOpen && (
+              <ExhReviewList exhId={exhId} diaryData={diaryData} />
+            )}
           </>
         )}
         {openLoading && <LoadingModal message="로딩 중 :)" />}

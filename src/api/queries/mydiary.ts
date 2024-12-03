@@ -22,6 +22,7 @@ import {gatheringQueryKeys} from './gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 import {exhibitionQueryKeys} from './exhibition';
+import {calendarQueryKeys} from './calendar';
 
 export const mydiaryQueryKeys = createQueryKeys('mydiary', {
   fetchMyExhList: () => ['fetchMyExhList'],
@@ -167,6 +168,8 @@ export const useFetchMyStoredDateListOfExh = (exhId: number) => {
 
 export const useAddMyExhVisitDate = (
   exhId: number,
+  year?: number,
+  month?: number,
 ): UseMutationResult<any, any, MyExhVisitDate, unknown> => {
   const queryClient = useQueryClient();
 
@@ -180,6 +183,11 @@ export const useAddMyExhVisitDate = (
       queryClient.invalidateQueries(
         mydiaryQueryKeys.fetchMyStoredDateListOfExh(exhId).queryKey,
       );
+      if (year && month) {
+        queryClient.invalidateQueries(
+          calendarQueryKeys.fetchCalendar('alone', null, year, month).queryKey,
+        );
+      }
       console.log('[AddSoloVisitDateScreen] success fetch AddSoloVisitDate');
     },
   });

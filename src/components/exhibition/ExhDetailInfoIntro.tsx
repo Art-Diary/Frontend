@@ -13,9 +13,10 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface Props {
   intro: string | undefined;
+  modalOpen?: boolean;
 }
 
-const ExhDetailInfoIntro: React.FC<Props> = ({intro}) => {
+const ExhDetailInfoIntro: React.FC<Props> = ({intro, modalOpen}) => {
   const [isMoreContent, setIsMoreContent] = useState<boolean>(false);
   const memoizedHtmlContent = useMemo(() => intro, [intro]);
   //   const [tmp, setTmp] = useState<string>( // 소개 부분 [변경 예정]
@@ -49,7 +50,7 @@ const ExhDetailInfoIntro: React.FC<Props> = ({intro}) => {
   );
 
   return (
-    <IntroduceView>
+    <IntroduceView modalOpen={modalOpen}>
       <Title>{'소개'}</Title>
       {!memoizedHtmlContent ? (
         <NotIntroText>전시회 소개글이 없습니다.</NotIntroText>
@@ -88,7 +89,11 @@ const ArrowButton = styled.TouchableOpacity`
 `;
 
 // introduce section
-const IntroduceView = styled.View`
+interface IntroduceProps {
+  modalOpen: boolean;
+}
+
+const IntroduceView = styled.View<IntroduceProps>`
   flex-direction: column;
   align-items: center;
   width: 100%;
@@ -97,7 +102,8 @@ const IntroduceView = styled.View`
   padding-left: ${wp(2)}px;
   padding-right: ${wp(2)}px;
   border-style: dashed;
-  border-bottom-width: ${DASH_WIDTH}px;
+  border-bottom-width: ${(props: IntroduceProps) =>
+    !props.modalOpen ? `${DASH_WIDTH}px` : `0px`};
   border-bottom-color: ${LIGHT_GREY};
 `;
 

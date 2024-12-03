@@ -3,18 +3,13 @@ import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
-import {
-  responseFont as rf,
-  heightSizePercentage as hp,
-  widthSizePercentage as wp,
-} from '~/components/common/ResponsiveSize';
 import {ExhInfoForList} from '~/types';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 
 interface SearchExhResultFrameProps {
   exhList: any[];
   handleExhInfo: (exhInfo: ExhInfoForList) => void;
-  handleCloseModal: () => void;
+  handleCloseModal?: () => void;
 }
 
 const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
@@ -27,7 +22,9 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
   const onPressExh = (item: ExhInfoForList) => {
     updateVisitedExhId(item.exhId);
     handleExhInfo(item);
-    handleCloseModal();
+    if (handleCloseModal) {
+      handleCloseModal();
+    }
   };
 
   return (
@@ -38,13 +35,12 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
         <FlatList
           data={exhList}
           renderItem={({item, index}) => (
-            <ExhItemWrapper>
-              <ExhItemView
-                exhInfo={{...item}}
-                notTouchable={false}
-                onTouch={() => onPressExh(item)}
-              />
-            </ExhItemWrapper>
+            <ExhItemView
+              exhInfo={{...item}}
+              notTouchable={false}
+              noLine={index === exhList.length - 1 ? true : false}
+              onTouch={() => onPressExh(item)}
+            />
           )}
         />
       )}
@@ -58,8 +54,4 @@ export default SearchExhResult;
 const ExhListView = styled.View`
   flex: 1;
   flex-direction: column;
-`;
-
-const ExhItemWrapper = styled.View`
-  padding-top: ${wp(1.8)}px;
 `;

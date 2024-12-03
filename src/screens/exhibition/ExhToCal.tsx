@@ -13,9 +13,8 @@ import {calendarColor} from '~/components/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
-import {MyVisitedDateType, VisitedDateInfo} from '~/utils/dataTypes';
+import {MarkedType, MyVisitedDateType, VisitedDateInfo} from '~/types';
 import ExhAddVisitDateCalendarFrame from '~/components/exhibition/ExhAddVisitDateCalendarFrame';
-import {MarkedType} from '~/types';
 
 type RootStackParamList = {
   ExhToCal: {exhId: number};

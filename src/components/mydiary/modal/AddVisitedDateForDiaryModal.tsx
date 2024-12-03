@@ -88,29 +88,31 @@ const AddVisitedDateForDiaryModal: React.FC<
     <InfoModal handleCloseModal={handleCloseModal}>
       <Message>{message}</Message>
       {/* 달력 */}
-      <CalendarSelectDateFrame
-        initDate={dateToString(new Date())}
-        onSelectedDate={onSelectedDate}
-        selectedDate={selectedDate}
-        markedDates={visitedDates}>
-        <BodyView>
-          <BodyText>방문 날짜가 기억 안 날 땐?</BodyText>
-          {checkForget() ? (
-            <ForgetText haveForgot={true}>기억 안 남</ForgetText>
-          ) : (
-            <CustomTouchable onPress={onClickForgotButton}>
-              <ForgetText haveForgot={false}>기억 안 남</ForgetText>
-            </CustomTouchable>
-          )}
-        </BodyView>
-      </CalendarSelectDateFrame>
-      {alreadyMarkedDate() ? (
-        <NextButton isAlready={true}>이미 저장된 방문 날짜입니다</NextButton>
-      ) : (
-        <CustomTouchable onPress={onClickNextButton}>
-          <NextButton isAlready={false}>완료</NextButton>
-        </CustomTouchable>
-      )}
+      <Wrapper>
+        <CalendarSelectDateFrame
+          initDate={dateToString(new Date())}
+          onSelectedDate={onSelectedDate}
+          selectedDate={selectedDate}
+          markedDates={visitedDates}>
+          <BodyView>
+            <BodyText>방문 날짜가 기억 안 날 땐?</BodyText>
+            {checkForget() ? (
+              <ForgetText haveForgot={true}>기억 안 남</ForgetText>
+            ) : (
+              <CustomTouchable onPress={onClickForgotButton}>
+                <ForgetText haveForgot={false}>기억 안 남</ForgetText>
+              </CustomTouchable>
+            )}
+          </BodyView>
+        </CalendarSelectDateFrame>
+        {alreadyMarkedDate() ? (
+          <NextButton isAlready={true}>이미 저장된 방문 날짜입니다</NextButton>
+        ) : (
+          <CustomTouchable onPress={onClickNextButton}>
+            <NextButton isAlready={false}>완료</NextButton>
+          </CustomTouchable>
+        )}
+      </Wrapper>
     </InfoModal>
   );
 };
@@ -123,6 +125,14 @@ const Message = styled.Text`
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
+`;
+
+const Wrapper = styled.View`
+  flex: 1;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
 `;
 
 const BodyView = styled.View`

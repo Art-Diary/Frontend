@@ -1,4 +1,4 @@
-import {ExhDetailInfo} from './dataTypes';
+import {ExhDetailInfo} from '~/types';
 
 // types.ts
 export type GatheringStackParamList = {
@@ -28,7 +28,10 @@ export type CalendarDiaryStackParamList = {
 };
 
 export type RootStackParamList = {
-  Main: undefined;
+  Main: {
+    screen: 'Calendar';
+    params?: {modalOpen: boolean};
+  };
   // mydiary
   CreateExhVisitedDate: {
     exhId?: number;
@@ -68,6 +71,7 @@ export type RootStackParamList = {
   ExhibitionSearch: undefined;
   ExhDetailInfo: {
     exhId: number;
+    modalOpen?: boolean;
   };
   ExhToDiary: {
     diary: any;

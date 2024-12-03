@@ -40,6 +40,7 @@ import {
   WriterPencil,
   EditRegExh,
   TrashRegExh,
+  InfoButton,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
@@ -264,6 +265,11 @@ export const OnExhibitionIcon = () => {
 export const CenterDiaryIcon = () => {
   const height = hp(7.8);
   return <CenterDiary width={100 * (height / 133)} height={height} />;
+};
+
+export const InfoButtonIcon = () => {
+  const height = hp(3);
+  return <InfoButton width={100 * (height / 100)} height={height} />;
 };
 
 // social login logo

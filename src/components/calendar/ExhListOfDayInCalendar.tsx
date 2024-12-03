@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -7,12 +7,11 @@ import {
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {changeDotToHyphen} from '~/utils/date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
-import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
 import {
   DEFAULT_TEXT,
@@ -23,22 +22,38 @@ import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {GatheringColorInfo} from '~/types';
 import {findGatherColor} from './calendarColor';
+import AddVisitExhToCalModal from './modal/AddVisitExhToCalModal';
+
+type SelectedDateInfo = {
+  selectedDate: string;
+  year: number;
+  month: number;
+};
 
 interface CalendarProps {
-  selectedDate: string;
+  selectedDateInfo: SelectedDateInfo;
   gatherColorList: GatheringColorInfo[];
   exhListOfDay: any[];
 }
 
 const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
-  selectedDate,
+  selectedDateInfo,
   gatherColorList,
   exhListOfDay,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateExhFromCalendar} = useExhFromCalendarActions();
-  const {updateAddDate} = useAddScheduleActions();
+  const [openModal, setOpenModal] = useState(false);
+  const params: any = useRoute().params;
+
+  useEffect(() => {
+    // route.params의 modalOpen 값으로 모달 상태 복원
+    if (params.modalOpen) {
+      setOpenModal(true);
+      navigation.setParams({modalOpen: false}); // 상태 초기화
+    }
+  }, [params]);
 
   const onPressExhItem = (exhItem: any) => {
     /* 선택한 날짜의 기록들 */
@@ -56,23 +71,27 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   };
 
   const onPressAddMyExh = () => {
-    updateAddDate(selectedDate);
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'Main',
-          state: {
-            routes: [
-              {
-                name: 'Exhibition',
-                params: undefined,
-              },
-            ],
-          },
-        },
-      ],
-    });
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
+  const getVisitedExhIdList = () => {
+    var list: number[] = [];
+    const scheduleList =
+      exhListOfDay[Number(selectedDateInfo.selectedDate.split('.')[2]) - 1]
+        .scheduleInfoList;
+
+    if (scheduleList) {
+      for (let i = 0; i < scheduleList.length; i++) {
+        if (!scheduleList[i].gatherId) {
+          list.push(scheduleList[i].exhId);
+        }
+      }
+    }
+    return list;
   };
 
   return (
@@ -80,7 +99,8 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
       {/* 선택 날짜 */}
       <SelectedDateView>
         <SelectedDateText>
-          {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
+          {selectedDateInfo.selectedDate.split('.')[1]}월{' '}
+          {selectedDateInfo.selectedDate.split('.')[2]}일
         </SelectedDateText>
         <CustomTouchable
           onPress={onPressAddMyExh}
@@ -91,14 +111,23 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
           <AddMyExhButtonIcon />
         </CustomTouchable>
       </SelectedDateView>
+      {openModal && (
+        <AddVisitExhToCalModal
+          visitedExhIdList={getVisitedExhIdList()}
+          selectedDateInfo={selectedDateInfo}
+          handleCloseModal={closeModal}
+          message={'개인 방문 전시회 추가'}
+        />
+      )}
       {/* 전시회 리스트 */}
       <FlatList
         data={
           exhListOfDay !== undefined &&
-          exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
+          exhListOfDay[Number(selectedDateInfo.selectedDate.split('.')[2]) - 1]
             .scheduleInfoList !== undefined
-            ? exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
-                .scheduleInfoList
+            ? exhListOfDay[
+                Number(selectedDateInfo.selectedDate.split('.')[2]) - 1
+              ].scheduleInfoList
             : []
         }
         renderItem={({item, index}) => (
@@ -107,8 +136,9 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
               exhInfo={{...item}}
               noLine={
                 index ===
-                exhListOfDay[Number(selectedDate.split('.')[2]) - 1]
-                  .scheduleInfoList.length -
+                exhListOfDay[
+                  Number(selectedDateInfo.selectedDate.split('.')[2]) - 1
+                ].scheduleInfoList.length -
                   1
                   ? true
                   : false

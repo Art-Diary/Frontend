@@ -45,7 +45,7 @@ const Contents = styled.View`
   background-color: ${BACK_COLOR};
   border-top-left-radius: ${wp(5)}px;
   border-top-right-radius: ${wp(5)}px;
-  padding: ${hp(2.4)}px;
+  padding-top: ${hp(2.4)}px;
   width: 100%;
   height: 74%;
 `;
