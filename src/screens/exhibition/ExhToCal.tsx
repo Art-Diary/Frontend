@@ -9,7 +9,7 @@ import {
 import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
-import {calendarColor} from '~/screens/calendar/calendarColor';
+import {calendarColor} from '~/components/calendar/calendarColor';
 import OptionsModal from '~/components/exhibition/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';

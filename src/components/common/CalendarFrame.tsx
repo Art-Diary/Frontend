@@ -18,6 +18,7 @@ interface CalendarProps {
   markedDates: MarkedType[]; // 마크 표시된 날짜 리스트
   setChangeMonth?: (changeMonth: string) => void; // 달 바꿈 set
   children?: ReactNode;
+  mainColor?: string;
 }
 
 interface Matrix {
@@ -31,6 +32,7 @@ const CalendarFrame: React.FC<CalendarProps> = ({
   markedDates,
   setChangeMonth,
   children,
+  mainColor,
 }) => {
   const splitDate = initDate.split('.');
   const [currentDate, setCurrentDate] = useState<Date>(
@@ -147,9 +149,10 @@ const CalendarFrame: React.FC<CalendarProps> = ({
         var isMarked = false;
 
         if (item.day !== null && markedDates !== undefined) {
-          itemDate = makeFullDate(item.day);
+          itemDate = makeFullDate(item.day); // yy.MM.dd
           for (var marked = 0; marked < markedDates.length; marked++) {
             if (itemDate === markedDates[marked].date) {
+              // 마킹됐는지 확인
               isMarked = true;
               dateNum = marked;
               break;
@@ -162,12 +165,16 @@ const CalendarFrame: React.FC<CalendarProps> = ({
             key={rowIndex}
             activeOpacity={0.6}
             onPress={() => handleDayPress(item)}>
-            <Circle isToday={isToday} isTouched={itemDate === selectedDate}>
+            <Circle
+              isToday={isToday}
+              isTouched={itemDate === selectedDate}
+              color={mainColor}>
               <CellText isTouched={itemDate === selectedDate}>
                 {item.day}
               </CellText>
               {isMarked && (
                 <MarkedDotWrapper>
+                  {/* 모두 일때 한 날짜에 여러 모임이 갔을 경우 표시 */}
                   {markedDates &&
                     markedDates[dateNum].color.map((color, colorIndex) => {
                       return (
@@ -177,8 +184,8 @@ const CalendarFrame: React.FC<CalendarProps> = ({
                             itemDate === selectedDate && markedDates
                               ? 'white'
                               : markedDates
-                              ? color
-                              : 'white'
+                                ? color
+                                : 'white'
                           }
                         />
                       );
@@ -206,7 +213,12 @@ const CalendarFrame: React.FC<CalendarProps> = ({
     <Container>
       <CalHeader>
         <DateWrapper>
-          <CustomTouchable onPress={goToPreviousMonth}>
+          <CustomTouchable
+            onPress={goToPreviousMonth}
+            style={{
+              paddingHorizontal: wp(3),
+              paddingVertical: wp(1),
+            }}>
             <ArrowLabel>&lt;</ArrowLabel>
           </CustomTouchable>
           <View style={{flexDirection: 'row'}}>
@@ -215,7 +227,12 @@ const CalendarFrame: React.FC<CalendarProps> = ({
             )}
             <MonthLabel>{months[currentDate.getMonth()]}월</MonthLabel>
           </View>
-          <CustomTouchable onPress={goToNextMonth}>
+          <CustomTouchable
+            onPress={goToNextMonth}
+            style={{
+              paddingHorizontal: wp(3),
+              paddingVertical: wp(1),
+            }}>
             <ArrowLabel>&gt;</ArrowLabel>
           </CustomTouchable>
         </DateWrapper>
@@ -309,8 +326,8 @@ const CellText = styled.Text<CircleProps>`
     props.isTouched
       ? 'white'
       : props.isDay
-      ? `${MIDDLE_GREY}`
-      : `${DEFAULT_TEXT}`};
+        ? `${MIDDLE_GREY}`
+        : `${DEFAULT_TEXT}`};
   font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
 `;
@@ -336,7 +353,7 @@ const Circle = styled.View<CircleProps>`
   border-radius: ${wp(50)}px;
   border-width: ${wp(0.3)}px;
   border-color: ${(props: CircleProps) =>
-    !props.isTouched && props.isToday ? `${MAIN_COLOR}` : `${BACK_COLOR}`};
+    !props.isTouched && props.isToday ? `${props.color}` : `${BACK_COLOR}`};
   background-color: ${(props: CircleProps) =>
-    props.isTouched ? `${MAIN_COLOR}` : `${BACK_COLOR}`};
+    props.isTouched ? `${props.color}` : `${BACK_COLOR}`};
 `;

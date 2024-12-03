@@ -7,7 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {DEFAULT_TEXT, MIDDLE_GREY} from '../common/colors';
 import {FONT_NAME} from '../common/style';
-import {calendarColor} from '~/screens/calendar/calendarColor';
+import {calendarColor} from '~/components/calendar/calendarColor';
 import {MarkedType} from '~/types';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';
 import CalendarSelectDateFrame from '../common/CalendarSelectDateFrame';
