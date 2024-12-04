@@ -40,6 +40,9 @@ export {default as ExhPlus} from './exh_plus.svg';
 export {default as TrashRegExh} from './trash_reg_exh.svg';
 export {default as EditRegExh} from './edit_reg_exh.svg';
 export {default as InfoButton} from './info_button.svg';
+export {default as PencilUpdate} from './pencil_update.svg';
+export {default as TrashDelete} from './trash_delete.svg';
+export {default as CloseButton} from './close_button.svg';
 
 // social icon
 export {default as GoogleLogo} from './google_logo.svg';

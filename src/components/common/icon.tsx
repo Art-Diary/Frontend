@@ -41,6 +41,9 @@ import {
   EditRegExh,
   TrashRegExh,
   InfoButton,
+  PencilUpdate,
+  TrashDelete,
+  CloseButton,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
@@ -270,6 +273,21 @@ export const CenterDiaryIcon = () => {
 export const InfoButtonIcon = () => {
   const height = hp(3);
   return <InfoButton width={100 * (height / 100)} height={height} />;
+};
+
+export const PencilUpdateIcon = () => {
+  const height = hp(4);
+  return <PencilUpdate width={100 * (height / 100)} height={height} />;
+};
+
+export const TrashDeleteIcon = () => {
+  const height = hp(4.1);
+  return <TrashDelete width={100 * (height / 100)} height={height} />;
+};
+
+export const CloseButtonIcon = () => {
+  const height = hp(3.7);
+  return <CloseButton width={70 * (height / 70)} height={height} />;
 };
 
 // social login logo

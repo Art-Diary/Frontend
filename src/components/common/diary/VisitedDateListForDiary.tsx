@@ -12,7 +12,7 @@ import {FlatList} from 'react-native';
 import CustomTouchable from '../CustomTouchable';
 import {getDateDay} from '~/utils/date';
 import {calendarColor} from '~/components/calendar/calendarColor';
-import {ExhInfoForList, MarkedType} from '~/types';
+import {MarkedType} from '~/types';
 import AddVisitedDateForDiaryModal from '../../mydiary/modal/AddVisitedDateForDiaryModal';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';
 
@@ -42,9 +42,16 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = gatherId
     ? useFetchStoredDateOfExhInGroup(exhId, gatherId)
     : useFetchMyStoredDateListOfExh(exhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
+
+  useEffect(() => {
+    if (exhId) {
+      refetch();
+    }
+  }, [exhId, gatherId]);
 
   useEffect(() => {
     if (storedDateListOfExh) {

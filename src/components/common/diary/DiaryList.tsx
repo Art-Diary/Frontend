@@ -22,7 +22,7 @@ import {RootStackNavigationProp} from '~/App';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useDiaryBackActions} from '~/zustand/common/diaryBack';
 import {useUserInfo} from '~/zustand/auth/auth';
-import DeleteDiaryModal from '../../mydiary/modal/DeleteDiaryModal';
+import DeleteDiaryModal from './modal/DeleteDiaryModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useWriteMyDiaryActions} from '~/zustand/mydiary/writeMyDiary';
 import {showToast} from '../modal/toastConfig';
@@ -255,7 +255,6 @@ const DiaryList: React.FC<DiaryListProps> = ({
             diaryId: diaryList[currentPage].diaryId,
           }}
           handleCloseModal={deleteActions.handleCloseDeleteModal}
-          message="기록을 삭제하겠습니까?"
           handleSuccessDelete={() => handleDeletePage(currentPage)}
         />
       )}

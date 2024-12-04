@@ -10,9 +10,9 @@ export const ITEM_BORDER_WIDTH: number = wp(0.21);
 
 export const FONT_NAME = 'omyu pretty';
 
-export const BUTTON_PADDING: number = hp(1.8);
+export const BUTTON_PADDING: number = hp(1.6);
 
-export const BUTTON_RADIUS: number = wp(1.5);
+export const BUTTON_RADIUS: number = wp(2);
 
 export const BUTTON_FONT_SIZE: number = rf(16);
 
