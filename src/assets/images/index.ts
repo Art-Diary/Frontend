@@ -43,6 +43,7 @@ export {default as InfoButton} from './info_button.svg';
 export {default as PencilUpdate} from './pencil_update.svg';
 export {default as TrashDelete} from './trash_delete.svg';
 export {default as CloseButton} from './close_button.svg';
+export {default as DeleteButton} from './delete_button.svg';
 
 // social icon
 export {default as GoogleLogo} from './google_logo.svg';
