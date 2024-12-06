@@ -32,12 +32,7 @@ import {
   useRememberDiaryNumActions,
   useRememberDiaryNumInfo,
 } from '~/zustand/mydiary/rememberDiaryNum';
-
-export type ImageType = {
-  // 첨부한 사진 타입
-  base64: string;
-  uri: string;
-};
+import {ImageType} from '~/types';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();

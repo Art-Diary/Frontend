@@ -11,8 +11,8 @@ import {showPhoto} from './GetPhoto';
 import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
 import {CameraButtonIcon} from '~/components/common/icon';
-import {ImageType} from './WriteMyDiaryContentsScreen';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {ImageType} from '~/types';
 
 /**
  * - [x] 초기 로딩에는 사진 추가 시 스크롤이 안되고, 재로딩하면 스크롤이 된다. => 화면 높이 문제? => 사진 뒤에 엔터 추가로 해결
@@ -76,7 +76,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
 
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
-    backgroundColor: '#f6f6f6',
+    backgroundColor: '#f6eceb',
     contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
   };
 
@@ -156,10 +156,7 @@ export default CustomDiaryEditor;
 const Container = styled.View`
   flex: 1;
   min-height: ${hp(52.5)}px;
-  background-color: ${BACK_COLOR};
   border-radius: ${BUTTON_RADIUS}px;
-  border-width: ${wp(0.5)}px;
-  border-color: ${LIGHT_GREY};
 `;
 interface ColorItemProps {
   color: string;
@@ -200,11 +197,19 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     // flexGrow: 1,
-    backgroundColor: BACK_COLOR,
     fontSize: 100,
+    borderTopLeftRadius: BUTTON_RADIUS,
+    borderTopRightRadius: BUTTON_RADIUS,
+    backgroundColor: '#f6eceb',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   toolbar: {
-    backgroundColor: BACK_COLOR, // 툴바 배경색 변경
+    backgroundColor: '#f6eceb',
+    borderBottomLeftRadius: BUTTON_RADIUS,
+    borderBottomRightRadius: BUTTON_RADIUS,
     borderColor: LIGHT_GREY, // 툴바 경계 색 변경
     borderTopWidth: wp(0.3), // 경계 두께
   },

@@ -6,9 +6,9 @@ import {
 } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
 import {RichEditor} from 'react-native-pell-rich-editor';
-import {ImageType} from './WriteMyDiaryContentsScreen';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {requestCameraPermission} from '~/utils/photo';
+import {ImageType} from '~/types';
 
 export const showPhoto = async (
   editorRef: React.RefObject<RichEditor>,

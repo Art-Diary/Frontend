@@ -39,7 +39,9 @@ const SelectNewVisitDateForGathering: React.FC<SelectNewVIsitDateProps> = ({
   } = useFetchStoredDateOfExhInGroup(exhId, gatherId);
 
   useEffect(() => {
-    refetch();
+    if (exhId !== 0) {
+      refetch();
+    }
   }, [exhId]);
 
   useEffect(() => {
