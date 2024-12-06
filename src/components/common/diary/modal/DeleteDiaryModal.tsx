@@ -4,10 +4,14 @@ import {useDeleteMyDiary} from '~/api/queries/mydiary';
 import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
+  responseFont as rf,
 } from '~/components/common/ResponsiveSize';
-import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -18,6 +22,7 @@ import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import DecisionModal from '../../modal/DecisionModal';
 
 type DeleteInfo = {
   exhId: number;
@@ -27,14 +32,12 @@ type DeleteInfo = {
 interface DeleteDiaryModalProps {
   deleteInfo: DeleteInfo;
   handleCloseModal: () => void;
-  message: string;
   handleSuccessDelete: () => void;
 }
 
 const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   deleteInfo,
   handleCloseModal,
-  message,
   handleSuccessDelete,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -65,33 +68,52 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   }, [isError, isSuccess, handleCloseModal]);
 
   return (
-    <ConfirmationModal handleCloseModal={handleCloseModal}>
-      <Message>{message}</Message>
-      <TouchView>
-        <ButtonDetailSection>
-          <CustomTouchable onPress={() => deleteMyDiary()}>
-            <DeleteButton>삭제</DeleteButton>
-          </CustomTouchable>
-        </ButtonDetailSection>
-        <ButtonDetailSection>
-          <CustomTouchable onPress={handleCloseModal}>
-            <DeleteButton mainButton>취소</DeleteButton>
-          </CustomTouchable>
-        </ButtonDetailSection>
-      </TouchView>
-    </ConfirmationModal>
+    <DecisionModal handleCloseModal={handleCloseModal}>
+      <Contents>
+        <MsgWrapper>
+          <Message>기록을 삭제하겠습니까?</Message>
+          <MessageSub>삭제하면 복구할 수 없습니다.</MessageSub>
+        </MsgWrapper>
+        <CustomTouchable onPress={() => deleteMyDiary()}>
+          <DeleteButton>삭제</DeleteButton>
+        </CustomTouchable>
+      </Contents>
+    </DecisionModal>
   );
 };
 
 export default DeleteDiaryModal;
 
 /** style */
+const Contents = styled.View`
+  flex: 1px;
+  justify-content: space-between;
+  padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(2.5)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
+`;
+
+const MsgWrapper = styled.View`
+  flex: 1px;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: ${hp(1.3)}px;
+`;
+
 const Message = styled.Text`
   text-align: center;
-  font-size: ${BUTTON_FONT_SIZE}px;
+  font-size: ${rf(18.5)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  padding: ${hp(8)}px;
+`;
+
+const MessageSub = styled.Text`
+  font-size: ${rf(14.5)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
 `;
 
 const DeleteButton = styled.Text`
@@ -102,15 +124,4 @@ const DeleteButton = styled.Text`
   background-color: ${MAIN_COLOR};
   padding: ${BUTTON_PADDING}px;
   border-radius: ${BUTTON_RADIUS}px;
-`;
-
-const TouchView = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: ${wp(1.5)}px;
-`;
-
-const ButtonDetailSection = styled.View`
-  width: 50%;
 `;

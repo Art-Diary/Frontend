@@ -34,7 +34,7 @@ const FetchMateDiaryList = () => {
   }
 
   if (mateDiaryList.length === 0) {
-    return <ErrorMessageView message="아직 전시회에 대힌 기록이 없습니다." />;
+    return <ErrorMessageView message="아직 전시회에 대한 기록이 없습니다." />;
   }
 
   return <DiaryList diaryList={mateDiaryList} />;
