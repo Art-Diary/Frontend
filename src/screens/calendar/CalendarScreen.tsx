@@ -145,7 +145,11 @@ const CalendarScreen = () => {
             gatherColorList={gatherColorList}
           />
           <ExhListOfDayInCalendar
-            selectedDate={selectedDate}
+            selectedDateInfo={{
+              selectedDate,
+              year: Number(changeMonth.split('.')[0]),
+              month: Number(changeMonth.split('.')[1]),
+            }}
             gatherColorList={gatherColorList}
             exhListOfDay={exhInfoOfDays}
           />

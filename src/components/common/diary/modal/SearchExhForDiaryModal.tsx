@@ -87,4 +87,6 @@ const Message = styled.Text`
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
 `;

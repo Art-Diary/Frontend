@@ -3,7 +3,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
 import {useUpdateExhDetailInfo} from '~/api/queries/exhibition';
 import {RouteProp, useNavigation} from '@react-navigation/native';
-import {ExhDetailInfo} from '~/utils/dataTypes';
+import {ExhDetailInfo} from '~/types';
 import {RootStackNavigationProp} from '~/App';
 type RootStackParamList = {
   ExhDetailEdit: {exhDetailInfo: ExhDetailInfo};
