@@ -33,11 +33,21 @@ export interface ExhDetailInfo {
 
 export interface MarkedType {
   date: string;
-  color: string[];
+  color: string[]; // 모두 일때 한 날짜에 여러 모임이 갔을 경우 표시
 }
 
 export type ImageType = {
   // 첨부한 사진 타입
   base64: string;
   uri: string;
+};
+
+export type GatheringInfo = {
+  gatherId: number;
+  gatherName: string;
+};
+
+export type GatheringColorInfo = {
+  gatherId: number;
+  color: string;
 };

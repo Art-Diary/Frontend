@@ -54,38 +54,33 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
           <PosterWapper>
             <Poster
               source={{uri: `${exhInfo.poster ?? DEFAULT_IMAGE}`}}
-              resizeMode="contain"
               alt={'이미지 읽기 실패'}
             />
           </PosterWapper>
-          <ExhInfoWrapper>
-            <ExhInfo haveRate={haveRate} haveChildren={children}>
-              <ExhName numberOfLines={1} ellipsizeMode="tail">
-                {exhInfo.exhName}
-              </ExhName>
-              {!haveRate ? (
-                <>
-                  <ExhGallery>{exhInfo.gallery}</ExhGallery>
-                  <ExhDate>
-                    {changeExhDateFormat(
-                      exhInfo.exhPeriodStart,
-                      exhInfo.exhPeriodEnd,
-                    )}
-                  </ExhDate>
-                  {gatherName && (
-                    <GatherName color={gatherColor}>
-                      with {gatherName}
-                    </GatherName>
+          <ExhInfo haveRate={haveRate} haveChildren={children}>
+            <ExhName numberOfLines={1} ellipsizeMode="tail">
+              {exhInfo.exhName}
+            </ExhName>
+            {!haveRate ? (
+              <>
+                <ExhGallery>{exhInfo.gallery}</ExhGallery>
+                <ExhDate>
+                  {changeExhDateFormat(
+                    exhInfo.exhPeriodStart,
+                    exhInfo.exhPeriodEnd,
                   )}
-                </>
-              ) : (
-                <ExhRateWrapper>
-                  <AvgRateStarIcon />
-                  <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
-                </ExhRateWrapper>
-              )}
-            </ExhInfo>
-          </ExhInfoWrapper>
+                </ExhDate>
+                {gatherName && (
+                  <GatherName color={gatherColor}>with {gatherName}</GatherName>
+                )}
+              </>
+            ) : (
+              <ExhRateWrapper>
+                <AvgRateStarIcon />
+                <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
+              </ExhRateWrapper>
+            )}
+          </ExhInfo>
         </TouchView>
         {children}
       </ExhView>
@@ -123,7 +118,7 @@ const ExhView = styled.View<ExhViewProps>`
 const TouchView = styled.TouchableOpacity`
   flex: 1;
   flex-direction: row;
-  gap: ${wp(2)}px;
+  gap: ${wp(2.5)}px;
 `;
 
 interface ExhInfoProps {
@@ -131,16 +126,10 @@ interface ExhInfoProps {
   haveChildren: boolean;
 }
 
-const ExhInfoWrapper = styled.View`
-  flex: 1;
-  width: 100%;
-  height: 100%;
-`;
-
 const ExhInfo = styled.View<ExhInfoProps>`
   flex: 1;
   width: 100%;
-  padding-top: ${wp(3)}px;
+  padding-top: ${wp(2.5)}px;
   padding-bottom: ${wp(3)}px;
   flex-direction: column;
   justify-content: ${(props: ExhInfoProps) =>

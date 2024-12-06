@@ -1,27 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {dateToString} from '~/utils/date';
-import {calendarColor} from './calendarColor';
+import {
+  calendarColor,
+  findGatherColor,
+} from '../../components/calendar/calendarColor';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
 import {useIsFocused} from '@react-navigation/native';
-import GatheringSelector from './GatheringSelector';
-import ExhListOfDayInCalendar from './ExhListOfDayInCalendar';
+import ExhListOfDayInCalendar from '../../components/calendar/ExhListOfDayInCalendar';
 import {useFetchCalendar} from '~/api/queries/calendar';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import {RefreshControl} from 'react-native';
-import {MarkedType} from '~/types';
-import CalendarFrame from '~/components/common/CalendarFrame';
-
-export interface IPicker {
-  label: string;
-  value: string;
-  image: {};
-}
+import {GatheringColorInfo, MarkedType} from '~/types';
+import CalendarGatheringSelector from '~/components/calendar/CalendarGatheringSelector';
+import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 
 const CalendarScreen = () => {
   const isFocused = useIsFocused();
@@ -39,11 +36,9 @@ const CalendarScreen = () => {
   // 일정이 있는 날짜 리스트
   const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
   // 모임 선택 selector - item
-  const [selectorItems, setSelectorItems] = useState<IPicker[]>([]);
-  // 모임 선택 selector - value
-  const [selectedValue, setSelectedValue] = useState<string>('-1');
   const [openLoading, setOpenLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [gatherId, setGatherId] = useState<number>(-1);
   const {
     data: exhInfoOfDays,
     isLoading,
@@ -51,14 +46,13 @@ const CalendarScreen = () => {
     isSuccess,
     refetch,
   } = useFetchCalendar(
-    Number(selectedValue) === -1
-      ? 'alone'
-      : Number(selectedValue) === -2
-      ? 'all'
-      : 'gather',
-    Number(selectedValue) > -1 ? Number(selectedValue) : null,
+    gatherId === -1 ? 'alone' : gatherId === -2 ? 'all' : 'gather',
+    gatherId > -1 ? gatherId : null,
     Number(changeMonth.split('.')[0]),
     Number(changeMonth.split('.')[1]),
+  );
+  const [gatherColorList, setGatherColorList] = useState<GatheringColorInfo[]>(
+    [],
   );
 
   useEffect(() => {
@@ -68,21 +62,18 @@ const CalendarScreen = () => {
       }
       setRefreshing(true);
     }
-  }, [isFocused, changeMonth, selectedValue]);
+  }, [isFocused, changeMonth, gatherId]);
 
   useEffect(() => {
     if (isError) {
       showToast('일정 조회 실패 ;(');
     }
-  }, [isError]);
-
-  useEffect(() => {
     if (isLoading) {
       setOpenLoading(true);
     } else {
       setOpenLoading(false);
     }
-  }, [isLoading]);
+  }, [isError, isLoading]);
 
   useEffect(() => {
     if (isSuccess && exhInfoOfDays.length !== 0) {
@@ -91,19 +82,23 @@ const CalendarScreen = () => {
       for (let i = 0; i < exhInfoOfDays.length; i++) {
         if (exhInfoOfDays[i].scheduleInfoList !== undefined) {
           var colorList: string[] = [];
-
-          if (selectedValue === '-2') {
+          if (gatherId === -2) {
             const infoList = exhInfoOfDays[i].scheduleInfoList;
 
             for (let k = 0; k < infoList.length; k++) {
-              let findColor = findGatherColor(infoList[k].gatherId);
+              let findColor = findGatherColor(
+                gatherColorList,
+                infoList[k].gatherId,
+              );
 
               if (!colorList.includes(findColor)) {
                 colorList.push(findColor);
               }
             }
-          } else {
+          } else if (gatherId === -1) {
             colorList.push(calendarColor[0]);
+          } else {
+            colorList.push(findGatherColor(gatherColorList, gatherId));
           }
           list.push({
             date:
@@ -119,18 +114,6 @@ const CalendarScreen = () => {
       setMarkedDates(list);
     }
   }, [exhInfoOfDays]);
-
-  const findGatherColor = (gatherId: number): string => {
-    if (gatherId === null) {
-      return calendarColor[0];
-    }
-    for (let i = 0; i < selectorItems.length - 1; i++) {
-      if (Number(selectorItems[i].value) === gatherId) {
-        return calendarColor[i];
-      }
-    }
-    return 'black';
-  };
 
   const handleRefetch = async () => {
     await refetch().then(() => {
@@ -150,24 +133,20 @@ const CalendarScreen = () => {
       }
       renderItem={({}) => (
         <>
-          <CalendarFrame
-            initDate={dateFromExhInfo ?? dateToString(new Date())}
-            onSelectedDate={setSelectedDate}
+          <CalendarGatheringSelector
+            handleRefetch={handleRefetch}
+            refreshing={refreshing}
+            handleGatherId={setGatherId}
             markedDates={markedDates}
-            setChangeMonth={setChangeMonth}>
-            <GatheringSelector
-              handleSelectorItems={setSelectorItems}
-              selectorItems={selectorItems}
-              handleSelectedValue={setSelectedValue}
-              selectedValue={selectedValue}
-              handleRefetch={handleRefetch}
-              refreshing={refreshing}
-            />
-          </CalendarFrame>
+            handleSelectedDate={setSelectedDate}
+            initDate={dateFromExhInfo ?? dateToString(new Date())}
+            handleChangeMonth={setChangeMonth}
+            handleGatherColorList={setGatherColorList}
+            gatherColorList={gatherColorList}
+          />
           <ExhListOfDayInCalendar
             selectedDate={selectedDate}
-            gatherId={Number(selectedValue)}
-            selectorItems={selectorItems}
+            gatherColorList={gatherColorList}
             exhListOfDay={exhInfoOfDays}
           />
           {/* {openLoading && <LoadingModal message="일정 조회 중 :)" />} */}
@@ -184,4 +163,5 @@ const RefreshView = styled.FlatList`
   flex: 1;
   flex-direction: column;
   background-color: ${BACK_COLOR};
+  padding: ${wp(1.3)}px;
 `;

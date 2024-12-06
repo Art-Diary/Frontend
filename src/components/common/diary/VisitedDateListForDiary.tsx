@@ -11,7 +11,7 @@ import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import {FlatList} from 'react-native';
 import CustomTouchable from '../CustomTouchable';
 import {getDateDay} from '~/utils/date';
-import {calendarColor} from '~/screens/calendar/calendarColor';
+import {calendarColor} from '~/components/calendar/calendarColor';
 import {ExhInfoForList, MarkedType} from '~/types';
 import AddVisitedDateForDiaryModal from '../../mydiary/modal/AddVisitedDateForDiaryModal';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';

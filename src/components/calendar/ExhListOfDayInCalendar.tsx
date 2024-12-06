@@ -7,49 +7,38 @@ import {
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import {calendarColor} from './calendarColor';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {changeDotToHyphen} from '~/utils/date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
-import {IPicker} from './CalendarScreen';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
-import {DEFAULT_TEXT, LIGHT_GREY} from '~/components/common/colors';
 import {
-  AREA_FONT_SIZE,
-  FONT_NAME,
-  ITEM_BORDER_WIDTH,
-} from '~/components/common/style';
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {GatheringColorInfo} from '~/types';
+import {findGatherColor} from './calendarColor';
 
 interface CalendarProps {
   selectedDate: string;
-  gatherId: number;
-  selectorItems: IPicker[];
+  gatherColorList: GatheringColorInfo[];
   exhListOfDay: any[];
 }
 
 const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   selectedDate,
-  gatherId,
-  selectorItems,
+  gatherColorList,
   exhListOfDay,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
   const {updateExhFromCalendar} = useExhFromCalendarActions();
   const {updateAddDate} = useAddScheduleActions();
-
-  const findGatherColor = (gatherId: number): string => {
-    for (let i = 0; i < selectorItems.length - 1; i++) {
-      if (Number(selectorItems[i].value) === gatherId) {
-        return calendarColor[i];
-      }
-    }
-    return 'black';
-  };
 
   const onPressExhItem = (exhItem: any) => {
     /* 선택한 날짜의 기록들 */
@@ -89,16 +78,19 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   return (
     <>
       {/* 선택 날짜 */}
-      <SelectedDateWrapper>
-        <SelectedDateView>
-          <SelectedDateText>
-            {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
-          </SelectedDateText>
-          <CustomTouchable onPress={onPressAddMyExh}>
-            <AddMyExhButtonIcon />
-          </CustomTouchable>
-        </SelectedDateView>
-      </SelectedDateWrapper>
+      <SelectedDateView>
+        <SelectedDateText>
+          {selectedDate.split('.')[1]}월 {selectedDate.split('.')[2]}일
+        </SelectedDateText>
+        <CustomTouchable
+          onPress={onPressAddMyExh}
+          style={{
+            paddingHorizontal: wp(3),
+            paddingVertical: wp(0.1),
+          }}>
+          <AddMyExhButtonIcon />
+        </CustomTouchable>
+      </SelectedDateView>
       {/* 전시회 리스트 */}
       <FlatList
         data={
@@ -122,10 +114,16 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
                   : false
               }
               notTouchable={true}
-              gatherName={item.gatherName}
-              gatherColor={findGatherColor(item.gatherId)}></ExhItemView>
+              gatherName={item.gatherName ?? '혼자'}
+              gatherColor={findGatherColor(gatherColorList, item.gatherId)}
+            />
           </CustomTouchable>
         )}
+        ListEmptyComponent={
+          <SelectMsgView>
+            <SelectMsgText>일정이 없습니다.</SelectMsgText>
+          </SelectMsgView>
+        }
       />
     </>
   );
@@ -134,19 +132,17 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
 export default ExhListOfDayInCalendar;
 
 /** style */
-const SelectedDateWrapper = styled.View`
-  width: 100%;
-  padding-top: ${wp(2.9)}px;
-  padding-left: ${wp(2.9)}px;
-  padding-right: ${wp(2.9)}px;
-`;
 
 const SelectedDateView = styled.View`
   width: 100%;
   flex-direction: row;
-  border-bottom-color: ${LIGHT_GREY};
-  border-bottom-width: ${ITEM_BORDER_WIDTH}px;
+  margin-top: ${wp(2.9)}px;
+  padding: ${wp(2.9)}px;
+  padding-right: 0px;
   padding-bottom: ${wp(1.6)}px;
+  border-style: dashed;
+  border-top-width: ${DASH_WIDTH}px;
+  border-top-color: ${LIGHT_GREY};
   justify-content: space-between;
   align-items: center;
 `;
@@ -157,20 +153,15 @@ const SelectedDateText = styled.Text`
   font-family: ${FONT_NAME};
 `;
 
-interface GatherNameProps {
-  color: string;
-}
+const SelectMsgView = styled.View`
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-top: ${hp(2.5)}px;
+`;
 
-const GatherName = styled.Text<GatherNameProps>`
-  font-size: ${rf(12.3)}px;
-  color: ${DEFAULT_TEXT};
+const SelectMsgText = styled.Text`
+  font-size: ${rf(16)}px;
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
-  border-width: ${wp(0.3)}px;
-  border-color: ${(props: GatherNameProps) => props.color}; //#ff6f61;
-  border-radius: ${wp(10)}px;
-  background-color: white;
-  padding-left: ${wp(2.9)}px;
-  padding-right: ${wp(2.9)}px;
-  padding-top: ${hp(0.9)}px;
-  padding-bottom: ${hp(0.9)}px;
 `;

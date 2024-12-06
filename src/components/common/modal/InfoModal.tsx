@@ -21,7 +21,7 @@ const InfoModal: React.FC<InfoModalProps> = ({handleCloseModal, children}) => {
       <Backdrop onPress={handleCloseModal}>
         {/* 컨텐츠 영역 */}
         <Container>
-          <Contents>{children}</Contents>
+          <Contents onStartShouldSetResponder={() => true}>{children}</Contents>
         </Container>
       </Backdrop>
     </Modal>
