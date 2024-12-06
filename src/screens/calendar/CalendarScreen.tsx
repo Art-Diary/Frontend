@@ -133,17 +133,19 @@ const CalendarScreen = () => {
       }
       renderItem={({}) => (
         <>
-          <CalendarGatheringSelector
-            handleRefetch={handleRefetch}
-            refreshing={refreshing}
-            handleGatherId={setGatherId}
-            markedDates={markedDates}
-            handleSelectedDate={setSelectedDate}
-            initDate={dateFromExhInfo ?? dateToString(new Date())}
-            handleChangeMonth={setChangeMonth}
-            handleGatherColorList={setGatherColorList}
-            gatherColorList={gatherColorList}
-          />
+          <CalendarWrapper>
+            <CalendarGatheringSelector
+              handleRefetch={handleRefetch}
+              refreshing={refreshing}
+              handleGatherId={setGatherId}
+              markedDates={markedDates}
+              handleSelectedDate={setSelectedDate}
+              initDate={dateFromExhInfo ?? dateToString(new Date())}
+              handleChangeMonth={setChangeMonth}
+              handleGatherColorList={setGatherColorList}
+              gatherColorList={gatherColorList}
+            />
+          </CalendarWrapper>
           <ExhListOfDayInCalendar
             selectedDateInfo={{
               selectedDate,
@@ -168,4 +170,13 @@ const RefreshView = styled.FlatList`
   flex-direction: column;
   background-color: ${BACK_COLOR};
   padding: ${wp(1.3)}px;
+`;
+
+const CalendarWrapper = styled.View`
+  flex: 1;
+  flex-direction: column;
+  background-color: ${BACK_COLOR};
+  padding: ${wp(1.3)}px;
+  padding-top: 0%;
+  padding-bottom: 0%;
 `;
