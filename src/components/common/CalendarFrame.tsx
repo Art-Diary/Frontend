@@ -168,7 +168,7 @@ const CalendarFrame: React.FC<CalendarProps> = ({
             <Circle
               isToday={isToday}
               isTouched={itemDate === selectedDate}
-              color={mainColor}>
+              color={mainColor ?? MAIN_COLOR}>
               <CellText isTouched={itemDate === selectedDate}>
                 {item.day}
               </CellText>
@@ -184,8 +184,8 @@ const CalendarFrame: React.FC<CalendarProps> = ({
                             itemDate === selectedDate && markedDates
                               ? 'white'
                               : markedDates
-                                ? color
-                                : 'white'
+                              ? color
+                              : 'white'
                           }
                         />
                       );
@@ -326,8 +326,8 @@ const CellText = styled.Text<CircleProps>`
     props.isTouched
       ? 'white'
       : props.isDay
-        ? `${MIDDLE_GREY}`
-        : `${DEFAULT_TEXT}`};
+      ? `${MIDDLE_GREY}`
+      : `${DEFAULT_TEXT}`};
   font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
 `;

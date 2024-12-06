@@ -87,7 +87,7 @@ const CreateExhVisitedDateScreen: React.FC<Props> = ({route}) => {
       <Contents full>
         <VisitedDateListForDiary
           exhId={exhId ?? 0}
-          exhVisitId={routeExhVisitId}
+          exhVisitId={exhVisitId}
           handleExhVisitId={setExhVisitId}
           gatherId={isInGathering ? gatherInfo.gatherId : undefined}
         />

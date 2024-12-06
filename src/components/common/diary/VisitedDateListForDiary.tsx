@@ -92,16 +92,18 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
   };
 
   const onPressVisitDate = (item: any, index: any) => {
-    // 구현
-    if (selectedItemIndex !== item.index) {
+    if (
+      selectedItemIndex.section === index.section &&
+      selectedItemIndex.dateItem === index.dateItem
+    ) {
+      setSelectedItemIndex({section: null, dateItem: null});
+      handleExhVisitId(0);
+    } else {
       setSelectedItemIndex({
-        section: index.sectionIndex,
-        dateItem: index.dateIndex,
+        section: index.section,
+        dateItem: index.dateItem,
       });
       handleExhVisitId(item.exhVisitId);
-    } else {
-      setSelectedItemIndex({section: null, dateItem: null});
-      //   handleExhVisitId(null);
     }
   };
 
@@ -132,7 +134,10 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
                   renderItem={({item: dateItem, index: dateIndex}) => (
                     <CustomTouchable
                       onPress={() =>
-                        onPressVisitDate(dateItem, {sectionIndex, dateIndex})
+                        onPressVisitDate(dateItem, {
+                          section: sectionIndex,
+                          dateItem: dateIndex,
+                        })
                       }>
                       <DateView
                         isSelected={
