@@ -41,6 +41,7 @@ import {
   EditRegExh,
   TrashRegExh,
   InfoButton,
+  DeleteButton,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
@@ -149,6 +150,11 @@ export const PinkNameTagIcon = () => {
 export const SearchButtonIcon = () => {
   const height = rw(4);
   return <SearchButton width={100 * (height / 100)} height={height} />;
+};
+
+export const DeleteButtonIcon = () => {
+  const height = rw(6);
+  return <DeleteButton width={100 * (height / 100)} height={height} />;
 };
 
 export const AnotherSearchIcon = () => {
