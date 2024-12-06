@@ -26,7 +26,7 @@ const SayingInfo: React.FC<SayingProps> = ({saying, exhName}) => {
         </ContentText>
       </SayingContentView>
       {/* 전시회 제목 */}
-      <ContentText haveSaying>{exhName}</ContentText>
+      <ContentText>{exhName}</ContentText>
     </Container>
   );
 };
@@ -56,15 +56,9 @@ const SayingContentView = styled.View`
   flex-direction: row;
 `;
 
-interface ContentTextProps {
-  haveSaying: boolean;
-}
-
-const ContentText = styled.Text<ContentTextProps>`
+const ContentText = styled.Text`
   font-size: ${rf(18)}px;
   color: ${DEFAULT_TEXT};
-  color: ${(props: ContentTextProps) =>
-    props.haveSaying ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};
 `;
 
