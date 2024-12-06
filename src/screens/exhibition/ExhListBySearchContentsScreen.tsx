@@ -14,13 +14,17 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorMessageView from '~/components/common/ErrorMessageView';
 
 interface SearchProps {
   searchContent: string;
+  handleCurrentPage?: (currentPage: boolean) => void;
 }
 
 const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
   searchContent,
+  handleCurrentPage,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const currentTime = new Date();
@@ -54,15 +58,6 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     isSuccess: isSuccessDeleteSearch,
   } = useFetchDeleteSearchContent(searchContentId);
 
-  // useEffect(() => {
-  //   //DB에서 데이터 추가 or 업데이트
-
-  //   if (content) {
-  //     fetchAddSearchContent();
-  //     setCheck(true);
-  //   }
-  // }, [content]);
-
   useEffect(() => {
     if (searchContentId != -1) {
       fetchDeleteSearchContent(); //검색기록삭제
@@ -73,16 +68,13 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     setRefreshing(true);
   };
 
-  // const onPressPreSearch = (text: string) => {
-  //   //setKeyword(text);
-  //   setContent(text);
-  //   // updateSearchName(text);
-  // };
+  if (isError) {
+    return <ErrorMessageView message={'검색 결과 조회 실패 ;('} />;
+  }
 
-  // const onPressDelete = (searchId: number) => {
-  //   //searchList에서 삭제할 기록 searchId
-  //   setSearchContentId(searchId);
-  // };
+  if (isLoading) {
+    return <LoadingModal message="검색 중:)" />;
+  }
 
   return (
     <Container>

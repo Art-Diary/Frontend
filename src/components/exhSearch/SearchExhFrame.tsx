@@ -17,7 +17,7 @@ interface SearchExhFrameProps {
   children: ReactNode;
   searchMessage?: string;
   deleteButton: boolean;
-  handleCurrentPage?: (currentPage: boolean) => void;
+  handleCurrentPage?: (currentPage: boolean) => void; //deleteButton이 true일 때만, 즉 전시회탭에서 검색어로 전시회를 조회할 때만
 }
 
 const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
@@ -34,10 +34,10 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
   }, []);
 
   const onPressDelete = () => {
+    if (handleCurrentPage) {
+      handleCurrentPage(false);
+    }
     handleSearchKeyword('');
-    // handleCurrentPage(false);
-    //searchList에서 삭제할 기록 searchId
-    //setSearchContentId(searchId);
   };
   return (
     <ContentsContainer>

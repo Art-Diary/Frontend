@@ -66,10 +66,6 @@ const ExhSearchName = () => {
   }, [content]);
 
   useEffect(() => {
-    //console.log(Object.keys(examples).length);
-  }, [examples]);
-
-  useEffect(() => {
     if (check) {
       navigation.goBack();
     }
@@ -80,10 +76,6 @@ const ExhSearchName = () => {
       fetchDeleteSearchContent(); //검색기록삭제
     }
   }, [searchContentId]);
-
-  // useEffect(() => {
-  //   setContent(searchKeyword);
-  // }, [searchKeyword]);
 
   const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
@@ -100,16 +92,6 @@ const ExhSearchName = () => {
   if (isLoading) {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
-  /* const onPressPreSearch = (text: string) => {
-    //setKeyword(text);
-    //setContent(text);
-    //updateSearchName(text);
-  };
-
-  const onPressDelete = (searchId: number) => {
-    //searchList에서 삭제할 기록 searchId
-    setSearchContentId(searchId);
-  };*/
 
   return (
     <Container>
@@ -121,10 +103,11 @@ const ExhSearchName = () => {
         searchMessage={'전시회를 검색하세요'}
         deleteButton={true}
         handleCurrentPage={setCurrentPage}>
-        {/* <ExhListBySearchContentsScreen searchContent={content} /> */}
-        {/* <SearchContentsListScreen /> */}
         {currentPage ? (
-          <ExhListBySearchContentsScreen searchContent={content} />
+          <ExhListBySearchContentsScreen
+            searchContent={content}
+            handleCurrentPage={setCurrentPage}
+          />
         ) : (
           <SearchContentsListScreen
             currentPage={currentPage}
@@ -133,25 +116,6 @@ const ExhSearchName = () => {
             // setSearchKeyword 추가
           />
         )}
-
-        {/* <PreSearch>{'최근검색기록'}</PreSearch>
-        {examples && Object.keys(examples).length ? (
-          examples.slice(0, limit).map((item: any, index: number) => (
-            <PreSearchView key={index}>
-              <CustomTouchable
-                onPress={() => onPressPreSearch(item.searchContent)}>
-                <PreSearchList>{item.searchContent}</PreSearchList>
-              </CustomTouchable>
-              <CustomTouchable onPress={() => onPressDelete(item.searchId)}>
-                <PreSearchList>{'X'}</PreSearchList>
-              </CustomTouchable>
-            </PreSearchView>
-          ))
-        ) : (
-          <PreSearchView>
-            <PreSearch>{'최근검색기록이 없습니다.'}</PreSearch>
-          </PreSearchView>
-        )} */}
       </SearchExhFrame>
     </Container>
   );
