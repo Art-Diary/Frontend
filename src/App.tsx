@@ -25,7 +25,6 @@ import ExhSearchName from './screens/exhibition/ExhSearchName';
 import ExhDetailInfo from './screens/exhibition/ExhDetailInfo';
 import LoginScreen from './screens/login/LoginScreen';
 import CreateGatheringScreen from './screens/mate/main/CreateGatheringScreen';
-import AddNewMateScreen from './screens/mate/main/AddNewMateScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
 import ExhToDiary from './screens/exhibition/ExhToDiary';
@@ -178,7 +177,6 @@ export default function App() {
               name="CreateGathering"
               component={CreateGatheringScreen}
             />
-            <Stack.Screen name="AddNewMate" component={AddNewMateScreen} />
             <Stack.Screen name="MateDiaryRoutes" component={MateDiaryRoutes} />
             {/* [설정] 프로필 수정, 좋아요, 알림 설정, 회원 탈퇴 */}
             <Stack.Screen name="SettingRoutes" component={SettingRoutes} />

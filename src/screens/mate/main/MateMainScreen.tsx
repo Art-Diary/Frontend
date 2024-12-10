@@ -30,6 +30,7 @@ import {
 } from '~/components/common/style';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import AddNewMateModal from '~/components/mate/AddNewMateModal';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -38,6 +39,7 @@ const MateMainScreen = () => {
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions();
   const [refreshing, setRefreshing] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -56,14 +58,25 @@ const MateMainScreen = () => {
     setRefreshing(true);
   };
 
+  const onPressAddNewMateButton = () => {
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
+
   return (
     <Container>
       {/* header */}
       <Header title={'전시메이트'}>
-        <CustomTouchable onPress={() => navigation.navigate('AddNewMate')}>
+        <CustomTouchable onPress={onPressAddNewMateButton}>
           <AddMyExhButtonIcon />
         </CustomTouchable>
       </Header>
+      {openModal && (
+        <AddNewMateModal handleCloseModal={closeModal}></AddNewMateModal>
+      )}
 
       {/* body */}
       <RefreshView
