@@ -16,7 +16,7 @@ interface SearchExhFrameProps {
   handleSearchKeyword: (keyword: string) => void;
   children: ReactNode;
   searchMessage?: string;
-  deleteButton: boolean;
+  deleteButton?: boolean;
   handleCurrentPage?: (currentPage: boolean) => void; //deleteButton이 true일 때만, 즉 전시회탭에서 검색어로 전시회를 조회할 때만
 }
 
@@ -84,6 +84,7 @@ const SearchContainer = styled.View`
   padding-bottom: ${hp(0.8)}px;
   padding-left: ${wp(5)}px;
   padding-right: ${wp(5)}px;
+  width: 100%;
 `;
 
 const UnderLine = styled.View`
@@ -94,10 +95,12 @@ const UnderLine = styled.View`
 const SearchView = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  margin-right: ${wp(1)}px;
 `;
 
 const SearchIconTouch = styled.TouchableOpacity`
   padding-top: ${hp(2.4)}px;
+  width: 95%;
 `;
 
 const DeleteIconTouch = styled.TouchableOpacity`
@@ -105,12 +108,11 @@ const DeleteIconTouch = styled.TouchableOpacity`
 `;
 
 const SearchWord = styled.TextInput`
-  //flex: 1;
   font-size: ${rf(15.2)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  //padding-right: ${wp(0)}px;
-  // padding-right: 0%;
+  padding-right: 0%;
+  width: 95%;
 `;
 
 const WordContent = styled.View`

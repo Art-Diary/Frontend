@@ -64,3 +64,10 @@ export type VisitedDateInfo = {
   exhVisitId: number;
   visitDate: string;
 };
+
+export type UserDetailInfo = {
+  userId: number;
+  nickname: string;
+  favoriteArt: string;
+  profile: string;
+};

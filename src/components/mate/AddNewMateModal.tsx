@@ -1,26 +1,31 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {RootStackNavigationProp} from '~/App';
-import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
-import BackView from '~/components/common/BackView';
 import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchNewMateList from './SearchNewMateList';
 import {useAddNewMate} from '~/api/queries/mate';
 import {checkBlankInKeyword} from '~/utils/keyword';
-import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
+import InfoModal from '../common/modal/InfoModal';
+import {
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
+import CustomTouchable from '../common/CustomTouchable';
 
-const AddNewMateScreen = () => {
-  const navigation = useNavigation<RootStackNavigationProp>();
+interface Props {
+  handleCloseModal: () => void;
+}
+
+const AddNewMateModal: React.FC<Props> = ({handleCloseModal}) => {
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [nicknameKeyword, setNicknameKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
@@ -52,7 +57,7 @@ const AddNewMateScreen = () => {
     }
     if (isSuccess) {
       showToast('전시 메이트 추가 성공 :)');
-      navigation.goBack();
+      handleCloseModal();
     }
   }, [isError, isLoading, isSuccess]);
 
@@ -77,14 +82,10 @@ const AddNewMateScreen = () => {
   };
 
   return (
-    <Container>
-      {/* header */}
-      <BackView title="전시 메이트 추가" line={true} />
-      {/* body */}
-      <Contents>
-        {/* <AreaView>
-          <AreaText>전시 메이트 검색</AreaText>
-        </AreaView> */}
+    <InfoModal handleCloseModal={handleCloseModal}>
+      <Message>전시 메이트 추가</Message>
+      {/* 달력 */}
+      <Wrapper>
         <SearchExhFrame
           searchKeyword={nicknameKeyword}
           onPressSearch={onPressSearch}
@@ -94,71 +95,48 @@ const AddNewMateScreen = () => {
           {keyword !== '' && (
             <SearchNewMateList
               searchKeyword={keyword}
-              changeIsPressed={onPressSearch}
               selectedMate={selectedMate}
               handleSelectedMate={setSelectedMate}
             />
           )}
         </SearchExhFrame>
-        {/* 전시 메이트 추가 버튼 */}
-        <ButtonTouch
-          activeOpacity={0.6}
-          onPress={onPressCreate}
-          disabled={selectedMate === -1 ? true : false}>
-          <CreateButton isSelected={selectedMate === -1 ? false : true}>
-            추가
-          </CreateButton>
-        </ButtonTouch>
-      </Contents>
-      {isLoadingOpen && <LoadingModal message={'전시 메이트 추가 중'} />}
-    </Container>
+        <ButtonWrapper>
+          <CustomTouchable onPress={onPressCreate}>
+            <NextButton>추가</NextButton>
+          </CustomTouchable>
+        </ButtonWrapper>
+      </Wrapper>
+    </InfoModal>
   );
 };
 
-export default AddNewMateScreen;
+export default AddNewMateModal;
 
 /** style */
-const Container = styled.View`
-  flex: 1;
-  flex-direction: column;
-  background-color: ${BACK_COLOR};
+const Message = styled.Text`
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-top: ${hp(1)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(4)}px;
 `;
 
-const Contents = styled.View`
+const Wrapper = styled.View`
   flex: 1;
-  padding-bottom: ${wp(3.3)}px;
 `;
 
-const ButtonTouch = styled.TouchableOpacity`
+const ButtonWrapper = styled.View`
   padding-left: ${wp(4)}px;
   padding-right: ${wp(4)}px;
 `;
 
-interface CreateButtonProps {
-  isSelected: boolean;
-}
-
-const CreateButton = styled.Text<CreateButtonProps>`
+const NextButton = styled.Text`
   padding: ${BUTTON_PADDING}px;
   border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
-  background-color: ${(props: CreateButtonProps) =>
-    props.isSelected ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
+  background-color: ${MAIN_COLOR};
   color: white;
   font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
 `;
-
-// const AreaView = styled.View`
-//   flex-direction: row;
-//   padding-top: ${hp(10)}px;
-//   padding-left: ${wp(20)}px;
-//   gap: ${wp(5)}px;
-//   align-items: flex-end;
-// `;
-
-// const AreaText = styled.Text`
-//   font-size: ${fp(19)}px;
-//   color: ${DEFAULT_TEXT};
-//   font-family: ${FONT_NAME};
-// `;
