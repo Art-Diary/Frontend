@@ -31,15 +31,7 @@ const ExhSearchName = () => {
   const [searchContentId, setSearchContentId] = useState<number>(-1);
   const limit = 10; //보여주는 검색 기록 개수
   const [currentPage, setCurrentPage] = useState<boolean>(false); // 최근 기록한 검색어(false), 검색 결과 전시회 리스트(true) 분별 용도
-  //search_list 가져오기
-  // const {
-  //   data: examples,
-  //   isLoading,
-  //   isError,
-  //   isSuccess,
-  //   refetch,
-  // } = useFetchSearchContentList();
-  //검색 기록 추가
+
   const {
     mutate: fetchAddSearchContent,
     isLoading: isLoadingAddSearch,
@@ -70,10 +62,6 @@ const ExhSearchName = () => {
     }
     Keyboard.dismiss();
   };
-
-  // if (isLoading) {
-  //   return <LoadingModal message={'로딩 중 :)'} />;
-  // }
 
   return (
     <Container>

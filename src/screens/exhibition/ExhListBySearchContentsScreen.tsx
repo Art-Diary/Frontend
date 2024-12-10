@@ -4,12 +4,7 @@ import styled from 'styled-components/native';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
-import {
-  useFetchAddSearchContent,
-  useFetchDeleteSearchContent,
-  useFetchSearchContentList,
-  useFetchExhListBySearchContent,
-} from '~/api/queries/exhibition';
+import {useFetchExhListBySearchContent} from '~/api/queries/exhibition';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useNavigation} from '@react-navigation/native';

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
