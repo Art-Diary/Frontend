@@ -4,12 +4,7 @@ import styled from 'styled-components/native';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
-import {
-  useFetchAddSearchContent,
-  useFetchDeleteSearchContent,
-  useFetchSearchContentList,
-  useFetchExhListBySearchContent,
-} from '~/api/queries/exhibition';
+import {useFetchExhListBySearchContent} from '~/api/queries/exhibition';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useNavigation} from '@react-navigation/native';
@@ -19,19 +14,12 @@ import ErrorMessageView from '~/components/common/ErrorMessageView';
 
 interface SearchProps {
   searchContent: string;
-  handleCurrentPage?: (currentPage: boolean) => void;
 }
 
 const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
   searchContent,
-  handleCurrentPage,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const currentTime = new Date();
-  const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
-  const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
-  const [searchContentId, setSearchContentId] = useState<number>(-1);
-  const limit = 10; //보여주는 검색 기록 개수
   const [refreshing, setRefreshing] = useState(false);
 
   //search_list 가져오기
@@ -42,27 +30,6 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     isSuccess,
     refetch,
   } = useFetchExhListBySearchContent(searchContent);
-
-  //검색 기록 추가
-  const {
-    mutate: fetchAddSearchContent,
-    isLoading: isLoadingAddSearch,
-    isError: isErrorAddSearch,
-    isSuccess: isSuccessAddSearch,
-  } = useFetchAddSearchContent(content, currentTime);
-
-  const {
-    mutate: fetchDeleteSearchContent,
-    isLoading: isLoadingDeleteSearch,
-    isError: isErrorDeleteSearch,
-    isSuccess: isSuccessDeleteSearch,
-  } = useFetchDeleteSearchContent(searchContentId);
-
-  useEffect(() => {
-    if (searchContentId != -1) {
-      fetchDeleteSearchContent(); //검색기록삭제
-    }
-  }, [searchContentId]);
 
   const handleRefresh = async () => {
     setRefreshing(true);

@@ -8,7 +8,7 @@ import {
 import {FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 import {SearchButtonIcon, DeleteButtonIcon} from '../common/icon';
-import CustomTouchable from '~/components/common/CustomTouchable';
+//import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -51,7 +51,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
               placeholder={!searchKeyword ? searchMessage : ''}
               value={searchKeyword}
             />
-            {deleteButton && (
+            {searchKeyword && (
               <DeleteIconTouch onPress={onPressDelete}>
                 <DeleteButtonIcon />
               </DeleteIconTouch>

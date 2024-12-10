@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard} from 'react-native';
 import styled from 'styled-components/native';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
@@ -12,21 +11,19 @@ import {
 import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface SearchProps {
-  currentPage: boolean;
   handlePage: (value: boolean) => void;
   changeContent: (value: string) => void;
+  changeKeyword: (value: string) => void;
 }
 
 const SearchContentsListScreen: React.FC<SearchProps> = ({
-  currentPage,
   handlePage,
   changeContent,
+  changeKeyword,
 }) => {
   const currentTime = new Date();
-  const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
-  const [check, setCheck] = useState<boolean>(false); // 검색 결과 페이지로 돌아가기 위해 필요.
+  const [searchContent, setSearchContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
   const [searchContentId, setSearchContentId] = useState<number>(-1);
-  const [Page, setPage] = useState<boolean>(false);
   const limit = 10; //보여주는 검색 기록 개수
 
   //search_list 가져오기
@@ -44,7 +41,7 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
     isLoading: isLoadingAddSearch,
     isError: isErrorAddSearch,
     isSuccess: isSuccessAddSearch,
-  } = useFetchAddSearchContent(content, currentTime);
+  } = useFetchAddSearchContent(searchContent, currentTime);
 
   const {
     mutate: fetchDeleteSearchContent,
@@ -55,12 +52,11 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
 
   useEffect(() => {
     //DB에서 데이터 추가 or 업데이트
-
-    if (content) {
-      fetchAddSearchContent();
-      setCheck(true);
+    if (searchContent) {
+      fetchAddSearchContent(); //검색 기록에 추가
+      handlePage(true);
     }
-  }, [content]);
+  }, [searchContent]);
 
   useEffect(() => {
     if (searchContentId != -1) {
@@ -69,10 +65,9 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
   }, [searchContentId]);
 
   const onPressPreSearch = (text: string) => {
-    //setKeyword(text);
-    handlePage(true);
+    changeKeyword(text);
     changeContent(text);
-    // updateSearchName(text);
+    setSearchContent(text);
   };
 
   const onPressDelete = (searchId: number) => {
