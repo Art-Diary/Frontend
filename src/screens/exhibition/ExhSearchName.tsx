@@ -23,7 +23,7 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 const ExhSearchName = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>(''); //검색 단어
   const {updateSearchName} = useSearchNameActions();
   const currentTime = new Date();
   const [content, setContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
@@ -32,20 +32,20 @@ const ExhSearchName = () => {
   const limit = 10; //보여주는 검색 기록 개수
   const [currentPage, setCurrentPage] = useState<boolean>(false); // 최근 기록한 검색어(false), 검색 결과 전시회 리스트(true) 분별 용도
   //search_list 가져오기
-  const {
-    data: examples,
-    isLoading,
-    isError,
-    isSuccess,
-    refetch,
-  } = useFetchSearchContentList();
+  // const {
+  //   data: examples,
+  //   isLoading,
+  //   isError,
+  //   isSuccess,
+  //   refetch,
+  // } = useFetchSearchContentList();
   //검색 기록 추가
   const {
     mutate: fetchAddSearchContent,
     isLoading: isLoadingAddSearch,
     isError: isErrorAddSearch,
     isSuccess: isSuccessAddSearch,
-  } = useFetchAddSearchContent(content, currentTime);
+  } = useFetchAddSearchContent(keyword, currentTime);
 
   const {
     mutate: fetchDeleteSearchContent,
@@ -55,65 +55,43 @@ const ExhSearchName = () => {
   } = useFetchDeleteSearchContent(searchContentId);
 
   useEffect(() => {
-    //DB에서 데이터 추가 or 업데이트
-
-    if (content) {
-      fetchAddSearchContent();
-      // setContent(content); //setCheck(true);
-      setSearchKeyword(content);
-      console.log('content?', content);
-    }
-  }, [content]);
-
-  useEffect(() => {
     if (check) {
       navigation.goBack();
     }
   }, [check]);
 
-  useEffect(() => {
-    if (searchContentId != -1) {
-      fetchDeleteSearchContent(); //검색기록삭제
-    }
-  }, [searchContentId]);
-
   const onPressSearch = () => {
-    if (checkBlankInKeyword(searchKeyword)) {
+    if (checkBlankInKeyword(keyword)) {
       showToast('다시 검색해 주세요.');
     } else {
-      setContent(searchKeyword);
-      // setKeyword(searchKeyword);
+      fetchAddSearchContent();
+      setContent(keyword);
       setCurrentPage(true);
-      //updateSearchName(searchKeyword);
     }
     Keyboard.dismiss();
   };
 
-  if (isLoading) {
-    return <LoadingModal message={'로딩 중 :)'} />;
-  }
+  // if (isLoading) {
+  //   return <LoadingModal message={'로딩 중 :)'} />;
+  // }
 
   return (
     <Container>
       <BackView line={false} children={null} />
       <SearchExhFrame
-        searchKeyword={content}
+        searchKeyword={keyword}
         onPressSearch={onPressSearch}
-        handleSearchKeyword={setContent}
+        handleSearchKeyword={setKeyword}
         searchMessage={'전시회를 검색하세요'}
         deleteButton={true}
         handleCurrentPage={setCurrentPage}>
         {currentPage ? (
-          <ExhListBySearchContentsScreen
-            searchContent={content}
-            handleCurrentPage={setCurrentPage}
-          />
+          <ExhListBySearchContentsScreen searchContent={content} />
         ) : (
           <SearchContentsListScreen
-            currentPage={currentPage}
             handlePage={setCurrentPage}
             changeContent={setContent}
-            // setSearchKeyword 추가
+            changeKeyword={setKeyword}
           />
         )}
       </SearchExhFrame>

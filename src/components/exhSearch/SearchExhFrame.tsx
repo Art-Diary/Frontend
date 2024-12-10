@@ -51,7 +51,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
               placeholder={!searchKeyword ? searchMessage : ''}
               value={searchKeyword}
             />
-            {deleteButton && (
+            {searchKeyword && (
               <DeleteIconTouch onPress={onPressDelete}>
                 <DeleteButtonIcon />
               </DeleteIconTouch>
