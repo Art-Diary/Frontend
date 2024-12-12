@@ -78,9 +78,9 @@ const Item = styled.View<ItemProps>`
   border-top-left-radius: ${BUTTON_RADIUS}px;
   border-top-right-radius: ${BUTTON_RADIUS}px;
   background-color: ${MAIN_COLOR};
-  padding-left: ${wp(1.4)}px;
-  padding-right: ${wp(1.4)}px;
-  height: ${wp(11.1)}px;
+  padding-left: ${wp(2.5)}px;
+  padding-right: ${wp(2.5)}px;
+  height: ${hp(5.3)}px;
   align-items: center;
   justify-content: center;
   margin-right: ${(props: ItemProps) =>
