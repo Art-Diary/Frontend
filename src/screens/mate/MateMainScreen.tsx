@@ -9,12 +9,12 @@ import {
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import ExhMateList from './ExhMateList';
+import ExhMateList from '../../components/mate/ExhMateList';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
-import GatheringListRequest from './GatheringListRequest';
+import GatheringListRequest from '../../components/gathering/GatheringListRequest';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
 import {
   BACK_COLOR,
@@ -31,6 +31,7 @@ import {
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import AddNewMateModal from '~/components/mate/AddNewMateModal';
+import CreateGatheringModal from '~/components/gathering/CreateGatheringModal';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -39,7 +40,9 @@ const MateMainScreen = () => {
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions();
   const [refreshing, setRefreshing] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [openAddNewMateModal, setOpenAddNewMateModal] = useState(false);
+  const [openCreateGatheringModal, setOpenCreateGatheringModal] =
+    useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -49,9 +52,10 @@ const MateMainScreen = () => {
       }
     }
   }, [isFocused]);
+
   const pressCreateGathering = () => {
     // 새 모임 생성
-    navigation.navigate('CreateGathering');
+    setOpenCreateGatheringModal(true);
   };
 
   const handleRefresh = async () => {
@@ -59,11 +63,15 @@ const MateMainScreen = () => {
   };
 
   const onPressAddNewMateButton = () => {
-    setOpenModal(true);
+    setOpenAddNewMateModal(true);
   };
 
-  const closeModal = () => {
-    setOpenModal(false);
+  const closeAddNewMateModal = () => {
+    setOpenAddNewMateModal(false);
+  };
+
+  const closeCreateGatheringModal = () => {
+    setOpenCreateGatheringModal(false);
   };
 
   return (
@@ -74,7 +82,9 @@ const MateMainScreen = () => {
           <AddMyExhButtonIcon />
         </CustomTouchable>
       </Header>
-      {openModal && <AddNewMateModal handleCloseModal={closeModal} />}
+      {openAddNewMateModal && (
+        <AddNewMateModal handleCloseModal={closeAddNewMateModal} />
+      )}
 
       {/* body */}
       <RefreshView
@@ -104,6 +114,9 @@ const MateMainScreen = () => {
           </Contents>
         )}
       />
+      {openCreateGatheringModal && (
+        <CreateGatheringModal handleCloseModal={closeCreateGatheringModal} />
+      )}
     </Container>
   );
 };

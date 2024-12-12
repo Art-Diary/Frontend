@@ -63,6 +63,8 @@ export const useFetchGatheringInfo = (gatherId: number) =>
   });
 
 export const useCreateGathering = (gatherName: string) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => createGathering(gatherName),
     onError: err => {
@@ -70,6 +72,9 @@ export const useCreateGathering = (gatherName: string) => {
       console.log('[CreateGathering] error create CreateGathering');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        gatheringQueryKeys.fetchGatheringList().queryKey,
+      );
       console.log('[CreateGathering] success create CreateGathering');
     },
   });

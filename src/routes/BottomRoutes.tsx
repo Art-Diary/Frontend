@@ -12,7 +12,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import MateMainScreen from '~/screens/mate/main/MateMainScreen';
+import MateMainScreen from '~/screens/mate/MateMainScreen';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
 import {DASH_WIDTH} from '~/components/common/style';
 import {BACK_COLOR, BORDER_COLOR} from '~/components/common/colors';
