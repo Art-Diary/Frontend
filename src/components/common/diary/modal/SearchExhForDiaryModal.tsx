@@ -6,7 +6,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {BUTTON_FONT_SIZE, FONT_NAME} from '../../style';
 import {DEFAULT_TEXT} from '../../colors';
-import {useFetchSearchExhInMyDiary} from '~/api/queries/exhibition';
+import {useFetchExhListBySearchContent} from '~/api/queries/exhibition';
 import {checkBlankInKeyword} from '~/utils/keyword';
 import {showToast} from '../../modal/toastConfig';
 import {Keyboard} from 'react-native';
@@ -36,7 +36,7 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
     isError,
     isSuccess,
     refetch,
-  } = useFetchSearchExhInMyDiary(searchKeyword);
+  } = useFetchExhListBySearchContent(searchKeyword);
 
   useEffect(() => {
     if (isError) {

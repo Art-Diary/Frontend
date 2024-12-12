@@ -49,6 +49,7 @@ import {Shadow} from 'react-native-shadow-2';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {ExhInfoForList} from '~/types';
+import AddNewMateInGatheringModal from '~/components/gathering/AddNewMateInGatheringModal';
 
 const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -61,6 +62,7 @@ const GatheringInfoScreen = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOptionBarOpen, setIsOptionBarOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   const {
     data: gatheringInfo,
@@ -122,10 +124,7 @@ const GatheringInfoScreen = () => {
 
   const pressNewExhMate = () => {
     // 모임에 새로운 전시 메이트 추가
-    navigation.navigate('GatheringRoutes', {
-      screen: 'AddNewMateInGathering',
-      params: undefined,
-    });
+    setOpenModal(true);
   };
 
   const pressNewExh = () => {
@@ -175,6 +174,10 @@ const GatheringInfoScreen = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -237,6 +240,9 @@ const GatheringInfoScreen = () => {
                 </NameListWrapper>
               </RowView>
             </ExhMates>
+            {openModal && (
+              <AddNewMateInGatheringModal handleCloseModal={closeModal} />
+            )}
             <Dot />
             <ExhListWrapper>
               <ExhListTitle>

@@ -22,10 +22,6 @@ import {
 } from '../exhibition';
 
 export const exhibitionQueryKeys = createQueryKeys('exhibition', {
-  fetchSearchExhInMyDiary: (searchName: string) => [
-    'fetchSearchExhInMyDiary',
-    searchName,
-  ],
   fetchSearchExh: (
     searchName?: string,
     price?: string,
@@ -47,22 +43,6 @@ export const exhibitionQueryKeys = createQueryKeys('exhibition', {
     searchName,
   ],
 });
-
-export const useFetchSearchExhInMyDiary = (searchName: string) =>
-  useQuery({
-    enabled: false,
-    queryKey: exhibitionQueryKeys.fetchSearchExhInMyDiary(searchName).queryKey,
-    queryFn: () => fetchSearchExh(searchName, null, null, null, null),
-    staleTime: 0, // 데이터를 항상 오래된 상태로 간주하여 강제로 refetch 되도록 설정
-    cacheTime: 0, // 캐시가 오래되지 않도록 설정
-    onError: err => {
-      console.log('error fetch SearchExh');
-    },
-    onSuccess: () => {
-      console.log('success fetch SearchExh');
-    },
-    select: (res: any) => res.data,
-  });
 
 export const useFetchSearchExh = (
   searchName: string | null,

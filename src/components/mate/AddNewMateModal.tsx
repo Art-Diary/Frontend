@@ -6,7 +6,7 @@ import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchNewMateList from './SearchNewMateList';
 import {useAddNewMate} from '~/api/queries/mate';
 import {checkBlankInKeyword} from '~/utils/keyword';
-import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -19,7 +19,6 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import CustomTouchable from '../common/CustomTouchable';
 
 interface Props {
   handleCloseModal: () => void;
@@ -100,11 +99,14 @@ const AddNewMateModal: React.FC<Props> = ({handleCloseModal}) => {
             />
           )}
         </SearchExhFrame>
-        <ButtonWrapper>
-          <CustomTouchable onPress={onPressCreate}>
-            <NextButton>추가</NextButton>
-          </CustomTouchable>
-        </ButtonWrapper>
+        <ButtonTouch
+          activeOpacity={0.6}
+          onPress={onPressCreate}
+          disabled={selectedMate === -1 ? true : false}>
+          <NextButton isSelected={selectedMate === -1 ? false : true}>
+            추가
+          </NextButton>
+        </ButtonTouch>
       </Wrapper>
     </InfoModal>
   );
@@ -126,17 +128,22 @@ const Wrapper = styled.View`
   flex: 1;
 `;
 
-const ButtonWrapper = styled.View`
-  padding-left: ${wp(4)}px;
-  padding-right: ${wp(4)}px;
-`;
+interface ButtonProps {
+  isSelected: boolean;
+}
 
-const NextButton = styled.Text`
+const NextButton = styled.Text<ButtonProps>`
   padding: ${BUTTON_PADDING}px;
   border-radius: ${BUTTON_RADIUS}px;
   text-align: center;
-  background-color: ${MAIN_COLOR};
+  background-color: ${(props: ButtonProps) =>
+    props.isSelected ? `${MAIN_COLOR}` : `${LIGHT_GREY}`};
   color: white;
   font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
+`;
+
+const ButtonTouch = styled.TouchableOpacity`
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
 `;

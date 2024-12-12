@@ -3,7 +3,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GatheringInfoScreen from '~/screens/mate/gathering/GatheringInfoScreen';
 import GatheringDiaryListScreen from '~/screens/mate/gathering/GatheringDiaryListScreen';
 import GatheringDiaryBackScreen from '~/screens/mate/gathering/GatheringDiaryBackScreen';
-import AddNewMateInGatheringScreen from '~/screens/mate/gathering/AddNewMateInGatheringScreen';
 import {GatheringStackParamList} from '~/utils/stackTypes';
 import CreateExhVisitDateInGatheringScreen from '~/screens/mate/gathering/CreateExhVisitDateInGatheringScreen';
 
@@ -32,12 +31,6 @@ const GatheringRoutes = () => {
       <Gathering.Screen
         name="GatheringDiaryBack"
         component={GatheringDiaryBackScreen}
-        options={{headerShown: false, animation: 'fade'}}
-      />
-      {/* 모임 내 전시 메이트 추가 */}
-      <Gathering.Screen
-        name="AddNewMateInGathering"
-        component={AddNewMateInGatheringScreen}
         options={{headerShown: false, animation: 'fade'}}
       />
       {/* 모임 내 전시회 방문 날짜 추가 */}

@@ -74,9 +74,7 @@ const MateMainScreen = () => {
           <AddMyExhButtonIcon />
         </CustomTouchable>
       </Header>
-      {openModal && (
-        <AddNewMateModal handleCloseModal={closeModal}></AddNewMateModal>
-      )}
+      {openModal && <AddNewMateModal handleCloseModal={closeModal} />}
 
       {/* body */}
       <RefreshView

@@ -8,7 +8,7 @@ import {
 import {FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 import {SearchButtonIcon, DeleteButtonIcon} from '../common/icon';
-//import CustomTouchable from '~/components/common/CustomTouchable';
+import CustomTouchable from '~/components/common/CustomTouchable';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -46,6 +46,7 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
         <SearchView>
           <WordContent>
             <SearchWord
+              haveText={searchKeyword}
               onSubmitEditing={onPressSearch} // 키보드 상에서 엔터 누르면 확인 버튼 누르는 것과 같음.
               onChangeText={onChangeText}
               placeholder={!searchKeyword ? searchMessage : ''}
@@ -57,9 +58,9 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
               </DeleteIconTouch>
             )}
           </WordContent>
-          <SearchIconTouch activeOpacity={0.6} onPress={onPressSearch}>
+          <CustomTouchable onPress={onPressSearch}>
             <SearchButtonIcon />
-          </SearchIconTouch>
+          </CustomTouchable>
         </SearchView>
         <UnderLine />
       </SearchContainer>
@@ -96,25 +97,28 @@ const SearchView = styled.View`
   flex-direction: row;
   justify-content: space-between;
   margin-right: ${wp(1)}px;
-`;
-
-const SearchIconTouch = styled.TouchableOpacity`
-  padding-top: ${hp(2.4)}px;
-  width: 95%;
+  align-items: center;
 `;
 
 const DeleteIconTouch = styled.TouchableOpacity`
   align-self: center;
 `;
 
-const SearchWord = styled.TextInput`
+interface SearchWordProps {
+  haveText: boolean;
+}
+
+const SearchWord = styled.TextInput<SearchWordProps>`
   font-size: ${rf(15.2)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   padding-right: 0%;
-  width: 95%;
+  padding-bottom: ${hp(1)}px;
+  width: ${(props: SearchWordProps) => !props.haveText && `89%`};
 `;
 
 const WordContent = styled.View`
   flex-direction: row;
+  width: 89%;
+  align-items: center;
 `;
