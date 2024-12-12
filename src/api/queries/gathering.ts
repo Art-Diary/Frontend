@@ -1,5 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, UseMutationResult, useQuery} from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import {
   addNewDateOfExhGathering,
   AddNewDateOfExhGatheringType,
@@ -123,6 +128,8 @@ export const useAddNewDateOfExhGathering = (): UseMutationResult<
 };
 
 export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => addNewMateInGathering(gatherId, mateId),
     onError: err => {
@@ -130,6 +137,9 @@ export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
       console.log('[AddNewMateInGathering] error create AddNewMateInGathering');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        gatheringQueryKeys.fetchGatheringInfo(gatherId).queryKey,
+      );
       console.log(
         '[AddNewMateInGathering] success create AddNewMateInGathering',
       );

@@ -5,7 +5,6 @@ export type GatheringStackParamList = {
   GatheringInfo: undefined;
   GatheringDiaryList: {pageNum: number};
   GatheringDiaryBack: undefined;
-  AddNewMateInGathering: undefined;
   CreateExhVisitDateInGathering: {gatherId: number};
 };
 
