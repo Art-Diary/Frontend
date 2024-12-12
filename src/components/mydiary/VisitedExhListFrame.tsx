@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {BORDER_COLOR, DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {BORDER_COLOR, DEFAULT_TEXT, MIDDLE_GREY} from '../common/colors';
 import {FONT_NAME} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
@@ -40,8 +40,8 @@ const VisitedExhListFrame: React.FC<ExhProps> = ({exhList, handlePressExh}) => {
               {item.exhName}
             </ExhTitle>
             <AvgRate>
-              <AvgRateText>{item.rate.toFixed(1)}</AvgRateText>
               <AvgRateStarIcon />
+              <AvgRateText>{item.rate.toFixed(2)}</AvgRateText>
             </AvgRate>
           </Contents>
         </RowView>
@@ -98,6 +98,6 @@ const AvgRate = styled.View`
 
 const AvgRateText = styled.Text`
   font-size: ${rf(15)}px;
-  color: ${LIGHT_GREY};
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
 `;

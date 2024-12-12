@@ -267,7 +267,7 @@ const GatheringInfoScreen = () => {
                           }
                           notTouchable={false}
                           onTouch={() => pressExh(item)}
-                          haveRate={true}
+                          inGathering={true}
                         />
                       );
                     },

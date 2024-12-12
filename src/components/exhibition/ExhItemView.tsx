@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {getDateDay} from '~/utils/date';
-import {DEFAULT_TEXT, LIGHT_GREY} from '../common/colors';
+import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
@@ -18,7 +18,7 @@ interface SearchExhListProps {
   noLine?: boolean;
   notTouchable: boolean;
   onTouch?: (something: any) => void;
-  haveRate?: boolean;
+  inGathering?: boolean;
   gatherName?: string;
   gatherColor?: string;
 }
@@ -29,7 +29,7 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
   noLine,
   notTouchable,
   onTouch,
-  haveRate,
+  inGathering,
   gatherName,
   gatherColor,
 }) => {
@@ -57,11 +57,11 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
               alt={'이미지 읽기 실패'}
             />
           </PosterWapper>
-          <ExhInfo haveRate={haveRate} haveChildren={children}>
+          <ExhInfo inGathering={inGathering} haveChildren={children}>
             <ExhName numberOfLines={1} ellipsizeMode="tail">
               {exhInfo.exhName}
             </ExhName>
-            {!haveRate ? (
+            {!inGathering ? (
               <>
                 <ExhGallery>{exhInfo.gallery}</ExhGallery>
                 <ExhDate>
@@ -75,10 +75,13 @@ const ExhItemView: React.FC<SearchExhListProps> = ({
                 )}
               </>
             ) : (
-              <ExhRateWrapper>
-                <AvgRateStarIcon />
-                <ExhRate>{exhInfo.rate?.toFixed(1)}</ExhRate>
-              </ExhRateWrapper>
+              <>
+                <VisitDate>최근 방문 날짜: {exhInfo.visitDate}</VisitDate>
+                <ExhRateWrapper>
+                  <AvgRateStarIcon />
+                  <ExhRate>{exhInfo.rate?.toFixed(2)}</ExhRate>
+                </ExhRateWrapper>
+              </>
             )}
           </ExhInfo>
         </TouchView>
@@ -122,7 +125,7 @@ const TouchView = styled.TouchableOpacity`
 `;
 
 interface ExhInfoProps {
-  haveRate: boolean;
+  inGathering: boolean;
   haveChildren: boolean;
 }
 
@@ -133,14 +136,21 @@ const ExhInfo = styled.View<ExhInfoProps>`
   padding-bottom: ${wp(3)}px;
   flex-direction: column;
   justify-content: ${(props: ExhInfoProps) =>
-    props.haveRate ? `center` : `space-between`};
+    props.inGathering ? `center` : `space-between`};
   gap: ${(props: ExhInfoProps) =>
-    props.haveRate ? `${wp(3)}px;` : `${wp(1.5)}px;`};
+    props.inGathering ? `${hp(1)}px;` : `${wp(1.5)}px;`};
 `;
 
 const ExhName = styled.Text`
   font-size: ${rf(17)}px;
   color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  line-height: ${wp(6)}px;
+`;
+
+const VisitDate = styled.Text`
+  font-size: ${rf(14.5)}px;
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
@@ -187,7 +197,7 @@ const ExhRateWrapper = styled.View`
 `;
 
 const ExhRate = styled.Text`
-  font-size: ${rf(15)}px;
-  color: ${LIGHT_GREY};
+  font-size: ${rf(14.5)}px;
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
 `;
