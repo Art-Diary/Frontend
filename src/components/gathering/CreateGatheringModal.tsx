@@ -1,16 +1,13 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {RootStackNavigationProp} from '~/App';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import BackView from '~/components/common/BackView';
 import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {checkBlankInKeyword} from '~/utils/keyword';
 import {
   BACK_COLOR,
@@ -27,11 +24,14 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import InfoModal from '../common/modal/InfoModal';
 
-// [WORD_LIMIT]
-const CreateGatheringScreen = () => {
+interface Props {
+  handleCloseModal: () => void;
+}
+
+const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
   const maxInputLength = 12;
-  const navigation = useNavigation<RootStackNavigationProp>();
   const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [gahteringKeyword, setGahteringKeyword] = useState<string>('');
   const {
@@ -53,7 +53,7 @@ const CreateGatheringScreen = () => {
     }
     if (isSuccess) {
       showToast('모임 만들기 성공 :)');
-      navigation.goBack();
+      handleCloseModal();
     }
   }, [isError, isLoading, isSuccess]);
 
@@ -71,13 +71,12 @@ const CreateGatheringScreen = () => {
   };
 
   return (
-    <Container>
-      {/* header */}
-      <BackView title="모임 추가" line={true} />
+    <InfoModal handleCloseModal={handleCloseModal}>
+      <Message>모임 만들기</Message>
       {/* body */}
       <Contents>
         <ContentWrapper>
-          <ContentText>모임 이름</ContentText>
+          {/* <ContentText>모임 이름</ContentText> */}
           <WriteView>
             <GatheringInput
               maxLength={maxInputLength}
@@ -97,35 +96,35 @@ const CreateGatheringScreen = () => {
           <CreateButton>모임 만들기</CreateButton>
         </CustomTouchable>
       </Contents>
-      {isLoadingOpen && <LoadingModal message={'모임 만들기 처리 중'} />}
-    </Container>
+    </InfoModal>
   );
 };
 
-export default CreateGatheringScreen;
+export default CreateGatheringModal;
 
 /** style */
-const Container = styled.View`
-  flex: 1;
+const Message = styled.Text`
+  font-size: ${BUTTON_FONT_SIZE}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-top: ${hp(1)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(4)}px;
 `;
 
 const Contents = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: ${BACK_COLOR};
-  padding: ${wp(3.3)}px;
+  padding-top: ${hp(3)}px;
+  padding-left: ${wp(4)}px;
+  padding-right: ${wp(4)}px;
 `;
 
 const ContentWrapper = styled.View`
   flex: 1;
   flex-direction: column;
   gap: ${wp(3.8)}px;
-`;
-
-const ContentText = styled.Text`
-  font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
 `;
 
 const CreateButton = styled.Text`

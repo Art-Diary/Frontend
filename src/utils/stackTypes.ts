@@ -92,7 +92,6 @@ export type RootStackParamList = {
   InitProfile: undefined;
   UserInfo: undefined;
   // mate
-  CreateGathering: undefined;
   MateDiaryRoutes: undefined;
   MateDiaryList: undefined;
   MateDiaryBack: undefined;
