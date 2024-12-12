@@ -8,12 +8,18 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {checkBlankInKeyword} from '~/utils/keyword';
 import {useUserInfo} from '~/zustand/auth/auth';
-import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
+import {
+  AREA_FONT_SIZE,
+  BUTTON_FONT_SIZE,
+  BUTTON_RADIUS,
+  FONT_NAME,
+} from '../common/style';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
 } from '../common/colors';
 
 interface EditNicknameProps {
@@ -30,6 +36,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   setIsVerified,
   isVerified,
 }) => {
+  const originalName = getNickname;
   const maxInputLength = 10;
   const userInfo = useUserInfo();
   const {
@@ -45,7 +52,11 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
   const onChangeNickname = useCallback((text: string) => {
     setNickname(text);
-    setIsVerified(false);
+    if (text === originalName) {
+      setIsVerified(true);
+    } else {
+      setIsVerified(false);
+    }
     setMessage(null);
   }, []);
 
@@ -60,7 +71,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
           setMessageColor('#34A853');
           setIsVerified(true);
         } else {
-          setMessage(' 이미 사용하고 있는 닉네임입니다.');
+          setMessage(' 이미 사용 중인 닉네임입니다.');
           setMessageColor('#FF6F61');
         }
       } else {
@@ -77,8 +88,18 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
   const onPressVerify = () => {
     // check nickname
+    const nickname = getNickname.replace(/(\s*)/g, '');
+
     if (checkBlankInKeyword(getNickname)) {
       setMessage(' 닉네임을 작성해주세요.');
+      setMessageColor('#FF6F61');
+    } else if (
+      nickname.includes('전시메이트') ||
+      nickname.includes('kakao_') ||
+      nickname.includes('google_') ||
+      nickname.includes('naver_')
+    ) {
+      setMessage(' 이미 사용 중인 닉네임입니다.');
       setMessageColor('#FF6F61');
     } else {
       verifyNickname();
@@ -86,30 +107,34 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   };
 
   return (
-    <ContentColumn>
-      <SectionView>
-        <SectionName main={true} color={'#3c4045'}>
-          닉네임
-        </SectionName>
+    <Container>
+      <CountWrapper>
+        <SectionWapper>
+          <SectionStar>*</SectionStar>
+          <SectionName main={true} color={'#3c4045'}>
+            닉네임
+          </SectionName>
+        </SectionWapper>
+        <CountText>
+          ( {getNickname ? getNickname.length : 0} / {maxInputLength} )
+        </CountText>
         {message !== null && (
           <SectionName color={messageColor}>{message}</SectionName>
         )}
-      </SectionView>
+      </CountWrapper>
+      {/* section 내용 */}
       <ContentRow>
-        <NicknameWrapper>
-          <Nickname
+        <BodyWrapper>
+          <TextInputView
             maxLength={maxInputLength}
-            placeholderTextColor="#D3D3D3"
+            placeholderTextColor={MIDDLE_GREY}
             placeholder={
               getNickname === '' ? '닉네임을 입력해주세요.' : getNickname
             }
-            onChangeText={onChangeNickname}
             value={getNickname}
+            onChangeText={onChangeNickname}
           />
-          <CountText>
-            {getNickname.length} / {maxInputLength}
-          </CountText>
-        </NicknameWrapper>
+        </BodyWrapper>
         <CheckButton
           activeOpacity={0.6}
           isVerified={isVerified}
@@ -118,16 +143,16 @@ const EditNickname: React.FC<EditNicknameProps> = ({
           <CheckText>중복확인</CheckText>
         </CheckButton>
       </ContentRow>
-    </ContentColumn>
+    </Container>
   );
 };
 
 export default EditNickname;
 
-const ContentColumn = styled.View`
+const Container = styled.View`
   flex-direction: column;
   width: 100%;
-  gap: ${hp(1.7)}px;
+  gap: ${hp(1.3)}px;
 `;
 
 const ContentRow = styled.View`
@@ -135,11 +160,7 @@ const ContentRow = styled.View`
   width: 100%;
   gap: ${wp(1.7)}px;
   align-items: center;
-`;
-
-const SectionView = styled.View`
-  flex-direction: row;
-  align-items: center;
+  justify-content: space-between;
 `;
 
 interface SectionNameProps {
@@ -154,27 +175,8 @@ const SectionName = styled.Text<SectionNameProps>`
   font-family: ${FONT_NAME};
 `;
 
-const NicknameWrapper = styled.View`
-  flex: 1;
-  flex-direction: row;
-  border-width: ${wp(0.3)}px;
-  border-color: ${LIGHT_GREY};
-  border-radius: ${wp(2)}px;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: ${wp(2.8)}px;
-  padding-right: ${wp(2.8)}px;
-`;
-
-const Nickname = styled.TextInput`
-  font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-  width: 80%;
-`;
-
 const CountText = styled.Text`
-  font-size: ${rf(16)}px;
+  font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
   color: ${MIDDLE_GREY};
   text-align: center;
@@ -185,8 +187,8 @@ interface CheckButtonProps {
 }
 
 const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
-  padding-top: ${hp(2)}px;
-  padding-bottom: ${hp(2)}px;
+  padding-top: ${hp(1.9)}px;
+  padding-bottom: ${hp(1.9)}px;
   padding-left: ${wp(1.5)}px;
   padding-right: ${wp(1.5)}px;
   border-radius: ${wp(2)}px;
@@ -198,6 +200,44 @@ const CheckButton = styled.TouchableOpacity<CheckButtonProps>`
 const CheckText = styled.Text`
   text-align: center;
   color: white;
-  font-size: ${AREA_FONT_SIZE}px;
+  font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
+`;
+
+const CountWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${wp(1)}px;
+`;
+
+const SectionWapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${wp(1)}px;
+`;
+
+const SectionStar = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MAIN_COLOR};
+  text-align: center;
+`;
+
+const BodyWrapper = styled.View`
+  flex-direction: column;
+  background-color: ${TEXTINPUTFORM_COLOR};
+  border-radius: ${BUTTON_RADIUS}px;
+  width: 81%;
+  padding: ${wp(2.9)}px;
+`;
+
+const TextInputView = styled.TextInput`
+  font-size: ${rf(16)}px;
+  color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+  padding-right: 0%;
+  padding-top: 0%;
+  padding-bottom: 0%;
+  max-width: 81%;
 `;

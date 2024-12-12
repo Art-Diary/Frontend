@@ -8,7 +8,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import {DEFAULT_TEXT, MAIN_COLOR, TEXTINPUTFORM_COLOR} from '../common/colors';
 
 interface IPicker {
   label: string;
@@ -33,7 +33,10 @@ const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
 
   return (
     <ContentColumn>
-      <SectionName>좋아하는 전시 분야</SectionName>
+      <SectionWapper>
+        <SectionStar>*</SectionStar>
+        <SectionName>좋아하는 전시 분야</SectionName>
+      </SectionWapper>
       <DropDownPicker
         style={pickerStyle.box}
         maxHeight={400} // 최대 높이 설정
@@ -55,13 +58,27 @@ export default EditArtCategory;
 const ContentColumn = styled.View`
   flex-direction: column;
   width: 100%;
-  gap: ${hp(1.7)}px;
+  gap: ${hp(1.3)}px;
 `;
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
+`;
+
+const SectionWapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: space-between; */
+  gap: ${wp(1)}px;
+`;
+
+const SectionStar = styled.Text`
+  font-size: ${rf(16)}px;
+  font-family: ${FONT_NAME};
+  color: ${MAIN_COLOR};
+  text-align: center;
 `;
 
 const pickerStyle = StyleSheet.create({
@@ -71,8 +88,8 @@ const pickerStyle = StyleSheet.create({
     width: '100%',
     borderRadius: wp(2),
     borderWidth: wp(0.3),
-    borderColor: MAIN_COLOR,
-    backgroundColor: BACK_COLOR,
+    borderColor: TEXTINPUTFORM_COLOR,
+    backgroundColor: TEXTINPUTFORM_COLOR,
   },
   artName: {
     paddingLeft: wp(2),

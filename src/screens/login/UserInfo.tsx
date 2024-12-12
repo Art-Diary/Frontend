@@ -36,7 +36,7 @@ export const UserInfo = () => {
           providerType: res.providerType,
           role: res.roleType,
         });
-        navigation.navigate('Main');
+        navigation.navigate('Main', {screen: 'Diary'});
       });
     }
   }, [isFocused]);
