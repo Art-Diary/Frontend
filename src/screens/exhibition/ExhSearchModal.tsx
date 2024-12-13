@@ -379,11 +379,9 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
               {isOptionsModalPressed && (
                 <OptionsModal
                   handleCloseModal={optionsModalClose}
-                  // tkey={selectedOption4}
                   onPressYes={() => onPressYes(selectedStatekey)}
-                  onPressNo={() => onPressNo()}
-                  message="이미 지정된 날짜는 삭제됩니다.
-                  그렇게 할까요?"
+                  message="전시 진행 상황을 선택하겠습니까?"
+                  subMessage="기존에 선택한 날짜는 제외됩니다."
                 />
               )}
             </OptionContainer>

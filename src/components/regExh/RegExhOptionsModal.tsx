@@ -21,24 +21,28 @@ import CustomTouchable from '../common/CustomTouchable';
 import DecisionModal from '../common/modal/DecisionModal';
 
 interface OptionsModalProps {
+  option: 'UPDATE' | 'DELETE';
   handleCloseModal: () => void;
-  message: string;
-  subMessage?: string;
   onPressYes: () => void;
 }
 
-const OptionsModal: React.FC<OptionsModalProps> = ({
+const RegExhOptionsModal: React.FC<OptionsModalProps> = ({
+  option,
   handleCloseModal,
-  message,
-  subMessage,
   onPressYes,
 }) => {
   return (
     <DecisionModal handleCloseModal={handleCloseModal}>
       <Contents>
         <MsgWrapper>
-          <Message>{message}</Message>
-          {subMessage && <MessageSub>{subMessage}</MessageSub>}
+          <Message>
+            {option === 'UPDATE'
+              ? '등록한 전시회 정보를 수정할까요?'
+              : '등록한 전시회 정보를 삭제할까요?'}
+          </Message>
+          {option === 'DELETE' && (
+            <MessageSub>삭제하면 복구할 수 없습니다.</MessageSub>
+          )}
         </MsgWrapper>
         <ButtonSection>
           <ButtonDetailSection>
@@ -48,7 +52,9 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
           </ButtonDetailSection>
           <ButtonDetailSection>
             <CustomTouchable onPress={onPressYes}>
-              <ButtonText isMain>예</ButtonText>
+              <ButtonText isMain>
+                {option === 'UPDATE' ? '수정' : '삭제'}
+              </ButtonText>
             </CustomTouchable>
           </ButtonDetailSection>
         </ButtonSection>
@@ -57,7 +63,7 @@ const OptionsModal: React.FC<OptionsModalProps> = ({
   );
 };
 
-export default OptionsModal;
+export default RegExhOptionsModal;
 
 /** style */
 const Contents = styled.View`
@@ -104,7 +110,7 @@ interface ButtonTextProps {
   isMain: string;
 }
 
-const ButtonText = styled.Text`
+const ButtonText = styled.Text<ButtonTextProps>`
   text-align: center;
   font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};

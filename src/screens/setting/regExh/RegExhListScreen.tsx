@@ -8,36 +8,31 @@ import {
   MIDDLE_GREY,
   BORDER_COLOR,
 } from '~/components/common/colors';
-import {FONT_NAME, BACK_FONT_SIZE, DASH_WIDTH} from '~/components/common/style';
+import {FONT_NAME, DASH_WIDTH} from '~/components/common/style';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {usefetchRegExhs} from '~/api/queries/regexh';
-//import GreyNameTag from '~/components/common/GreyNameTag';
 import ErrorMessageView from '~/components/common/ErrorMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
-//import {BACK_COLOR,  DEFAULT_TEXT} from './colors';
 
 type RootStackParamList = {
-  RegisterNewExhScreen: {isAdmin: boolean};
+  RegExhList: {isAdmin: boolean};
 };
 
-type RegisterNewExhScreenProp = RouteProp<
-  RootStackParamList,
-  'RegisterNewExhScreen'
->;
+type RegisterNewExhScreenProp = RouteProp<RootStackParamList, 'RegExhList'>;
 
 interface Props {
   route: RegisterNewExhScreenProp;
 }
 
-const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
+const RegExhListScreen: React.FC<Props> = ({route}) => {
   const {isAdmin} = route.params;
   const {data, isLoading, isError, isSuccess, refetch} =
     usefetchRegExhs(isAdmin);
@@ -49,19 +44,19 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
   const [numPages, setNumPages] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
   const isFocused = useIsFocused();
-  const [regExhInfo, setRegExhInfo] = useState<any | null>(null);
+  const [regExhInfoList, setRegExhInfoList] = useState<any | null>(null);
 
   useEffect(() => {
     if (isFocused) {
       refetch().then(res => {
-        setRegExhInfo(res.data);
+        setRegExhInfoList(res.data);
       });
     }
   }, [isFocused]);
 
   useEffect(() => {
     if (isSuccess) {
-      setRegExhInfo(data);
+      setRegExhInfoList(data);
       setNumPages(Math.ceil(data.length / limit));
     }
   }, [data, isSuccess]);
@@ -120,21 +115,17 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
-          {regExhInfo &&
-            regExhInfo
+          {regExhInfoList &&
+            regExhInfoList
               .slice(offset, offset + limit)
               .map((item: any, index: number) => (
                 <TouchableOpacity
                   key={index}
                   onPress={() => {
-                    isAdmin
-                      ? navigation.navigate('ConfirmRegExhScreen', {
-                          regExhId: item.regExhId,
-                          forUpdate: false,
-                        })
-                      : navigation.navigate('CheckRegExh', {
-                          regExhId: item.regExhId,
-                        });
+                    navigation.navigate(
+                      isAdmin ? 'ConfirmRegExhByAdmin' : 'CheckRegExhByUser',
+                      {regExhId: item.regExhId},
+                    );
                   }}>
                   <Category>
                     <CategoryNormal>
@@ -186,7 +177,7 @@ const RegisterNewExhScreen: React.FC<Props> = ({route}) => {
   );
 };
 
-export default RegisterNewExhScreen;
+export default RegExhListScreen;
 
 /** style */
 

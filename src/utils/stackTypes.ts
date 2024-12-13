@@ -1,4 +1,4 @@
-import {ExhDetailInfo} from '~/types';
+import {ExhDetailInfo, RegExhDetailInfo} from '~/types';
 
 // types.ts
 export type GatheringStackParamList = {
@@ -48,18 +48,18 @@ export type RootStackParamList = {
     screen: keyof SettingStackParamList;
     params: SettingStackParamList[keyof SettingStackParamList];
   };
-  RegisterNewExhScreen: {
+  RegExhList: {
     isAdmin: boolean;
   };
-  CheckRegExh: {
+  CheckRegExhByUser: {
     regExhId: number;
   };
-  ConfirmRegExhScreen: {
+  ConfirmRegExhByAdmin: {
     regExhId: number;
-    forUpdate: boolean;
   };
-  EditRegExhByUser: {
-    regExhInfo: any;
+  EditRegExh: {
+    regExhInfo: RegExhDetailInfo;
+    role: 'ADMIN' | 'USER_WAIT';
   };
   // calendar
   CalendarDiaryRoutes: {
@@ -82,7 +82,7 @@ export type RootStackParamList = {
   ExhToMoreReview: {
     exhId: number;
   };
-  ExhAddForm: undefined;
+  RegisterNewExh: undefined;
   ExhDetailEdit: {
     exhDetailInfo: ExhDetailInfo;
   };

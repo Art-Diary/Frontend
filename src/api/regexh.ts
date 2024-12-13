@@ -16,27 +16,20 @@ export const fetchRegExhDetail = (regExhId: number, isAdmin: boolean) =>
     params: {isAdmin},
   });
 
-export type UpdateRegExhByAdminType = {
+export type UpdateRegExhType = {
   regExhId: number;
   formData: FormData | null;
 };
 
-export const updateRegExhByAdmin = (updateData: UpdateRegExhByAdminType) => [
+export const updateRegExhByAdmin = (updateData: UpdateRegExhType) =>
   client.patch(`/regexh/${updateData.regExhId}/comments`, updateData.formData, {
     headers: {'Content-Type': 'multipart/form-data'},
-  }),
-];
+  });
 
-export type UpdateRegExhByUserType = {
-  regExhId: number;
-  formData: FormData | null;
-};
-
-export const updateRegExhByUser = (updateData: UpdateRegExhByUserType) => [
+export const updateRegExhByUser = (updateData: UpdateRegExhType) =>
   client.patch(`/regexh/${updateData.regExhId}`, updateData.formData, {
     headers: {'Content-Type': 'multipart/form-data'},
-  }),
-];
+  });
 
 export const deleteRegExh = (regExhId: number) =>
   client.delete(`/regexh/${regExhId}`);

@@ -72,3 +72,20 @@ export type UserDetailInfo = {
   favoriteArt: string;
   profile: string;
 };
+
+export type RegExhDetailInfo = {
+  regExhId: number;
+  regExhName: string;
+  regGallery: string;
+  regExhPeriodStart: string;
+  regExhPeriodEnd: string;
+  regPainter: string;
+  regFee: number;
+  regIntro: string;
+  regUrl: string;
+  regPoster: string;
+  regArt: string;
+  regDate: string;
+  regComment: string;
+  regState: boolean;
+};

@@ -16,7 +16,6 @@ import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {Modal, Pressable, RefreshControl, ScrollView} from 'react-native';
-import ConfirmationModal from '~/components/common/modal/ConfirmationModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
   useTabIdentifierActions,
@@ -34,13 +33,11 @@ import {
   BACK_COLOR,
   DEFAULT_TEXT,
   LIGHT_GREY,
-  MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,
-  BUTTON_PADDING,
   BUTTON_RADIUS,
   DASH_WIDTH,
   FONT_NAME,
@@ -49,7 +46,8 @@ import {Shadow} from 'react-native-shadow-2';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {ExhInfoForList} from '~/types';
-import AddNewMateInGatheringModal from '~/components/gathering/AddNewMateInGatheringModal';
+import AddNewMateInGatheringModal from '~/components/gathering/modal/AddNewMateInGatheringModal';
+import LeaveGatheringModal from '~/components/gathering/modal/LeaveGatheringModal';
 
 const GatheringInfoScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -286,12 +284,10 @@ const GatheringInfoScreen = () => {
       </DeleteTouch> */}
 
       {isDeleteModalOpen && (
-        <ConfirmationModal handleCloseModal={handleCloseModal}>
-          <Message>모임을 나가겠습니까?</Message>
-          <CustomTouchable onPress={handleDeleteGathering}>
-            <DeleteButton>나가기</DeleteButton>
-          </CustomTouchable>
-        </ConfirmationModal>
+        <LeaveGatheringModal
+          handleCloseModal={handleCloseModal}
+          handleLeave={handleDeleteGathering}
+        />
       )}
     </Container>
   );
@@ -375,24 +371,6 @@ const NameText = styled.Text<NameProps>`
   font-size: ${(props: NameProps) =>
     props.isAdd ? `${rf(20)}px` : `${rf(18)}px`};
   color: ${(props: NameProps) => (props.isAdd ? `${MIDDLE_GREY}` : 'white')};
-  font-family: ${FONT_NAME};
-`;
-
-const Message = styled.Text`
-  text-align: center;
-  font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-  padding: ${hp(8)}px;
-`;
-
-const DeleteButton = styled.Text`
-  padding: ${BUTTON_PADDING}px;
-  border-radius: ${BUTTON_RADIUS}px;
-  text-align: center;
-  background-color: ${MAIN_COLOR};
-  color: white;
-  font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};
 `;
 

@@ -40,13 +40,13 @@ import {linking} from './utils/deeplinkConfig';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {LogBox, PermissionsAndroid, Platform} from 'react-native';
 import {setNavigator} from './api/navigationService';
-import ExhAddFormScreen from './screens/exhibition/ExhAddFormScreen';
-import RegisterNewExhScreen from './screens/setting/RegisterNewExhScreen';
-import CheckRegExh from './screens/setting/CheckRegExh';
-import ConfirmRegExhScreen from './screens/setting/ConfirmRegExhScreen';
-import EditRegExhByUser from './screens/setting/EditRegExhByUser';
+import RegisterNewExhScreen from './screens/exhibition/RegisterNewExhScreen';
+import RegExhListScreen from './screens/setting/regExh/RegExhListScreen';
 import ExhDetailEditScreen from './screens/exhibition/ExhDetailEditScreen';
 import CreateExhVisitedDateScreen from './screens/mydiary/CreateExhVisitedDateScreen';
+import ConfirmRegExhByAdminScreen from './screens/setting/regExh/ConfirmRegExhByAdminScreen';
+import CheckRegExhByUserScreen from './screens/setting/regExh/CheckRegExhByUserScreen';
+import EditRegExhScreen from './screens/setting/regExh/EditRegExhScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -157,7 +157,10 @@ export default function App() {
             <Stack.Screen name="ExhToDiaryBack" component={ExhToDiaryBack} />
             <Stack.Screen name="ExhToCal" component={ExhToCal} />
             <Stack.Screen name="ExhToMoreReview" component={ExhToMoreReview} />
-            <Stack.Screen name="ExhAddForm" component={ExhAddFormScreen} />
+            <Stack.Screen
+              name="RegisterNewExh"
+              component={RegisterNewExhScreen}
+            />
             <Stack.Screen
               name="ExhDetailEdit"
               component={ExhDetailEditScreen}
@@ -176,22 +179,19 @@ export default function App() {
             {/* [설정] 프로필 수정, 좋아요, 알림 설정, 회원 탈퇴 */}
             <Stack.Screen name="SettingRoutes" component={SettingRoutes} />
             {/* [설정] 전시회 등록 리스트 확인 화면*/}
+            <Stack.Screen name="RegExhList" component={RegExhListScreen} />
+            {/* [설정] 등록 전시회 상세 정보 확인 화면 - 대기/완료 포함 (사용자)*/}
             <Stack.Screen
-              name="RegisterNewExhScreen"
-              component={RegisterNewExhScreen}
+              name="CheckRegExhByUser"
+              component={CheckRegExhByUserScreen}
             />
             {/* [설정] 등록 전시회 상세 정보 확인 화면 - 대기/완료 포함 (관리자)*/}
             <Stack.Screen
-              name="ConfirmRegExhScreen"
-              component={ConfirmRegExhScreen}
+              name="ConfirmRegExhByAdmin"
+              component={ConfirmRegExhByAdminScreen}
             />
-            {/* [설정] 등록 전시회 상세 정보 확인 화면 - 대기/완료 포함 (사용자)*/}
-            <Stack.Screen name="CheckRegExh" component={CheckRegExh} />
-            {/* [설정] 전시회 등록 수정 화면 (사용자)*/}
-            <Stack.Screen
-              name="EditRegExhByUser"
-              component={EditRegExhByUser}
-            />
+            {/* [설정] 전시회 등록 수정 화면 (사용자/관리자)*/}
+            <Stack.Screen name="EditRegExh" component={EditRegExhScreen} />
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />

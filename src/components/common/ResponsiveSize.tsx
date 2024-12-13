@@ -9,23 +9,23 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-export function widthPercentage(width: number): number {
-  const percentage = (width / 360) * 100;
+// export function widthPercentage(width: number): number {
+//   const percentage = (width / 360) * 100;
 
-  return responsiveScreenWidth(percentage);
-}
+//   return responsiveScreenWidth(percentage);
+// }
 
-export function heightPercentage(height: number): number {
-  const percentage = (height / 640) * 100;
+// export function heightPercentage(height: number): number {
+//   const percentage = (height / 640) * 100;
 
-  return responsiveScreenHeight(percentage);
-}
+//   return responsiveScreenHeight(percentage);
+// }
 
-export function fontPercentage(size: number): number {
-  const percentage = size * 0.135;
+// export function fontPercentage(size: number): number {
+//   const percentage = size * 0.135;
 
-  return responsiveFontSize(percentage);
-}
+//   return responsiveFontSize(percentage);
+// }
 
 // ---------------------
 

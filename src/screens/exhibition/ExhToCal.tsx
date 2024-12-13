@@ -144,7 +144,6 @@ const ExhToCal: React.FC<Props> = ({route}) => {
         <OptionsModal
           handleCloseModal={onPressNo}
           onPressYes={onPressYes}
-          onPressNo={onPressNo}
           message="캘린더로 이동할까요?"
         />
       )}
@@ -152,7 +151,6 @@ const ExhToCal: React.FC<Props> = ({route}) => {
         <OptionsModal
           handleCloseModal={onPressCheckNo}
           onPressYes={onPressCheckYes}
-          onPressNo={onPressCheckNo}
           message="해당 날짜로 정하겠습니까?"
         />
       )}
