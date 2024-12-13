@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateRegExh} from '~/api/queries/regexh';
-import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
+import EditExhFormFrame from '~/components/common/exhibition/EditExhFormFrame';
 import RegExhPreviewModal from './RegExhPreviewModal';
 
 const RegisterNewExhScreen = () => {
@@ -62,8 +62,8 @@ const RegisterNewExhScreen = () => {
 
   return (
     <>
-      <ExhFormFrame
-        formState={'create'}
+      <EditExhFormFrame
+        formState={'createByUser'}
         exhData={{
           exhName: regExhName,
           setExhName: setRegExhName,

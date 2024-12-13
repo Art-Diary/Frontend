@@ -18,20 +18,14 @@ import {
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
 
-interface TextInputFormProps {
-  title: string;
-  isEssential?: boolean;
+interface FormProps {
   maxLen?: number;
-  multiLine?: boolean;
   keyword: string;
   handleKeyword: (text: string) => void;
 }
 
-const TextInputForm: React.FC<TextInputFormProps> = ({
-  title,
-  isEssential,
+const EditExhFeeForm: React.FC<FormProps> = ({
   maxLen,
-  multiLine,
   keyword,
   handleKeyword,
 }) => {
@@ -41,34 +35,28 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
 
   return (
     <Container>
-      {/* section 제목 */}
-      <CountWrapper>
-        <SectionWapper>
-          {isEssential && <SectionStar>*</SectionStar>}
-          <SectionName>{title}</SectionName>
-        </SectionWapper>
-        {maxLen && (
-          <CountText>
-            ( {keyword ? keyword.length : 0} / {maxLen} )
-          </CountText>
-        )}
-      </CountWrapper>
+      {/* section 날짜 */}
+      <SectionWapper>
+        <SectionStar>*</SectionStar>
+        <SectionName>전시회 관람료</SectionName>
+      </SectionWapper>
       {/* section 내용 */}
       <BodyWrapper>
         <TextInputView
-          multiline={multiLine}
+          keyboardType="numeric"
           maxLength={maxLen}
           placeholderTextColor={MIDDLE_GREY}
-          placeholder={!keyword ? title : ''}
-          value={keyword}
+          placeholder={!keyword ? '입력' : ''}
           onChangeText={onChangeKeyword}
+          value={keyword}
         />
+        <SectionName color={'default'}>원</SectionName>
       </BodyWrapper>
     </Container>
   );
 };
 
-export default TextInputForm;
+export default EditExhFeeForm;
 
 /** style */
 const Container = styled.View`
@@ -76,6 +64,7 @@ const Container = styled.View`
   width: 100%;
   background-color: ${BACK_COLOR};
   gap: ${hp(1.3)}px;
+  justify-content: space-between;
 `;
 
 const SectionName = styled.Text`
@@ -84,23 +73,9 @@ const SectionName = styled.Text`
   font-family: ${FONT_NAME};
 `;
 
-const CountText = styled.Text`
-  font-size: ${rf(16)}px;
-  font-family: ${FONT_NAME};
-  color: ${MIDDLE_GREY};
-  text-align: center;
-`;
-
-const CountWrapper = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: ${wp(1)}px;
-`;
-
 const SectionWapper = styled.View`
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   gap: ${wp(1)}px;
 `;
 
@@ -112,18 +87,19 @@ const SectionStar = styled.Text`
 `;
 
 const BodyWrapper = styled.View`
-  flex-direction: column;
+  flex-direction: row;
   background-color: ${TEXTINPUTFORM_COLOR};
   border-radius: ${BUTTON_RADIUS}px;
   width: 100%;
   padding: ${wp(2.9)}px;
+  align-items: center;
 `;
 
 const TextInputView = styled.TextInput`
   font-size: ${rf(16)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  padding-right: 0%;
+  padding-right: 3%;
   padding-top: 0%;
   padding-bottom: 0%;
   max-width: 97%;

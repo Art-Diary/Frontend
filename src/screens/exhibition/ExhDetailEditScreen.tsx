@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {showToast} from '~/components/common/modal/toastConfig';
-import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
+import EditExhFormFrame from '~/components/common/exhibition/EditExhFormFrame';
 import {useUpdateExhDetailInfo} from '~/api/queries/exhibition';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {ExhDetailInfo} from '~/types';
@@ -24,6 +24,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
   const [url, setUrl] = useState<string | undefined>(undefined);
   const [intro, setIntro] = useState<string | undefined>(undefined);
   const [posterUri, setPosterUri] = useState<string | undefined>(undefined);
+  const [art, setArt] = useState<string>('');
   // update exh detail by admin api
   const {
     mutate: updateExhDetailInfo,
@@ -42,6 +43,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
       setUrl(exhDetailInfo.url);
       setIntro(exhDetailInfo.intro);
       setPosterUri(exhDetailInfo.poster);
+      setArt(exhDetailInfo.art);
     }
   }, [exhDetailInfo]);
   useEffect(() => {
@@ -53,7 +55,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
     }
   }, [isError, isSuccess]);
   return (
-    <ExhFormFrame
+    <EditExhFormFrame
       formState={'updateExhDetailByAdmin'}
       exhData={{
         exhName,
@@ -74,6 +76,8 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
         setIntro,
         posterUri,
         setPosterUri,
+        art,
+        setArt,
       }}
       requestData={{
         isLoading: isLoading,
