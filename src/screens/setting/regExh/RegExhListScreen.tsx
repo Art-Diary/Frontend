@@ -138,10 +138,12 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
                       <RExhDate>{item.regDate}</RExhDate>
                     </CategoryExhDate>
                     <CategoryNormal>
-                      {item.regState ? (
+                      {item.regState === '완료' ? (
                         <RExhStateTrue>{'완료'}</RExhStateTrue>
-                      ) : (
+                      ) : item.regState === '대기' ? (
                         <RExhStateFalse>{'대기'}</RExhStateFalse>
+                      ) : (
+                        <RExhStateFalse>{'실패'}</RExhStateFalse>
                       )}
                     </CategoryNormal>
                   </Category>

@@ -56,7 +56,7 @@ const CheckRegExhByUserScreen: React.FC<Props> = ({route}) => {
       {regExhInfo && (
         // 사용자 확인용 - 등록된 전시회 확인 페이지
         <RegExhDetailFormat
-          role={regExhInfo.regState ? 'USER_COMPLETE' : 'USER_WAIT'}
+          role={regExhInfo.regState === '대기' ? 'USER_WAIT' : 'USER_COMPLETE'}
           regExhInfo={regExhInfo}
           refetch={refetch}
         />

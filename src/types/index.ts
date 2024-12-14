@@ -87,5 +87,5 @@ export type RegExhDetailInfo = {
   regArt: string;
   regDate: string;
   regComment: string;
-  regState: boolean;
+  regState: string;
 };

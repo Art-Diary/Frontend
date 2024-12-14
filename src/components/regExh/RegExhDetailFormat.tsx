@@ -192,30 +192,30 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
             <Title>{'등록현황'}</Title>
             <StateView>
               <StateText>{'등록현황'}</StateText>
-              {regExhInfo.regState ? (
+              {regExhInfo.regState === '완료' ? (
                 <CompletedText>{'등록 완료'}</CompletedText>
-              ) : (
+              ) : regExhInfo.regState === '대기' ? (
                 <StandbyText>{'등록 대기'}</StandbyText>
+              ) : (
+                <StandbyText>{'등록 실패'}</StandbyText>
               )}
             </StateView>
             <StateView>
               <StateText>{'등록 요청 날짜'}</StateText>
               <RegDateText>{regExhInfo.regDate}</RegDateText>
             </StateView>
-            {role !== 'USER_WAIT' && regExhInfo.regState && (
+            {role !== 'USER_WAIT' && regExhInfo.regState !== '대기' && (
               <StateCommentView>
                 <StateView>
                   <StateText>{'코멘트'}</StateText>
                 </StateView>
                 <CommentView>
                   <RegDateText>
-                    {regExhInfo.regComment ?? '전시 등록 완료'}
+                    {regExhInfo.regState === '완료' &&
+                      (regExhInfo.regComment ?? '전시 등록 완료')}
+                    {regExhInfo.regState === '실패' &&
+                      (regExhInfo.regComment ?? '전시 등록 실패')}
                   </RegDateText>
-                  {/* <CommentBorderView>
-                    <RegDateText>
-                      {regExhInfo.regComment ?? '전시 등록 완료'}
-                    </RegDateText>
-                  </CommentBorderView> */}
                 </CommentView>
               </StateCommentView>
             )}

@@ -51,6 +51,7 @@ type ExhDataSetType = {
   regComment?: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
   art?: string;
   setArt?: React.Dispatch<React.SetStateAction<string>>;
+  regState?: string;
 };
 
 type CreateApiType = {
@@ -164,6 +165,14 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
       showToast('전시회 포스터를 첨부해주세요.');
       return;
     }
+    // 등록 현황
+    if (
+      formState === 'updateByAdmin' &&
+      (!exhData.regState || checkBlankInKeyword(exhData.regState))
+    ) {
+      showToast('등록 현황을 선택해주세요.');
+      return;
+    }
     makeFormData();
   };
 
@@ -193,6 +202,8 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
     formData.append(exhInfoName.endDate, changeDotToHyphen(exhData.endDate));
     formData.append(exhInfoName.fee, Number(exhData.fee));
     // 선택 데이터
+    if (formState === 'updateByAdmin')
+      formData.append('regState', exhData.regState);
     if (formState === 'updateExhDetailByAdmin' || formState === 'updateByAdmin')
       formData.append(exhInfoName.art, exhData.art);
     if (exhData.painter) formData.append(exhInfoName.painter, exhData.painter);

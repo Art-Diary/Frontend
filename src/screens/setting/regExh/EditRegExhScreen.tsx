@@ -9,6 +9,18 @@ import {
 import EditExhFormFrame from '~/components/common/exhibition/EditExhFormFrame';
 import {RegExhDetailInfo} from '~/types';
 import TextInputForm from '~/components/common/TextInputForm';
+import styled from 'styled-components/native';
+import {BUTTON_PADDING, FONT_NAME} from '~/components/common/style';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  TEXTINPUTFORM_COLOR,
+} from '~/components/common/colors';
+import {
+  responseFont as rf,
+  heightSizePercentage as hp,
+  widthSizePercentage as wp,
+} from '~/components/common/ResponsiveSize';
 
 type RootStackParamList = {
   EditRegExh: {
@@ -40,6 +52,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
   );
   const [regComment, setRegComment] = useState<string | undefined>(undefined);
   const [regArt, setRegArt] = useState<string>('');
+  const [regState, setRegState] = useState<string>('');
 
   // update by admin api
   const {
@@ -69,6 +82,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
       setRegPosterUri(regExhInfo.regPoster);
       setRegComment(regExhInfo.regComment);
       setRegArt(regExhInfo.regArt);
+      setRegState(regExhInfo.regState);
     }
   }, [regExhInfo]);
 
@@ -92,6 +106,24 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
       navigation.goBack();
     }
   }, [isErrorByUser, isSuccessByUser]);
+
+  const handleComplete = () => {
+    const state: string = '완료';
+    if (regState === state) {
+      setRegState('');
+    } else {
+      setRegState(state);
+    }
+  };
+
+  const handleFail = () => {
+    const state: string = '실패';
+    if (regState === state) {
+      setRegState('');
+    } else {
+      setRegState(state);
+    }
+  };
 
   return (
     <EditExhFormFrame
@@ -118,6 +150,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
         regComment,
         art: regArt,
         setArt: setRegArt,
+        regState,
       }}
       requestData={{
         isLoading: role === 'ADMIN' ? isLoadingByAdmin : isLoadingByUser,
@@ -128,15 +161,52 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
         },
       }}>
       {role === 'ADMIN' && (
-        <TextInputForm
-          title={'코멘트'}
-          multiLine
-          keyword={regComment ?? ''}
-          handleKeyword={setRegComment}
-        />
+        <>
+          <TextInputForm
+            title={'코멘트'}
+            multiLine
+            keyword={regComment ?? ''}
+            handleKeyword={setRegComment}
+          />
+          <ButtonWrapper>
+            <ButtonView activeOpacity={0.6} onPress={handleComplete}>
+              <ButtonText state={regState === '완료'}>완료</ButtonText>
+            </ButtonView>
+            <ButtonView activeOpacity={0.6} onPress={handleFail}>
+              <ButtonText state={regState === '실패'}>실패</ButtonText>
+            </ButtonView>
+          </ButtonWrapper>
+        </>
       )}
     </EditExhFormFrame>
   );
 };
 
 export default EditRegExhScreen;
+
+/** style */
+const ButtonWrapper = styled.View`
+  flex-direction: row;
+  width: 100%;
+  gap: ${hp(1.6)}px;
+  justify-content: space-between;
+`;
+
+const ButtonView = styled.TouchableOpacity`
+  width: 48.3%;
+`;
+
+interface ButtonTextProps {
+  state: boolean;
+}
+
+const ButtonText = styled.Text<ButtonTextProps>`
+  background-color: ${(props: ButtonTextProps) =>
+    props.state ? `${TEXTINPUTFORM_COLOR}` : `${LIGHT_GREY}`};
+  padding: ${BUTTON_PADDING}px;
+  border-radius: ${wp(5)}px;
+  text-align: center;
+  color: ${DEFAULT_TEXT};
+  font-size: ${rf(15)}px;
+  font-family: ${FONT_NAME};
+`;
