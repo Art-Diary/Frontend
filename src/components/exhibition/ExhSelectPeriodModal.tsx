@@ -23,7 +23,6 @@ import {BackButtonIcon} from '~/components/common/icon';
 import ExhSelectPeriodCalendar from './ExhSelectPeriodCalendar';
 
 interface ExhSelectPeriodProps {
-  isVisible: boolean;
   onClose: () => void;
   startPeriod: string;
   endPeriod: string;
@@ -31,7 +30,6 @@ interface ExhSelectPeriodProps {
 }
 
 const ExhSelectPeriod: React.FC<ExhSelectPeriodProps> = ({
-  isVisible,
   onClose,
   startPeriod,
   endPeriod,
@@ -51,7 +49,7 @@ const ExhSelectPeriod: React.FC<ExhSelectPeriodProps> = ({
   };
 
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible}>
+    <Modal animationType="fade" transparent={true} onRequestClose={onClose}>
       <Container>
         <Backview>
           <CustomTouchable onPress={onClose}>

@@ -237,7 +237,7 @@ const DateView = styled.View<DateViewProps>`
   padding-right: ${wp(2)}px;
   background-color: ${(props: DateViewProps) =>
     props.isSelected ? '#fde2e0' : `${BACK_COLOR}`};
-  border-radius: ${wp(5)}px;
+  border-radius: ${wp(4)}px;
   width: 100%;
 `;
 

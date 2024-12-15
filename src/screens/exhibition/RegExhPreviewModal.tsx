@@ -27,20 +27,18 @@ type RegExhDataType = {
 };
 
 interface RegExhPreviewModalProps {
-  isVisible: boolean;
   onClose: () => void;
   regExhData: RegExhDataType;
   createApi: () => void;
 }
 
 const RegExhPreviewModal: React.FC<RegExhPreviewModalProps> = ({
-  isVisible,
   onClose,
   regExhData,
   createApi,
 }) => {
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible}>
+    <Modal animationType="fade" transparent={true} onRequestClose={onClose}>
       <Container>
         <Backview>
           <CustomTouchable onPress={onClose}>

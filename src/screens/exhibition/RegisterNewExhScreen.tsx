@@ -94,7 +94,6 @@ const RegisterNewExhScreen = () => {
       />
       {isPreviewModalOpen && (
         <RegExhPreviewModal
-          isVisible={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
           regExhData={{
             regExhName,
