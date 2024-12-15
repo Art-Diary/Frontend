@@ -151,7 +151,7 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
           {!regExhInfoList || regExhInfoList.length === 0 ? (
-            <ErrorMessageView message="검색 결과가 없습니다." />
+            <ErrorMessageView message="등록한 전시회가 없습니다." />
           ) : (
             <>
               {regExhInfoList
