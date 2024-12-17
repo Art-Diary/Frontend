@@ -185,36 +185,6 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
                 ))}
             </>
           )}
-          {regExhInfoList &&
-            regExhInfoList
-              .slice(offset, offset + limit)
-              .map((item: any, index: number) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    navigation.navigate(
-                      isAdmin ? 'ConfirmRegExhByAdmin' : 'CheckRegExhByUser',
-                      {regExhId: item.regExhId},
-                    );
-                  }}>
-                  <Category>
-                    <CategoryNormal>
-                      <RExhNumber>{item.no}</RExhNumber>
-                    </CategoryNormal>
-                    <CategoryExhName>
-                      <RExhName numberOfLines={1}>{item.regExhName}</RExhName>
-                    </CategoryExhName>
-                    <CategoryExhDate>
-                      <RExhDate>{item.regDate}</RExhDate>
-                    </CategoryExhDate>
-                    <CategoryNormal>
-                      <RExhStateText state={item.regState}>
-                        {item.regState}
-                      </RExhStateText>
-                    </CategoryNormal>
-                  </Category>
-                </TouchableOpacity>
-              ))}
         </ScrollView>
         {regExhInfoList && regExhInfoList.length !== 0 && (
           <PageNumberView>
