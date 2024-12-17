@@ -18,15 +18,11 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import CalendarSelectDateFrame from '~/components/common/CalendarSelectDateFrame';
 
 interface ExhSearchByDateProps {
-  isVisible: boolean;
   date: string | null;
   onClose: () => void;
 }
 
-const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
-  isVisible,
-  onClose,
-}) => {
+const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({onClose}) => {
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   const {date: dateFromExhInfo} = useDateFromExhInfo();
@@ -40,7 +36,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
   };
 
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible}>
+    <Modal animationType="fade" transparent={true} onRequestClose={onClose}>
       <Container>
         <Backview>
           <CustomTouchable onPress={onClose}>

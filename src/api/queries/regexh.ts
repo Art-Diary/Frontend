@@ -1,5 +1,10 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {useMutation, UseMutationResult, useQuery} from 'react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 import {
   createRegExh,
   deleteRegExh,
@@ -39,6 +44,8 @@ export const useCreateRegExh = (): UseMutationResult<
   FormData | null,
   unknown
 > => {
+  const queryClient = useQueryClient();
+
   return useMutation<any, any, FormData | null, unknown>({
     mutationFn: (formData: FormData | null) => createRegExh(formData),
     onError: err => {
@@ -46,6 +53,9 @@ export const useCreateRegExh = (): UseMutationResult<
       console.log('[ExhAddFormScreen] error create ExhAddForm');
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(
+        regexhQueryKeys.fetchRegExhs(false).queryKey,
+      );
       console.log('[ExhAddFormScreen] success create ExhAddForm');
     },
   });

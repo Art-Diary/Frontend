@@ -369,7 +369,6 @@ const ExhListScreen = () => {
               <ExhSearchModal
                 title={'전시 분류 카테고리'}
                 x={'X'}
-                isVisible={isModalVisible}
                 field={selectedField}
                 price={selectedPrice}
                 state={selectedState}
@@ -387,7 +386,6 @@ const ExhListScreen = () => {
             <SearchDateCalendarIcon />
             {isCalendarModalVisible && (
               <ExhSearchByDate
-                isVisible={isCalendarModalVisible}
                 date={selectedDate}
                 onClose={handleCalendarModalClose}
               />

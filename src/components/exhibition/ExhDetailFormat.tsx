@@ -34,7 +34,7 @@ interface ExhDetailData {
 
 interface Props {
   data: ExhDetailData;
-  state: string;
+  state: '미리보기' | '전시정보';
   exhId: number | null;
   modalOpen?: boolean;
 }
@@ -127,7 +127,9 @@ const ExhDetailFormat: React.FC<Props> = ({data, state, exhId, modalOpen}) => {
             )}
           </InfoListView>
           {/* 소개 */}
-          <ExhDetailInfoIntro intro={data.intro} modalOpen={modalOpen} />
+          {state === '전시정보' && (
+            <ExhDetailInfoIntro intro={data.intro} modalOpen={modalOpen} />
+          )}
         </>
       )}
     </Container>
@@ -148,24 +150,6 @@ const Title = styled.Text`
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
   line-height: ${wp(8)}px;
-`;
-
-const TopLayer = styled.View`
-  flex-direction: row;
-  justify-content: space-between; // 양 끝으로 버튼 배치
-  align-items: center;
-  padding-left: ${wp(3)}px;
-  padding-right: ${wp(3)}px;
-  padding-top: ${wp(2.3)}px;
-  padding-bottom: ${wp(2)}px;
-  width: 100%;
-`;
-
-const IconView = styled.View`
-  flex-direction: row;
-  gap: ${wp(2)}px;
-  justify-content: center;
-  align-items: center;
 `;
 
 // poster section

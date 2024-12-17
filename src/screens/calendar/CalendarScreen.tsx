@@ -147,6 +147,7 @@ const CalendarScreen = () => {
             />
           </CalendarWrapper>
           <ExhListOfDayInCalendar
+            solo={gatherId < 0}
             selectedDateInfo={{
               selectedDate,
               year: Number(changeMonth.split('.')[0]),

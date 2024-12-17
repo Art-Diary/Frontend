@@ -287,7 +287,6 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
           />
           {isPeriodModalVisible && (
             <ExhSelectPeriod
-              isVisible={isPeriodModalVisible}
               onClose={handleClosePeriodModal}
               startPeriod={exhData.startDate}
               endPeriod={exhData.endDate}

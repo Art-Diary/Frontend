@@ -27,7 +27,6 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 interface ExhSearchProps {
   title: string; // title prop의 타입을 문자열로 지정
   x: string;
-  isVisible: boolean;
   field: string[] | null;
   price: string | null;
   state: string[] | null;
@@ -43,7 +42,6 @@ interface ExhSearchProps {
 const ExhSearchModal: React.FC<ExhSearchProps> = ({
   title,
   x,
-  isVisible,
   field,
   price,
   state,
@@ -324,7 +322,10 @@ const ExhSearchModal: React.FC<ExhSearchProps> = ({
   };
 
   return (
-    <Modal animationType="fade" transparent={true} visible={isVisible}>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      onRequestClose={() => handleConfirm(field, price, state, date)}>
       {/* onRequestClose={() => onClose}> */}
       <Container>
         <ModalHeader>
