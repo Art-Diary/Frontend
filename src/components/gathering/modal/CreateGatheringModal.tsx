@@ -24,7 +24,7 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import InfoModal from '../common/modal/InfoModal';
+import InfoModal from '../../common/modal/InfoModal';
 
 interface Props {
   handleCloseModal: () => void;

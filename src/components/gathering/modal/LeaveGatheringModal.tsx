@@ -1,12 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
-import {useDeleteMyDiary} from '~/api/queries/mydiary';
 import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
-import {showToast} from '~/components/common/modal/toastConfig';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
@@ -19,71 +17,34 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import DecisionModal from '../../modal/DecisionModal';
-
-type DeleteInfo = {
-  exhId: number;
-  diaryId: number;
-};
+import DecisionModal from '~/components/common/modal/DecisionModal';
 
 interface DeleteDiaryModalProps {
-  deleteInfo: DeleteInfo;
   handleCloseModal: () => void;
-  handleSuccessDelete: () => void;
+  handleLeave: () => void;
 }
 
-const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
-  deleteInfo,
+const LeaveGatheringModal: React.FC<DeleteDiaryModalProps> = ({
   handleCloseModal,
-  handleSuccessDelete,
+  handleLeave,
 }) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const tabIdentifierInfo = useTabIdentifierInfo();
-  const {
-    mutate: deleteMyDiary,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useDeleteMyDiary(deleteInfo.exhId, deleteInfo.diaryId);
-
-  useEffect(() => {
-    if (isError) {
-      handleCloseModal();
-      showToast('에러 발생 ;(');
-    }
-    if (isSuccess) {
-      handleCloseModal();
-      showToast('기록을 삭제했습니다.');
-      handleSuccessDelete();
-      if (
-        tabIdentifierInfo.tab === 'exhibition' ||
-        tabIdentifierInfo.tab === 'exhibitionMoreReview'
-      ) {
-        navigation.goBack();
-      }
-    }
-  }, [isError, isSuccess, handleCloseModal]);
-
   return (
     <DecisionModal handleCloseModal={handleCloseModal}>
       <Contents>
         <MsgWrapper>
-          <Message>기록을 삭제하겠습니까?</Message>
-          <MessageSub>삭제하면 복구할 수 없습니다.</MessageSub>
+          <Message>모임을 나가겠습니까?</Message>
+          <MessageSub>나가면 초대받기 전까지 입장할 수 없습니다.</MessageSub>
         </MsgWrapper>
         <ButtonSection>
           <ButtonDetailSection>
             <CustomTouchable onPress={handleCloseModal}>
-              <DeleteButton>닫기</DeleteButton>
+              <LeaveButton>닫기</LeaveButton>
             </CustomTouchable>
           </ButtonDetailSection>
           <ButtonDetailSection>
-            <CustomTouchable onPress={() => deleteMyDiary()}>
-              <DeleteButton isMain>삭제</DeleteButton>
+            <CustomTouchable onPress={handleLeave}>
+              <LeaveButton isMain>나가기</LeaveButton>
             </CustomTouchable>
           </ButtonDetailSection>
         </ButtonSection>
@@ -92,7 +53,7 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   );
 };
 
-export default DeleteDiaryModal;
+export default LeaveGatheringModal;
 
 /** style */
 const Contents = styled.View`
@@ -139,7 +100,7 @@ interface ButtonTextProps {
   isMain: string;
 }
 
-const DeleteButton = styled.Text`
+const LeaveButton = styled.Text`
   text-align: center;
   font-size: ${BUTTON_FONT_SIZE}px;
   font-family: ${FONT_NAME};

@@ -396,9 +396,8 @@ const ExhListScreen = () => {
               <OptionsModal
                 handleCloseModal={optionsModalClose}
                 onPressYes={() => onPressYes()}
-                onPressNo={() => onPressNo()}
-                message="이미 지정된 전시 진행 상황은 삭제됩니다. 
-              그렇게 할까요?"
+                message="날짜 선택을 하시겠습니까?"
+                subMessage="기존에 선택한 전시 진행 상황은 제외됩니다."
               />
             )}
           </CustomTouchable>

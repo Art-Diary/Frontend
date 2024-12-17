@@ -1,19 +1,13 @@
 import {createQueryKeys} from '@lukemorales/query-key-factory';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  UseMutationResult,
-} from 'react-query';
+import {useMutation, UseMutationResult, useQuery} from 'react-query';
 import {
   createRegExh,
   deleteRegExh,
   fetchRegExhDetail,
   fetchRegExhs,
   updateRegExhByAdmin,
-  UpdateRegExhByAdminType,
   updateRegExhByUser,
-  UpdateRegExhByUserType,
+  UpdateRegExhType,
 } from '../regexh';
 
 export const regexhQueryKeys = createQueryKeys('regexh', {
@@ -88,13 +82,11 @@ export const useDeleteRegExh = (regExhId: number) => {
 export const useUpdateRegExhByAdmin = (): UseMutationResult<
   any,
   any,
-  UpdateRegExhByAdminType,
+  UpdateRegExhType,
   unknown
 > => {
-  // const queryClient = useQueryClient();
-
-  return useMutation<any, any, UpdateRegExhByAdminType, unknown>({
-    mutationFn: (updateData: UpdateRegExhByAdminType) =>
+  return useMutation<any, any, UpdateRegExhType, unknown>({
+    mutationFn: (updateData: UpdateRegExhType) =>
       updateRegExhByAdmin(updateData),
     onError: err => {
       console.log(err);
@@ -102,7 +94,6 @@ export const useUpdateRegExhByAdmin = (): UseMutationResult<
     },
     onSuccess: () => {
       console.log('[UpdateRegExhByAdmin] success update RegExhByAdmin');
-      // TODO queryClient.invalidateQueries();
     },
   });
 };
@@ -110,21 +101,18 @@ export const useUpdateRegExhByAdmin = (): UseMutationResult<
 export const useUpdateRegExhByUser = (): UseMutationResult<
   any,
   any,
-  UpdateRegExhByUserType,
+  UpdateRegExhType,
   unknown
 > => {
-  const queryClient = useQueryClient();
-
-  return useMutation<any, any, UpdateRegExhByUserType, unknown>({
-    mutationFn: (updateData: UpdateRegExhByUserType) =>
+  return useMutation<any, any, UpdateRegExhType, unknown>({
+    mutationFn: (updateData: UpdateRegExhType) =>
       updateRegExhByUser(updateData),
     onError: err => {
       console.log(err);
-      console.log('[ExhAddFormScreen] error create ExhAddForm By User');
+      console.log('[UpdateRegExhByUser] error update RegExhByUser');
     },
     onSuccess: () => {
-      console.log('[ExhAddFormScreen] success create ExhAddForm By User');
-      // TODO queryClient.invalidateQueries();
+      console.log('[UpdateRegExhByUser] success update RegExhByUser');
     },
   });
 };

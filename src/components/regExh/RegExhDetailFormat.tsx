@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {BackHandler, RefreshControl} from 'react-native';
+import {RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -10,7 +10,11 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import {BackButtonIcon, EditRegExhIcon} from '~/components/common/icon';
+import {
+  BackButtonIcon,
+  EditRegExhIcon,
+  TrashRegExhIcon,
+} from '~/components/common/icon';
 import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
@@ -25,28 +29,33 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from 'react-query';
-import RegExhOptionsModal from '~/components/exhibition/RegExhOptionsModal';
+import RegExhOptionsModal from '~/components/regExh/RegExhOptionsModal';
+import {useDeleteRegExh} from '~/api/queries/regexh';
+import {showToast} from '../common/modal/toastConfig';
+import {RegExhDetailInfo} from '~/types';
 
 interface Props {
-  regExhId: number;
-  regExhInfo: any;
+  role: 'ADMIN' | 'USER_WAIT' | 'USER_COMPLETE';
+  regExhInfo: RegExhDetailInfo;
   refetch: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined,
   ) => Promise<QueryObserverResult<any, unknown>>;
-  handleMoveToUpdatePage: () => void;
 }
 
-const ShowConfirmedRegExh: React.FC<Props> = ({
-  regExhId,
-  regExhInfo,
-  refetch,
-  handleMoveToUpdatePage,
-}) => {
+const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
-  const [isEditModal, setIsEditModal] = useState<boolean>(false);
+  const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+  const [openTrashModal, setOpenTrashModal] = useState<boolean>(false);
 
   const [refreshing, setRefreshing] = useState(false);
+  //삭제
+  const {
+    mutate: deleteRegExh,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useDeleteRegExh(regExhInfo.regExhId);
 
   useEffect(() => {
     if (isFocused) {
@@ -70,34 +79,51 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
     setRefreshing(true);
   };
 
-  const handlePressBack = () => {
-    //BackButton
-    if (navigation?.canGoBack()) {
-      navigation.goBack();
-      return true;
+  useEffect(() => {
+    if (isError) {
+      showToast('삭제 실패. 다시 시도하세요');
     }
+    if (isSuccess) {
+      // 설정 페이지의 등록한 전시회 페이지로 이동
+      setOpenTrashModal(false);
+      showToast('성공적으로 삭제됐습니다.');
+      navigation.goBack();
+    }
+  }, [isError, isSuccess]);
+
+  const handlePressBack = () => {
+    navigation.goBack();
   };
 
-  useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', handlePressBack);
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handlePressBack);
-    };
-  }, [handlePressBack]);
+  const onPressOpenEditModal = () => {
+    setOpenEditModal(true);
+  };
 
-  const openEditModal = () => {
-    setIsEditModal(true);
+  const onPressCloseEditModal = () => {
+    setOpenEditModal(false);
   };
 
   const onPressEditYes = () => {
-    setIsEditModal(false);
+    setOpenEditModal(false);
 
     //수정페이지이동
-    handleMoveToUpdatePage();
+    navigation.navigate('EditRegExh', {
+      regExhInfo,
+      role: role === 'ADMIN' ? 'ADMIN' : 'USER_WAIT',
+    });
   };
 
-  const onPressEditNo = () => {
-    setIsEditModal(false);
+  const onPressOpenTrashModal = () => {
+    setOpenTrashModal(true);
+  };
+
+  const onPressCloseTrashModal = () => {
+    setOpenTrashModal(false);
+  };
+
+  const onPressTrashYes = () => {
+    //삭제
+    deleteRegExh();
   };
 
   return (
@@ -117,19 +143,30 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
               <Title> {'전시회 등록 확인'}</Title>
             </TopCenterView>
             <OptionVeiw>
-              <CustomTouchable onPress={openEditModal}>
-                {isEditModal && (
-                  <RegExhOptionsModal
-                    handleCloseModal={onPressEditNo}
-                    onPressYes={() => onPressEditYes()}
-                    onPressNo={() => onPressEditNo()}
-                    message="등록한 전시회 정보를 수정할까요?"
-                    yes="예"
-                    no="아니오"
-                  />
-                )}
-                <EditRegExhIcon />
-              </CustomTouchable>
+              {role !== 'USER_COMPLETE' && (
+                <CustomTouchable onPress={onPressOpenEditModal}>
+                  {openEditModal && (
+                    <RegExhOptionsModal
+                      option={'UPDATE'}
+                      handleCloseModal={onPressCloseEditModal}
+                      onPressYes={onPressEditYes}
+                    />
+                  )}
+                  <EditRegExhIcon />
+                </CustomTouchable>
+              )}
+              {role === 'USER_WAIT' && (
+                <CustomTouchable onPress={onPressOpenTrashModal}>
+                  <TrashRegExhIcon />
+                  {openTrashModal && (
+                    <RegExhOptionsModal
+                      option={'DELETE'}
+                      handleCloseModal={onPressCloseTrashModal}
+                      onPressYes={() => onPressTrashYes()}
+                    />
+                  )}
+                </CustomTouchable>
+              )}
             </OptionVeiw>
           </TopLayer>
           {/**전시 상세정보 */}
@@ -150,7 +187,6 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
             exhId={null}
           />
           {/*전시 등록 현황 */}
-          {/* TODO 공통 컴포넌트로 분리되면 수정 */}
           <RegExhStateView>
             <Title>{'등록현황'}</Title>
             <StateView>
@@ -184,7 +220,7 @@ const ShowConfirmedRegExh: React.FC<Props> = ({
   );
 };
 
-export default ShowConfirmedRegExh;
+export default RegExhDetailFormat;
 
 /** style */
 const ContainerScroll = styled.ScrollView`

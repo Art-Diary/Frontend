@@ -6,7 +6,7 @@ import {useCreateRegExh} from '~/api/queries/regexh';
 import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
 import RegExhPreviewModal from './RegExhPreviewModal';
 
-const ExhAddFormScreen = () => {
+const RegisterNewExhScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [regExhName, setRegExhName] = useState<string>('');
   const [regGallery, setRegGallery] = useState<string>('');
@@ -52,7 +52,7 @@ const ExhAddFormScreen = () => {
             },
           },
           {
-            name: 'RegisterNewExhScreen',
+            name: 'RegExhList',
             params: {isAdmin: false},
           },
         ],
@@ -114,4 +114,4 @@ const ExhAddFormScreen = () => {
   );
 };
 
-export default ExhAddFormScreen;
+export default RegisterNewExhScreen;

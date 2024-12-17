@@ -37,8 +37,8 @@ import {changeImageSize} from '~/utils/resizeImage';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
 import ExhSelectPeriod from './ExhSelectPeriodModal';
-import {UpdateRegExhByAdminType, UpdateRegExhByUserType} from '~/api/regexh';
 import {UpdateExhDetailType} from '~/api/exhibition';
+import {UpdateRegExhType} from '~/api/regexh';
 
 type ExhDataSetType = {
   exhName: string;
@@ -67,14 +67,9 @@ type CreateApiType = {
   setIsPreviewModalOpen: (state: boolean) => void;
 };
 
-type UpdateByAdminApiType = {
+type UpdateRegExhApiType = {
   regExhId: number;
-  updateByAdminApi: (updateData: UpdateRegExhByAdminType) => void;
-};
-
-type UpdateByUserApiType = {
-  regExhId: number;
-  updateByUserApi: (updateData: UpdateRegExhByUserType) => void;
+  updateRegExhApi: (updateData: UpdateRegExhType) => void;
 };
 
 type updateExhDetailByAdminApiType = {
@@ -86,10 +81,8 @@ type RequestApiType = {
   isLoading: boolean;
   // 사용자 추가 api
   createRequest?: CreateApiType;
-  // 관리자 업데이트 api
-  updateByAdminRequest?: UpdateByAdminApiType;
-  // 사용자 업데이트 api
-  updateByUserRequest?: UpdateByUserApiType;
+  // 사용자/관리자 등록 전시회 업데이트 api
+  updateRegExhRequest?: UpdateRegExhApiType;
   // 관리자의 전시회 상세 정보 업데이트 api
   updateExhDetailByAdminRequest?: updateExhDetailByAdminApiType;
   // - 추가는 여기에 추가해주세용
@@ -286,8 +279,8 @@ const ExhFormFrame: React.FC<ExhFormFrameProps> = ({
       requestData.createRequest.setIsPreviewModalOpen(true);
     } else if (formState === 'updateByUser') {
       // 사용자 업데이트
-      requestData.updateByUserRequest?.updateByUserApi({
-        regExhId: requestData.updateByUserRequest?.regExhId,
+      requestData.updateRegExhRequest?.updateRegExhApi({
+        regExhId: requestData.updateRegExhRequest?.regExhId,
         formData,
       });
     } else if (formState === 'updateByAdmin') {
@@ -295,8 +288,8 @@ const ExhFormFrame: React.FC<ExhFormFrameProps> = ({
       if (exhData.regComment) {
         formData.append('regComment', exhData.regComment);
       }
-      requestData.updateByAdminRequest?.updateByAdminApi({
-        regExhId: requestData.updateByAdminRequest?.regExhId,
+      requestData.updateRegExhRequest?.updateRegExhApi({
+        regExhId: requestData.updateRegExhRequest?.regExhId,
         formData,
       });
     } else if (formState === 'updateExhDetailByAdmin') {

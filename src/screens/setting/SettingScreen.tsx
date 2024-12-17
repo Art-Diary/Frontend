@@ -127,18 +127,14 @@ const SettingScreen = () => {
             <GreyNameTag
               content="전시회 등록 확인"
               handleTouch={() =>
-                navigation.navigate('RegisterNewExhScreen', {
-                  isAdmin: false,
-                })
+                navigation.navigate('RegExhList', {isAdmin: false})
               }
             />
             {userInfo.authInfo.role === 'ADMIN' && (
               <GreyNameTag
                 content="전시회 등록 확인 (관리자)"
                 handleTouch={() =>
-                  navigation.navigate('RegisterNewExhScreen', {
-                    isAdmin: true,
-                  })
+                  navigation.navigate('RegExhList', {isAdmin: true})
                 }
               />
             )}

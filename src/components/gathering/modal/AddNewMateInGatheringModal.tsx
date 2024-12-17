@@ -18,8 +18,8 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import SearchNewMateListInGathering from './SearchNewMateListInGathering';
-import InfoModal from '../common/modal/InfoModal';
+import SearchNewMateListInGathering from '../SearchNewMateListInGathering';
+import InfoModal from '../../common/modal/InfoModal';
 
 interface Props {
   handleCloseModal: () => void;

@@ -31,7 +31,7 @@ import {
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import AddNewMateModal from '~/components/mate/AddNewMateModal';
-import CreateGatheringModal from '~/components/gathering/CreateGatheringModal';
+import CreateGatheringModal from '~/components/gathering/modal/CreateGatheringModal';
 
 const MateMainScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
