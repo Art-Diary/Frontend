@@ -121,7 +121,7 @@ export const WriterIcon = () => {
 };
 
 export const AvgRateStarIcon = () => {
-  const height = rw(3);
+  const height = rw(3.2);
   return <AvgRateStar width={106 * (height / 101)} height={height} />;
 };
 

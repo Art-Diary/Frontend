@@ -14,6 +14,7 @@ export interface ExhInfoForList {
   poster: string;
   favoriteExh?: boolean;
   rate?: number;
+  visitDate?: string;
 }
 
 export interface ExhDetailInfo {
