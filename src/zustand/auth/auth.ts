@@ -6,9 +6,11 @@ type AuthInfo = {
   email: string;
   profile: string | undefined;
   favoriteArt: string;
-  alarm1: boolean;
-  alarm2: boolean;
-  alarm3: boolean;
+  favoriteExhAlarm: boolean;
+  visitSoloAlarm: boolean;
+  visitGatheringAlarm: boolean;
+  newGatheringAlarm: boolean;
+  newDateGatheringAlarm: boolean;
   providerType: string;
   role: string;
 };
@@ -17,9 +19,11 @@ interface AuthState {
   authInfo: AuthInfo;
   actions: {
     updateAuthInfo: (authInfo: AuthInfo) => void;
-    updateAlarm1: (alarm1: boolean) => void;
-    updateAlarm2: (alarm2: boolean) => void;
-    updateAlarm3: (alarm3: boolean) => void;
+    updateFavoriteExhAlarm: (alarm: boolean) => void;
+    updateVisitSoloAlarm: (alarm: boolean) => void;
+    updateVisitGatheringAlarm: (alarm: boolean) => void;
+    updateNewGatheringAlarm: (alarm: boolean) => void;
+    updateNewDateGatheringAlarm: (alarm: boolean) => void;
   };
 }
 
@@ -30,9 +34,11 @@ const useAuth = create<AuthState>(set => ({
     email: '',
     profile: undefined,
     favoriteArt: '',
-    alarm1: false,
-    alarm2: false,
-    alarm3: false,
+    favoriteExhAlarm: false,
+    visitSoloAlarm: false,
+    visitGatheringAlarm: false,
+    newGatheringAlarm: false,
+    newDateGatheringAlarm: false,
     providerType: '',
     role: 'USER',
   },
@@ -45,57 +51,34 @@ const useAuth = create<AuthState>(set => ({
           email: authInfo.email,
           profile: authInfo.profile,
           favoriteArt: authInfo.favoriteArt,
-          alarm1: authInfo.alarm1,
-          alarm2: authInfo.alarm2,
-          alarm3: authInfo.alarm3,
+          favoriteExhAlarm: authInfo.favoriteExhAlarm,
+          visitSoloAlarm: authInfo.visitSoloAlarm,
+          visitGatheringAlarm: authInfo.visitGatheringAlarm,
+          newGatheringAlarm: authInfo.newGatheringAlarm,
+          newDateGatheringAlarm: authInfo.newDateGatheringAlarm,
           providerType: authInfo.providerType,
           role: authInfo.role,
         },
       })),
-    updateAlarm1: alarm1 =>
+    updateFavoriteExhAlarm: alarm =>
       set(state => ({
-        authInfo: {
-          userId: state.authInfo.userId,
-          nickname: state.authInfo.nickname,
-          email: state.authInfo.email,
-          profile: state.authInfo.profile,
-          favoriteArt: state.authInfo.favoriteArt,
-          alarm1: alarm1,
-          alarm2: state.authInfo.alarm2,
-          alarm3: state.authInfo.alarm3,
-          providerType: state.authInfo.providerType,
-          role: state.authInfo.role,
-        },
+        authInfo: {...state.authInfo, favoriteExhAlarm: alarm},
       })),
-    updateAlarm2: alarm2 =>
+    updateVisitSoloAlarm: alarm =>
       set(state => ({
-        authInfo: {
-          userId: state.authInfo.userId,
-          nickname: state.authInfo.nickname,
-          email: state.authInfo.email,
-          profile: state.authInfo.profile,
-          favoriteArt: state.authInfo.favoriteArt,
-          alarm1: state.authInfo.alarm1,
-          alarm2: alarm2,
-          alarm3: state.authInfo.alarm3,
-          providerType: state.authInfo.providerType,
-          role: state.authInfo.role,
-        },
+        authInfo: {...state.authInfo, visitSoloAlarm: alarm},
       })),
-    updateAlarm3: alarm3 =>
+    updateVisitGatheringAlarm: alarm =>
       set(state => ({
-        authInfo: {
-          userId: state.authInfo.userId,
-          nickname: state.authInfo.nickname,
-          email: state.authInfo.email,
-          profile: state.authInfo.profile,
-          favoriteArt: state.authInfo.favoriteArt,
-          alarm1: state.authInfo.alarm1,
-          alarm2: state.authInfo.alarm2,
-          alarm3: alarm3,
-          providerType: state.authInfo.providerType,
-          role: state.authInfo.role,
-        },
+        authInfo: {...state.authInfo, visitGatheringAlarm: alarm},
+      })),
+    updateNewGatheringAlarm: alarm =>
+      set(state => ({
+        authInfo: {...state.authInfo, newGatheringAlarm: alarm},
+      })),
+    updateNewDateGatheringAlarm: alarm =>
+      set(state => ({
+        authInfo: {...state.authInfo, newDateGatheringAlarm: alarm},
       })),
   },
 }));

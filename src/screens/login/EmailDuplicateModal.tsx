@@ -49,18 +49,7 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
   } = useSeparateSocialLogin();
 
   const updateUserInfo = (data: any) => {
-    updateAuthInfo({
-      userId: data.userId,
-      nickname: data.nickname,
-      email: data.email,
-      profile: data.profile,
-      favoriteArt: data.favoriteArt,
-      alarm1: data.alarm1,
-      alarm2: data.alarm2,
-      alarm3: data.alarm3,
-      providerType: data.providerType,
-      role: data.roleType,
-    });
+    updateAuthInfo({...data, role: data.roleType});
   };
 
   useEffect(() => {
@@ -78,7 +67,11 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
       const data = uniteData.data;
       updateUserInfo(data);
       handleCloseModal();
-      navigation.navigate(data.initInfo ? 'Main' : 'InitProfile');
+      if (data.initInfo) {
+        navigation.navigate('Main', {screen: 'Diary'});
+      } else {
+        navigation.navigate('InitProfile');
+      }
     }
   }, [uniteLoading, uniteError, uniteSuccess]);
 
@@ -97,7 +90,11 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
       const data = separateData.data;
       updateUserInfo(data);
       handleCloseModal();
-      navigation.navigate(data.initInfo ? 'Main' : 'InitProfile');
+      if (data.initInfo) {
+        navigation.navigate('Main', {screen: 'Diary'});
+      } else {
+        navigation.navigate('InitProfile');
+      }
     }
   }, [separateLoading, separateError, separateSuccess]);
 

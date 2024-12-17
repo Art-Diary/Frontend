@@ -24,18 +24,7 @@ export const UserInfo = () => {
         const res = result.data;
 
         console.log(res);
-        updateAuthInfo({
-          userId: res.userId,
-          nickname: res.nickname,
-          email: res.email,
-          profile: res.profile,
-          favoriteArt: res.favoriteArt,
-          alarm1: res.alarm1,
-          alarm2: res.alarm2,
-          alarm3: res.alarm3,
-          providerType: res.providerType,
-          role: res.roleType,
-        });
+        updateAuthInfo({...res, role: res.roleType});
         navigation.navigate('Main', {screen: 'Diary'});
       });
     }

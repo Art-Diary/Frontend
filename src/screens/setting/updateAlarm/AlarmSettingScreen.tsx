@@ -6,13 +6,58 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import UpdateAlarm1 from './UpdateAlarm1';
-import UpdateAlarm2 from './UpdateAlarm2';
-import UpdateAlarm3 from './UpdateAlarm3';
-import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
+import {BACK_COLOR, DEFAULT_TEXT, LIGHT_GREY} from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
+import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
+import {
+  useUpdateFavoriteExhAlarm,
+  useUpdateNewDateGatheringAlarm,
+  useUpdateNewGatheringAlarm,
+  useUpdateVisitGatheringAlarm,
+  useUpdateVisitSoloAlarm,
+} from '~/api/queries/auth';
+import UpdateAlarm from './UpdateAlarm';
 
 const AlarmSettingScreen = () => {
+  const {authInfo} = useUserInfo();
+  const {
+    updateFavoriteExhAlarm,
+    updateVisitSoloAlarm,
+    updateVisitGatheringAlarm,
+    updateNewGatheringAlarm,
+    updateNewDateGatheringAlarm,
+  } = useUserActions();
+  const {
+    mutate: changeFavoriteExhAlarm,
+    isLoading: loadingFavorite,
+    isError: errorFavorite,
+    isSuccess: successFavorite,
+  } = useUpdateFavoriteExhAlarm();
+  const {
+    mutate: changeVisitSoloAlarm,
+    isLoading: loadingVisitSolo,
+    isError: errorVisitSolo,
+    isSuccess: successVisitSolo,
+  } = useUpdateVisitSoloAlarm();
+  const {
+    mutate: changeVisitGatheringAlarm,
+    isLoading: loadingVisitGathering,
+    isError: errorVisitGathering,
+    isSuccess: successVisitGathering,
+  } = useUpdateVisitGatheringAlarm();
+  const {
+    mutate: changeNewGatheringAlarm,
+    isLoading: loadingNewGathering,
+    isError: errorNewGathering,
+    isSuccess: successNewGathering,
+  } = useUpdateNewGatheringAlarm();
+  const {
+    mutate: changeNewDateGatheringAlarm,
+    isLoading: loadingNewDateGathering,
+    isError: errorNewDateGathering,
+    isSuccess: successNewDateGathering,
+  } = useUpdateNewDateGatheringAlarm();
+
   return (
     <Container>
       <BackView title="푸시 알림 설정" line={true} />
@@ -20,16 +65,76 @@ const AlarmSettingScreen = () => {
       {/* body */}
       <Contents>
         <ContentRow>
-          <AlarmText>좋아요한 전시회 시작일 알림</AlarmText>
-          <UpdateAlarm1 />
+          <ContentColumn>
+            <AlarmText>좋아요한 전시회 시작일/마감일 알림</AlarmText>
+            <AlarmSubText>
+              전시회의 시작일과 마감일 당일에 대한 알림
+            </AlarmSubText>
+          </ContentColumn>
+          <UpdateAlarm
+            initValue={authInfo.favoriteExhAlarm}
+            updateAlarmApi={changeFavoriteExhAlarm}
+            isLoading={loadingFavorite}
+            isError={errorFavorite}
+            isSuccess={successFavorite}
+            updateUserAlarm={updateFavoriteExhAlarm}
+          />
         </ContentRow>
         <ContentRow>
-          <AlarmText>좋아요한 전시회 마감일 알림</AlarmText>
-          <UpdateAlarm2 />
+          <ContentColumn>
+            <AlarmText>혼자 가는 전시회 날짜 알림</AlarmText>
+            <AlarmSubText>방문 날짜 당일에 대한 알림</AlarmSubText>
+          </ContentColumn>
+          <UpdateAlarm
+            initValue={authInfo.visitSoloAlarm}
+            updateAlarmApi={changeVisitSoloAlarm}
+            isLoading={loadingVisitSolo}
+            isError={errorVisitSolo}
+            isSuccess={successVisitSolo}
+            updateUserAlarm={updateVisitSoloAlarm}
+          />
         </ContentRow>
         <ContentRow>
-          <AlarmText>캘린더에 저장된 전시회 알림</AlarmText>
-          <UpdateAlarm3 />
+          <ContentColumn>
+            <AlarmText>모임에서 가는 전시회 날짜 알림</AlarmText>
+            <AlarmSubText>방문 날짜 당일에 대한 알림</AlarmSubText>
+          </ContentColumn>
+          <UpdateAlarm
+            initValue={authInfo.visitGatheringAlarm}
+            updateAlarmApi={changeVisitGatheringAlarm}
+            isLoading={loadingVisitGathering}
+            isError={errorVisitGathering}
+            isSuccess={successVisitGathering}
+            updateUserAlarm={updateVisitGatheringAlarm}
+          />
+        </ContentRow>
+        <ContentRow>
+          <ContentColumn>
+            <AlarmText>새로운 모임 알림</AlarmText>
+            <AlarmSubText>초대 받은 모임 알림</AlarmSubText>
+          </ContentColumn>
+          <UpdateAlarm
+            initValue={authInfo.newGatheringAlarm}
+            updateAlarmApi={changeNewGatheringAlarm}
+            isLoading={loadingNewGathering}
+            isError={errorNewGathering}
+            isSuccess={successNewGathering}
+            updateUserAlarm={updateNewGatheringAlarm}
+          />
+        </ContentRow>
+        <ContentRow>
+          <ContentColumn>
+            <AlarmText>모임에서 추가된 전시회 알림</AlarmText>
+            <AlarmSubText>새로운 전시회 방문 날짜 알림</AlarmSubText>
+          </ContentColumn>
+          <UpdateAlarm
+            initValue={authInfo.newDateGatheringAlarm}
+            updateAlarmApi={changeNewDateGatheringAlarm}
+            isLoading={loadingNewDateGathering}
+            isError={errorNewDateGathering}
+            isSuccess={successNewDateGathering}
+            updateUserAlarm={updateNewDateGatheringAlarm}
+          />
         </ContentRow>
       </Contents>
     </Container>
@@ -48,7 +153,7 @@ const Contents = styled.View`
   flex-direction: column;
   background-color: ${BACK_COLOR};
   padding: ${wp(5)}px;
-  gap: ${wp(4.2)}px;
+  gap: ${hp(2)}px;
 `;
 
 const ContentRow = styled.View`
@@ -57,8 +162,19 @@ const ContentRow = styled.View`
   justify-content: space-between;
 `;
 
+const ContentColumn = styled.View`
+  flex-direction: column;
+  gap: ${hp(0.5)}px;
+`;
+
 const AlarmText = styled.Text`
   font-size: ${rf(16.8)}px;
   color: ${DEFAULT_TEXT};
+  font-family: ${FONT_NAME};
+`;
+
+const AlarmSubText = styled.Text`
+  font-size: ${rf(14)}px;
+  color: ${LIGHT_GREY};
   font-family: ${FONT_NAME};
 `;

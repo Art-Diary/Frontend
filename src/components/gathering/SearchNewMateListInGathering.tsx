@@ -82,7 +82,9 @@ const SearchNewMateListInGathering: React.FC<
               {searchNewMateInGathering.notMate.map(
                 (item: UserDetailInfo, index: number) => {
                   return (
-                    <CustomTouchable onPress={() => pressItem(item)}>
+                    <CustomTouchable
+                      onPress={() => pressItem(item)}
+                      key={index}>
                       <UserInfoWrapper>
                         <NameTag isSelected={item.userId === selectedMate}>
                           <UserInfo>
