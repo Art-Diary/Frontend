@@ -429,10 +429,11 @@ const ExhListScreen = () => {
               </OptionView>
             )}
             {isFieldVisible &&
-              selectedField?.map((item: string) => (
+              selectedField?.map((item: string, index: number) => (
                 <OptionView
                   activeOpacity={0.6}
-                  onPress={() => deleteField(item)}>
+                  onPress={() => deleteField(item)}
+                  key={index}>
                   <OptionText>{item}</OptionText>
                   <OptionText isDeleteText> x</OptionText>
                 </OptionView>
@@ -444,10 +445,11 @@ const ExhListScreen = () => {
               </OptionView>
             )}
             {isStateVisible &&
-              selectedState?.map((item: string) => (
+              selectedState?.map((item: string, index: number) => (
                 <OptionView
                   activeOpacity={0.6}
-                  onPress={() => deleteState(item)}>
+                  onPress={() => deleteState(item)}
+                  key={index}>
                   <OptionText key={item}>{item}</OptionText>
                   <OptionText isDeleteText> x</OptionText>
                 </OptionView>

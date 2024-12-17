@@ -7,11 +7,13 @@ import {
   loginUserTest,
   separateSocialLogin,
   uniteSocialLogin,
-  updateAlarm1,
-  updateAlarm2,
-  updateAlarm3,
   updateAlarmToken,
+  updateFavoriteExhAlarm,
+  updateNewDateGatheringAlarm,
+  updateNewGatheringAlarm,
   updateUserInfo,
+  updateVisitGatheringAlarm,
+  updateVisitSoloAlarm,
   verifyNickname,
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
@@ -21,41 +23,104 @@ const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
 });
 
-export const useUpdateAlarm1 = (alarm1: boolean) => {
-  return useMutation({
-    mutationFn: () => updateAlarm1(alarm1),
+export const useUpdateFavoriteExhAlarm = (): UseMutationResult<
+  any,
+  any,
+  boolean,
+  unknown
+> => {
+  return useMutation<any, any, boolean, unknown>({
+    mutationFn: (alarm: boolean) => updateFavoriteExhAlarm(alarm),
     onError: err => {
       console.log(err);
-      console.log('[AlarmSettingScreen] error udpate Alarm1');
+      console.log('[UpdateFavoriteExhAlarm] error update FavoriteExhAlarm');
     },
     onSuccess: () => {
-      console.log('[EditFavoriteScreen] success udpate Alarm1');
+      console.log('[UpdateFavoriteExhAlarm] success update FavoriteExhAlarm');
     },
   });
 };
 
-export const useUpdateAlarm2 = (alarm2: boolean) => {
-  return useMutation({
-    mutationFn: () => updateAlarm2(alarm2),
+export const useUpdateVisitSoloAlarm = (): UseMutationResult<
+  any,
+  any,
+  boolean,
+  unknown
+> => {
+  return useMutation<any, any, boolean, unknown>({
+    mutationFn: (alarm: boolean) => updateVisitSoloAlarm(alarm),
     onError: err => {
       console.log(err);
-      console.log('[AlarmSettingScreen] error udpate Alarm2');
+      console.log('[UpdateVisitSoloAlarm] error update UpdateVisitSoloAlarm');
     },
     onSuccess: () => {
-      console.log('[EditFavoriteScreen] success udpate Alarm2');
+      console.log('[UpdateVisitSoloAlarm] success update UpdateVisitSoloAlarm');
     },
   });
 };
 
-export const useUpdateAlarm3 = (alarm3: boolean) => {
-  return useMutation({
-    mutationFn: () => updateAlarm3(alarm3),
+export const useUpdateVisitGatheringAlarm = (): UseMutationResult<
+  any,
+  any,
+  boolean,
+  unknown
+> => {
+  return useMutation<any, any, boolean, unknown>({
+    mutationFn: (alarm: boolean) => updateVisitGatheringAlarm(alarm),
     onError: err => {
       console.log(err);
-      console.log('[AlarmSettingScreen] error udpate Alarm3');
+      console.log(
+        '[UpdateVisitGatheringAlarm] error update UpdateVisitGatheringAlarm',
+      );
     },
     onSuccess: () => {
-      console.log('[EditFavoriteScreen] success udpate Alarm3');
+      console.log(
+        '[UpdateVisitGatheringAlarm] success update UpdateVisitGatheringAlarm',
+      );
+    },
+  });
+};
+
+export const useUpdateNewGatheringAlarm = (): UseMutationResult<
+  any,
+  any,
+  boolean,
+  unknown
+> => {
+  return useMutation<any, any, boolean, unknown>({
+    mutationFn: (alarm: boolean) => updateNewGatheringAlarm(alarm),
+    onError: err => {
+      console.log(err);
+      console.log(
+        '[UpdateNewGatheringAlarm] error update UpdateNewGatheringAlarm',
+      );
+    },
+    onSuccess: () => {
+      console.log(
+        '[UpdateNewGatheringAlarm] success update UpdateNewGatheringAlarm',
+      );
+    },
+  });
+};
+
+export const useUpdateNewDateGatheringAlarm = (): UseMutationResult<
+  any,
+  any,
+  boolean,
+  unknown
+> => {
+  return useMutation<any, any, boolean, unknown>({
+    mutationFn: (alarm: boolean) => updateNewDateGatheringAlarm(alarm),
+    onError: err => {
+      console.log(err);
+      console.log(
+        '[UpdateNewDateGatheringAlarm] error update UpdateNewDateGatheringAlarm',
+      );
+    },
+    onSuccess: () => {
+      console.log(
+        '[UpdateNewDateGatheringAlarm] success update UpdateNewDateGatheringAlarm',
+      );
     },
   });
 };

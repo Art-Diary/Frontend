@@ -64,7 +64,7 @@ type UpdateRegExhApiType = {
   updateRegExhApi: (updateData: UpdateRegExhType) => void;
 };
 
-type updateExhDetailByAdminApiType = {
+type UpdateExhDetailByAdminApiType = {
   exhId: number;
   updateByAdminApi: (updateData: UpdateExhDetailType) => void;
 };
@@ -76,7 +76,7 @@ type RequestApiType = {
   // 사용자/관리자 등록 전시회 업데이트 api
   updateRegExhRequest?: UpdateRegExhApiType;
   // 관리자의 전시회 상세 정보 업데이트 api
-  updateExhDetailByAdminRequest?: updateExhDetailByAdminApiType;
+  updateExhDetailByAdminRequest?: UpdateExhDetailByAdminApiType;
   // - 추가는 여기에 추가해주세용
 };
 
