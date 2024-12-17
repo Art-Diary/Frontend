@@ -211,14 +211,19 @@ const WriteMyDiaryContentsScreen = () => {
       formData.append('saying', writeMyDiaryInfo.saying);
     }
     // 기록 생성에만 추가
-    if (
-      writeMyDiaryInfo.thumbnail &&
-      writeMyDiaryInfo.thumbnail.indexOf('file:///') !== -1
-    ) {
-      const resultResizedImage = await changeImageSize(
-        writeMyDiaryInfo.thumbnail,
-      );
-      formData.append('thumbnail', resultResizedImage);
+    if (writeMyDiaryInfo.thumbnail) {
+      if (writeMyDiaryInfo.thumbnail.indexOf('file:///') !== -1) {
+        const resultResizedImage = await changeImageSize(
+          writeMyDiaryInfo.thumbnail,
+        );
+        formData.append('thumbnail', resultResizedImage);
+      } else {
+        formData.append('thumbnail', {
+          name: writeMyDiaryInfo.thumbnail,
+          type: 'image/JPEG',
+          uri: writeMyDiaryInfo.thumbnail,
+        });
+      }
     }
     return formData;
   };

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -8,7 +7,13 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT, MAIN_COLOR, TEXTINPUTFORM_COLOR} from '../common/colors';
+import {
+  DEFAULT_TEXT,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
+} from '../common/colors';
+import {Dropdown} from 'react-native-element-dropdown';
 
 interface IPicker {
   label: string;
@@ -16,11 +21,16 @@ interface IPicker {
 }
 
 interface EditArtProps {
+  title: string;
   getValue: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
+const EditArtCategory: React.FC<EditArtProps> = ({
+  title,
+  getValue,
+  setValue,
+}) => {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<IPicker[]>([
     {label: '사진', value: '사진'},
@@ -35,19 +45,26 @@ const EditArtCategory: React.FC<EditArtProps> = ({getValue, setValue}) => {
     <ContentColumn>
       <SectionWapper>
         <SectionStar>*</SectionStar>
-        <SectionName>좋아하는 전시 분야</SectionName>
+        <SectionName>{title}</SectionName>
       </SectionWapper>
-      <DropDownPicker
-        style={pickerStyle.box}
-        maxHeight={400} // 최대 높이 설정
-        textStyle={pickerStyle.artName}
-        open={open}
-        value={getValue}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
+      <Dropdown
+        style={pickerStyle.dropdown}
+        placeholderStyle={pickerStyle.placeholderStyle}
+        selectedTextStyle={pickerStyle.selectedTextStyle}
+        itemTextStyle={pickerStyle.selectedTextStyle}
+        containerStyle={pickerStyle.containerStyle}
+        maxHeight={400}
+        data={items}
+        labelField="label"
+        valueField="value"
         placeholder="전시 분야를 선택해 주세요."
+        value={getValue}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        onChange={item => {
+          setValue(item.value);
+          setOpen(false);
+        }}
       />
     </ContentColumn>
   );
@@ -70,7 +87,6 @@ const SectionName = styled.Text`
 const SectionWapper = styled.View`
   flex-direction: row;
   align-items: center;
-  /* justify-content: space-between; */
   gap: ${wp(1)}px;
 `;
 
@@ -82,17 +98,25 @@ const SectionStar = styled.Text`
 `;
 
 const pickerStyle = StyleSheet.create({
-  box: {
+  dropdown: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     borderRadius: wp(2),
     borderWidth: wp(0.3),
+    padding: wp(4),
     borderColor: TEXTINPUTFORM_COLOR,
     backgroundColor: TEXTINPUTFORM_COLOR,
   },
-  artName: {
-    paddingLeft: wp(2),
+  containerStyle: {
+    borderRadius: wp(2),
+  },
+  placeholderStyle: {
+    fontSize: rf(15),
+    color: MIDDLE_GREY,
+    fontFamily: FONT_NAME,
+  },
+  selectedTextStyle: {
     fontSize: rf(15),
     color: DEFAULT_TEXT,
     fontFamily: FONT_NAME,

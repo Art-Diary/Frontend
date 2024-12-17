@@ -1,5 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import styled from 'styled-components/native';
+import React, {useEffect, useState} from 'react';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
@@ -7,24 +6,9 @@ import {
   useUpdateRegExhByAdmin,
   useUpdateRegExhByUser,
 } from '~/api/queries/regexh';
-import ExhFormFrame from '~/components/exhibition/ExhFormFrame';
-import {
-  AREA_FONT_SIZE,
-  BUTTON_RADIUS,
-  FONT_NAME,
-  ITEM_BORDER_WIDTH,
-} from '~/components/common/style';
-import {
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
-import {
-  responseFont as rf,
-  heightSizePercentage as hp,
-  widthSizePercentage as wp,
-} from '~/components/common/ResponsiveSize';
+import EditExhFormFrame from '~/components/common/exhibition/EditExhFormFrame';
 import {RegExhDetailInfo} from '~/types';
+import TextInputForm from '~/components/common/TextInputForm';
 
 type RootStackParamList = {
   EditRegExh: {
@@ -55,6 +39,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
     undefined,
   );
   const [regComment, setRegComment] = useState<string | undefined>(undefined);
+  const [regArt, setRegArt] = useState<string>('');
 
   // update by admin api
   const {
@@ -83,6 +68,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
       setRegIntro(regExhInfo.regIntro);
       setRegPosterUri(regExhInfo.regPoster);
       setRegComment(regExhInfo.regComment);
+      setRegArt(regExhInfo.regArt);
     }
   }, [regExhInfo]);
 
@@ -107,12 +93,8 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
     }
   }, [isErrorByUser, isSuccessByUser]);
 
-  const onChangeComment = useCallback((text: string) => {
-    setRegComment(text);
-  }, []);
-
   return (
-    <ExhFormFrame
+    <EditExhFormFrame
       formState={role === 'ADMIN' ? 'updateByAdmin' : 'updateByUser'}
       exhData={{
         exhName: regExhName,
@@ -134,6 +116,8 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
         posterUri: regPosterUri,
         setPosterUri: setRegPosterUri,
         regComment,
+        art: regArt,
+        setArt: setRegArt,
       }}
       requestData={{
         isLoading: role === 'ADMIN' ? isLoadingByAdmin : isLoadingByUser,
@@ -144,71 +128,15 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
         },
       }}>
       {role === 'ADMIN' && (
-        <ColSectionWrapper>
-          <SectionView>
-            <SectionName>코멘트</SectionName>
-            <SectionName color={'grey'}>(선택)</SectionName>
-          </SectionView>
-          <RowSectionWrapper>
-            <WriteInfo
-              textAlignVertical={'top'}
-              multiline={true}
-              placeholderTextColor={LIGHT_GREY}
-              placeholder={'코멘트 작성'}
-              value={regComment}
-              onChangeText={onChangeComment}
-            />
-          </RowSectionWrapper>
-        </ColSectionWrapper>
+        <TextInputForm
+          title={'코멘트'}
+          multiLine
+          keyword={regComment ?? ''}
+          handleKeyword={setRegComment}
+        />
       )}
-    </ExhFormFrame>
+    </EditExhFormFrame>
   );
 };
 
 export default EditRegExhScreen;
-
-/** style */
-const RowSectionWrapper = styled.View`
-  flex-direction: row;
-  border-width: ${ITEM_BORDER_WIDTH}px;
-  border-color: ${LIGHT_GREY};
-  border-radius: ${BUTTON_RADIUS}px;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: ${wp(2.8)}px;
-  padding-right: ${wp(2.8)}px;
-`;
-
-const ColSectionWrapper = styled.View`
-  flex-direction: column;
-  border-width: ${ITEM_BORDER_WIDTH}px;
-  border-color: ${LIGHT_GREY};
-  border-radius: ${BUTTON_RADIUS}px;
-  width: 100%;
-  padding: ${wp(2.9)}px;
-  gap: ${hp(1.6)}px;
-`;
-
-const SectionView = styled.View`
-  flex-direction: row;
-  gap: ${hp(0.3)}px;
-`;
-
-interface SectionProps {
-  color: string;
-}
-
-const SectionName = styled.Text<SectionProps>`
-  font-size: ${AREA_FONT_SIZE}px;
-  font-family: ${FONT_NAME};
-  color: ${(props: SectionProps) =>
-    props.color === 'grey' ? `${LIGHT_GREY}` : `${MIDDLE_GREY}`};
-`;
-
-const WriteInfo = styled.TextInput`
-  font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-  padding-right: 0%;
-  min-height: ${hp(25)}px;
-`;

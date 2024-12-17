@@ -19,9 +19,10 @@ import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
   DEFAULT_TEXT,
-  LIGHT_GREY,
+  COMMENTFORM_COLOR,
   MAIN_COLOR,
   MIDDLE_GREY,
+  LIGHT_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {
@@ -201,15 +202,20 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
               <StateText>{'등록 요청 날짜'}</StateText>
               <RegDateText>{regExhInfo.regDate}</RegDateText>
             </StateView>
-            {regExhInfo.regComment && (
+            {role !== 'USER_WAIT' && regExhInfo.regState && (
               <StateCommentView>
                 <StateView>
                   <StateText>{'코멘트'}</StateText>
                 </StateView>
                 <CommentView>
-                  <CommentBorderView>
-                    <RegDateText>{regExhInfo.regComment}</RegDateText>
-                  </CommentBorderView>
+                  <RegDateText>
+                    {regExhInfo.regComment ?? '전시 등록 완료'}
+                  </RegDateText>
+                  {/* <CommentBorderView>
+                    <RegDateText>
+                      {regExhInfo.regComment ?? '전시 등록 완료'}
+                    </RegDateText>
+                  </CommentBorderView> */}
                 </CommentView>
               </StateCommentView>
             )}
@@ -293,7 +299,8 @@ const RegDateText = styled.Text`
   font-size: ${rf(14)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
-  line-height: ${wp(8)}px;
+  /* line-height: ${wp(8)}px; */
+  line-height: ${wp(5)}px;
 `;
 
 const StateCommentView = styled.View`
@@ -303,16 +310,19 @@ const StateCommentView = styled.View`
 
 const CommentView = styled.View`
   width: 100%;
-  padding: ${wp(2)}px;
+  /* padding: ${wp(2)}px; */
+  padding: ${wp(4)}px;
+  background-color: ${COMMENTFORM_COLOR};
+  border-radius: ${wp(3)}px;
 `;
 
-const CommentBorderView = styled.View`
-  align-items: center;
-  width: 100%;
-  border-color: ${LIGHT_GREY};
-  border-width: ${wp(0.3)}px;
-  border-radius: ${wp(5)}px;
-`;
+// const CommentBorderView = styled.View`
+//   align-items: center;
+//   width: 100%;
+//   border-color: ${LIGHT_GREY};
+//   border-width: ${wp(0.3)}px;
+//   border-radius: ${wp(5)}px;
+// `;
 
 const OptionVeiw = styled.View`
   align-items: center;

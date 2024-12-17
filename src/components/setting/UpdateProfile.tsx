@@ -128,9 +128,17 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     formData.append('nickname', nicknameKeyword);
     formData.append('favoriteArt', art);
 
-    if (imageUri && imageUri.indexOf('file:///') !== -1) {
-      const resultResizedImage = await changeImageSize(imageUri);
-      formData.append('profile', resultResizedImage);
+    if (imageUri) {
+      if (imageUri.indexOf('file:///') !== -1) {
+        const resultResizedImage = await changeImageSize(imageUri);
+        formData.append('profile', resultResizedImage);
+      } else {
+        formData.append('profile', {
+          name: imageUri,
+          type: 'image/JPEG',
+          uri: imageUri,
+        });
+      }
     }
     updateUserInfo(formData);
   };
@@ -153,7 +161,11 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
             setIsVerified={setIsVerified}
           />
           {/* 좋아하는 전시 분야 */}
-          <EditArtCategory getValue={art} setValue={setArt} />
+          <EditArtCategory
+            title={'좋아하는 전시 분야'}
+            getValue={art}
+            setValue={setArt}
+          />
           {/* 프로필 */}
           <ImageInputForm
             title={'프로필 사진'}
