@@ -28,7 +28,7 @@ export type CalendarDiaryStackParamList = {
 
 export type RootStackParamList = {
   Main: {
-    screen: 'Calendar';
+    screen: 'Calendar' | 'Setting' | 'Diary' | 'Exhibition' | 'Mate';
     params?: {modalOpen: boolean};
   };
   // mydiary

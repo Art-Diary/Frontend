@@ -13,7 +13,6 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import EditNickname from '~/components/setting/EditNickname';
 import EditArtCategory from '~/components/setting/EditArtCategory';
-import EditPicture from '~/components/setting/EditPicture';
 import {useUserActions} from '~/zustand/auth/auth';
 import {
   BACK_COLOR,
@@ -32,7 +31,7 @@ import {GoogleLogoIcon, KakaoLogoIcon, NaverLogoIcon} from '../common/icon';
 import {changeImageSize} from '~/utils/resizeImage';
 import CustomTouchable from '../common/CustomTouchable';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {View} from 'react-native';
+import ImageInputForm from '../common/ImageInputForm';
 
 type InitProfile = {
   favoriteArt: string;
@@ -108,7 +107,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       if (navigateTo === 'back') {
         navigation.goBack();
       } else if (navigateTo === 'Main') {
-        navigation.navigate('Main');
+        navigation.navigate('Main', {screen: 'Setting'});
       }
     }
   }, [isError, isLoading, isSuccess]);
@@ -156,7 +155,11 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           {/* 좋아하는 전시 분야 */}
           <EditArtCategory getValue={art} setValue={setArt} />
           {/* 프로필 */}
-          <EditPicture imageUri={imageUri} setImageUri={setImageUri} />
+          <ImageInputForm
+            title={'프로필 사진'}
+            image={imageUri}
+            handleImage={setImageUri}
+          />
           {/* 이메일 */}
           <ContentColumn>
             <SectionName>이메일</SectionName>
