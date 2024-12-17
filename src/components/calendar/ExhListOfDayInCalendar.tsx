@@ -34,12 +34,14 @@ interface CalendarProps {
   selectedDateInfo: SelectedDateInfo;
   gatherColorList: GatheringColorInfo[];
   exhListOfDay: any[];
+  solo: boolean;
 }
 
 const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
   selectedDateInfo,
   gatherColorList,
   exhListOfDay,
+  solo,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
@@ -102,14 +104,16 @@ const ExhListOfDayInCalendar: React.FC<CalendarProps> = ({
           {selectedDateInfo.selectedDate.split('.')[1]}월{' '}
           {selectedDateInfo.selectedDate.split('.')[2]}일
         </SelectedDateText>
-        <CustomTouchable
-          onPress={onPressAddMyExh}
-          style={{
-            paddingHorizontal: wp(3),
-            paddingVertical: wp(0.1),
-          }}>
-          <AddMyExhButtonIcon />
-        </CustomTouchable>
+        {solo && (
+          <CustomTouchable
+            onPress={onPressAddMyExh}
+            style={{
+              paddingHorizontal: wp(3),
+              paddingVertical: wp(0.1),
+            }}>
+            <AddMyExhButtonIcon />
+          </CustomTouchable>
+        )}
       </SelectedDateView>
       {openModal && (
         <AddVisitExhToCalModal

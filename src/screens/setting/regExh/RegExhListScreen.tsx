@@ -21,6 +21,7 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
+import {AddMyExhButtonIcon} from '~/components/common/icon';
 
 type RootStackParamList = {
   RegExhList: {isAdmin: boolean};
@@ -37,9 +38,10 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
   const {data, isLoading, isError, isSuccess, refetch} =
     usefetchRegExhs(isAdmin);
   const navigation = useNavigation<RootStackNavigationProp>();
-  const limit = 5; // 한 페이지에 보이는 리뷰 개수 -[변경 예정]
+  const limit = 13; // 한 페이지에 보이는 리뷰 개수
+  const PAGE_GROUP_SIZE = 5; // 한 번에 보여줄 페이지 번호 개수
   const [page, setPage] = useState<number>(1); //현재 페이지
-  const offset = (page - 1) * limit; //해당 페이지의 첫번째 인덱스
+  const [offset, setOffset] = useState<number>(0); //해당 페이지의 첫번째 인덱스
   const [numPagesArr, setNumPagesArr] = useState<number[]>([]);
   const [numPages, setNumPages] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
@@ -57,15 +59,38 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     if (isSuccess) {
       setRegExhInfoList(data);
+      // 페이지 수 감소로 현재 페이지가 초과된 경우 처리
+      const totalItems = data.length;
+      const newNumPages = Math.ceil(totalItems / limit);
+
+      if (page > newNumPages) {
+        setPage(newNumPages);
+      }
       setNumPages(Math.ceil(data.length / limit));
     }
   }, [data, isSuccess]);
 
   useEffect(() => {
-    //numPage 변경 후, 변경
-    let tmp = new Array(numPages).fill(0);
+    setOffset((page - 1) * limit);
+
+    // 시작 페이지와 끝 페이지 계산
+    let startPage = 1;
+    let endPage = Math.min(PAGE_GROUP_SIZE, numPages);
+
+    if (page > 3 && page <= numPages - 3) {
+      startPage = page - 2;
+      endPage = page + 2;
+    } else if (page > numPages - 3) {
+      startPage = Math.max(1, numPages - 4);
+      endPage = numPages;
+    }
+
+    const tmp = [];
+    for (let i = startPage; i <= endPage; i++) {
+      tmp.push(i);
+    }
     setNumPagesArr(tmp);
-  }, [numPages]);
+  }, [page, numPages]);
 
   useEffect(() => {
     if (refreshing) {
@@ -91,11 +116,21 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
     return <LoadingModal message={'로딩 중 :)'} />;
   }
 
+  const handleAddRegExh = () => {
+    navigation.navigate('RegisterNewExh');
+  };
+
   return (
     <Container>
       <BackView
         title={'전시회 등록 확인' + (isAdmin ? ' (관리자)' : '')}
-        line={true}></BackView>
+        line={true}>
+        {!isAdmin && (
+          <CustomTouchable onPress={handleAddRegExh}>
+            <AddMyExhButtonIcon />
+          </CustomTouchable>
+        )}
+      </BackView>
       <RegExhList>
         <Category>
           <CategoryNormal>
@@ -115,61 +150,67 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
-          {regExhInfoList &&
-            regExhInfoList
-              .slice(offset, offset + limit)
-              .map((item: any, index: number) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    navigation.navigate(
-                      isAdmin ? 'ConfirmRegExhByAdmin' : 'CheckRegExhByUser',
-                      {regExhId: item.regExhId},
-                    );
-                  }}>
-                  <Category>
-                    <CategoryNormal>
-                      <RExhNumber>{item.no}</RExhNumber>
-                    </CategoryNormal>
-                    <CategoryExhName>
-                      <RExhName numberOfLines={1}>{item.regExhName}</RExhName>
-                    </CategoryExhName>
-                    <CategoryExhDate>
-                      <RExhDate>{item.regDate}</RExhDate>
-                    </CategoryExhDate>
-                    <CategoryNormal>
-                      <RExhStateText state={item.regState}>
-                        {item.regState}
-                      </RExhStateText>
-                    </CategoryNormal>
-                  </Category>
-                </TouchableOpacity>
-              ))}
+          {!regExhInfoList || regExhInfoList.length === 0 ? (
+            <ErrorMessageView message="등록한 전시회가 없습니다." />
+          ) : (
+            <>
+              {regExhInfoList
+                .slice(offset, offset + limit)
+                .map((item: any, index: number) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      navigation.navigate(
+                        isAdmin ? 'ConfirmRegExhByAdmin' : 'CheckRegExhByUser',
+                        {regExhId: item.regExhId},
+                      );
+                    }}>
+                    <Category>
+                      <CategoryNormal>
+                        <RExhNumber>{item.no}</RExhNumber>
+                      </CategoryNormal>
+                      <CategoryExhName>
+                        <RExhName numberOfLines={1}>{item.regExhName}</RExhName>
+                      </CategoryExhName>
+                      <CategoryExhDate>
+                        <RExhDate>{item.regDate}</RExhDate>
+                      </CategoryExhDate>
+                      <CategoryNormal>
+                        <RExhStateText state={item.regState}>
+                          {item.regState}
+                        </RExhStateText>
+                      </CategoryNormal>
+                    </Category>
+                  </TouchableOpacity>
+                ))}
+            </>
+          )}
         </ScrollView>
-
-        <PageNumberView>
-          <CustomTouchable
-            onPress={() => setPage(page - 1)}
-            disabled={page === 1}>
-            <PageNumber>{'<'}</PageNumber>
-          </CustomTouchable>
-
-          {numPagesArr.map((item, index) => (
-            <CustomTouchable key={index + 1} onPress={() => setPage(index + 1)}>
-              {index + 1 == page ? (
-                <CurrentPageNumber>{index + 1}</CurrentPageNumber>
-              ) : (
-                <PageNumber>{index + 1}</PageNumber>
-              )}
+        {regExhInfoList && regExhInfoList.length !== 0 && (
+          <PageNumberView>
+            <CustomTouchable
+              onPress={() => setPage(page - 1)}
+              disabled={page === 1}>
+              <PageNumber>{'<'}</PageNumber>
             </CustomTouchable>
-          ))}
 
-          <CustomTouchable
-            onPress={() => setPage(page + 1)}
-            disabled={page === numPages}>
-            <PageNumber>{'>'}</PageNumber>
-          </CustomTouchable>
-        </PageNumberView>
+            {numPagesArr.map(item => (
+              <CustomTouchable key={item} onPress={() => setPage(item)}>
+                {item === page ? (
+                  <CurrentPageNumber>{item}</CurrentPageNumber>
+                ) : (
+                  <PageNumber>{item}</PageNumber>
+                )}
+              </CustomTouchable>
+            ))}
+
+            <CustomTouchable
+              onPress={() => setPage(page + 1)}
+              disabled={page === numPages}>
+              <PageNumber>{'>'}</PageNumber>
+            </CustomTouchable>
+          </PageNumberView>
+        )}
       </RegExhList>
     </Container>
   );
@@ -281,6 +322,7 @@ const PageNumberView = styled.View`
   flex-direction: row;
   justify-content: center;
   align-items: flex-end;
+  padding-bottom: ${hp(1)}px;
 `;
 
 const PageNumber = styled.Text`
