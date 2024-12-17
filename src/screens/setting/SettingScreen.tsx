@@ -48,6 +48,7 @@ const SettingScreen = () => {
     // 쿼리 제거
     queryClient.removeQueries(mydiaryQueryKeys.fetchMyExhList());
     queryClient.removeQueries(mateQueryKeys.fetchExhMateList());
+    showToast('로그아웃 되었습니다.');
     // 로그인 페이지로 이동
     navigation.reset({
       index: 0,

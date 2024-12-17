@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -6,18 +6,13 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import BackView from '~/components/common/BackView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import {useDeleteUser} from '~/api/queries/auth';
-import {showToast} from '~/components/common/modal/toastConfig';
-import {useNavigation} from '@react-navigation/native';
-import {RootStackNavigationProp} from '~/App';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   BACK_COLOR,
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
 import {
   AREA_FONT_SIZE,
@@ -27,48 +22,24 @@ import {
   FONT_NAME,
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import LeaveCheckModal from '~/components/setting/modal/LeaveCheckModal';
 
 // [WORD_LIMIT]
 const LeaveScreen = () => {
   const maxInputLength = 100;
-  const navigation = useNavigation<RootStackNavigationProp>();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [reasonKeyword, setReasonKeyword] = useState<string>('');
-  const {
-    mutate: deleteUser,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useDeleteUser(reasonKeyword);
-
-  useEffect(() => {
-    if (isError) {
-      showToast('탈퇴를 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
-    }
-    if (isSuccess) {
-      showToast('탈퇴 성공 :(');
-      // TODO 나중에 로그아웃 구체적으로 하기
-      AsyncStorage.removeItem('userId');
-      // 로그인 페이지로 이동
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
-    }
-  }, [isError, isLoading, isSuccess]);
+  const [openCheckModal, setOpenCheckModal] = useState<boolean>(false);
 
   const onChangeReason = useCallback((text: string) => {
     setReasonKeyword(text);
   }, []);
 
-  const onPressLeave = () => {
-    deleteUser();
+  const onPressButton = () => {
+    setOpenCheckModal(true);
+  };
+
+  const onCloseButton = () => {
+    setOpenCheckModal(false);
   };
 
   return (
@@ -83,7 +54,7 @@ const LeaveScreen = () => {
             <ReasonInput
               multiline={true}
               maxLength={maxInputLength} // 글자 수 제한
-              placeholderTextColor="#D3D3D3"
+              placeholderTextColor="#979797"
               placeholder={'탈퇴 이유를 작성해주세요.'}
               onChangeText={onChangeReason}
               value={reasonKeyword}
@@ -98,14 +69,19 @@ const LeaveScreen = () => {
         </ContentColumn>
         {/* 탈퇴 버튼 */}
         {reasonKeyword !== '' ? (
-          <CustomTouchable onPress={onPressLeave}>
+          <CustomTouchable onPress={onPressButton}>
             <LeaveButton leave={true}>탈퇴</LeaveButton>
           </CustomTouchable>
         ) : (
           <LeaveButton leave={false}>탈퇴</LeaveButton>
         )}
+        {openCheckModal && (
+          <LeaveCheckModal
+            handleCloseModal={onCloseButton}
+            reason={reasonKeyword}
+          />
+        )}
       </Contents>
-      {isLoadingOpen && <LoadingModal message={'탈퇴 처리 중 :('} />}
     </Container>
   );
 };
@@ -139,10 +115,9 @@ const SectionName = styled.Text`
 `;
 
 const ReasonView = styled.View`
-  border-width: ${wp(0.3)}px;
-  border-color: ${LIGHT_GREY};
-  border-radius: ${wp(1.5)}px;
-  height: ${hp(40)}px;
+  background-color: ${TEXTINPUTFORM_COLOR};
+  border-radius: ${BUTTON_RADIUS}px;
+  height: ${hp(35)}px;
 `;
 
 const ReasonInput = styled.TextInput`

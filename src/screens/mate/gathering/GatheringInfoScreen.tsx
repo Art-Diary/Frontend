@@ -352,18 +352,17 @@ const Dot = styled.View`
 
 const RowView = styled.View`
   flex-direction: row;
-  padding-bottom: ${hp(0.5)}px;
   gap: ${wp(2.3)}px;
 `;
 
 const AddNewItem = styled.TouchableOpacity`
   border-top-left-radius: ${BUTTON_RADIUS}px;
   border-top-right-radius: ${BUTTON_RADIUS}px;
-  border-width: ${wp(0.3)}px;
+  border-width: ${wp(0.4)}px;
   border-color: ${MIDDLE_GREY};
   padding-left: ${wp(4.2)}px;
   padding-right: ${wp(4.2)}px;
-  height: ${wp(11.2)}px;
+  height: ${hp(5.3)}px;
   align-items: center;
   justify-content: center;
 `;
@@ -373,7 +372,8 @@ interface NameProps {
 }
 
 const NameText = styled.Text<NameProps>`
-  font-size: ${rf(18)}px;
+  font-size: ${(props: NameProps) =>
+    props.isAdd ? `${rf(20)}px` : `${rf(18)}px`};
   color: ${(props: NameProps) => (props.isAdd ? `${MIDDLE_GREY}` : 'white')};
   font-family: ${FONT_NAME};
 `;
