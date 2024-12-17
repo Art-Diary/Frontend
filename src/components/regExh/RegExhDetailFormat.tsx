@@ -22,7 +22,6 @@ import {
   COMMENTFORM_COLOR,
   MAIN_COLOR,
   MIDDLE_GREY,
-  LIGHT_GREY,
 } from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {
@@ -192,13 +191,9 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
             <Title>{'등록현황'}</Title>
             <StateView>
               <StateText>{'등록현황'}</StateText>
-              {regExhInfo.regState === '완료' ? (
-                <CompletedText>{'등록 완료'}</CompletedText>
-              ) : regExhInfo.regState === '대기' ? (
-                <StandbyText>{'등록 대기'}</StandbyText>
-              ) : (
-                <StandbyText>{'등록 실패'}</StandbyText>
-              )}
+              <RExhStateText state={regExhInfo.regState}>
+                등록 {regExhInfo.regState}
+              </RExhStateText>
             </StateView>
             <StateView>
               <StateText>{'등록 요청 날짜'}</StateText>
@@ -281,16 +276,19 @@ const StateText = styled.Text`
   line-height: ${wp(8)}px;
 `;
 
-const StandbyText = styled.Text`
-  font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
-  font-family: ${FONT_NAME};
-  line-height: ${wp(8)}px;
-`;
+interface RExhStateProps {
+  state: string;
+}
 
-const CompletedText = styled.Text`
+const RExhStateText = styled.Text<RExhStateProps>`
   font-size: ${rf(17)}px;
-  color: ${MAIN_COLOR};
+  color: ${MIDDLE_GREY};
+  color: ${(props: RExhStateProps) =>
+    props.state === '완료'
+      ? `${MAIN_COLOR}`
+      : props.state === '대기'
+      ? `${MIDDLE_GREY}`
+      : `black`};
   font-family: ${FONT_NAME};
   line-height: ${wp(8)}px;
 `;

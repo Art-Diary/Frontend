@@ -138,13 +138,9 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
                       <RExhDate>{item.regDate}</RExhDate>
                     </CategoryExhDate>
                     <CategoryNormal>
-                      {item.regState === '완료' ? (
-                        <RExhStateTrue>{'완료'}</RExhStateTrue>
-                      ) : item.regState === '대기' ? (
-                        <RExhStateFalse>{'대기'}</RExhStateFalse>
-                      ) : (
-                        <RExhStateFalse>{'실패'}</RExhStateFalse>
-                      )}
+                      <RExhStateText state={item.regState}>
+                        {item.regState}
+                      </RExhStateText>
                     </CategoryNormal>
                   </Category>
                 </TouchableOpacity>
@@ -262,16 +258,19 @@ const RExhDate = styled.Text`
   line-height: ${wp(6)}px;
 `;
 
-const RExhStateTrue = styled.Text`
-  font-size: ${rf(16)}px;
-  color: ${MAIN_COLOR};
-  font-family: ${FONT_NAME};
-  line-height: ${wp(6)}px;
-`;
+interface RExhStateProps {
+  state: string;
+}
 
-const RExhStateFalse = styled.Text`
+const RExhStateText = styled.Text<RExhStateProps>`
   font-size: ${rf(16)}px;
   color: ${MIDDLE_GREY};
+  color: ${(props: RExhStateProps) =>
+    props.state === '완료'
+      ? `${MAIN_COLOR}`
+      : props.state === '대기'
+      ? `${MIDDLE_GREY}`
+      : `black`};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
