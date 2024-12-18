@@ -56,6 +56,10 @@ const CalendarScreen = () => {
   );
 
   useEffect(() => {
+    refetch();
+  }, [gatherId]);
+
+  useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'calendar') {
         updateTab('calendar');

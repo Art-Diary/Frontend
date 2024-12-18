@@ -66,7 +66,7 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     });
     navigation.navigate('GatheringRoutes', {
       screen: 'GatheringInfo',
-      params: undefined,
+      params: {gatherId: item.gatherId},
     });
   };
 

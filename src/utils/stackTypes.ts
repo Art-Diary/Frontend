@@ -2,7 +2,7 @@ import {ExhDetailInfo, RegExhDetailInfo} from '~/types';
 
 // types.ts
 export type GatheringStackParamList = {
-  GatheringInfo: undefined;
+  GatheringInfo: {gatherId: number};
   GatheringDiaryList: {pageNum: number};
   GatheringDiaryBack: undefined;
   CreateExhVisitDateInGathering: {gatherId: number};
@@ -29,7 +29,7 @@ export type CalendarDiaryStackParamList = {
 export type RootStackParamList = {
   Main: {
     screen: 'Calendar' | 'Setting' | 'Diary' | 'Exhibition' | 'Mate';
-    params?: {modalOpen: boolean};
+    params?: {modalOpen?: boolean; fromPushAlarm?: boolean; visitDate?: string};
   };
   // mydiary
   CreateExhVisitedDate: {

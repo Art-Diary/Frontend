@@ -44,7 +44,7 @@ interface Props {
   route: ExhDetailInfoScreenRouteProp;
 }
 
-const ExhDetailInfo: React.FC<Props> = ({route}) => {
+const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const userInfo = useUserInfo();
   const isFocused = useIsFocused();
@@ -225,7 +225,7 @@ const ExhDetailInfo: React.FC<Props> = ({route}) => {
   );
 };
 
-export default ExhDetailInfo;
+export default ExhDetailInfoScreen;
 
 /** style */
 const ContainerScroll = styled.ScrollView`

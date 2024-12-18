@@ -87,12 +87,26 @@ const LoginScreen = () => {
 
   useEffect(() => {
     const handlePressNotification = async (detail: EventDetail) => {
+      const data = detail.notification?.data;
       // 처리할 이벤트 추가
-      if (detail.notification?.data) {
-        const exhId = detail.notification?.data.exhId;
-        navigation.navigate('ExhDetailInfo', {
-          exhId: Number(exhId),
-        });
+      if (data) {
+        const info = Object(data.info);
+        const type = info.type;
+        const value = info.id;
+
+        if (type === 'exhibition') {
+          navigation.navigate('ExhDetailInfo', {exhId: value});
+        } else if (type === 'gathering') {
+          navigation.navigate('GatheringRoutes', {
+            screen: 'GatheringInfo',
+            params: {gatherId: value},
+          });
+        } else if (type === 'calendar') {
+          navigation.navigate('Main', {
+            screen: 'Calendar',
+            params: {fromPushAlarm: true, visitDate: value},
+          });
+        }
       }
     };
 
@@ -114,9 +128,21 @@ const LoginScreen = () => {
 
     notifee.onBackgroundEvent(async ({type, detail}) => {
       if (type === EventType.PRESS) {
-        await Linking.openURL(
-          `artdiary://exhibition/${detail.notification?.data?.exhId}`,
-        );
+        const data = detail.notification?.data;
+
+        if (data) {
+          const info = Object(data.info);
+          const type = info.type;
+          const id = Number(info.id);
+
+          if (type === 'exhibition') {
+            await Linking.openURL(`artdiary://exhibition/${id}`);
+          } else if (type === 'gathering') {
+            await Linking.openURL(`artdiary://gathering/${id}`);
+          } else if (type === 'calendar') {
+            await Linking.openURL(`artdiary://calendar`);
+          }
+        }
       } else if (type === EventType.DISMISSED) {
         handleDismissedNotification(detail);
       }

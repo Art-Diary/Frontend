@@ -51,6 +51,7 @@ const CalendarFrame: React.FC<CalendarProps> = ({
       Number(splitDate[2]),
     );
     setCurrentDate(date);
+    setSelectedDate(initDate);
   }, [initDate]);
 
   const goToNextMonth = () => {
