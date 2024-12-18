@@ -9,6 +9,16 @@ export const linking: LinkingOptions<RootStackParamList> = {
   config: {
     screens: {
       ExhDetailInfo: 'exhibition/:exhId',
+      GatheringRoutes: {
+        screens: {
+          GatheringInfo: 'gathering/:gatherId', // GatheringInfo 화면으로의 경로 설정
+        },
+      },
+      Main: {
+        screens: {
+          Calendar: 'calendar',
+        },
+      },
     },
   },
   async getInitialURL() {

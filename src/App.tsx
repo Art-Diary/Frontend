@@ -22,7 +22,7 @@ import {toastConfig} from './components/common/modal/toastConfig';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import ExhSearchName from './screens/exhibition/ExhSearchName';
-import ExhDetailInfo from './screens/exhibition/ExhDetailInfo';
+import ExhDetailInfoScreen from './screens/exhibition/ExhDetailInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
@@ -152,7 +152,10 @@ export default function App() {
             <Stack.Screen name="MyDiaryRoutes" component={MyDiaryRoutes} />
             {/* [전시회] 전시회 상세 정보 */}
             <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
-            <Stack.Screen name="ExhDetailInfo" component={ExhDetailInfo} />
+            <Stack.Screen
+              name="ExhDetailInfo"
+              component={ExhDetailInfoScreen}
+            />
             <Stack.Screen name="ExhToDiary" component={ExhToDiary} />
             <Stack.Screen name="ExhToDiaryBack" component={ExhToDiaryBack} />
             <Stack.Screen name="ExhToCal" component={ExhToCal} />

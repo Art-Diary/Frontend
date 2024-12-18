@@ -15,6 +15,8 @@ import {
 import {FONT_NAME} from '../common/style';
 import {useFetchGatheringList} from '~/api/queries/gathering';
 import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {RootStackNavigationProp} from '~/App';
 
 interface SelectorProps {
   handleRefetch: () => void;
@@ -40,6 +42,9 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
   handleGatherColorList,
   gatherColorList,
 }) => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const params: any = useRoute().params;
+  const [initialDate, setInitialDate] = useState(initDate);
   const [selectedId, setSelectedId] = useState(-1); // 아이템 선택
   const {
     data: gatheringList,
@@ -54,6 +59,19 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
       handleRefetch();
     });
   };
+
+  useEffect(() => {
+    setInitialDate(initDate);
+  }, [initDate]);
+
+  useEffect(() => {
+    if (params.fromPushAlarm) {
+      setInitialDate(params.visitDate);
+      handleGatherId(-2);
+      setSelectedId(-2);
+      navigation.setParams({fromPushAlarm: false, visitDate: undefined}); // 상태 초기화
+    }
+  }, [params.fromPushAlarm]);
 
   useEffect(() => {
     if (gatheringList) {
@@ -92,7 +110,7 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
 
   return (
     <CalendarFrame
-      initDate={initDate}
+      initDate={initialDate}
       onSelectedDate={handleSelectedDate}
       markedDates={markedDates}
       setChangeMonth={handleChangeMonth}
@@ -100,8 +118,8 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
         selectedId === -2
           ? LIGHT_GREY
           : selectedId === -1
-            ? MAIN_COLOR
-            : findGatherColor(gatherColorList, selectedId)
+          ? MAIN_COLOR
+          : findGatherColor(gatherColorList, selectedId)
       }>
       <GatheringWrapper>
         <ScrollView
@@ -145,8 +163,8 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
                       selectedId === item.gatherId
                         ? 'white'
                         : gatherColorList[index]
-                          ? gatherColorList[index].color
-                          : undefined
+                        ? gatherColorList[index].color
+                        : undefined
                     }>
                     {item.gatherName}
                   </GatherNameText>

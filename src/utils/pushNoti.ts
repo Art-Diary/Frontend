@@ -10,14 +10,30 @@ const displayNotification = async (
     importance: AndroidImportance.HIGH,
   });
 
-  const titleData = message.data?.title.toString();
-  const title = titleData?.split('/')[0];
-  const exhId = Number(titleData?.split('/')[1]);
+  if (!message.data) {
+    return;
+  }
+  const titleData = message.data.title.toString();
+  const title = titleData.split('/')[0];
+  const body = message.data.body.toString();
+  const type: string = titleData.split('/')[1].split('-')[0];
+  var value: number | undefined | string = undefined;
+
+  if (type === 'calendar') {
+    value = body.split('에')[0];
+  } else {
+    value = Number(titleData.split('/')[1].split('-')[1]);
+  }
 
   await notifee.displayNotification({
     title: title,
-    body: message.data?.body.toString(),
-    data: {exhId: exhId},
+    body: body,
+    data: {
+      info: {
+        type: type,
+        id: value,
+      },
+    },
     android: {
       channelId: channelAnoucement,
       showTimestamp: true,

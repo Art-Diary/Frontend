@@ -1,4 +1,4 @@
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -48,8 +48,19 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import {ExhInfoForList} from '~/types';
 import AddNewMateInGatheringModal from '~/components/gathering/modal/AddNewMateInGatheringModal';
 import LeaveGatheringModal from '~/components/gathering/modal/LeaveGatheringModal';
+import {GatheringStackParamList} from '~/utils/stackTypes';
 
-const GatheringInfoScreen = () => {
+type GatheringInfoScreenRouteProp = RouteProp<
+  GatheringStackParamList,
+  'GatheringInfo'
+>;
+
+interface Props {
+  route: GatheringInfoScreenRouteProp;
+}
+
+const GatheringInfoScreen: React.FC<Props> = ({route}) => {
+  const {gatherId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const tabIdentifierInfo = useTabIdentifierInfo();
@@ -68,13 +79,13 @@ const GatheringInfoScreen = () => {
     isError,
     isSuccess,
     refetch,
-  } = useFetchGatheringInfo(enterGatheringInfo.gatherId);
+  } = useFetchGatheringInfo(gatherId);
   const {
     mutate: deleteGathering,
     isLoading: deleteLoading,
     isError: deleteError,
     isSuccess: deleteSuccess,
-  } = useDeleteGathering(enterGatheringInfo.gatherId);
+  } = useDeleteGathering(gatherId);
   const {updateDate} = useDateFromExhActions();
 
   useEffect(() => {
@@ -129,7 +140,7 @@ const GatheringInfoScreen = () => {
     // 모임에 새로운 전시회 일정 추가
     navigation.navigate('GatheringRoutes', {
       screen: 'CreateExhVisitDateInGathering',
-      params: {gatherId: enterGatheringInfo.gatherId},
+      params: {gatherId: gatherId},
     });
   };
 
@@ -137,7 +148,7 @@ const GatheringInfoScreen = () => {
     // 모임의 기록으로 넘어가기
     updateVisitedExhId(item.exhId);
     updateGatheringListParams({
-      gatherId: enterGatheringInfo.gatherId,
+      gatherId: gatherId,
       exhId: item.exhId,
     });
     navigation.navigate('GatheringRoutes', {
