@@ -20,6 +20,7 @@ import {useAddMyExhVisitDate} from '~/api/queries/mydiary';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import CustomTouchable from '../../common/CustomTouchable';
 import CalendarSelectDateFrame from '~/components/common/CalendarSelectDateFrame';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 interface AddVisitedDateForDiaryModalProps {
   exhId: number;
@@ -37,14 +38,22 @@ const AddVisitedDateForDiaryModal: React.FC<
     isLoading,
     isError,
     isSuccess,
+    error,
   } = useAddMyExhVisitDate(exhId);
 
   useEffect(() => {
     if (isError) {
-      showToast('방문 가능한 날짜가 아닙니다');
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 저장된 날짜입니다.');
+      } else if (statusCode === 403) {
+        showToast('방문 가능한 날짜가 아닙니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccess) {
-      showToast('방문 날짜를 추가했습니다');
       handleCloseModal();
     }
   }, [isError, isSuccess]);
@@ -86,6 +95,7 @@ const AddVisitedDateForDiaryModal: React.FC<
 
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <Message>{message}</Message>
       {/* 달력 */}
       <Wrapper>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {RouteProp} from '@react-navigation/native';
 import DiaryList from '~/components/common/diary/DiaryList';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import BackView from '~/components/common/BackView';
 import {OptionBarIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -18,7 +18,7 @@ interface Props {
   route: ExhDetailInfoScreenRouteProp;
 }
 
-const ExhToDiary: React.FC<Props> = ({route}) => {
+const ShowExhDiaryScreen: React.FC<Props> = ({route}) => {
   //  const navigation = useNavigation<RootStackNavigationProp>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -51,7 +51,7 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
       </BackView>
 
       {diaryArr.length === 0 ? (
-        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+        <InfoMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
       ) : (
         <DiaryList
           diaryList={diaryArr}
@@ -79,7 +79,7 @@ const ExhToDiary: React.FC<Props> = ({route}) => {
     </Container>
   );
 };
-export default ExhToDiary;
+export default ShowExhDiaryScreen;
 
 /** style */
 

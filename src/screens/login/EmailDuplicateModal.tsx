@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
@@ -31,7 +31,6 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
   loginUserInfo,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {updateAuthInfo} = useUserActions();
   const {
     mutate: uniteSocialLogin,
@@ -54,14 +53,7 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
 
   useEffect(() => {
     if (uniteError) {
-      showToast('에러 발생 ;(');
-      handleCloseModal();
-    }
-    if (uniteLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!uniteLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (uniteSuccess) {
       const data = uniteData.data;
@@ -73,18 +65,11 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
         navigation.navigate('InitProfile');
       }
     }
-  }, [uniteLoading, uniteError, uniteSuccess]);
+  }, [uniteError, uniteSuccess]);
 
   useEffect(() => {
     if (separateError) {
-      showToast('에러 발생 ;(');
-      handleCloseModal();
-    }
-    if (separateLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!separateLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (separateSuccess) {
       const data = separateData.data;
@@ -96,7 +81,7 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
         navigation.navigate('InitProfile');
       }
     }
-  }, [separateLoading, separateError, separateSuccess]);
+  }, [separateError, separateSuccess]);
 
   const socialLogin = (isUnite: boolean) => {
     if (isUnite) {
@@ -116,6 +101,7 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
         onPress={handleCloseModal}
       />
       <Container>
+        <LoadingModal isLoading={uniteLoading || separateLoading} />
         <Contents>
           <MessageView>
             <Message>동일한 이메일로 이미 로그인 한 적이 있습니다.</Message>
@@ -139,7 +125,6 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
             </ButtonDetailSection>
           </TouchView>
         </Contents>
-        {isLoadingOpen && <LoadingModal message={'로그인 시도 중 :)'} />}
       </Container>
     </Modal>
   );

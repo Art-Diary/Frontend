@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {
   heightSizePercentage as hp,
@@ -35,7 +35,6 @@ const LeaveCheckModal: React.FC<DeleteDiaryModalProps> = ({
   reason,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
 
   const {
     mutate: deleteUser,
@@ -46,16 +45,9 @@ const LeaveCheckModal: React.FC<DeleteDiaryModalProps> = ({
 
   useEffect(() => {
     if (isError) {
-      showToast('탈퇴를 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
-      showToast('탈퇴 성공 :(');
       handleCloseModal();
       // TODO 나중에 로그아웃 구체적으로 하기
       AsyncStorage.removeItem('userId');
@@ -65,7 +57,7 @@ const LeaveCheckModal: React.FC<DeleteDiaryModalProps> = ({
         routes: [{name: 'Login'}],
       });
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onPressLeave = () => {
     deleteUser();
@@ -73,6 +65,7 @@ const LeaveCheckModal: React.FC<DeleteDiaryModalProps> = ({
 
   return (
     <DecisionModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <Contents>
         <MsgWrapper>
           <Message>정말 탈퇴하겠습니까?</Message>
@@ -82,7 +75,6 @@ const LeaveCheckModal: React.FC<DeleteDiaryModalProps> = ({
           <DeleteButton>탈퇴</DeleteButton>
         </CustomTouchable>
       </Contents>
-      {isLoadingOpen && <LoadingModal message={'탈퇴 처리 중 :('} />}
     </DecisionModal>
   );
 };

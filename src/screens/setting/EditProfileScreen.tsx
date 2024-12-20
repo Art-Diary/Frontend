@@ -16,10 +16,6 @@ const EditProfileScreen = () => {
     <UpdateProfile
       title={'프로필 수정'}
       initProfile={user}
-      messages={{
-        errorMsg: '정보 수정을 실패했습니다.',
-        successMsg: '정보 수정 완료!',
-      }}
       navigateTo={'back'}
     />
   );

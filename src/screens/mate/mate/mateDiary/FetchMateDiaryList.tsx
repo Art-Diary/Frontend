@@ -1,14 +1,16 @@
-import React, {useEffect} from 'react';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import React, {useEffect, useState} from 'react';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {useFetchMateDiaryList} from '~/api/queries/mate';
 import {useQueryMateDiaryInfo} from '~/zustand/mate/queryMateDiary';
 import DiaryList from '~/components/common/diary/DiaryList';
 import {useIsFocused} from '@react-navigation/native';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 const FetchMateDiaryList = () => {
   const isFocused = useIsFocused();
   const queryInfo = useQueryMateDiaryInfo();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: mateDiaryList,
     isLoading,
@@ -25,19 +27,29 @@ const FetchMateDiaryList = () => {
     }
   }, [isFocused]);
 
-  if (isError) {
-    return <ErrorMessageView message="전시 메이트 다이어리 조회 실패 ;(" />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
-  if (isLoading) {
-    return <LoadingModal message="전시 메이트 다이어리 조회 중 :)" />;
-  }
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
-  if (mateDiaryList.length === 0) {
-    return <ErrorMessageView message="아직 전시회에 대한 기록이 없습니다." />;
-  }
-
-  return <DiaryList diaryList={mateDiaryList} />;
+  return (
+    <>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+      {mateDiaryList &&
+        (!mateDiaryList.length ? (
+          <InfoMessageView message="아직 전시회에 대한 기록이 없습니다." />
+        ) : (
+          <DiaryList diaryList={mateDiaryList} />
+        ))}
+    </>
+  );
 };
 
 export default FetchMateDiaryList;

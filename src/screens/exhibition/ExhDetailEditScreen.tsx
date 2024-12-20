@@ -5,6 +5,7 @@ import {useUpdateExhDetailInfo} from '~/api/queries/exhibition';
 import {RouteProp, useNavigation} from '@react-navigation/native';
 import {ExhDetailInfo} from '~/types';
 import {RootStackNavigationProp} from '~/App';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 type RootStackParamList = {
   ExhDetailEdit: {exhDetailInfo: ExhDetailInfo};
 };
@@ -32,6 +33,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
     isError,
     isSuccess,
   } = useUpdateExhDetailInfo();
+
   useEffect(() => {
     if (exhDetailInfo) {
       setExhName(exhDetailInfo.exhName);
@@ -46,47 +48,52 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
       setArt(exhDetailInfo.art);
     }
   }, [exhDetailInfo]);
+
   useEffect(() => {
     if (isError) {
-      showToast('전시회 수정을 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       navigation.goBack();
     }
   }, [isError, isSuccess]);
+
   return (
-    <EditExhFormFrame
-      formState={'updateExhDetailByAdmin'}
-      exhData={{
-        exhName,
-        setExhName,
-        gallery,
-        setGallery,
-        startDate,
-        setStartDate,
-        endDate,
-        setEndDate,
-        painter,
-        setPainter,
-        fee,
-        setFee,
-        url,
-        setUrl,
-        intro,
-        setIntro,
-        posterUri,
-        setPosterUri,
-        art,
-        setArt,
-      }}
-      requestData={{
-        isLoading: isLoading,
-        updateExhDetailByAdminRequest: {
-          exhId: exhDetailInfo.exhId,
-          updateByAdminApi: updateExhDetailInfo,
-        },
-      }}
-    />
+    <>
+      <LoadingModal isLoading={isLoading} />
+      <EditExhFormFrame
+        formState={'updateExhDetailByAdmin'}
+        exhData={{
+          exhName,
+          setExhName,
+          gallery,
+          setGallery,
+          startDate,
+          setStartDate,
+          endDate,
+          setEndDate,
+          painter,
+          setPainter,
+          fee,
+          setFee,
+          url,
+          setUrl,
+          intro,
+          setIntro,
+          posterUri,
+          setPosterUri,
+          art,
+          setArt,
+        }}
+        requestData={{
+          isLoading: isLoading,
+          updateExhDetailByAdminRequest: {
+            exhId: exhDetailInfo.exhId,
+            updateByAdminApi: updateExhDetailInfo,
+          },
+        }}
+      />
+    </>
   );
 };
 export default ExhDetailEditScreen;

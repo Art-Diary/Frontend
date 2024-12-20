@@ -15,13 +15,14 @@ import {
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {usefetchRegExhs} from '~/api/queries/regexh';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {RefreshControl, ScrollView, TouchableOpacity} from 'react-native';
 import {RootStackNavigationProp} from '~/App';
 import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   RegExhList: {isAdmin: boolean};
@@ -34,20 +35,27 @@ interface Props {
 }
 
 const RegExhListScreen: React.FC<Props> = ({route}) => {
-  const {isAdmin} = route.params;
-  const {data, isLoading, isError, isSuccess, refetch} =
-    usefetchRegExhs(isAdmin);
-  const navigation = useNavigation<RootStackNavigationProp>();
   const limit = 13; // 한 페이지에 보이는 리뷰 개수
   const PAGE_GROUP_SIZE = 5; // 한 번에 보여줄 페이지 번호 개수
+  // Hooks
+  const {isAdmin} = route.params;
+  const isFocused = useIsFocused();
+  const navigation = useNavigation<RootStackNavigationProp>();
+
+  // State Management
   const [page, setPage] = useState<number>(1); //현재 페이지
   const [offset, setOffset] = useState<number>(0); //해당 페이지의 첫번째 인덱스
   const [numPagesArr, setNumPagesArr] = useState<number[]>([]);
   const [numPages, setNumPages] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
-  const isFocused = useIsFocused();
   const [regExhInfoList, setRegExhInfoList] = useState<any | null>(null);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
+  // API Hooks
+  const {data, isLoading, isError, isSuccess, refetch} =
+    usefetchRegExhs(isAdmin);
+
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetch().then(res => {
@@ -55,6 +63,12 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
       });
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -98,6 +112,7 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
     }
   }, [refreshing]);
 
+  // Handlers
   const handleRefetch = async () => {
     await refetch().then(() => {
       setRefreshing(false);
@@ -108,20 +123,19 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
     setRefreshing(true);
   };
 
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'로딩 중 :)'} />;
-  }
-
   const handleAddRegExh = () => {
     navigation.navigate('RegisterNewExh');
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView
         title={'전시회 등록 확인' + (isAdmin ? ' (관리자)' : '')}
         line={true}>
@@ -151,7 +165,7 @@ const RegExhListScreen: React.FC<Props> = ({route}) => {
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
           {!regExhInfoList || regExhInfoList.length === 0 ? (
-            <ErrorMessageView message="등록한 전시회가 없습니다." />
+            <InfoMessageView message="등록한 전시회가 없습니다." />
           ) : (
             <>
               {regExhInfoList

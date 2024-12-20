@@ -1,12 +1,13 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RootStackNavigationProp} from '~/App';
 import NameList from '~/components/mate/NameList';
 import {useFetchGatheringList} from '~/api/queries/gathering';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {useEnterGatheringActions} from '~/zustand/gathering/enterGathering';
 import styled from 'styled-components/native';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface GatherInfo {
   gatherId: number;
@@ -22,9 +23,15 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
   handleRefresh,
   refreshing,
 }) => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const {updateEnterGatheringInfo} = useEnterGatheringActions();
+
+  // State Management
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: gatheringList,
     isLoading,
@@ -33,6 +40,7 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     refetch,
   } = useFetchGatheringList();
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -45,6 +53,13 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     }
   }, [refreshing]);
 
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
+
+  // Handlers
   const handleRefetch = async () => {
     await refetch().then(() => {
       handleRefresh(false);
@@ -52,11 +67,7 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
   };
 
   if (isError) {
-    return <ErrorMessageView message="모임 목록 조회 실패:(" />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="모임 목록 조회 중:)" />;
+    return <InfoMessageView message="모임 목록 조회 실패:(" />;
   }
 
   const pressEnterGathering = (item: GatherInfo) => {
@@ -70,8 +81,15 @@ const GatheringListRequest: React.FC<GatheringListRequestProps> = ({
     });
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <NameList
         itemList={gatheringList}
         handleClickItem={pressEnterGathering}

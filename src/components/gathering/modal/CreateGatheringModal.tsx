@@ -25,6 +25,7 @@ import {
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import InfoModal from '../../common/modal/InfoModal';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 interface Props {
   handleCloseModal: () => void;
@@ -32,7 +33,6 @@ interface Props {
 
 const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
   const maxInputLength = 12;
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [gahteringKeyword, setGahteringKeyword] = useState<string>('');
   const {
     mutate: createGathering,
@@ -43,19 +43,13 @@ const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
 
   useEffect(() => {
     if (isError) {
-      showToast('모임 만들기를 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
-      showToast('모임 만들기 성공 :)');
       handleCloseModal();
+      // TODO 모임 안으로 들어가기
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onChangeGathering = useCallback((text: string) => {
     setGahteringKeyword(text);
@@ -72,6 +66,7 @@ const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
 
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <Message>모임 만들기</Message>
       {/* body */}
       <Contents>

@@ -1,13 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameTag from '../../screens/mate/NameTag';
 import {useFetchSearchNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
@@ -20,6 +19,8 @@ import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {UserDetailInfo} from '~/types';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface SearchNewMateListInGatheringProps {
   searchKeyword: string;
@@ -32,11 +33,13 @@ const SearchNewMateListInGathering: React.FC<
   SearchNewMateListInGatheringProps
 > = ({searchKeyword, changeIsPressed, selectedMate, handleSelectedMate}) => {
   const {enterGatheringInfo} = useEnterGatheringInfo();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: searchNewMateInGathering,
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchSearchNewMateInGathering(
     enterGatheringInfo.gatherId,
     searchKeyword,
@@ -46,17 +49,10 @@ const SearchNewMateListInGathering: React.FC<
     if (isSuccess) {
       changeIsPressed();
     }
-  }, [isSuccess]);
-
-  if (isError) {
-    return (
-      <ErrorMessageView message={'모임에 추가할 전시 메이트 조회 실패 ;('} />
-    );
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'추가할 전시 메이트 조회 중 :)'} />;
-  }
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isSuccess, isError]);
 
   const pressItem = (item: any) => {
     if (item.userId === selectedMate) {
@@ -66,12 +62,19 @@ const SearchNewMateListInGathering: React.FC<
     }
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <MateListView>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {!searchNewMateInGathering ||
       (searchNewMateInGathering.notMate.length === 0 &&
         searchNewMateInGathering.alreadyMate.length === 0) ? (
-        <ErrorMessageView message={'검색 결과가 없습니다.'} />
+        <InfoMessageView message={'검색 결과가 없습니다.'} />
       ) : (
         <ScrollView
           pagingEnabled={false}

@@ -9,12 +9,13 @@ import {BACK_COLOR} from '~/components/common/colors';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryList} from '~/api/queries/mydiary';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import DiaryList from '~/components/common/diary/DiaryList';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {MyDiaryStackParamList} from '~/utils/stackTypes';
 import DiaryUpdateDeleteModal from '~/components/common/diary/modal/DiaryUpdateDeleteModal';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type MyDiaryListScreenProps = RouteProp<MyDiaryStackParamList, 'MyDiaryList'>;
 
@@ -36,22 +37,16 @@ const MyDiaryListScreen: React.FC<Props> = ({route}) => {
     data: myDiaryList,
     isLoading,
     isError,
+    refetch,
   } = useFetchMyDiaryList(visitedExhId);
-  const [isLoadingOpen, setIsLoadingOpen] = useState(false);
-  const [haveError, setHaveError] = useState(false);
   const [first, setFirst] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
-      setHaveError(true);
+      setIsErrorOpen(true);
     }
-    if (isLoading) {
-      setFirst(false);
-      setIsLoadingOpen(true);
-    } else {
-      setIsLoadingOpen(false);
-    }
-  }, [isError, isLoading]);
+  }, [isError]);
 
   const onPressButton = () => {
     resetWriteInfo();
@@ -68,8 +63,15 @@ const MyDiaryListScreen: React.FC<Props> = ({route}) => {
     setIsUpdateClicked(true);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {/* header */}
       <BackView line={false}>
         <ButtonView>
@@ -85,40 +87,34 @@ const MyDiaryListScreen: React.FC<Props> = ({route}) => {
       </BackView>
 
       {/* body */}
-      {haveError ? (
-        <ErrorMessageView message={'내 다이어리 목록 조회 실패 ;('} />
-      ) : !myDiaryList ? (
-        <></>
-      ) : myDiaryList.length === 0 ? (
-        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
-      ) : (
-        <DiaryList
-          pageNum={pageNum}
-          first={first}
-          handleFirst={() => setFirst(true)}
-          diaryList={myDiaryList}
-          deleteActions={{
-            handleShowOptionBar: setShowOptionBar,
-            isDeleteModalOpen: isDeleteModalOpen,
-            handleCloseDeleteModal: () => setIsDeleteModalOpen(false),
-            handleCloseOptionModal: () => setIsModalOpen(false),
-          }}
-          updateActions={{
-            isUpdateClicked: isUpdateClicked,
-            handleUpdateClicked: () => setIsUpdateClicked(false),
-            handleCloseOptionModal: () => setIsModalOpen(false),
-          }}
-        />
-      )}
+      {myDiaryList &&
+        (myDiaryList.length === 0 ? (
+          <InfoMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+        ) : (
+          <DiaryList
+            pageNum={pageNum}
+            first={first}
+            handleFirst={() => setFirst(true)}
+            diaryList={myDiaryList}
+            deleteActions={{
+              handleShowOptionBar: setShowOptionBar,
+              isDeleteModalOpen: isDeleteModalOpen,
+              handleCloseDeleteModal: () => setIsDeleteModalOpen(false),
+              handleCloseOptionModal: () => setIsModalOpen(false),
+            }}
+            updateActions={{
+              isUpdateClicked: isUpdateClicked,
+              handleUpdateClicked: () => setIsUpdateClicked(false),
+              handleCloseOptionModal: () => setIsModalOpen(false),
+            }}
+          />
+        ))}
       {isModalOpen && (
         <DiaryUpdateDeleteModal
           handleCloseModal={() => setIsModalOpen(false)}
           handleUpdate={clickUpdatePage}
           handleDelete={clickDeletePage}
         />
-      )}
-      {isLoadingOpen && (
-        <LoadingModal message={'내 다이어리 목록 조회 중 :)'} />
       )}
     </Container>
   );

@@ -8,11 +8,11 @@ import {
 import {AREA_FONT_SIZE, FONT_NAME} from './style';
 import {BACK_COLOR, MIDDLE_GREY} from './colors';
 
-interface ErrorMessageProps {
+interface InfoMessageProps {
   message: string;
 }
 
-const ErrorMessageView: React.FC<ErrorMessageProps> = ({message}) => {
+const InfoMessageView: React.FC<InfoMessageProps> = ({message}) => {
   return (
     <Container>
       <Message>{message}</Message>
@@ -20,7 +20,7 @@ const ErrorMessageView: React.FC<ErrorMessageProps> = ({message}) => {
   );
 };
 
-export default ErrorMessageView;
+export default InfoMessageView;
 
 /** style */
 const Container = styled.View`

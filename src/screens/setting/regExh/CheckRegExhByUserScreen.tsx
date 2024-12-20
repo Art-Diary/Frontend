@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {usefetchRegExhDetail} from '~/api/queries/regexh';
 import RegExhDetailFormat from '~/components/regExh/RegExhDetailFormat';
-import {showToast} from '~/components/common/modal/toastConfig';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   CheckRegExhByUser: {regExhId: number};
@@ -18,6 +18,8 @@ interface Props {
 const CheckRegExhByUserScreen: React.FC<Props> = ({route}) => {
   const isFocused = useIsFocused();
   const {regExhId} = route.params;
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
   const {
     data: regExhInfo,
     isLoading,
@@ -26,33 +28,27 @@ const CheckRegExhByUserScreen: React.FC<Props> = ({route}) => {
     refetch,
   } = usefetchRegExhDetail(regExhId, false);
 
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
-
   useEffect(() => {
     if (isFocused) {
-      handleRefetch();
+      refetch();
     }
   }, [isFocused]);
 
   useEffect(() => {
     if (isError) {
-      showToast('전시회 등록 정보 조회를 실패했습니다.');
+      setIsErrorOpen(true);
     }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    } else {
-      setIsLoadingOpen(false);
-    }
-  }, [isError, isLoading]);
+  }, [isError]);
 
-  const handleRefetch = async () => {
-    await refetch().then(() => {
-      setIsLoadingOpen(false);
-    });
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
   };
 
   return (
     <>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {regExhInfo && (
         // 사용자 확인용 - 등록된 전시회 확인 페이지
         <RegExhDetailFormat
@@ -61,7 +57,6 @@ const CheckRegExhByUserScreen: React.FC<Props> = ({route}) => {
           refetch={refetch}
         />
       )}
-      {isLoadingOpen && <LoadingModal message={'정보 불러오는 중 :)'} />}
     </>
   );
 };

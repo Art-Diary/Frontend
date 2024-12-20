@@ -1,8 +1,8 @@
 import React from 'react';
 import DiaryBackFrame from '~/components/common/diary/DiaryBackFrame';
 
-const ExhToDiaryBack = () => {
+const ShowExhDiaryBackScreen = () => {
   return <DiaryBackFrame />;
 };
 
-export default ExhToDiaryBack;
+export default ShowExhDiaryBackScreen;

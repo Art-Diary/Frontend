@@ -10,11 +10,13 @@ import BackView from '~/components/common/BackView';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {calendarColor} from '~/components/calendar/calendarColor';
-import OptionsModal from '~/components/exhibition/OptionsModal';
+import OptionsModal from '~/components/exhibition/modal/OptionsModal';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import {MarkedType, MyVisitedDateType, VisitedDateInfo} from '~/types';
 import ExhAddVisitDateCalendarFrame from '~/components/exhibition/ExhAddVisitDateCalendarFrame';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   ExhToCal: {exhId: number};
@@ -26,16 +28,21 @@ interface Props {
   route: ExhToCalProp;
 }
 
-const ExhToCal: React.FC<Props> = ({route}) => {
+const AddVisitDateInExhScreen: React.FC<Props> = ({route}) => {
+  // Hooks
   const {exhId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateDate} = useDateFromExhActions();
+  const isFocused = useIsFocused();
+
+  // State Management
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 날짜 선택 완료 누를 시,모달 오픈
   const [isCheckModalOpen, setIsCheckModalOpen] = useState<boolean>(false); // 날짜 선택 누를 시,모달 오픈
-  const {updateDate} = useDateFromExhActions();
-  const isFocused = useIsFocused();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
+  // API Hooks
   const {
     data: dates,
     isLoading: isDatesLoading,
@@ -43,14 +50,15 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     isSuccess: isDatesSuccess,
     refetch: refetchDates,
   } = useFetchMyStoredDateListOfExh(exhId); //전시회 방문 날짜 목록
-
   const {
     mutate: addMyExhVisitDate,
     isLoading,
     isError,
     isSuccess,
+    error,
   } = useAddMyExhVisitDate(exhId);
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetchDates();
@@ -69,18 +77,32 @@ const ExhToCal: React.FC<Props> = ({route}) => {
         setMarkedDates(list);
       });
     }
-  }, [dates]);
+  }, [isDatesSuccess, dates]);
+
+  useEffect(() => {
+    if (isDatesError) {
+      setIsErrorOpen(true);
+    }
+  }, [isDatesError]);
 
   useEffect(() => {
     if (isError) {
-      showToast('방문 가능한 날짜가 아닙니다');
-      setIsCheckModalOpen(false);
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 방문 예정된 날짜입니다.');
+      } else if (statusCode === 403) {
+        showToast('방문 가능한 날짜가 아닙니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccess) {
       setIsModalOpen(true);
     }
   }, [isError, isSuccess]);
 
+  // Handlers
   const onSelectedDate = (selectedDate: string) => {
     setSelectedDate(selectedDate);
   };
@@ -137,8 +159,15 @@ const ExhToCal: React.FC<Props> = ({route}) => {
     setIsCheckModalOpen(false);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetchDates();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading || isDatesLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView line={false} children={null} />
       {isModalOpen && (
         <OptionsModal
@@ -165,7 +194,7 @@ const ExhToCal: React.FC<Props> = ({route}) => {
   );
 };
 
-export default ExhToCal;
+export default AddVisitDateInExhScreen;
 
 /** style */
 const Container = styled.View`

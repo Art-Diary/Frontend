@@ -29,6 +29,8 @@ import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {InfoButtonIcon} from '~/components/common/icon';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type SelectedDateInfo = {
   selectedDate: string;
@@ -49,14 +51,21 @@ const AddVisitExhToCalModal: React.FC<ModalProps> = ({
   handleCloseModal,
   message,
 }) => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
+
+  // State Management
   const [exhInfo, setExhInfo] = useState<ExhInfoForList>();
   const [showExhList, setShowExhList] = useState<ExhInfoForList[]>([]);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: exhList,
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchSearchExh(
     null,
     null,
@@ -68,21 +77,32 @@ const AddVisitExhToCalModal: React.FC<ModalProps> = ({
     mutate: addMyExhVisitDate,
     isError: isAddError,
     isSuccess: isAddSuccess,
+    isLoading: isAddLoading,
+    error,
   } = useAddMyExhVisitDate(
     exhInfo?.exhId ?? 0,
     selectedDateInfo.year,
     selectedDateInfo.month,
   );
 
+  // Effects
   useEffect(() => {
     if (isError) {
-      showToast('전시회 목록 조회를 실패했습니다.');
+      setIsErrorOpen(true);
     }
   }, [isError]);
 
   useEffect(() => {
     if (isAddError) {
-      showToast('개인 전시 방문 날짜 추가를 실패했습니다.');
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 저장된 전시회입니다.');
+      } else if (statusCode === 403) {
+        showToast('해당 날짜에 방문할 수 없는 전시회입니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isAddSuccess) {
       handleCloseModal();
@@ -108,6 +128,7 @@ const AddVisitExhToCalModal: React.FC<ModalProps> = ({
     }
   }, [exhList]);
 
+  // Handlers
   const onClickNextButton = () => {
     if (exhInfo) {
       addMyExhVisitDate({
@@ -116,15 +137,6 @@ const AddVisitExhToCalModal: React.FC<ModalProps> = ({
       });
     }
   };
-
-  //   const alreadyVisited = () => {
-  //     for (var i = 0; i < visitedExhIdList.length; i++) {
-  //       if (visitedExhIdList[i] === exhInfo?.exhId) {
-  //         return true;
-  //       }
-  //     }
-  //     return false;
-  //   };
 
   const onPressExh = (item: ExhInfoForList) => {
     setExhInfo(item);
@@ -135,8 +147,15 @@ const AddVisitExhToCalModal: React.FC<ModalProps> = ({
     navigation.navigate('ExhDetailInfo', {exhId, modalOpen: true});
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading || isAddLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <Message>{message}</Message>
       {!showExhList || showExhList.length === 0 ? (
         <SelectMsgView>

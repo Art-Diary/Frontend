@@ -15,10 +15,6 @@ const InitProfileScreen = () => {
         email: userloginInfo.email,
         providerType: userloginInfo.providerType,
       }}
-      messages={{
-        errorMsg: '정보 초기화를 실패했습니다.',
-        successMsg: '정보 초기화 완료!',
-      }}
       navigateTo={'Main'}
     />
   );

@@ -14,6 +14,8 @@ import {ExhInfoForList} from '~/types';
 import InfoModal from '../../modal/InfoModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchExhResult from '../../exhibition/SearchExhResult';
+import LoadingModal from '../../modal/LoadingModal';
+import ErrorModal from '../../modal/ErrorModal';
 
 interface SearchExhForDiaryModalProps {
   handleCloseModal: () => void;
@@ -27,9 +29,12 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
   message,
   handleExhInfo,
 }) => {
+  // State Management
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [exhibitionList, setExhibitionList] = useState([]);
-  const [openLoading, setOpenLoading] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: exhList,
     isLoading,
@@ -38,20 +43,17 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
     refetch,
   } = useFetchExhListBySearchContent(searchKeyword);
 
+  // Effects
   useEffect(() => {
     if (isError) {
-      showToast('전시회 조회 실패 ;(');
-    }
-    if (isLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
+      setIsErrorOpen(true);
     }
     if (isSuccess) {
       setExhibitionList(exhList);
     }
-  }, [isSuccess, isError, isLoading, exhList]);
+  }, [isSuccess, isError, exhList]);
 
+  // Handlers
   const onPressSearch = () => {
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
@@ -61,8 +63,15 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
     Keyboard.dismiss();
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <Message>{message}</Message>
       <SearchExhFrame
         searchKeyword={searchKeyword}

@@ -18,9 +18,8 @@ import {
 } from '~/components/common/style';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {changeImageSize} from '~/utils/resizeImage';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {changeDateTimeFormat, changeDotToHyphen} from '~/utils/date';
-import ExhSelectPeriod from '../../exhibition/ExhSelectPeriodModal';
+import ExhSelectPeriod from '../../exhibition/modal/ExhSelectPeriodModal';
 import {UpdateExhDetailType} from '~/api/exhibition';
 import {UpdateRegExhType} from '~/api/regexh';
 import TextInputForm from '../TextInputForm';
@@ -28,6 +27,7 @@ import ImageInputForm from '../ImageInputForm';
 import EditExhDateForm from './EditExhDateForm';
 import EditExhFeeForm from './EditExhFeeForm';
 import EditArtCategory from '~/components/setting/EditArtCategory';
+import LoadingModal from '../modal/LoadingModal';
 
 type ExhDataSetType = {
   exhName: string;
@@ -98,17 +98,7 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
   requestData,
 }) => {
   const feeMaxInputLength = 10;
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [isPeriodModalVisible, setIsPeriodModalVisible] = useState(false); // 일정 선택 모달
-
-  useEffect(() => {
-    if (requestData.isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!requestData.isLoading) {
-      setIsLoadingOpen(false);
-    }
-  }, [requestData.isLoading]);
 
   const handleClosePeriodModal = () => {
     setIsPeriodModalVisible(false);
@@ -261,6 +251,7 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
       resetScrollToCoords={{x: 0, y: 0}}
       contentContainerStyle={{flexGrow: 1}}>
       <Container>
+        <LoadingModal isLoading={requestData.isLoading} />
         <BackView title="전시회 등록" line={true} children={null} />
         <ContentsContainer>
           {/* 전시회 제목 */}
@@ -354,7 +345,6 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
           </CustomTouchable>
         </ContentsContainer>
       </Container>
-      {isLoadingOpen && <LoadingModal message={'전시회 등록 요청 중 :)'} />}
     </KeyboardAwareScrollView>
   );
 };

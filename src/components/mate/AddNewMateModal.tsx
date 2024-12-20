@@ -19,13 +19,13 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
+import LoadingModal from '../common/modal/LoadingModal';
 
 interface Props {
   handleCloseModal: () => void;
 }
 
 const AddNewMateModal: React.FC<Props> = ({handleCloseModal}) => {
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [nicknameKeyword, setNicknameKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
   const [selectedMate, setSelectedMate] = useState(-1);
@@ -45,20 +45,13 @@ const AddNewMateModal: React.FC<Props> = ({handleCloseModal}) => {
         // 상태 코드를 체크 (예: 409 Conflict)
         showToast('이미 추가한 전시 메이트입니다.');
       } else {
-        showToast('전시 메이트 추가를 실패했습니다.');
+        showToast('다시 시도해주세요.');
       }
     }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
-    }
     if (isSuccess) {
-      showToast('전시 메이트 추가 성공 :)');
       handleCloseModal();
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onPressCreate = () => {
     Keyboard.dismiss();
@@ -82,6 +75,7 @@ const AddNewMateModal: React.FC<Props> = ({handleCloseModal}) => {
 
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <Message>전시 메이트 추가</Message>
       {/* 달력 */}
       <Wrapper>

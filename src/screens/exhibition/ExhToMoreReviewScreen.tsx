@@ -31,6 +31,8 @@ import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   ExhToMoreReview: {exhId: number};
@@ -42,20 +44,30 @@ interface Props {
   route: ExhToMoreReviewProp;
 }
 
-const ExhToMoreReview: React.FC<Props> = ({route}) => {
-  const navigation = useNavigation<RootStackNavigationProp>();
-
-  const {updateVisitedExhId} = useVisitedExhIdActions(); //exhId 넘겨주기
-  const {exhId} = route.params;
+const ExhToMoreReviewScreen: React.FC<Props> = ({route}) => {
   const limit = 10; // 한 페이지에 보이는 리뷰 개수
   const PAGE_GROUP_SIZE = 5; // 한 번에 보여줄 페이지 번호 개수
+  // Hooks
+  const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateVisitedExhId} = useVisitedExhIdActions(); //exhId 넘겨주기
+  const {exhId} = route.params;
+  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
+    useWriteMyDiaryActions();
+  const isFocused = useIsFocused();
+  const tabIdentifierInfo = useTabIdentifierInfo();
+  const {updateTab} = useTabIdentifierActions();
+
+  // State Management
   const [page, setPage] = useState<number>(1); //현재 페이지
   const [offset, setOffset] = useState<number>(0); //해당 페이지의 첫번째 인덱스
   const [avgRate, setAvgRate] = useState<string>();
   const [avgNumber, setAvgNumber] = useState<number>(0);
   const [numPagesArr, setNumPagesArr] = useState<number[]>([]);
   const [numPages, setNumPages] = useState<number>(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
+  // API Hooks
   const {
     data: diaryData,
     isLoading,
@@ -63,13 +75,8 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     isSuccess,
     refetch,
   } = useFetchDiaryListForExh(exhId);
-  const [refreshing, setRefreshing] = useState(false);
-  const {updateIsUpdate, updateInGathering, resetWriteInfo} =
-    useWriteMyDiaryActions();
-  const isFocused = useIsFocused();
-  const tabIdentifierInfo = useTabIdentifierInfo();
-  const {updateTab} = useTabIdentifierActions();
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -138,6 +145,13 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     }
   }, [refreshing]);
 
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
+
+  // Handlers
   const handleRefetch = async () => {
     await refetch().then(() => {
       setRefreshing(false);
@@ -173,8 +187,15 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
     navigation.navigate('CreateExhVisitedDate', {exhId: exhId});
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView title="기록" line={false}>
         <ButtonView>
           <CustomTouchable onPress={onPressButton}>
@@ -272,7 +293,7 @@ const ExhToMoreReview: React.FC<Props> = ({route}) => {
   );
 };
 
-export default ExhToMoreReview;
+export default ExhToMoreReviewScreen;
 
 /** style */
 const Container = styled.View`

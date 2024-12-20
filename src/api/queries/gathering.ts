@@ -16,6 +16,7 @@ import {
   fetchGatheringList,
   fetchSearchNewMateInGathering,
 } from '../gathering';
+import {AxiosError} from 'axios';
 
 export const gatheringQueryKeys = createQueryKeys('gathering', {
   fetchGatheringList: () => ['fetchGatheringList'],
@@ -137,7 +138,7 @@ export const useAddNewMateInGathering = (gatherId: number, mateId: number) => {
 
   return useMutation({
     mutationFn: () => addNewMateInGathering(gatherId, mateId),
-    onError: err => {
+    onError: (err: AxiosError) => {
       console.log(err);
       console.log('[AddNewMateInGathering] error create AddNewMateInGathering');
     },

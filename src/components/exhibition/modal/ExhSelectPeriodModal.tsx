@@ -20,7 +20,7 @@ import {
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {BackButtonIcon} from '~/components/common/icon';
-import ExhSelectPeriodCalendar from './ExhSelectPeriodCalendar';
+import ExhSelectPeriodCalendar from '../ExhSelectPeriodCalendar';
 
 interface ExhSelectPeriodProps {
   onClose: () => void;

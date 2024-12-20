@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {RouteProp, useIsFocused} from '@react-navigation/native';
-import {showToast} from '~/components/common/modal/toastConfig';
 import {usefetchRegExhDetail} from '~/api/queries/regexh';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import RegExhDetailFormat from '~/components/regExh/RegExhDetailFormat';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   ConfirmRegExhByAdmin: {regExhId: number};
@@ -21,6 +21,8 @@ interface Props {
 const ConfirmRegExhByAdminScreen: React.FC<Props> = ({route}) => {
   const isFocused = useIsFocused();
   const {regExhId} = route.params;
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
   // fetch api
   const {
     data: regExhInfo,
@@ -30,33 +32,27 @@ const ConfirmRegExhByAdminScreen: React.FC<Props> = ({route}) => {
     refetch,
   } = usefetchRegExhDetail(regExhId, true);
 
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
-
   useEffect(() => {
     if (isFocused) {
-      handleRefetch();
+      refetch();
     }
   }, [isFocused]);
 
-  const handleRefetch = async () => {
-    await refetch().then(() => {
-      setIsLoadingOpen(false);
-    });
-  };
-
   useEffect(() => {
     if (isError) {
-      showToast('전시회 등록 정보 조회를 실패했습니다.');
+      setIsErrorOpen(true);
     }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    } else {
-      setIsLoadingOpen(false);
-    }
-  }, [isError, isLoading]);
+  }, [isError]);
+
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
   return (
     <>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {regExhInfo && (
         // 관리자 확인용 - 등록된 전시회 확인 페이지
         <RegExhDetailFormat
@@ -65,7 +61,6 @@ const ConfirmRegExhByAdminScreen: React.FC<Props> = ({route}) => {
           refetch={refetch}
         />
       )}
-      {isLoadingOpen && <LoadingModal message={'정보 불러오는 중 :)'} />}
     </>
   );
 };

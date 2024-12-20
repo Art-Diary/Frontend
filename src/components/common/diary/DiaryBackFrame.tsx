@@ -9,9 +9,9 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {useDiaryBackInfo} from '~/zustand/common/diaryBack';
-import LoadingModal from '../modal/LoadingModal';
 import {FONT_NAME} from '../style';
 import {LIGHT_GREY} from '../colors';
+import LoadingModal from '../modal/LoadingModal';
 
 const DiaryBackFrame = () => {
   const {backInfo} = useDiaryBackInfo();
@@ -26,7 +26,7 @@ const DiaryBackFrame = () => {
   return (
     <>
       {loading ? (
-        <LoadingModal message="로딩 중.." />
+        <LoadingModal isLoading={loading} />
       ) : (
         <Container>
           <BackView line={false} children={null} />

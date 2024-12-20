@@ -10,7 +10,6 @@ import {RootStackNavigationProp} from '~/App';
 import BackView from '~/components/common/BackView';
 import {useUpdateUserInfo} from '~/api/queries/auth';
 import {showToast} from '~/components/common/modal/toastConfig';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import EditNickname from '~/components/setting/EditNickname';
 import EditArtCategory from '~/components/setting/EditArtCategory';
 import {useUserActions} from '~/zustand/auth/auth';
@@ -32,6 +31,7 @@ import {changeImageSize} from '~/utils/resizeImage';
 import CustomTouchable from '../common/CustomTouchable';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ImageInputForm from '../common/ImageInputForm';
+import LoadingModal from '../common/modal/LoadingModal';
 
 type InitProfile = {
   favoriteArt: string;
@@ -41,22 +41,15 @@ type InitProfile = {
   providerType: string;
 };
 
-type UpdateProfileMessage = {
-  errorMsg: string;
-  successMsg: string;
-};
-
 interface UpdateProfileProps {
   title: string;
   initProfile: InitProfile;
-  messages: UpdateProfileMessage;
   navigateTo: string;
 }
 
 const UpdateProfile: React.FC<UpdateProfileProps> = ({
   title,
   initProfile,
-  messages,
   navigateTo,
 }) => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -69,7 +62,6 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
     initProfile.profile,
   );
   const [isVerified, setIsVerified] = useState<boolean>(true);
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {
     mutate: updateUserInfo,
     isLoading,
@@ -80,26 +72,19 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
 
   useEffect(() => {
     if (isError) {
-      showToast(messages.errorMsg);
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       const data = resData.data;
 
       updateAuthInfo({...data, role: data.roleType});
-      showToast(messages.successMsg);
       if (navigateTo === 'back') {
         navigation.goBack();
       } else if (navigateTo === 'Main') {
         navigation.navigate('Main', {screen: 'Setting'});
       }
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onPressComplete = async () => {
     if (!(nicknameKeyword !== '' && art !== '' && isVerified)) {
@@ -137,6 +122,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       style={{flex: 1, backgroundColor: BACK_COLOR}}
       resetScrollToCoords={{x: 0, y: 0}}
       contentContainerStyle={{flexGrow: 1}}>
+      <LoadingModal isLoading={isLoading} />
       <Container>
         <BackView title={title} line={true} />
 
@@ -186,7 +172,6 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
             </CompleteButton>
           </CustomTouchable>
         </Contents>
-        {isLoadingOpen && <LoadingModal message={'정보 수정 중 :)'} />}
       </Container>
     </KeyboardAwareScrollView>
   );

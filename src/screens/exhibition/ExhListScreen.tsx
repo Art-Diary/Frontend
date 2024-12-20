@@ -10,22 +10,16 @@ import {
 import {useFetchSearchExh} from '~/api/queries/exhibition';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {showToast} from '~/components/common/modal/toastConfig';
-import ExhSearchModal from './ExhSearchModal';
-import ExhSearchByDate from './ExhSearchByDate';
+import ExhSearchModal from '../../components/exhibition/modal/ExhSearchModal';
+import ExhSearchByDate from '../../components/exhibition/ExhSearchByDate';
 import {
   useSearchNameActions,
   useSearchNameInfo,
 } from '~/zustand/exhibition/exhibition';
 import {useIsFocused} from '@react-navigation/native';
-import OptionsModal from '~/components/exhibition/OptionsModal';
-import {
-  useAddScheduleActions,
-  useAddScheduleInfo,
-} from '~/zustand/calendar/addSchedule';
+import OptionsModal from '~/components/exhibition/modal/OptionsModal';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
@@ -41,7 +35,9 @@ import {BACK_COLOR, BORDER_COLOR, MAIN_COLOR} from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import {useDateFromExhActions} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '~/components/common/CustomTouchable';
-import ExhAddButton from './ExhAddButton';
+import ExhAddButton from '../../components/exhibition/ExhAddButton';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 interface Exhibition {
   exhId: number;
@@ -53,55 +49,61 @@ interface Exhibition {
   favoriteExh: boolean;
 }
 
+export type OptionsType = {
+  field: string[] | null;
+  state: string[] | null;
+  price: string | null;
+  date: string | null;
+  searchName: string | null;
+};
+
 const ExhListScreen = () => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
-  const [hearts, setHearts] = useState<Exhibition[]>([]);
-  const [favExhId, setfavExhId] = useState<number>(0); //누른 전시회 exhId
-  const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
-  const [isCalendarModalVisible, setIsCalendarModalVisible] = useState(false); //달력 모달
-  const [isNameVisible, setIsNameVisible] = useState(false);
-  const [isDateVisible, setIsDateVisible] = useState(false);
-  const [isFieldVisible, setIsFieldVisible] = useState(false);
-  const [isPriceVisible, setIsPriceVisible] = useState(false);
-  const [isStateVisible, setIsStateVisible] = useState(false);
-  const [selectedField, setSelectedField] = useState<string[] | null>(null); //선택된 분야
-  const [selectedState, setSelectedState] = useState<string[] | null>(null); //선택된 전시 진행상황
-  const [selectedPrice, setSelectedPrice] = useState<string | null>(null); //선택된 가격
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); //검색 날짜
-  const [selectedName, setSelectedName] = useState<string | null>(null); //검색 이름
-  const [isOptionsModalPressed, setIsOptionsModalPressed] =
-    useState<boolean>(false); //진행상황 선택된 상황에서 캘린더 누를시 뜨는 모달
-  const searchExhName = useSearchNameInfo().name;
-  const {addDate} = useAddScheduleInfo();
-  const {updateAddDate} = useAddScheduleActions();
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
   const {updateDate} = useDateFromExhActions(); // 전시회 상세 페이지 내부 캘린더에서 날짜 선택 시 사용
-  const {updateSearchName} = useSearchNameActions();
+  // const searchExhName = useSearchNameInfo().name;
+  // const {updateSearchName} = useSearchNameActions();
+
+  // State Management
+  const [hearts, setHearts] = useState<Exhibition[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false); //옵션 선택 모달
+  const [isCalendarModalVisible, setIsCalendarModalVisible] = useState(false); //달력 모달
+  const [selectedOptions, setSelectedOptions] = useState<OptionsType>({
+    field: null,
+    state: null,
+    price: null,
+    date: null,
+    searchName: null,
+  });
+  const [isOptionsModalPressed, setIsOptionsModalPressed] =
+    useState<boolean>(false); //진행상황 선택된 상황에서 캘린더 누를시 뜨는 모달
   const [refreshing, setRefreshing] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
+  // API Hooks
   const {data, isLoading, isError, isSuccess, refetch} = useFetchSearchExh(
-    selectedName,
-    selectedPrice,
-    selectedField,
-    selectedState,
-    selectedDate,
+    selectedOptions.searchName,
+    selectedOptions.price,
+    selectedOptions.field,
+    selectedOptions.state,
+    selectedOptions.date,
   );
-
-  //post
   const {
     mutate: addLike,
     isLoading: isLoadingLike,
     isError: isErrorLike,
     isSuccess: isSuccessLike,
+    error: errorLike,
   } = useAddLike();
-
   const {
     mutate: deleteLike,
     isLoading: isLoadingDislike,
     isError: isErrorDislike,
     isSuccess: isSuccessDislike,
+    error: errorDislike,
   } = useDeleteLike();
 
   useEffect(() => {
@@ -111,18 +113,14 @@ const ExhListScreen = () => {
         updateDate(null);
 
         // 다른 화면을 갔다왔을때 갱신 그냥 null을 사용해 다시 받는게 더 빠를 수도,,,
-        setSelectedName(null);
-        setSelectedField(null);
-        setSelectedPrice(null);
-        setSelectedState(null);
-        setSelectedDate(null);
-        setIsNameVisible(false);
-        setIsFieldVisible(false);
-        setIsPriceVisible(false);
-        setIsStateVisible(false);
-        setIsDateVisible(false);
+        // setSelectedOptions({
+        //   field: null,
+        //   state: null,
+        //   price: null,
+        //   date: null,
+        //   searchName: null,
+        // });
       }
-
       handleRefetch();
     }
   }, [isFocused]);
@@ -145,45 +143,13 @@ const ExhListScreen = () => {
     setRefreshing(true);
   };
 
-  useEffect(() => {
-    if (searchExhName) {
-      setSelectedName(searchExhName);
-      setIsNameVisible(true);
-      updateSearchName(null);
-    }
-  }, [searchExhName]);
-
-  useEffect(() => {
-    if (addDate) {
-      setSelectedDate(addDate);
-      setIsDateVisible(true);
-      updateAddDate(null);
-    }
-  }, [addDate]);
-
-  useEffect(() => {
-    if (selectedField) {
-      setIsFieldVisible(true);
-    } else {
-      setIsFieldVisible(false);
-    }
-  }, [selectedField]);
-
-  useEffect(() => {
-    if (selectedPrice) {
-      setIsPriceVisible(true);
-    } else {
-      setIsPriceVisible(false);
-    }
-  }, [selectedPrice]);
-
-  useEffect(() => {
-    if (selectedState) {
-      setIsStateVisible(true);
-    } else {
-      setIsStateVisible(false);
-    }
-  }, [selectedState]);
+  // useEffect(() => {
+  //   if (searchExhName) {
+  //     setSelectedName(searchExhName);
+  //     setIsNameVisible(true);
+  //     updateSearchName(null);
+  //   }
+  // }, [searchExhName]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -193,49 +159,44 @@ const ExhListScreen = () => {
 
   useEffect(() => {
     if (isErrorLike) {
-      //showToast('좋아요 실패했습니다.');
-      console.log('좋아요 실패');
-    }
-    if (isLoadingLike) {
-      // setIsLoadingOpen(true);
-      console.log('좋아요 로딩중');
+      const statusCode = errorLike?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 좋아요했습니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccessLike) {
-      console.log(favExhId);
       console.log('좋아요 성공');
     }
 
     if (isErrorDislike) {
-      showToast('좋아요 삭제 실패했습니다.');
-      //console.log('좋아요 실패');
-    }
-    if (isLoadingDislike) {
-      // setIsLoadingOpen(true);
-      console.log('좋아요 삭제 로딩중');
+      const statusCode = errorDislike?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 좋아요 취소했습니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccessDislike) {
-      console.log(favExhId);
       console.log('좋아요 삭제');
     }
-  }, [
-    isErrorLike,
-    isLoadingLike,
-    isSuccessLike,
-    isErrorDislike,
-    isLoadingDislike,
-    isSuccessDislike,
-  ]);
+  }, [isErrorLike, isSuccessLike, isErrorDislike, isSuccessDislike]);
 
-  if (isError) {
-    return <ErrorMessageView message={'에러 발생 ;('} />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
-  if (isLoading) {
-    return <LoadingModal message={'로딩 중 :)'} />;
-  }
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
   //search Modal
-
   const openModal = () => {
     setIsModalVisible(true);
   };
@@ -244,39 +205,13 @@ const ExhListScreen = () => {
     setIsModalVisible(false);
   };
 
-  const handleModalClose = (
-    selectedOption2: string[] | null,
-    selectedOption3: string | null,
-    selectedOption4: string[] | null,
-    selectedOption5: string | null,
-  ) => {
-    if (selectedOption2 && selectedOption2.length === 0) {
-      selectedOption2 = null;
-    }
-    if (selectedOption4 && selectedOption4.length === 0) {
-      selectedOption4 = null;
-    }
-    setSelectedField(selectedOption2);
-    setSelectedPrice(selectedOption3);
-    setSelectedState(selectedOption4);
-    setSelectedDate(selectedOption5);
-    if (!selectedOption5) {
-      setIsDateVisible(false);
-    }
-    closeModal();
-  };
-
   //calendarModal
   const openCalendarModal = () => {
     setIsCalendarModalVisible(true);
   };
 
-  const closeCalendarModal = () => {
-    setIsCalendarModalVisible(false);
-  };
-
   const handleCalendarModalClose = () => {
-    closeCalendarModal();
+    setIsCalendarModalVisible(false);
   };
 
   //하트 클릭
@@ -295,52 +230,40 @@ const ExhListScreen = () => {
 
   //옵션 삭제
   const deleteDate = () => {
-    setSelectedDate(null);
-    setIsDateVisible(false);
+    setSelectedOptions({...selectedOptions, date: null});
   };
 
-  const deleteName = () => {
-    setSelectedName(null);
-    setIsNameVisible(false);
-  };
+  // const deleteName = () => {
+  //   setSelectedOptions({...selectedOptions, searchName: null});
+  // };
 
   const deleteField = (deleteName: string) => {
-    if (selectedField != null) {
-      if (selectedField?.length > 1) {
-        setSelectedField(selectedField.filter(item => item !== deleteName));
-      } else {
-        setSelectedField(null);
-        setIsFieldVisible(false);
-      }
+    var field: string[] | null = null;
+
+    if (selectedOptions.field) {
+      field = selectedOptions.field.filter(item => item !== deleteName);
+      field = field.length === 0 ? null : field;
     }
+    setSelectedOptions({...selectedOptions, field: field});
   };
 
   const deletePrice = () => {
-    setSelectedPrice(null);
-    setIsPriceVisible(false);
+    setSelectedOptions({...selectedOptions, price: null});
   };
 
   const deleteState = (deleteName: string) => {
-    //setSelectedState(null);
-    //setIsStateVisible(false);
-    if (selectedState != null) {
-      if (selectedState?.length > 1) {
-        setSelectedState(selectedState.filter(item => item !== deleteName));
-      } else {
-        setSelectedState(null);
-        setIsStateVisible(false);
-      }
+    var state: string[] | null = null;
+
+    if (selectedOptions.state) {
+      state = selectedOptions.state.filter(item => item !== deleteName);
+      state = state.length === 0 ? null : state;
     }
+    setSelectedOptions({...selectedOptions, state: state});
   };
 
-  //날짜 누를 때, 전시상태옵션이 지정되어 있으면 모달 오픈
-  // 모달을 열기 위한 함수
+  // 날짜 누를 때, 전시상태옵션이 지정되어 있으면 모달 오픈
   const optionsModalOpen = () => {
-    console.log(
-      '[OptionsModalOpen] Opening OptionsModal for calendar, the state exits',
-    );
     setIsOptionsModalPressed(true);
-    //setSelectedOption5(selectedDate); // 선택한 값의 key 알려주는 용도
   };
 
   const optionsModalClose = () => {
@@ -348,32 +271,27 @@ const ExhListScreen = () => {
   };
 
   const onPressYes = () => {
-    setSelectedState(null);
-    setIsStateVisible(false);
+    setSelectedOptions({...selectedOptions, state: null});
     optionsModalClose();
     openCalendarModal();
   };
 
-  const onPressNo = () => {
-    optionsModalClose();
-  };
-
   return (
     <Container>
+      <LoadingModal
+        isLoading={isLoading || isLoadingLike || isLoadingDislike}
+      />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {/* header */}
       <Header title={'전시회'}>
         <IconsView>
-          <CustomTouchable onPress={() => openModal()}>
+          <CustomTouchable onPress={openModal}>
             <ClassifyButtonIcon />
             {isModalVisible && (
               <ExhSearchModal
-                title={'전시 분류 카테고리'}
-                x={'X'}
-                field={selectedField}
-                price={selectedPrice}
-                state={selectedState}
-                date={selectedDate}
-                onClose={handleModalClose}
+                selectedOptions={selectedOptions}
+                handleUpdateOptions={setSelectedOptions}
+                handleCloseModal={closeModal}
               />
             )}
           </CustomTouchable>
@@ -382,11 +300,14 @@ const ExhListScreen = () => {
             <AnotherSearchIcon />
           </CustomTouchable>
           <CustomTouchable
-            onPress={selectedState ? optionsModalOpen : openCalendarModal}>
+            onPress={
+              selectedOptions.state ? optionsModalOpen : openCalendarModal
+            }>
             <SearchDateCalendarIcon />
             {isCalendarModalVisible && (
               <ExhSearchByDate
-                date={selectedDate}
+                selectedOptions={selectedOptions}
+                handleUpdateDate={setSelectedOptions}
                 onClose={handleCalendarModalClose}
               />
             )}
@@ -406,30 +327,30 @@ const ExhListScreen = () => {
       <ContentsWrapper>
         <OptionContainer
           haveOption={
-            isDateVisible ||
-            isNameVisible ||
-            isFieldVisible ||
-            isPriceVisible ||
-            isStateVisible
+            selectedOptions.date ||
+            selectedOptions.searchName ||
+            selectedOptions.field ||
+            selectedOptions.price ||
+            selectedOptions.state
           }>
           <ScrollView
             horizontal={true}
             pagingEnabled={false}
             showsHorizontalScrollIndicator={true}>
-            {isDateVisible && (
-              <OptionView activeOpacity={0.6} onPress={() => deleteDate()}>
-                <OptionText>{selectedDate}</OptionText>
+            {selectedOptions.date && (
+              <OptionView activeOpacity={0.6} onPress={deleteDate}>
+                <OptionText>{selectedOptions.date}</OptionText>
                 <OptionText isDeleteText> x</OptionText>
               </OptionView>
             )}
-            {isNameVisible && (
-              <OptionView activeOpacity={0.6} onPress={() => deleteName()}>
-                <OptionText>{selectedName}</OptionText>
+            {/* {selectedOptions.searchName && (
+              <OptionView activeOpacity={0.6} onPress={deleteName}>
+                <OptionText>{selectedOptions.searchName}</OptionText>
                 <OptionText isDeleteText> x</OptionText>
               </OptionView>
-            )}
-            {isFieldVisible &&
-              selectedField?.map((item: string, index: number) => (
+            )} */}
+            {selectedOptions.field &&
+              selectedOptions.field.map((item: string, index: number) => (
                 <OptionView
                   activeOpacity={0.6}
                   onPress={() => deleteField(item)}
@@ -438,14 +359,14 @@ const ExhListScreen = () => {
                   <OptionText isDeleteText> x</OptionText>
                 </OptionView>
               ))}
-            {isPriceVisible && (
-              <OptionView activeOpacity={0.6} onPress={() => deletePrice()}>
-                <OptionText>{selectedPrice}</OptionText>
+            {selectedOptions.price && (
+              <OptionView activeOpacity={0.6} onPress={deletePrice}>
+                <OptionText>{selectedOptions.price}</OptionText>
                 <OptionText isDeleteText> x</OptionText>
               </OptionView>
             )}
-            {isStateVisible &&
-              selectedState?.map((item: string, index: number) => (
+            {selectedOptions.state &&
+              selectedOptions.state.map((item: string, index: number) => (
                 <OptionView
                   activeOpacity={0.6}
                   onPress={() => deleteState(item)}

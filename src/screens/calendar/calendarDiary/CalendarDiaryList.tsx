@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useFetchMyDiaryListInCalendar} from '~/api/queries/mydiary';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import DiaryList from '~/components/common/diary/DiaryList';
 import {useExhFromCalendarInfo} from '~/zustand/calendar/exhFromCalendar';
 import {useIsFocused} from '@react-navigation/native';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type DeleteActions = {
   handleShowOptionBar: (show: boolean) => void; // 내가 작성한 기록만 옵션바가 보이도록
@@ -45,9 +46,8 @@ const CalendarDiaryList: React.FC<CalendarDiaryListProps> = ({
     exhFromCalendarInfo.visitDate,
     exhFromCalendarInfo.gatherId,
   );
-  const [isLoadingOpen, setIsLoadingOpen] = useState(false);
-  const [haveError, setHaveError] = useState(false);
   const [first, setFirst] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -58,38 +58,32 @@ const CalendarDiaryList: React.FC<CalendarDiaryListProps> = ({
 
   useEffect(() => {
     if (isError) {
-      setHaveError(true);
+      setIsErrorOpen(true);
     }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    } else {
-      setIsLoadingOpen(false);
-    }
-  }, [isError, isLoading]);
+  }, [isError]);
+
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
   return (
     <>
-      {haveError ? (
-        <ErrorMessageView
-          message={'특정 날짜의 내 다이어리 목록 조회 실패 ;('}
-        />
-      ) : !diaryList ? (
-        <></>
-      ) : diaryList.length === 0 ? (
-        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
-      ) : (
-        <DiaryList
-          pageNum={pageNum}
-          first={first}
-          handleFirst={() => setFirst(true)}
-          diaryList={diaryList}
-          deleteActions={deleteActions}
-          updateActions={updateActions}
-        />
-      )}
-      {isLoadingOpen && (
-        <LoadingModal message={'내 다이어리 목록 조회 중 :)'} />
-      )}
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+      {diaryList &&
+        (diaryList.length === 0 ? (
+          <InfoMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+        ) : (
+          <DiaryList
+            pageNum={pageNum}
+            first={first}
+            handleFirst={() => setFirst(true)}
+            diaryList={diaryList}
+            deleteActions={deleteActions}
+            updateActions={updateActions}
+          />
+        ))}
     </>
   );
 };

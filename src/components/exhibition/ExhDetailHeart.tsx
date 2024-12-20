@@ -5,6 +5,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import {useAddLike, useDeleteLike} from '~/api/queries/exhibition';
 import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import LoadingModal from '../common/modal/LoadingModal';
 
 interface Props {
   exhId: number;
@@ -38,17 +39,14 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
       if (statusCode === 409) {
         showToast('이미 좋아요 설정 완료했습니다.');
       } else {
-        showToast('재접속해주세요.');
+        showToast('다시 시도해주세요.');
       }
-    }
-    if (isLoadingLike) {
-      console.log('좋아요 설정 로딩 중');
     }
     if (isSuccessLike) {
       setHearts(true);
       console.log('좋아요 성공 (exhId: ' + exhId + ')');
     }
-  }, [isErrorLike, isLoadingLike, isSuccessLike]);
+  }, [isErrorLike, isSuccessLike]);
 
   useEffect(() => {
     if (isErrorDislike) {
@@ -56,17 +54,14 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
       if (statusCode === 409) {
         showToast('이미 좋아요 해제 완료했습니다.');
       } else {
-        showToast('재접속해주세요.');
+        showToast('다시 시도해주세요.');
       }
-    }
-    if (isLoadingDislike) {
-      console.log('좋아요 해제 로딩 중');
     }
     if (isSuccessDislike) {
       setHearts(false);
       console.log('좋아요 해제 (exhId: ' + exhId + ')');
     }
-  }, [isErrorDislike, isLoadingDislike, isSuccessDislike]);
+  }, [isErrorDislike, isSuccessDislike]);
 
   const onPressHeart = (exhId: number) => {
     if (!hearts) {
@@ -78,6 +73,7 @@ const ExhDetailHeart: React.FC<Props> = ({exhId, heartState}) => {
 
   return (
     <TopLayer>
+      <LoadingModal isLoading={isLoadingLike || isLoadingDislike} />
       <EmptyHeartContent>
         <CustomTouchable onPress={() => onPressHeart(exhId)}>
           {hearts ? <FullHeartIcon /> : <EmptyHeartIcon />}

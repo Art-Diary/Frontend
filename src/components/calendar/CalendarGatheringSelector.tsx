@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {showToast} from '~/components/common/modal/toastConfig';
 import {ScrollView} from 'react-native';
 import {GatheringColorInfo, GatheringInfo, MarkedType} from '~/types';
 import CalendarFrame from '~/components/common/CalendarFrame';
@@ -17,6 +16,8 @@ import {useFetchGatheringList} from '~/api/queries/gathering';
 import {BACK_COLOR, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface SelectorProps {
   handleRefetch: () => void;
@@ -42,10 +43,16 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
   handleGatherColorList,
   gatherColorList,
 }) => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const params: any = useRoute().params;
+
+  // State Management
   const [initialDate, setInitialDate] = useState(initDate);
   const [selectedId, setSelectedId] = useState(-1); // 아이템 선택
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: gatheringList,
     isLoading,
@@ -54,12 +61,7 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
     refetch,
   } = useFetchGatheringList();
 
-  const handleRefetchGatheringList = async () => {
-    await refetch().then(() => {
-      handleRefetch();
-    });
-  };
-
+  // Effects
   useEffect(() => {
     setInitialDate(initDate);
   }, [initDate]);
@@ -87,9 +89,16 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
 
   useEffect(() => {
     if (isError) {
-      showToast('모임 목록 조회 실패 :(');
+      setIsErrorOpen(true);
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [isError]);
+
+  // Handlers
+  const handleRefetchGatheringList = async () => {
+    await refetch().then(() => {
+      handleRefetch();
+    });
+  };
 
   const settingGatherColor = () => {
     var list: GatheringColorInfo[] = [];
@@ -108,6 +117,11 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
     setSelectedId(gatherId);
   };
 
+  const handleRetry = () => {
+    setIsErrorOpen(true);
+    refetch();
+  };
+
   return (
     <CalendarFrame
       initDate={initialDate}
@@ -121,6 +135,8 @@ const CalendarGatheringSelector: React.FC<SelectorProps> = ({
           ? MAIN_COLOR
           : findGatherColor(gatherColorList, selectedId)
       }>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetry} />
       <GatheringWrapper>
         <ScrollView
           horizontal

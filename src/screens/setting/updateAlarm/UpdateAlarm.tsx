@@ -22,7 +22,6 @@ const UpdateAlarm: React.FC<Props> = ({
   updateUserAlarm,
 }) => {
   const [alarm, setAlarm] = useState(false);
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setAlarm(initValue);
@@ -30,18 +29,13 @@ const UpdateAlarm: React.FC<Props> = ({
 
   useEffect(() => {
     if (isError) {
-      showToast('알림 설정에 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    } else {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       updateUserAlarm(!alarm);
       setAlarm(!alarm);
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onPressAlarm = () => {
     updateAlarmApi(!alarm);
@@ -52,7 +46,7 @@ const UpdateAlarm: React.FC<Props> = ({
       <CustomTouchable onPress={onPressAlarm}>
         {alarm ? <PublicToggleIcon /> : <PrivateToggleIcon />}
       </CustomTouchable>
-      {isLoadingOpen && <LoadingModal message={'알림 설정 중 :)'} />}
+      <LoadingModal isLoading={isLoading} />
     </>
   );
 };

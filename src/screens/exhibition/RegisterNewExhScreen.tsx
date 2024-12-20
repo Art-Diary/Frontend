@@ -4,7 +4,7 @@ import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateRegExh} from '~/api/queries/regexh';
 import EditExhFormFrame from '~/components/common/exhibition/EditExhFormFrame';
-import RegExhPreviewModal from './RegExhPreviewModal';
+import RegExhPreviewModal from '../../components/exhibition/modal/RegExhPreviewModal';
 
 const RegisterNewExhScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -26,14 +26,14 @@ const RegisterNewExhScreen = () => {
   // create api
   const {
     mutate: createRegExh,
-    isLoading: isLoading,
-    isError: isError,
-    isSuccess: isSuccess,
+    isLoading,
+    isError,
+    isSuccess,
   } = useCreateRegExh();
 
   useEffect(() => {
     if (isError) {
-      showToast('전시회 등록 작성을 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       // 설정 페이지의 등록한 전시회 페이지로 이동
