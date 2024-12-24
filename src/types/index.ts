@@ -89,3 +89,14 @@ export type RegExhDetailInfo = {
   regComment: string;
   regState: string;
 };
+
+export type QnaInfo = {
+  qnaId: number;
+  title: string;
+  body: string;
+  writeDate: string;
+  state: boolean;
+  answer?: string;
+  answerDate?: string;
+  // userId: number;
+};

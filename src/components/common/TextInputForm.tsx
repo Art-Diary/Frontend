@@ -25,6 +25,7 @@ interface TextInputFormProps {
   multiLine?: boolean;
   keyword: string;
   handleKeyword: (text: string) => void;
+  full?: boolean;
 }
 
 const TextInputForm: React.FC<TextInputFormProps> = ({
@@ -34,6 +35,7 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
   multiLine,
   keyword,
   handleKeyword,
+  full,
 }) => {
   const onChangeKeyword = useCallback((text: string) => {
     handleKeyword(text);
@@ -54,14 +56,16 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
         )}
       </CountWrapper>
       {/* section 내용 */}
-      <BodyWrapper>
+      <BodyWrapper full={full}>
         <TextInputView
           multiline={multiLine}
           maxLength={maxLen}
           placeholderTextColor={MIDDLE_GREY}
           placeholder={!keyword ? title : ''}
+          textAlignVertical={'top'}
           value={keyword}
           onChangeText={onChangeKeyword}
+          full={full}
         />
       </BodyWrapper>
     </Container>
@@ -119,7 +123,11 @@ const BodyWrapper = styled.View`
   padding: ${wp(2.9)}px;
 `;
 
-const TextInputView = styled.TextInput`
+interface TextInputProps {
+  full: number;
+}
+
+const TextInputView = styled.TextInput<TextInputProps>`
   font-size: ${rf(16)}px;
   color: ${DEFAULT_TEXT};
   font-family: ${FONT_NAME};
@@ -127,4 +135,5 @@ const TextInputView = styled.TextInput`
   padding-top: 0%;
   padding-bottom: 0%;
   max-width: 97%;
+  height: ${(props: TextInputProps) => props.full && `95%`};
 `;

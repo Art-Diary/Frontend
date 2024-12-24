@@ -138,6 +138,20 @@ const SettingScreen = () => {
                 }
               />
             )}
+            <GreyNameTag
+              content="Q&A"
+              handleTouch={() =>
+                navigation.navigate('QnaList', {isAdmin: false})
+              }
+            />
+            {userInfo.authInfo.role === 'ADMIN' && (
+              <GreyNameTag
+                content="Q&A (관리자)"
+                handleTouch={() =>
+                  navigation.navigate('QnaList', {isAdmin: true})
+                }
+              />
+            )}
             <GreyNameTag content="도움말" />
           </SettingWrapper>
           {/* 회원정보 */}
