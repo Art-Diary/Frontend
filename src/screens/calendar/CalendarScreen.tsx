@@ -12,13 +12,14 @@ import {
 import {useIsFocused} from '@react-navigation/native';
 import ExhListOfDayInCalendar from '../../components/calendar/ExhListOfDayInCalendar';
 import {useFetchCalendar} from '~/api/queries/calendar';
-import {showToast} from '~/components/common/modal/toastConfig';
 import {BACK_COLOR} from '~/components/common/colors';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import {RefreshControl} from 'react-native';
 import {GatheringColorInfo, MarkedType} from '~/types';
 import CalendarGatheringSelector from '~/components/calendar/CalendarGatheringSelector';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 const CalendarScreen = () => {
   const isFocused = useIsFocused();
@@ -35,10 +36,9 @@ const CalendarScreen = () => {
   );
   // 일정이 있는 날짜 리스트
   const [markedDates, setMarkedDates] = useState<MarkedType[]>([]);
-  // 모임 선택 selector - item
-  const [openLoading, setOpenLoading] = useState<boolean>(false);
   const [refreshing, setRefreshing] = useState(false);
   const [gatherId, setGatherId] = useState<number>(-1);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: exhInfoOfDays,
     isLoading,
@@ -70,14 +70,9 @@ const CalendarScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      showToast('일정 조회 실패 ;(');
+      setIsErrorOpen(true);
     }
-    if (isLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
-    }
-  }, [isError, isLoading]);
+  }, [isError]);
 
   useEffect(() => {
     if (isSuccess && exhInfoOfDays.length !== 0) {
@@ -129,6 +124,11 @@ const CalendarScreen = () => {
     setRefreshing(true);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <RefreshView
       data={['']}
@@ -137,6 +137,8 @@ const CalendarScreen = () => {
       }
       renderItem={({}) => (
         <>
+          <LoadingModal isLoading={isLoading} />
+          <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
           <CalendarWrapper>
             <CalendarGatheringSelector
               handleRefetch={handleRefetch}
@@ -160,7 +162,6 @@ const CalendarScreen = () => {
             gatherColorList={gatherColorList}
             exhListOfDay={exhInfoOfDays}
           />
-          {/* {openLoading && <LoadingModal message="일정 조회 중 :)" />} */}
         </>
       )}
     />

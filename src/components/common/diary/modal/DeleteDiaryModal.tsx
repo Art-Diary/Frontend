@@ -24,6 +24,7 @@ import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import DecisionModal from '../../modal/DecisionModal';
+import LoadingModal from '../../modal/LoadingModal';
 
 type DeleteInfo = {
   exhId: number;
@@ -41,8 +42,11 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   handleCloseModal,
   handleSuccessDelete,
 }) => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const tabIdentifierInfo = useTabIdentifierInfo();
+
+  // API Hooks
   const {
     mutate: deleteMyDiary,
     isLoading,
@@ -53,11 +57,10 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
   useEffect(() => {
     if (isError) {
       handleCloseModal();
-      showToast('에러 발생 ;(');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       handleCloseModal();
-      showToast('기록을 삭제했습니다.');
       handleSuccessDelete();
       if (
         tabIdentifierInfo.tab === 'exhibition' ||
@@ -70,6 +73,7 @@ const DeleteDiaryModal: React.FC<DeleteDiaryModalProps> = ({
 
   return (
     <DecisionModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <Contents>
         <MsgWrapper>
           <Message>기록을 삭제하겠습니까?</Message>

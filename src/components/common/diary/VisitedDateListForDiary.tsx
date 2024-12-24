@@ -15,6 +15,8 @@ import {calendarColor} from '~/components/calendar/calendarColor';
 import {MarkedType} from '~/types';
 import AddVisitedDateForDiaryModal from '../../mydiary/modal/AddVisitedDateForDiaryModal';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';
+import LoadingModal from '../modal/LoadingModal';
+import ErrorModal from '../modal/ErrorModal';
 
 interface VisitedDateListForDiaryProps {
   exhId: number;
@@ -30,12 +32,17 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
   gatherId,
 }) => {
   const limitSize = 3;
+
+  // State Management
   const [openModal, setOpenModal] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState({
     section: null,
     dateItem: null,
   }); // 아이템 선택
   const [dateList, setDateList] = useState<any>();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   // 모임과 개인 전시회 날짜
   const {
     data: storedDateListOfExh,
@@ -47,11 +54,18 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
     ? useFetchStoredDateOfExhInGroup(exhId, gatherId)
     : useFetchMyStoredDateListOfExh(exhId); // 한 전시회에 대하여 캘린더에 저장된 날짜 조회
 
+  // Effects
   useEffect(() => {
     if (exhId) {
       refetch();
     }
   }, [exhId, gatherId]);
+
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (storedDateListOfExh) {
@@ -63,6 +77,7 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
     }
   }, [storedDateListOfExh]);
 
+  // Handlers
   const onPressAddDateButton = () => {
     setOpenModal(true);
   };
@@ -107,8 +122,15 @@ const VisitedDateListForDiary: React.FC<VisitedDateListForDiaryProps> = ({
     }
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <SectionName>방문 날짜</SectionName>
       {/* 방문 날짜 정보 */}
       {exhId === 0 ? (

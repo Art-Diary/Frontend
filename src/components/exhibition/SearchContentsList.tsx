@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
-import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {
-  useFetchAddSearchContent,
-  useFetchDeleteSearchContent,
+  useAddSearchContent,
+  useDeleteSearchContent,
   useFetchSearchContentList,
 } from '~/api/queries/exhibition';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
+import {showToast} from '../common/modal/toastConfig';
 
 interface SearchProps {
   handlePage: (value: boolean) => void;
@@ -16,54 +19,65 @@ interface SearchProps {
   changeKeyword: (value: string) => void;
 }
 
-const SearchContentsListScreen: React.FC<SearchProps> = ({
+const SearchContentsList: React.FC<SearchProps> = ({
   handlePage,
   changeContent,
   changeKeyword,
 }) => {
   const currentTime = new Date();
-  const [searchContent, setSearchContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
-  const [searchContentId, setSearchContentId] = useState<number>(-1);
   const limit = 10; //보여주는 검색 기록 개수
 
-  //search_list 가져오기
+  // State Management
+  const [searchContent, setSearchContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
+  const [searchContentId, setSearchContentId] = useState<number>(-1);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: searchContents,
     isLoading,
     isError,
-    isSuccess,
     refetch,
-  } = useFetchSearchContentList();
-
-  //검색 기록 추가
+  } = useFetchSearchContentList(); // search_history_list 가져오기
   const {
-    mutate: fetchAddSearchContent,
+    mutate: addSearchContent,
     isLoading: isLoadingAddSearch,
     isError: isErrorAddSearch,
-    isSuccess: isSuccessAddSearch,
-  } = useFetchAddSearchContent(searchContent, currentTime);
-
+  } = useAddSearchContent(searchContent, currentTime); //검색 기록 추가
   const {
-    mutate: fetchDeleteSearchContent,
+    mutate: deleteSearchContent,
     isLoading: isLoadingDeleteSearch,
     isError: isErrorDeleteSearch,
-    isSuccess: isSuccessDeleteSearch,
-  } = useFetchDeleteSearchContent(searchContentId);
+  } = useDeleteSearchContent(searchContentId); //검색 기록 삭제
 
+  // Effects
   useEffect(() => {
     //DB에서 데이터 추가 or 업데이트
     if (searchContent) {
-      fetchAddSearchContent(); //검색 기록에 추가
+      addSearchContent(); //검색 기록에 추가
       handlePage(true);
     }
   }, [searchContent]);
 
   useEffect(() => {
     if (searchContentId != -1) {
-      fetchDeleteSearchContent(); //검색기록삭제
+      deleteSearchContent(); //검색기록삭제
     }
   }, [searchContentId]);
 
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isErrorAddSearch || isErrorDeleteSearch) {
+      showToast('다시 시도해주세요.');
+    }
+  }, [isErrorAddSearch, isErrorDeleteSearch]);
+
+  // Handlers
   const onPressPreSearch = (text: string) => {
     changeKeyword(text);
     changeContent(text);
@@ -75,8 +89,17 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
     setSearchContentId(searchId);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal
+        isLoading={isLoading || isLoadingAddSearch || isLoadingDeleteSearch}
+      />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {searchContents && Object.keys(searchContents).length ? (
         <PreSearch>{'최근검색기록'}</PreSearch>
       ) : (
@@ -99,7 +122,7 @@ const SearchContentsListScreen: React.FC<SearchProps> = ({
   );
 };
 
-export default SearchContentsListScreen;
+export default SearchContentsList;
 
 /** style */
 const Container = styled.View`

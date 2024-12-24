@@ -43,7 +43,7 @@ export const useFetchSearchMateList = (nickname: string) =>
   useQuery({
     queryKey: mateQueryKeys.fetchSearchMateList(nickname).queryKey,
     queryFn: () => fetchSearchMateList(nickname),
-    staleTime: 500000,
+    staleTime: 0,
     onError: err => {
       console.log(err);
       console.log('[SearchMateList] error fetch SearchMateList');

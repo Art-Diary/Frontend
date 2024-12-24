@@ -7,7 +7,6 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import {useAddNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
@@ -20,6 +19,7 @@ import {
 } from '~/components/common/style';
 import SearchNewMateListInGathering from '../SearchNewMateListInGathering';
 import InfoModal from '../../common/modal/InfoModal';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 interface Props {
   handleCloseModal: () => void;
@@ -27,7 +27,6 @@ interface Props {
 
 const AddNewMateInGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
   const {enterGatheringInfo} = useEnterGatheringInfo();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [nicknameKeyword, setNicknameKeyword] = useState<string>('');
   const [keyword, setKeyword] = useState<string>('');
   const [selectedMate, setSelectedMate] = useState(-1);
@@ -36,20 +35,20 @@ const AddNewMateInGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
     isLoading,
     isError,
     isSuccess,
+    error,
   } = useAddNewMateInGathering(enterGatheringInfo.gatherId, selectedMate);
 
   useEffect(() => {
     if (isError) {
-      showToast('전시 메이트 추가를 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 추가된 전시 메이트입니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccess) {
-      showToast('전시 메이트 추가 성공 :)');
       handleCloseModal();
     }
   }, [isError, isLoading, isSuccess]);
@@ -77,6 +76,7 @@ const AddNewMateInGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
 
   return (
     <InfoModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={isLoading} />
       <AreaView>
         <Message>모임 메이트 선택</Message>
         <Message greyColor={true}>(내 전시 메이트만 가능)</Message>
@@ -105,7 +105,6 @@ const AddNewMateInGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
           </CreateButton>
         </ButtonTouch>
       </Contents>
-      {isLoadingOpen && <LoadingModal message={'모임 메이트 추가 중'} />}
     </InfoModal>
   );
 };

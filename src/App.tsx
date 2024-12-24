@@ -21,15 +21,15 @@ import Toast from 'react-native-toast-message';
 import {toastConfig} from './components/common/modal/toastConfig';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
-import ExhSearchName from './screens/exhibition/ExhSearchName';
+import SearchExhNameScreen from './screens/exhibition/SearchExhNameScreen';
 import ExhDetailInfoScreen from './screens/exhibition/ExhDetailInfoScreen';
 import LoginScreen from './screens/login/LoginScreen';
 import MateDiaryRoutes from './routes/mate/MateDiaryRoutes';
 import InitProfileScreen from './screens/login/InitProfileScreen';
-import ExhToDiary from './screens/exhibition/ExhToDiary';
-import ExhToDiaryBack from './screens/exhibition/ExhToDiaryBack';
-import ExhToCal from './screens/exhibition/ExhToCal';
-import ExhToMoreReview from './screens/exhibition/ExhToMoreReview';
+import ShowExhDiaryScreen from './screens/exhibition/ShowExhDiaryScreen';
+import ShowExhDiaryBackScreen from './screens/exhibition/ShowExhDiaryBackScreen';
+import AddVisitDateInExhScreen from './screens/exhibition/AddVisitDateInExhScreen';
+import ExhToMoreReviewScreen from './screens/exhibition/ExhToMoreReviewScreen';
 import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/stackTypes';
@@ -151,15 +151,24 @@ export default function App() {
             />
             <Stack.Screen name="MyDiaryRoutes" component={MyDiaryRoutes} />
             {/* [전시회] 전시회 상세 정보 */}
-            <Stack.Screen name="ExhibitionSearch" component={ExhSearchName} />
+            <Stack.Screen
+              name="ExhibitionSearch"
+              component={SearchExhNameScreen}
+            />
             <Stack.Screen
               name="ExhDetailInfo"
               component={ExhDetailInfoScreen}
             />
-            <Stack.Screen name="ExhToDiary" component={ExhToDiary} />
-            <Stack.Screen name="ExhToDiaryBack" component={ExhToDiaryBack} />
-            <Stack.Screen name="ExhToCal" component={ExhToCal} />
-            <Stack.Screen name="ExhToMoreReview" component={ExhToMoreReview} />
+            <Stack.Screen name="ExhToDiary" component={ShowExhDiaryScreen} />
+            <Stack.Screen
+              name="ExhToDiaryBack"
+              component={ShowExhDiaryBackScreen}
+            />
+            <Stack.Screen name="ExhToCal" component={AddVisitDateInExhScreen} />
+            <Stack.Screen
+              name="ExhToMoreReview"
+              component={ExhToMoreReviewScreen}
+            />
             <Stack.Screen
               name="RegisterNewExh"
               component={RegisterNewExhScreen}

@@ -10,15 +10,15 @@ import {
   BUTTON_PADDING,
   BUTTON_RADIUS,
   FONT_NAME,
-} from '../common/style';
+} from '../../common/style';
 import {
   DEFAULT_TEXT,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
-} from '../common/colors';
-import CustomTouchable from '../common/CustomTouchable';
-import DecisionModal from '../common/modal/DecisionModal';
+} from '../../common/colors';
+import CustomTouchable from '../../common/CustomTouchable';
+import DecisionModal from '../../common/modal/DecisionModal';
 
 interface OptionsModalProps {
   handleCloseModal: () => void;

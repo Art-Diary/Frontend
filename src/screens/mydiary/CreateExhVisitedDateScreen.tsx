@@ -26,6 +26,8 @@ import {useFetchExhDetailInfo} from '~/api/queries/exhibition';
 import SearchExhForDiary from '~/components/common/diary/SearchExhForDiary';
 import VisitedDateListForDiary from '~/components/common/diary/VisitedDateListForDiary';
 import {useGatheringListParamsInfo} from '~/zustand/gathering/gathering';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type CreateExhVisitedDateScreenProps = RouteProp<
   RootStackParamList,
@@ -37,20 +39,34 @@ interface Props {
 }
 
 const CreateExhVisitedDateScreen: React.FC<Props> = ({route}) => {
+  // Hooks
   const {exhId: routeExhId} = route.params;
   const {exhVisitId: routeExhVisitId} = route.params;
   const {isInGathering} = route.params;
   const {params: gatherInfo} = useGatheringListParamsInfo();
   const navigation = useNavigation<RootStackNavigationProp>();
+  const {updateforIds} = useWriteMyDiaryActions();
+
+  // State Management
   const [exhId, setExhId] = useState<number>();
   const [exhVisitId, setExhVisitId] = useState<number>();
-  const {updateforIds} = useWriteMyDiaryActions();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: exhInfo,
     isLoading,
     isError,
+    refetch,
   } = useFetchExhDetailInfo(routeExhId ?? 0);
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
+
+  // Effects
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (routeExhId) {
@@ -64,6 +80,7 @@ const CreateExhVisitedDateScreen: React.FC<Props> = ({route}) => {
     }
   }, [routeExhVisitId]);
 
+  // Handlers
   const onPressNextButton = () => {
     // 기록 작성 페이지로 이동
     if (!exhId || exhId === 0) {
@@ -76,8 +93,15 @@ const CreateExhVisitedDateScreen: React.FC<Props> = ({route}) => {
     }
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView title={exhVisitId ? '기록 수정' : '기록 추가'} line />
       {/* 전시회 선택 */}
       <Contents>

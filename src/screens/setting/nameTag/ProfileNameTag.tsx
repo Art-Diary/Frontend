@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -14,12 +14,33 @@ import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {useFetchUserInfo} from '~/api/queries/auth';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 const ProfileNameTag = () => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const {authInfo} = useUserInfo();
   const {updateAuthInfo} = useUserActions();
-  const {refetch} = useFetchUserInfo();
+
+  // State Management
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
+  const {isLoading, isError, refetch} = useFetchUserInfo();
+
+  // Effects
+  useEffect(() => {
+    if (authInfo.userId === -1) {
+      handleRefetch();
+    }
+  }, [authInfo.userId]);
+
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   const handleRefetch = async () => {
     await refetch().then(result => {
@@ -28,14 +49,15 @@ const ProfileNameTag = () => {
     });
   };
 
-  useEffect(() => {
-    if (authInfo.userId === -1) {
-      handleRefetch();
-    }
-  }, [authInfo.userId]);
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <ProfileTagIcon />
 
       <WordContainer>

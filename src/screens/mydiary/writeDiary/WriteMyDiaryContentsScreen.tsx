@@ -14,7 +14,6 @@ import {
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {useCreateMyDiary, useUpdateMyDiary} from '~/api/queries/mydiary';
 import {showToast} from '~/components/common/modal/toastConfig';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useVisitedExhIdInfo} from '~/zustand/mydiary/mydiary';
 import {useTabIdentifierInfo} from '~/zustand/tabIdentifier';
 import {checkBlankInKeyword} from '~/utils/keyword';
@@ -33,6 +32,7 @@ import {
   useRememberDiaryNumInfo,
 } from '~/zustand/mydiary/rememberDiaryNum';
 import {ImageType} from '~/types';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 const WriteMyDiaryContentsScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -41,7 +41,6 @@ const WriteMyDiaryContentsScreen = () => {
   const tabIdentifier = useTabIdentifierInfo();
   const writeMyDiaryInfo = useWriteMyDiaryInfo();
   const {resetWriteInfo, updateforContent} = useWriteMyDiaryActions();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const [images, setImages] = useState<ImageType[]>([]); // 작성한 글에 첨부한 사진들
   const {updateDiaryNum} = useRememberDiaryNumActions();
   const diaryNum = useRememberDiaryNumInfo().diaryNum;
@@ -74,16 +73,10 @@ const WriteMyDiaryContentsScreen = () => {
 
   useEffect(() => {
     if (isErrorCreate) {
-      showToast('기록 작성 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (isErrorUpdate) {
-      showToast('기록 수정 실패했습니다');
-    }
-    if (isLoadingCreate || isLoadingUpdate) {
-      setIsLoadingOpen(true);
-    }
-    if (!(isLoadingCreate || isLoadingUpdate)) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccessCreate || isSuccessUpdate) {
       const diaryId = writeMyDiaryInfo.diaryId;
@@ -148,14 +141,7 @@ const WriteMyDiaryContentsScreen = () => {
         }
       }
     }
-  }, [
-    isErrorCreate,
-    isErrorUpdate,
-    isLoadingCreate,
-    isLoadingUpdate,
-    isSuccessCreate,
-    isSuccessUpdate,
-  ]);
+  }, [isErrorCreate, isErrorUpdate, isSuccessCreate, isSuccessUpdate]);
 
   const escapeRegExp = (str: string) => {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // 특수 문자를 이스케이프 처리
@@ -235,6 +221,7 @@ const WriteMyDiaryContentsScreen = () => {
 
   return (
     <Container>
+      <LoadingModal isLoading={isLoadingCreate || isLoadingUpdate} />
       <BackView title="기록 작성" line={true} children={null} />
       <ContentsContainer>
         <CustomDiaryEditor
@@ -247,7 +234,6 @@ const WriteMyDiaryContentsScreen = () => {
           <NextButton moveNext={true}>완료</NextButton>
         </CustomTouchable>
       </ContentsContainer>
-      {isLoadingOpen && <LoadingModal message={'다이어리 저장 중 :)'} />}
     </Container>
   );
 };

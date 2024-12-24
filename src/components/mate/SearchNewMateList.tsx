@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '../common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {useFetchSearchMateList} from '~/api/queries/mate';
 import NameTag from '../../screens/mate/NameTag';
 import {
@@ -19,6 +18,8 @@ import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {UserDetailInfo} from '~/types';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface SearchNewMateListProps {
   searchKeyword: string;
@@ -31,20 +32,20 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
   selectedMate,
   handleSelectedMate,
 }) => {
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: mateList,
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchSearchMateList(searchKeyword);
 
-  if (isError) {
-    return <ErrorMessageView message={'전시 메이트 검색 실패했습니다.'} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'전시 메이트 검색 중 :)'} />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   const pressItem = (item: any) => {
     if (item.userId === selectedMate) {
@@ -54,11 +55,19 @@ const SearchNewMateList: React.FC<SearchNewMateListProps> = ({
     }
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <MateListView>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+
       {!mateList ||
       (mateList.notMate.length === 0 && mateList.alreadyMate.length === 0) ? (
-        <ErrorMessageView message={'검색 결과가 없습니다.'} />
+        <InfoMessageView message={'검색 결과가 없습니다.'} />
       ) : (
         <ScrollView
           pagingEnabled={false}

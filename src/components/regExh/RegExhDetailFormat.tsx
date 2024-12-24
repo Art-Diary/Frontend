@@ -33,6 +33,7 @@ import RegExhOptionsModal from '~/components/regExh/RegExhOptionsModal';
 import {useDeleteRegExh} from '~/api/queries/regexh';
 import {showToast} from '../common/modal/toastConfig';
 import {RegExhDetailInfo} from '~/types';
+import LoadingModal from '../common/modal/LoadingModal';
 
 interface Props {
   role: 'ADMIN' | 'USER_WAIT' | 'USER_COMPLETE';
@@ -81,12 +82,11 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
 
   useEffect(() => {
     if (isError) {
-      showToast('삭제 실패. 다시 시도하세요');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       // 설정 페이지의 등록한 전시회 페이지로 이동
       setOpenTrashModal(false);
-      showToast('성공적으로 삭제됐습니다.');
       navigation.goBack();
     }
   }, [isError, isSuccess]);
@@ -128,6 +128,7 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
 
   return (
     <TRenderEngineProvider>
+      <LoadingModal isLoading={isLoading} />
       <ContainerScroll
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />

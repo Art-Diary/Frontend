@@ -1,32 +1,20 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {useNavigation} from '@react-navigation/native';
 import {useFetchMyExhList} from '~/api/queries/mydiary';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {RootStackNavigationProp} from '~/App';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {BACK_COLOR} from '~/components/common/colors';
 import VisitedExhListFrame from './VisitedExhListFrame';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 const MyVisitedExhList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateVisitedExhId} = useVisitedExhIdActions();
-  const {data: myExhList, isLoading, isError} = useFetchMyExhList();
-
-  if (isError) {
-    return (
-      <ErrorMessageView message={'기록이 있는 전시회 목록 조회 실패 ;('} />
-    );
-  }
-
-  if (isLoading) {
-    return <LoadingModal message={'기록이 있는 전시회 목록 조회 중 :)'} />;
-  }
-
-  if (myExhList.length === 0) {
-    return <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다'} />;
-  }
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+  const {data: myExhList, isLoading, isError, refetch} = useFetchMyExhList();
 
   const onPress = (exhId: number) => {
     updateVisitedExhId(exhId);
@@ -36,10 +24,22 @@ const MyVisitedExhList = () => {
     });
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Contents>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {/* body */}
-      <VisitedExhListFrame exhList={myExhList} handlePressExh={onPress} />
+      {myExhList &&
+        (myExhList.length > 0 ? (
+          <VisitedExhListFrame exhList={myExhList} handlePressExh={onPress} />
+        ) : (
+          <InfoMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+        ))}
     </Contents>
   );
 };

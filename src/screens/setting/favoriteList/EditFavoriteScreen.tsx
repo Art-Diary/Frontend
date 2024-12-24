@@ -11,13 +11,13 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {BACK_COLOR, MAIN_COLOR} from '~/components/common/colors';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {FONT_NAME} from '~/components/common/style';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useFavoriteInfoList} from '~/zustand/setting/favoriteList';
 import {EmptyHeartIcon, FullHeartIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import LoadingModal from '~/components/common/modal/LoadingModal';
 
 interface Like {
   exhId: number;
@@ -28,7 +28,6 @@ const EditFavoriteScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [likeList, setLikeList] = useState<Like[]>([]);
   const exhList = useFavoriteInfoList();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
   const {
     mutate: deleteFavoriteList,
     isLoading,
@@ -47,18 +46,12 @@ const EditFavoriteScreen = () => {
 
   useEffect(() => {
     if (isError) {
-      showToast('편집에 실패했습니다.');
-    }
-    if (isLoading) {
-      setIsLoadingOpen(true);
-    }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
+      showToast('다시 시도해주세요.');
     }
     if (isSuccess) {
       handleSuccess(false);
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [isSuccess, isError]);
 
   const handleSuccess = (isZeroLength: boolean) => {
     if (!isZeroLength) {
@@ -98,6 +91,7 @@ const EditFavoriteScreen = () => {
 
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
       <BackView title="좋아요 전시회" line={true}>
         <CustomTouchable onPress={onPressComplete}>
           <EditText>완료</EditText>
@@ -126,7 +120,6 @@ const EditFavoriteScreen = () => {
           )}
         />
       </Contents>
-      {isLoadingOpen && <LoadingModal message={'편집 중 :)'} />}
     </Container>
   );
 };

@@ -21,6 +21,8 @@ import {
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '../common/colors';
+import LoadingModal from '../common/modal/LoadingModal';
+import {showToast} from '../common/modal/toastConfig';
 
 interface EditNicknameProps {
   getNickname: string;
@@ -75,8 +77,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
           setMessageColor('#FF6F61');
         }
       } else {
-        setMessage(' 닉네임 확인 중 오류가 발생했습니다.');
-        setMessageColor('#FF6F61');
+        showToast('다시 시도해주세요.');
       }
     }
     if (isSuccess) {
@@ -84,7 +85,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
       setMessageColor('#34A853');
       setIsVerified(true);
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onPressVerify = () => {
     // check nickname
@@ -108,6 +109,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
       <CountWrapper>
         <SectionWapper>
           <SectionStar>*</SectionStar>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import styled from 'styled-components/native';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {ExhInfoForList} from '~/types';
 import ExhItemView from '~/components/exhibition/ExhItemView';
@@ -30,7 +30,7 @@ const SearchExhResult: React.FC<SearchExhResultFrameProps> = ({
   return (
     <ExhListView>
       {exhList.length === 0 ? (
-        <ErrorMessageView message="검색 결과가 없습니다." />
+        <InfoMessageView message="검색 결과가 없습니다." />
       ) : (
         <FlatList
           data={exhList}

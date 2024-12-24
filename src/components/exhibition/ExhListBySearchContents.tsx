@@ -1,28 +1,24 @@
-import React, {ReactNode, useEffect, useState} from 'react';
-import {Keyboard, ScrollView, RefreshControl} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
-import {BACK_COLOR, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
-import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
+import {BACK_COLOR, MIDDLE_GREY} from '~/components/common/colors';
+import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {useFetchExhListBySearchContent} from '~/api/queries/exhibition';
-import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import LoadingModal from '~/components/common/modal/LoadingModal';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface SearchProps {
   searchContent: string;
 }
 
-const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
-  searchContent,
-}) => {
+const ExhListBySearchContents: React.FC<SearchProps> = ({searchContent}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const [refreshing, setRefreshing] = useState(false);
-
-  //search_list 가져오기
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+  // search_result_list 가져오기
   const {
     data: searchContents,
     isLoading,
@@ -31,27 +27,25 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
     refetch,
   } = useFetchExhListBySearchContent(searchContent);
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
+  // Effects
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
+
+  // Handlers
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
   };
-
-  if (isError) {
-    return <ErrorMessageView message={'검색 결과 조회 실패 ;('} />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="검색 중:)" />;
-  }
 
   return (
     <Container>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
-        style={{flex: 1}}
-        scrollEventThrottle={200}>
-        {searchContents && Object.keys(searchContents).length ? (
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+      <ScrollView style={{flex: 1}} scrollEventThrottle={200}>
+        {searchContents && searchContents.length ? (
           <PreSearch>
             {'검색 결과 ('}
             {Object.keys(searchContents).length}
@@ -79,22 +73,13 @@ const ExhListBySearchContentsScreen: React.FC<SearchProps> = ({
   );
 };
 
-export default ExhListBySearchContentsScreen;
+export default ExhListBySearchContents;
 
 /** style */
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
   background-color: ${BACK_COLOR};
-`;
-
-const PreSearchView = styled.View`
-  flex-direction: row;
-  align-items: center;
-  padding-top: ${wp(1.8)}px;
-  padding-bottom: ${wp(1.8)}px;
-  padding-left: ${wp(8.3)}px;
-  gap: ${wp(6)}px;
 `;
 
 const PreSearch = styled.Text`
@@ -105,11 +90,4 @@ const PreSearch = styled.Text`
   padding-bottom: ${wp(1.5)}px;
   padding-left: ${wp(5.5)}px;
   padding-right: ${wp(5.5)}px;
-`;
-
-const PreSearchList = styled.Text`
-  color: ${LIGHT_GREY};
-  font-size: ${AREA_FONT_SIZE}px;
-  font-family: ${FONT_NAME};
-  text-align: center;
 `;

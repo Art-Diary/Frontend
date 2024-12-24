@@ -12,7 +12,6 @@ import {
   useDeleteGathering,
   useFetchGatheringInfo,
 } from '~/api/queries/gathering';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameList from '~/components/mate/NameList';
 import ExhItemView from '~/components/exhibition/ExhItemView';
 import {Modal, Pressable, RefreshControl, ScrollView} from 'react-native';
@@ -49,6 +48,8 @@ import {ExhInfoForList} from '~/types';
 import AddNewMateInGatheringModal from '~/components/gathering/modal/AddNewMateInGatheringModal';
 import LeaveGatheringModal from '~/components/gathering/modal/LeaveGatheringModal';
 import {GatheringStackParamList} from '~/utils/stackTypes';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type GatheringInfoScreenRouteProp = RouteProp<
   GatheringStackParamList,
@@ -60,6 +61,7 @@ interface Props {
 }
 
 const GatheringInfoScreen: React.FC<Props> = ({route}) => {
+  // Hooks
   const {gatherId} = route.params;
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
@@ -68,11 +70,15 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
   const {updateTab} = useTabIdentifierActions();
   const {updateGatheringListParams} = useGatheringListParamsActions();
   const {enterGatheringInfo} = useEnterGatheringInfo();
+
+  // State Management
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOptionBarOpen, setIsOptionBarOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
+  // API Hooks
   const {
     data: gatheringInfo,
     isLoading,
@@ -88,6 +94,7 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
   } = useDeleteGathering(gatherId);
   const {updateDate} = useDateFromExhActions();
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       if (tabIdentifierInfo.tab !== 'gathering') {
@@ -113,24 +120,22 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
   useEffect(() => {
     if (deleteError) {
       handleCloseModal();
-      showToast('모임 탈퇴에 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (deleteSuccess) {
       handleCloseModal();
-      showToast('성공적으로 모임을 탈퇴했습니다.');
       // 이전 페이지로 이동
       navigation.goBack();
     }
   }, [deleteError, deleteSuccess]);
 
-  if (isError) {
-    showToast('모임 정보 조회 실패:(');
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
-  if (isLoading) {
-    return <LoadingModal message="모임 정보 조회 중:)" />;
-  }
-
+  // Handlers
   const pressNewExhMate = () => {
     // 모임에 새로운 전시 메이트 추가
     setOpenModal(true);
@@ -189,8 +194,15 @@ const GatheringInfoScreen: React.FC<Props> = ({route}) => {
     setOpenModal(false);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading || deleteLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       {/* header */}
       <BackView
         title={

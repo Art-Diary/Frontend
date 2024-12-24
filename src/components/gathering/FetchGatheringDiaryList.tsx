@@ -1,9 +1,10 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useFetchGatheringDiaryList} from '~/api/queries/gathering';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
-import LoadingModal from '~/components/common/modal/LoadingModal';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import DiaryList from '~/components/common/diary/DiaryList';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 type FetchInfo = {
   gatherId: number;
@@ -37,14 +38,16 @@ const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
   pageNum,
 }) => {
   const isFocused = useIsFocused();
+  const [first, setFirst] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: gatheringDiaryList,
     isLoading,
     isError,
     refetch,
   } = useFetchGatheringDiaryList(fetchInfo.gatherId, fetchInfo.exhId);
-  const [first, setFirst] = useState(false);
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -52,34 +55,35 @@ const FetchGatheringDiaryList: React.FC<FetchGatheringDiaryListProps> = ({
     }
   }, [isFocused]);
 
-  if (isError) {
-    return <ErrorMessageView message="전시 메이트 다이어리 조회 실패:(" />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
-  if (isLoading) {
-    return <LoadingModal message="전시 메이트 다이어리 조회 중:)" />;
-  }
-
-  if (gatheringDiaryList.length === 0) {
-    return <ErrorMessageView message="아직 전시회에 대한 기록이 없습니다." />;
-  }
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
 
   return (
     <>
       {/* body */}
-
-      {gatheringDiaryList.length === 0 ? (
-        <ErrorMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
-      ) : (
-        <DiaryList
-          pageNum={pageNum}
-          first={first}
-          handleFirst={() => setFirst(true)}
-          diaryList={gatheringDiaryList}
-          deleteActions={deleteActions}
-          updateActions={updateActions}
-        />
-      )}
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+      {gatheringDiaryList &&
+        (gatheringDiaryList.length === 0 ? (
+          <InfoMessageView message={'아직 전시회에 대한 기록이 없습니다.'} />
+        ) : (
+          <DiaryList
+            pageNum={pageNum}
+            first={first}
+            handleFirst={() => setFirst(true)}
+            diaryList={gatheringDiaryList}
+            deleteActions={deleteActions}
+            updateActions={updateActions}
+          />
+        ))}
     </>
   );
 };

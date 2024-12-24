@@ -80,7 +80,7 @@ export const useFetchExhListBySearchContent = (searchName: string | null) =>
     queryFn: () => fetchExhListBySearchContent(searchName),
     staleTime: 500000,
     cacheTime: 0, // 캐시가 오래되지 않도록 설정
-    enabled: !searchName,
+    enabled: searchName !== null,
     onError: err => {
       console.log('[FetchExhBySearchContent] error fetch ExhList', searchName);
     },
@@ -224,15 +224,15 @@ export const useFetchSearchContentList = () =>
     staleTime: 500000,
     onError: err => {
       console.log(err);
-      console.log('[ExhSearchNameScreen] error fetch SearchContentList');
+      console.log('[SearchHistoryList] error fetch SearchContentList');
     },
     onSuccess: () => {
-      console.log('[ExhSearchNameScreen] success fetch SearchContentList');
+      console.log('[SearchHistoryList] success fetch SearchContentList');
     },
     select: (res: any) => res.data,
   });
 
-export const useFetchAddSearchContent = (
+export const useAddSearchContent = (
   searchContent: string,
   searchTime: Date,
 ) => {
@@ -242,31 +242,31 @@ export const useFetchAddSearchContent = (
     mutationFn: () => fetchAddSearchContent(searchContent, searchTime),
     onError: err => {
       console.log(err);
-      console.log('[AddSearchContent] error fetch Add SearchContent');
+      console.log('[AddSearchContent] error add SearchContent');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(
         exhibitionQueryKeys.fetchSearchContentList().queryKey,
       );
-      console.log('[AddSearchContent] success fetch Add SearchContent');
+      console.log('[AddSearchContent] success add SearchContent');
     },
   });
 };
 
-export const useFetchDeleteSearchContent = (searchId: number) => {
+export const useDeleteSearchContent = (searchId: number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () => fetchDeleteSearchContent(searchId),
     onError: err => {
       console.log(err);
-      console.log('[DeleteSearchContent] error fetch Delete SearchContent');
+      console.log('[DeleteSearchContent] error delete SearchContent');
     },
     onSuccess: () => {
       queryClient.invalidateQueries(
         exhibitionQueryKeys.fetchSearchContentList().queryKey,
       );
-      console.log('[DeleteSearchContent] success fetch Delete SearchContent');
+      console.log('[DeleteSearchContent] success delete SearchContent');
     },
   });
 };

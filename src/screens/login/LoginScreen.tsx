@@ -8,8 +8,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import GreyNameTag from '../../components/common/GreyNameTag';
-import {showToast} from '~/components/common/modal/toastConfig';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {handleGoogleLogin} from './GoogleLogin';
 import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
@@ -35,6 +33,8 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import notifee, {EventDetail, EventType} from '@notifee/react-native';
 import pushNoti from '~/utils/pushNoti';
 import {Linking} from 'react-native';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type LoginUserInfo = {
   email: string;
@@ -43,40 +43,53 @@ type LoginUserInfo = {
 };
 
 const LoginScreen = () => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateAuthInfo} = useUserActions();
   const {updateEmail, updateProviderId, updateProviderType} =
     useUserLoginActions();
-  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+
+  // State Management
   const [isDuplicateModalOpen, setDuplicateModalOpen] =
     useState<boolean>(false);
   const [pushToken, setPushToken] = useState<string | null>(null);
   const [loginUserInfo, setLoginUserInfo] = useState<LoginUserParams | null>(
     null,
   );
+  const [isLoadingOpen, setIsLoadingOpen] = useState<boolean>(false);
+  const [loginType, setLoginType] = useState<string>('');
+  const [isErrorLoginOpen, setIsErrorLoginOpen] = useState<boolean>(false);
+  const [isErrorAlarmOpen, setIsErrorAlarmOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     mutate: loginUser,
-    isLoading: isLoading,
-    isError: isError,
-    isSuccess: isSuccess,
+    isLoading: isLoadingLogin,
+    isError: isErrorLogin,
+    isSuccess: isSuccessLogin,
     data: resData,
     error,
   } = useLoginUser();
-  const {mutate: updateAlarmToken} = useUpdateAlarmToken();
-  const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest();
+  const {
+    isLoading: isLoadingAlarmToken,
+    isError: isErrorAlarmToken,
+    isSuccess: isSuccessAlarmToken,
+    mutate: updateAlarmToken,
+  } = useUpdateAlarmToken();
+  const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest(); // TODO 삭제
 
+  // Effects
   useEffect(() => {
     const checkUserId = async () => {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const initInfo = await AsyncStorage.getItem('initInfo');
+
       // TODO 삭제
       console.log('{login page}', initInfo, accessToken);
       if (accessToken && initInfo === 'true') {
         // 토큰 확인
         const alarmToken = await handlePushToken();
         if (alarmToken !== pushToken) {
-          console.log('change token');
-          setPushToken(alarmToken);
           updateAlarmToken(alarmToken);
         }
         navigation.navigate('UserInfo');
@@ -84,6 +97,15 @@ const LoginScreen = () => {
     };
     checkUserId();
   }, []);
+
+  useEffect(() => {
+    if (isSuccessAlarmToken) {
+      handlePushToken().then(setPushToken);
+    }
+    if (isErrorAlarmToken) {
+      setIsErrorAlarmOpen(true);
+    }
+  }, [isSuccessAlarmToken, isErrorAlarmToken]);
 
   useEffect(() => {
     const handlePressNotification = async (detail: EventDetail) => {
@@ -153,26 +175,18 @@ const LoginScreen = () => {
     });
   }, []);
 
-  const emailDuplicateModal = () => {
-    // 모달로 확인
-    setDuplicateModalOpen(true);
-  };
-
   useEffect(() => {
-    if (isError) {
+    if (isErrorLogin) {
       const statusCode = error?.response?.status;
 
       if (statusCode === 409) {
         // 상태 코드를 체크 (예: 409 Conflict)
-        emailDuplicateModal();
+        setDuplicateModalOpen(true);
       } else {
-        showToast('로그인에 실패했습니다.');
+        setIsErrorLoginOpen(true);
       }
     }
-    if (!isLoading) {
-      setIsLoadingOpen(false);
-    }
-    if (isSuccess) {
+    if (isSuccessLogin) {
       const data = resData.data;
       updateAuthInfo({...data, role: data.roleType});
       if (data.initInfo) {
@@ -181,12 +195,15 @@ const LoginScreen = () => {
         navigation.navigate('InitProfile');
       }
     }
-  }, [isError, isLoading, isSuccess, resData, navigation, updateAuthInfo]);
+  }, [isErrorLogin, isSuccessLogin, resData]);
 
+  // Handlers
   const handleLogin = async (
     type: string,
   ): Promise<LoginUserInfo | undefined> => {
     setIsLoadingOpen(true);
+    setLoginType(type);
+
     let loginInfo;
     switch (type) {
       case 'google':
@@ -200,7 +217,6 @@ const LoginScreen = () => {
         break;
       default:
         setIsLoadingOpen(false);
-        showToast('로그인에 실패했습니다.');
         return;
     }
     if (loginInfo && loginInfo.email !== '') {
@@ -213,20 +229,16 @@ const LoginScreen = () => {
       loginUser({...loginInfo, alarmToken});
       setLoginUserInfo({...loginInfo, alarmToken});
     } else {
-      showToast('로그인에 실패했습니다.');
+      setIsErrorLoginOpen(true);
     }
+
     setIsLoadingOpen(false);
   };
 
   const handlePushToken = async () => {
     const enabled = await messaging().hasPermission();
-
     if (enabled) {
-      const fcmToken = await messaging().getToken();
-
-      if (fcmToken) {
-        return fcmToken;
-      }
+      return messaging().getToken();
     }
     return null;
   };
@@ -243,8 +255,27 @@ const LoginScreen = () => {
     testerLogin(3);
   };
 
+  const handleLoginRetry = async () => {
+    setIsErrorLoginOpen(false);
+    handleLogin(loginType);
+  };
+
+  const handleUpdateAlarmToken = async () => {
+    setIsErrorAlarmOpen(false);
+    const alarmToken = await handlePushToken();
+    if (alarmToken !== pushToken) {
+      updateAlarmToken(alarmToken);
+    }
+    navigation.navigate('UserInfo');
+  };
+
   return (
     <Container>
+      <LoadingModal
+        isLoading={isLoadingLogin || isLoadingAlarmToken || isLoadingOpen}
+      />
+      <ErrorModal isError={isErrorLoginOpen} retry={handleLoginRetry} />
+      <ErrorModal isError={isErrorAlarmOpen} retry={handleUpdateAlarmToken} />
       <Contents>
         <ArtDiaryMainWrapper>
           <ArtDiary>Art Diary</ArtDiary>
@@ -277,7 +308,6 @@ const LoginScreen = () => {
       <LineWrapper>
         <Line />
       </LineWrapper>
-      {isLoadingOpen && <LoadingModal message={'로그인 시도 중 :)'} />}
       {isDuplicateModalOpen && loginUserInfo && (
         <EmailDuplicateModal
           handleCloseModal={() => setDuplicateModalOpen(false)}

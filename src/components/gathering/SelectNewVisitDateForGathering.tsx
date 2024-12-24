@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -11,6 +11,8 @@ import {calendarColor} from '~/components/calendar/calendarColor';
 import {MarkedType} from '~/types';
 import {useFetchStoredDateOfExhInGroup} from '~/api/queries/exhibition';
 import CalendarSelectDateFrame from '../common/CalendarSelectDateFrame';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface SelectNewVIsitDateProps {
   exhId: number;
@@ -29,6 +31,7 @@ const SelectNewVisitDateForGathering: React.FC<SelectNewVIsitDateProps> = ({
   initDate,
   handleAlreadyVisit,
 }) => {
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   // 모임에서 방문한 날짜 리스트 가져오기
   const {
     data: storedDateList,
@@ -37,6 +40,13 @@ const SelectNewVisitDateForGathering: React.FC<SelectNewVIsitDateProps> = ({
     isSuccess,
     refetch,
   } = useFetchStoredDateOfExhInGroup(exhId, gatherId);
+
+  // Effects
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   useEffect(() => {
     if (exhId !== 0) {
@@ -80,8 +90,15 @@ const SelectNewVisitDateForGathering: React.FC<SelectNewVIsitDateProps> = ({
     return list;
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <SectionName>날짜 추가</SectionName>
       {/* 방문 날짜 정보 */}
       {exhId === 0 || !storedDateList ? (

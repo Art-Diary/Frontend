@@ -1,15 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {useFetchUserInfo} from '~/api/queries/auth';
 import {useUserActions} from '~/zustand/auth/auth';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import {View} from 'react-native';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 export const UserInfo = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const {updateAuthInfo} = useUserActions();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: userInfo,
     isLoading,
@@ -30,9 +32,21 @@ export const UserInfo = () => {
     }
   }, [isFocused]);
 
-  if (isLoading) {
-    return <LoadingModal message={'사용자 정보 조회 중 :)'} />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
-  return <View></View>;
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
+  return (
+    <View>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+    </View>
+  );
 };

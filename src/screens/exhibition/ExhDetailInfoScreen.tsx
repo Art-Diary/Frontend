@@ -1,19 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {BackHandler, Linking, RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
-import {
-  responseFont as rf,
-  widthSizePercentage as wp,
-  heightSizePercentage as hp,
-} from '~/components/common/ResponsiveSize';
+import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import {RouteProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {
   useFetchDiaryListForExh,
   useFetchExhDetailInfo,
 } from '~/api/queries/exhibition';
-import LoadingModal from '~/components/common/modal/LoadingModal';
-import ExhReviewList from './detail/ExhReviewList';
+import ExhReviewList from '../../components/exhibition/ExhReviewList';
 import {TRenderEngineProvider} from 'react-native-render-html';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {
@@ -22,7 +17,7 @@ import {
   EditRegExhIcon,
   HomepageIcon,
 } from '~/components/common/icon';
-import ExhShare from './ExhShare';
+import ExhShare from '../../components/exhibition/ExhShare';
 import {showToast} from '~/components/common/modal/toastConfig';
 import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {useUserInfo} from '~/zustand/auth/auth';
@@ -30,6 +25,8 @@ import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
 } from '~/zustand/tabIdentifier';
+import LoadingModal from '~/components/common/modal/LoadingModal';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 type RootStackParamList = {
   ExhDetailInfo: {exhId: number; modalOpen?: boolean};
@@ -45,26 +42,30 @@ interface Props {
 }
 
 const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const userInfo = useUserInfo();
   const isFocused = useIsFocused();
-
   const {exhId} = route.params;
   const {modalOpen} = route.params;
-  const {data, isLoading, isError, isSuccess, refetch} =
-    useFetchExhDetailInfo(exhId);
-  const {
-    data: diaryData,
-    isSuccess: isDiaryListSuccess,
-    isLoading: isDiaryListLoading,
-    refetch: refetchDiaryList,
-  } = useFetchDiaryListForExh(exhId);
-
   const [refreshing, setRefreshing] = useState(false);
-  const [openLoading, setOpenLoading] = useState<boolean>(false);
   const tabIdentifierInfo = useTabIdentifierInfo();
   const {updateTab} = useTabIdentifierActions();
 
+  // State Management
+  const [isErrorDetailOpen, setIsErrorDetailOpen] = useState<boolean>(false);
+  const [isErrorDiaryOpen, setIsErrorDiaryOpen] = useState<boolean>(false);
+
+  // API Hooks
+  const {data, isLoading, isError, refetch} = useFetchExhDetailInfo(exhId);
+  const {
+    data: diaryData,
+    isLoading: isDiaryListLoading,
+    isError: isDiaryListError,
+    refetch: refetchDiaryList,
+  } = useFetchDiaryListForExh(exhId);
+
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetchDiaryList();
@@ -76,36 +77,10 @@ const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
   }, [isFocused]);
 
   useEffect(() => {
-    if (isLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
-    }
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isDiaryListLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
-    }
-  }, [isDiaryListLoading]);
-
-  useEffect(() => {
     if (refreshing) {
       handleRefetch();
     }
   }, [refreshing]);
-
-  const handleRefetch = async () => {
-    await refetchDiaryList().then(() => {
-      setRefreshing(false);
-    });
-  };
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-  };
 
   const handlePressBack = () => {
     //BackButton
@@ -147,6 +122,29 @@ const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
     };
   }, [handlePressBack]);
 
+  useEffect(() => {
+    if (isError) {
+      setIsErrorDetailOpen(true);
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isDiaryListError) {
+      setIsErrorDiaryOpen(true);
+    }
+  }, [isDiaryListError]);
+
+  // Handlers
+  const handleRefetch = async () => {
+    await refetchDiaryList().then(() => {
+      setRefreshing(false);
+    });
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+  };
+
   const exhToHomepage = async (url: string) => {
     // 주어진 URL을 열 수 있는지 확인합니다.
     const supported = await Linking.canOpenURL(url);
@@ -163,8 +161,21 @@ const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
     navigation.navigate('ExhDetailEdit', {exhDetailInfo: data});
   };
 
+  const handleRetryFetchDetail = () => {
+    setIsErrorDetailOpen(false);
+    refetch();
+  };
+
+  const handleRetryFetchDiary = () => {
+    setIsErrorDiaryOpen(false);
+    refetchDiaryList();
+  };
+
   return (
     <TRenderEngineProvider>
+      <LoadingModal isLoading={isLoading || isDiaryListLoading} />
+      <ErrorModal isError={isErrorDetailOpen} retry={handleRetryFetchDetail} />
+      <ErrorModal isError={isErrorDiaryOpen} retry={handleRetryFetchDiary} />
       <ContainerScroll
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
@@ -219,7 +230,6 @@ const ExhDetailInfoScreen: React.FC<Props> = ({route}) => {
             )}
           </>
         )}
-        {openLoading && <LoadingModal message="로딩 중 :)" />}
       </ContainerScroll>
     </TRenderEngineProvider>
   );

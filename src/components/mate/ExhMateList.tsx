@@ -1,14 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import LoadingModal from '~/components/common/modal/LoadingModal';
 import NameTag from '../../screens/mate/NameTag';
 import {useFetchExhMateList} from '~/api/queries/mate';
 import {useMateActions} from '~/zustand/mate/mate';
@@ -20,6 +18,8 @@ import {
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import LoadingModal from '../common/modal/LoadingModal';
+import ErrorModal from '../common/modal/ErrorModal';
 
 interface ExhMateInfo {
   userId: number;
@@ -31,20 +31,20 @@ interface ExhMateInfo {
 const ExhMateList = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const {updateMate} = useMateActions();
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
   const {
     data: exhMateList,
     isLoading,
     isError,
     isSuccess,
+    refetch,
   } = useFetchExhMateList();
 
-  if (isError) {
-    return <ErrorMessageView message="전시메이트 목록 조회 실패:(" />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="전시메이트 목록 조회 중:)" />;
-  }
+  useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
 
   const pressExhMate = (item: ExhMateInfo) => {
     // 메이트 클릭
@@ -60,37 +60,45 @@ const ExhMateList = () => {
     navigation.navigate('MateDiaryRoutes');
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
     <Container>
       {/* 전시메이트 리스트 */}
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <ScrollView>
-        {exhMateList.map((item: any, index: number) => {
-          return (
-            <CustomTouchable key={index} onPress={() => pressExhMate(item)}>
-              <UserInfoWrapper>
-                <NameTag isSelected={true}>
-                  <UserInfo>
-                    <ProfileWrapper>
-                      <Profile
-                        source={{uri: `${item.profile ?? DEFAULT_IMAGE}`}}
-                        resizeMode="cover"
-                        alt={'이미지 읽기 실패'}
-                      />
-                    </ProfileWrapper>
-                    <UserInfoColumn>
-                      <NickName>{item.nickname}</NickName>
-                      <Art>
-                        {item.favoriteArt === '.' || !item.favoriteArt
-                          ? '그외'
-                          : item.favoriteArt}
-                      </Art>
-                    </UserInfoColumn>
-                  </UserInfo>
-                </NameTag>
-              </UserInfoWrapper>
-            </CustomTouchable>
-          );
-        })}
+        {exhMateList &&
+          exhMateList.map((item: any, index: number) => {
+            return (
+              <CustomTouchable key={index} onPress={() => pressExhMate(item)}>
+                <UserInfoWrapper>
+                  <NameTag isSelected={true}>
+                    <UserInfo>
+                      <ProfileWrapper>
+                        <Profile
+                          source={{uri: `${item.profile ?? DEFAULT_IMAGE}`}}
+                          resizeMode="cover"
+                          alt={'이미지 읽기 실패'}
+                        />
+                      </ProfileWrapper>
+                      <UserInfoColumn>
+                        <NickName>{item.nickname}</NickName>
+                        <Art>
+                          {item.favoriteArt === '.' || !item.favoriteArt
+                            ? '그외'
+                            : item.favoriteArt}
+                        </Art>
+                      </UserInfoColumn>
+                    </UserInfo>
+                  </NameTag>
+                </UserInfoWrapper>
+              </CustomTouchable>
+            );
+          })}
       </ScrollView>
     </Container>
   );

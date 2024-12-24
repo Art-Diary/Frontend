@@ -88,7 +88,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     if (isErrorByAdmin) {
-      showToast('전시회 등록을 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccessByAdmin) {
       // 이전 페이지로 이동
@@ -98,7 +98,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
 
   useEffect(() => {
     if (isErrorByUser) {
-      showToast('전시회 등록을 실패했습니다.');
+      showToast('다시 시도해주세요.');
     }
     if (isSuccessByUser) {
       // 설정 페이지의 등록한 전시회 페이지로 이동

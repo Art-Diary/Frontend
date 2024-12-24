@@ -1,7 +1,7 @@
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {RootStackNavigationProp} from '~/App';
-import ErrorMessageView from '~/components/common/ErrorMessageView';
+import InfoMessageView from '~/components/common/InfoMessageView';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {useFetchMateExhList} from '~/api/queries/mate';
 import {useMateInfo} from '~/zustand/mate/mate';
@@ -10,13 +10,20 @@ import {useQueryMateDiaryActions} from '~/zustand/mate/queryMateDiary';
 import {RefreshControl} from 'react-native';
 import styled from 'styled-components/native';
 import {BACK_COLOR} from '~/components/common/colors';
+import ErrorModal from '~/components/common/modal/ErrorModal';
 
 const MateExhList = () => {
+  // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
   const isFocused = useIsFocused();
   const mateInfo = useMateInfo();
   const {updateQueryInfo} = useQueryMateDiaryActions();
+
+  // State Management
   const [refreshing, setRefreshing] = useState(false);
+  const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+
+  // API Hooks
   const {
     data: mateExhList,
     isLoading,
@@ -24,6 +31,7 @@ const MateExhList = () => {
     refetch,
   } = useFetchMateExhList(mateInfo.mateInfo.userId);
 
+  // Effects
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -31,27 +39,18 @@ const MateExhList = () => {
   }, [isFocused]);
 
   useEffect(() => {
+    if (isError) {
+      setIsErrorOpen(true);
+    }
+  }, [isError]);
+
+  useEffect(() => {
     if (refreshing) {
       handleRefetch();
     }
   }, [refreshing]);
 
-  if (isError) {
-    return <ErrorMessageView message="전시 메이트 정보 조회 실패 ;(" />;
-  }
-
-  if (isLoading) {
-    return <LoadingModal message="전시 메이트 정보 조회 중:)" />;
-  }
-
-  if (mateExhList.length === 0) {
-    return (
-      <ErrorMessageView
-        message={'아직 전시 메이트의 전시회에 대한 기록이 없습니다.'}
-      />
-    );
-  }
-
+  // Handlers
   const onPress = (exhId: number) => {
     updateQueryInfo({
       mateId: mateInfo.mateInfo.userId,
@@ -70,16 +69,37 @@ const MateExhList = () => {
     setRefreshing(true);
   };
 
+  const handleRetryFetch = () => {
+    setIsErrorOpen(false);
+    refetch();
+  };
+
   return (
-    <RefreshView
-      data={['']}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-      }
-      renderItem={({}) => (
-        <VisitedExhListFrame exhList={mateExhList} handlePressExh={onPress} />
-      )}
-    />
+    <>
+      <LoadingModal isLoading={isLoading} />
+      <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
+      <RefreshView
+        data={['']}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        renderItem={({}) => (
+          <>
+            {mateExhList &&
+              (!mateExhList.length ? (
+                <InfoMessageView
+                  message={'아직 전시 메이트의 전시회에 대한 기록이 없습니다.'}
+                />
+              ) : (
+                <VisitedExhListFrame
+                  exhList={mateExhList}
+                  handlePressExh={onPress}
+                />
+              ))}
+          </>
+        )}
+      />
+    </>
   );
 };
 

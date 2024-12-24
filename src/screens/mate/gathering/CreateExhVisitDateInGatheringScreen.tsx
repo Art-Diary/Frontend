@@ -37,7 +37,6 @@ const CreateExhVisitDateInGatheringScreen: React.FC<Props> = ({route}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [exhId, setExhId] = useState<number>();
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  const [openLoading, setOpenLoading] = useState(false);
   const [alreadyVisit, setAlreadyVisit] = useState(false);
   // 모임의 전시회 방문 날짜 추가 API
   const {
@@ -45,22 +44,25 @@ const CreateExhVisitDateInGatheringScreen: React.FC<Props> = ({route}) => {
     isLoading,
     isError,
     isSuccess,
+    error,
   } = useAddNewDateOfExhGathering();
 
   useEffect(() => {
     if (isError) {
-      showToast('방문 가능한 날짜가 아닙니다');
-    }
-    if (isLoading) {
-      setOpenLoading(true);
-    } else {
-      setOpenLoading(false);
+      const statusCode = error?.response?.status;
+
+      if (statusCode === 409) {
+        showToast('이미 방문 예정인 날짜입니다.');
+      } else if (statusCode === 403) {
+        showToast('방문 가능한 날짜가 아닙니다.');
+      } else {
+        showToast('다시 시도해주세요.');
+      }
     }
     if (isSuccess) {
-      showToast('방문 날짜를 추가했습니다');
       navigation.goBack();
     }
-  }, [isError, isLoading, isSuccess]);
+  }, [isError, isSuccess]);
 
   const onSelectedDate = (selectedDate: string) => {
     setSelectedDate(selectedDate);
@@ -82,6 +84,7 @@ const CreateExhVisitDateInGatheringScreen: React.FC<Props> = ({route}) => {
 
   return (
     <Container>
+      <LoadingModal isLoading={isLoading} />
       <BackView title={'방문 날짜 추가'} line />
       {/* 전시회 선택 */}
       <Contents>
@@ -108,7 +111,6 @@ const CreateExhVisitDateInGatheringScreen: React.FC<Props> = ({route}) => {
           </CustomTouchable>
         )}
       </Contents>
-      {openLoading && <LoadingModal message={'처리 중'} />}
     </Container>
   );
 };

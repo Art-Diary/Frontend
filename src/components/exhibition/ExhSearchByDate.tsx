@@ -12,26 +12,28 @@ import {
 } from '~/components/common/style';
 import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
 import {BackButtonIcon} from '~/components/common/icon';
-import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
-import {useAddScheduleActions} from '~/zustand/calendar/addSchedule';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import CalendarSelectDateFrame from '~/components/common/CalendarSelectDateFrame';
+import {OptionsType} from '~/screens/exhibition/ExhListScreen';
 
 interface ExhSearchByDateProps {
-  date: string | null;
+  selectedOptions: OptionsType;
+  handleUpdateDate: (option: OptionsType) => void;
   onClose: () => void;
 }
 
-const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({onClose}) => {
+const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({
+  selectedOptions,
+  handleUpdateDate,
+  onClose,
+}) => {
   // 사용자가 선택한 날짜
   const [selectedDate, setSelectedDate] = useState(dateToString(new Date()));
-  const {date: dateFromExhInfo} = useDateFromExhInfo();
-  const {updateAddDate} = useAddScheduleActions();
 
   const onPressDate = () => {
     const dateObject = changeDotToHyphen(selectedDate);
-    console.log('dateObject', dateObject);
-    updateAddDate(dateObject);
+
+    handleUpdateDate({...selectedOptions, date: dateObject});
     onClose();
   };
 
@@ -46,7 +48,7 @@ const ExhSearchByDate: React.FC<ExhSearchByDateProps> = ({onClose}) => {
         <ContentView>
           <TextView>{'날짜 선택'}</TextView>
           <CalendarSelectDateFrame
-            initDate={dateFromExhInfo ?? dateToString(new Date())}
+            initDate={dateToString(new Date())}
             markedDates={[]}
             selectedDate={selectedDate}
             onSelectedDate={setSelectedDate}
