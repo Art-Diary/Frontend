@@ -31,9 +31,9 @@ import {
 } from 'react-query';
 import RegExhOptionsModal from '~/components/regExh/RegExhOptionsModal';
 import {useDeleteRegExh} from '~/api/queries/regexh';
-import {showToast} from '../common/modal/toastConfig';
 import {RegExhDetailInfo} from '~/types';
 import LoadingModal from '../common/modal/LoadingModal';
+import {toastErrorMessage} from '~/utils/message';
 
 interface Props {
   role: 'ADMIN' | 'USER_WAIT' | 'USER_COMPLETE';
@@ -82,7 +82,7 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
 
   useEffect(() => {
     if (isError) {
-      showToast('다시 시도해주세요.');
+      toastErrorMessage();
     }
     if (isSuccess) {
       // 설정 페이지의 등록한 전시회 페이지로 이동
@@ -163,7 +163,7 @@ const RegExhDetailFormat: React.FC<Props> = ({role, regExhInfo, refetch}) => {
                     <RegExhOptionsModal
                       option={'DELETE'}
                       handleCloseModal={onPressCloseTrashModal}
-                      onPressYes={() => onPressTrashYes()}
+                      onPressYes={onPressTrashYes}
                     />
                   )}
                 </CustomTouchable>

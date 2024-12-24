@@ -1,4 +1,4 @@
-import {ExhDetailInfo, RegExhDetailInfo} from '~/types';
+import {ExhDetailInfo, QnaInfo, RegExhDetailInfo} from '~/types';
 
 // types.ts
 export type GatheringStackParamList = {
@@ -60,6 +60,20 @@ export type RootStackParamList = {
   EditRegExh: {
     regExhInfo: RegExhDetailInfo;
     role: 'ADMIN' | 'USER_WAIT';
+  };
+  QnaList: {
+    isAdmin: boolean;
+  };
+  CreateQna: undefined;
+  QnaDetail: {
+    isAdmin: boolean;
+    qnaId: number;
+  };
+  UpdateQna: {
+    qnaInfo: QnaInfo;
+  };
+  AnswerQna: {
+    qnaInfo: QnaInfo;
   };
   // calendar
   CalendarDiaryRoutes: {

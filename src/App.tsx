@@ -47,6 +47,11 @@ import CreateExhVisitedDateScreen from './screens/mydiary/CreateExhVisitedDateSc
 import ConfirmRegExhByAdminScreen from './screens/setting/regExh/ConfirmRegExhByAdminScreen';
 import CheckRegExhByUserScreen from './screens/setting/regExh/CheckRegExhByUserScreen';
 import EditRegExhScreen from './screens/setting/regExh/EditRegExhScreen';
+import QnaListScreen from './screens/setting/qna/QnaListScreen';
+import CreateQnaScreen from './screens/setting/qna/CreateQnaScreen';
+import QnaDetailScreen from './screens/setting/qna/QnaDetailScreen';
+import UpdateQnaScreen from './screens/setting/qna/UpdateQnaScreen';
+import AnswerQnaScreen from './screens/setting/qna/AnswerQnaScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -204,6 +209,13 @@ export default function App() {
             />
             {/* [설정] 전시회 등록 수정 화면 (사용자/관리자)*/}
             <Stack.Screen name="EditRegExh" component={EditRegExhScreen} />
+            {/* [설정] Qna*/}
+            <Stack.Screen name="QnaList" component={QnaListScreen} />
+            <Stack.Screen name="CreateQna" component={CreateQnaScreen} />
+            <Stack.Screen name="QnaDetail" component={QnaDetailScreen} />
+            <Stack.Screen name="UpdateQna" component={UpdateQnaScreen} />
+            <Stack.Screen name="AnswerQna" component={AnswerQnaScreen} />
+
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
