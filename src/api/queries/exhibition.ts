@@ -80,7 +80,7 @@ export const useFetchExhListBySearchContent = (searchName: string | null) =>
     queryFn: () => fetchExhListBySearchContent(searchName),
     staleTime: 500000,
     cacheTime: 0, // 캐시가 오래되지 않도록 설정
-    enabled: searchName !== null,
+    enabled: searchName !== null && searchName !== '',
     onError: err => {
       console.log('[FetchExhBySearchContent] error fetch ExhList', searchName);
     },

@@ -86,7 +86,7 @@ export const useFetchGatheringDiaryList = (gatherId: number, exhId: number) =>
     queryKey: gatheringQueryKeys.fetchGatheringDiaryList(gatherId, exhId)
       .queryKey,
     queryFn: () => fetchGatheringDiaryList(gatherId, exhId),
-    staleTime: 500000,
+    staleTime: 1000000,
     onError: err => {
       console.log(err);
       console.log('[GatheringDiaryList] error fetch GatheringDiaryList');

@@ -12,7 +12,7 @@ import {handleGoogleLogin} from './GoogleLogin';
 import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
 import {
-  useLoginTest,
+  // useLoginTest,
   useLoginUser,
   useUpdateAlarmToken,
 } from '~/api/queries/auth';
@@ -35,6 +35,9 @@ import pushNoti from '~/utils/pushNoti';
 import {Linking} from 'react-native';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorModal from '~/components/common/modal/ErrorModal';
+import {showToast} from '~/components/common/modal/toastConfig';
+import {API_URL} from '@env';
+import {initializeClient} from '~/api/client';
 
 type LoginUserInfo = {
   email: string;
@@ -60,6 +63,7 @@ const LoginScreen = () => {
   const [loginType, setLoginType] = useState<string>('');
   const [isErrorLoginOpen, setIsErrorLoginOpen] = useState<boolean>(false);
   const [isErrorAlarmOpen, setIsErrorAlarmOpen] = useState<boolean>(false);
+  const [isReady, setIsReady] = useState(false);
 
   // API Hooks
   const {
@@ -76,10 +80,31 @@ const LoginScreen = () => {
     isSuccess: isSuccessAlarmToken,
     mutate: updateAlarmToken,
   } = useUpdateAlarmToken();
-  const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest(); // TODO 삭제
+  // const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest(); // TODO 삭제
+
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       await initializeClient();
+  //       setIsLoadingOpen(false);
+  //     } catch (error) {
+  //       console.error('Initialization error:', error);
+  //     }
+  //   };
+  //   setIsLoadingOpen(true);
+  //   init();
+  // }, []);
 
   // Effects
   useEffect(() => {
+    const init = async () => {
+      try {
+        await initializeClient();
+        setIsLoadingOpen(false);
+      } catch (error) {
+        console.error('Initialization error:', error);
+      }
+    };
     const checkUserId = async () => {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const initInfo = await AsyncStorage.getItem('initInfo');
@@ -88,13 +113,15 @@ const LoginScreen = () => {
       console.log('{login page}', initInfo, accessToken);
       if (accessToken && initInfo === 'true') {
         // 토큰 확인
-        const alarmToken = await handlePushToken();
-        if (alarmToken !== pushToken) {
+        const alarmToken = (await handlePushToken()) ?? null;
+        if (alarmToken && alarmToken !== pushToken) {
           updateAlarmToken(alarmToken);
         }
         navigation.navigate('UserInfo');
       }
     };
+    setIsLoadingOpen(true);
+    init();
     checkUserId();
   }, []);
 
@@ -183,6 +210,8 @@ const LoginScreen = () => {
         // 상태 코드를 체크 (예: 409 Conflict)
         setDuplicateModalOpen(true);
       } else {
+        // console.log(statusCode + ': 로그인 요청 실패');
+        // showToast('다시 시도해주세요.');
         setIsErrorLoginOpen(true);
       }
     }
@@ -224,10 +253,17 @@ const LoginScreen = () => {
       updateProviderId(loginInfo.providerId);
       updateProviderType(loginInfo.providerType);
       // 토큰 확인
-      const alarmToken = await handlePushToken();
+      const alarmToken = (await handlePushToken()) ?? null;
+      const userData = {
+        email: loginInfo.email,
+        providerId: loginInfo.providerId,
+        providerType: loginInfo.providerType,
+        alarmToken: (await handlePushToken()) ?? null,
+      };
+      showToast(loginInfo.email);
       setPushToken(alarmToken);
-      loginUser({...loginInfo, alarmToken});
-      setLoginUserInfo({...loginInfo, alarmToken});
+      setLoginUserInfo(userData);
+      loginUser(userData);
     } else {
       setIsErrorLoginOpen(true);
     }
@@ -243,17 +279,17 @@ const LoginScreen = () => {
     return null;
   };
 
-  // TODO 삭제
-  useEffect(() => {
-    if (isSuccessTest) {
-      navigation.navigate('UserInfo');
-    }
-  }, [isSuccessTest]);
+  // // TODO 삭제
+  // useEffect(() => {
+  //   if (isSuccessTest) {
+  //     navigation.navigate('UserInfo');
+  //   }
+  // }, [isSuccessTest]);
 
-  // TODO 삭제
-  const handleTester = async () => {
-    testerLogin(3);
-  };
+  // // TODO 삭제
+  // const handleTester = async () => {
+  //   testerLogin(3);
+  // };
 
   const handleLoginRetry = async () => {
     setIsErrorLoginOpen(false);
@@ -300,9 +336,9 @@ const LoginScreen = () => {
             <KakaoLogoIcon />
           </GreyNameTag>
           {/* TODO 삭제 */}
-          <CustomTouchable onPress={handleTester}>
+          {/* <CustomTouchable onPress={handleTester}>
             <Tester>테스터 3</Tester>
-          </CustomTouchable>
+          </CustomTouchable> */}
         </LoginWrapper>
       </Contents>
       <LineWrapper>

@@ -45,6 +45,7 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
   const [numPages, setNumPages] = useState<number>(0);
   const [refreshing, setRefreshing] = useState(false);
   const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
+  const [qnaList, setQnaList] = useState([]);
 
   // API Hooks
   const {
@@ -56,6 +57,12 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
   } = useFetchQnaList(isAdmin);
 
   // Effects
+  useEffect(() => {
+    if (qnaInfoList) {
+      setQnaList(qnaInfoList);
+    }
+  }, [qnaInfoList]);
+
   useEffect(() => {
     if (isFocused) {
       refetch();
@@ -69,17 +76,17 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
   }, [isError]);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (qnaList.length > 0) {
       // 페이지 수 감소로 현재 페이지가 초과된 경우 처리
-      const totalItems = qnaInfoList.length;
+      const totalItems = qnaList.length;
       const newNumPages = Math.ceil(totalItems / limit);
 
       if (page > newNumPages) {
         setPage(newNumPages);
       }
-      setNumPages(Math.ceil(qnaInfoList.length / limit));
+      setNumPages(Math.ceil(qnaList.length / limit));
     }
-  }, [isSuccess]);
+  }, [qnaList]);
 
   useEffect(() => {
     setOffset((page - 1) * limit);
@@ -159,11 +166,11 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }>
-          {!qnaInfoList || qnaInfoList.length === 0 ? (
+          {!qnaList || qnaList.length === 0 ? (
             <InfoMessageView message="문의 내역이 없습니다." />
           ) : (
             <>
-              {qnaInfoList
+              {qnaList
                 .slice(offset, offset + limit)
                 .map((item: any, index: number) => (
                   <TouchableOpacity
@@ -195,7 +202,7 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
             </>
           )}
         </ScrollView>
-        {qnaInfoList && qnaInfoList.length !== 0 && (
+        {qnaList && qnaList.length !== 0 && (
           <PageNumberView>
             <CustomTouchable
               onPress={() => setPage(page - 1)}

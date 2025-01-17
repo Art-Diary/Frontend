@@ -4,7 +4,7 @@ import {
   deleteUser,
   fetchUserInfo,
   loginUser,
-  loginUserTest,
+  // loginUserTest,
   separateSocialLogin,
   uniteSocialLogin,
   updateAlarmToken,
@@ -276,27 +276,27 @@ export const useUpdateAlarmToken = () => {
   });
 };
 
-// TODO 삭제
-export const useLoginTest = () => {
-  return useMutation({
-    mutationFn: (userId: number) => loginUserTest(userId),
-    onError: err => {
-      console.log(err);
-      console.log('[Tester Login] error Login');
-    },
-    onSuccess: async (res: any) => {
-      const resData = res.data;
-      try {
-        await AsyncStorage.setItem('accessToken', resData.accessToken);
-        await AsyncStorage.setItem(
-          'initInfo',
-          JSON.stringify(resData.initInfo),
-        );
-        console.log('[Tester Login] success Login');
-      } catch (error) {
-        console.log('[AsyncStorage] Error storing userId', error);
-      }
-      return resData;
-    },
-  });
-};
+// // TODO 삭제
+// export const useLoginTest = () => {
+//   return useMutation({
+//     mutationFn: (userId: number) => loginUserTest(userId),
+//     onError: err => {
+//       console.log(err);
+//       console.log('[Tester Login] error Login');
+//     },
+//     onSuccess: async (res: any) => {
+//       const resData = res.data;
+//       try {
+//         await AsyncStorage.setItem('accessToken', resData.accessToken);
+//         await AsyncStorage.setItem(
+//           'initInfo',
+//           JSON.stringify(resData.initInfo),
+//         );
+//         console.log('[Tester Login] success Login');
+//       } catch (error) {
+//         console.log('[AsyncStorage] Error storing userId', error);
+//       }
+//       return resData;
+//     },
+//   });
+// };

@@ -38,6 +38,7 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import ExhAddButton from '../../components/exhibition/ExhAddButton';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorModal from '~/components/common/modal/ErrorModal';
+import {ExhInfoForList} from '~/types';
 
 interface Exhibition {
   exhId: number;
@@ -384,7 +385,7 @@ const ExhListScreen = () => {
           style={{flex: 1}}
           scrollEventThrottle={200}>
           {data &&
-            data.map((item: any, index: number) => (
+            data.map((item: ExhInfoForList, index: number) => (
               <ExhItemView
                 key={index}
                 exhInfo={{...item}}
