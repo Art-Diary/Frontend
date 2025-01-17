@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {Modal, Pressable} from 'react-native';
 import styled from 'styled-components/native';
 import {RootStackNavigationProp} from '~/App';
 import {LoginUserParams} from '~/api/auth';
@@ -9,8 +8,15 @@ import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
+  responseFont as rf,
 } from '~/components/common/ResponsiveSize';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import DecisionModal from '~/components/common/modal/DecisionModal';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
@@ -92,87 +98,76 @@ const EmailDuplicateModal: React.FC<EmailDuplicateModalProps> = ({
   };
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      onRequestClose={handleCloseModal}>
-      <Pressable
-        style={{flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.3)'}}
-        onPress={handleCloseModal}
-      />
-      <Container>
-        <LoadingModal isLoading={uniteLoading || separateLoading} />
-        <Contents>
-          <MessageView>
-            <Message>동일한 이메일로 이미 로그인 한 적이 있습니다.</Message>
-            <MessageView row>
-              <Message>통합을 원하시면 </Message>
-              <Message color="main">통합</Message>
-              <Message>을,</Message>
-            </MessageView>
-            <Message>통합을 원하지 않으시면 "분리"를 눌러주세요.</Message>
-          </MessageView>
-          <TouchView>
-            <ButtonDetailSection>
-              <CustomTouchable onPress={() => socialLogin(false)}>
-                <ButtonView>분리</ButtonView>
-              </CustomTouchable>
-            </ButtonDetailSection>
-            <ButtonDetailSection>
-              <CustomTouchable onPress={() => socialLogin(true)}>
-                <ButtonView mainButton>통합</ButtonView>
-              </CustomTouchable>
-            </ButtonDetailSection>
-          </TouchView>
-        </Contents>
-      </Container>
-    </Modal>
+    <DecisionModal handleCloseModal={handleCloseModal}>
+      <LoadingModal isLoading={uniteLoading || separateLoading} />
+      <Contents>
+        <MsgWrapper>
+          <Message isMainMsg>
+            해당 이메일 주소로 {'\n'}이미 등록된 계정이 있습니다.
+          </Message>
+          <Message>
+            통합을 원하시면 <HighlightMain>통합</HighlightMain>을,{'\n'}새
+            계정을 원하시면 <HighlightSub>분리</HighlightSub>를 눌러주세요.
+          </Message>
+        </MsgWrapper>
+        <TouchView>
+          <ButtonDetailSection>
+            <CustomTouchable onPress={() => socialLogin(false)}>
+              <ButtonView>분리</ButtonView>
+            </CustomTouchable>
+          </ButtonDetailSection>
+          <ButtonDetailSection>
+            <CustomTouchable onPress={() => socialLogin(true)}>
+              <ButtonView mainButton>통합</ButtonView>
+            </CustomTouchable>
+          </ButtonDetailSection>
+        </TouchView>
+      </Contents>
+    </DecisionModal>
   );
 };
 
 export default EmailDuplicateModal;
 
 /** style */
-const Container = styled.View`
-  justify-content: flex-end;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
 const Contents = styled.View`
-  background-color: white;
-  border-top-left-radius: ${wp(5)}px;
-  border-top-right-radius: ${wp(5)}px;
-  padding: ${hp(2.4)}px;
-  width: 100%;
+  flex: 1px;
+  justify-content: space-between;
+  padding-top: ${hp(2)}px;
+  padding-bottom: ${hp(2)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
 `;
 
-interface MessageViewProps {
-  row: boolean;
-}
-
-const MessageView = styled.View<MessageViewProps>`
-  flex-direction: ${(props: MessageViewProps) =>
-    props.row ? `row` : `column`};
-  padding: ${(props: MessageViewProps) => (props.row ? `0px` : `${hp(7)}px`)};
-  padding-top: ${(props: MessageViewProps) =>
-    props.row ? `${hp(2)}px` : `${hp(7)}px`};
-  align-items: center;
-  justify-content: center;
-  /* border-width: 1px; */
+const MsgWrapper = styled.View`
+  flex: 1px;
+  flex-direction: column;
+  width: 100%;
+  padding-top: ${hp(3)}px;
+  padding-left: ${wp(5)}px;
+  padding-right: ${wp(5)}px;
+  gap: ${hp(2)}px;
 `;
 
 interface MessageProps {
   color: string;
+  isMainMsg: boolean;
 }
 
 const Message = styled.Text<MessageProps>`
-  text-align: center;
-  font-size: ${BUTTON_FONT_SIZE}px;
+  font-size: ${(props: MessageProps) =>
+    props.isMainMsg ? `${rf(19)}px` : `${rf(14.5)}px`};
   color: ${(props: MessageProps) =>
-    props.color === 'main' ? `${MAIN_COLOR}` : `${DEFAULT_TEXT}`};
+    props.isMainMsg ? `${DEFAULT_TEXT}` : `${MIDDLE_GREY}`};
   font-family: ${FONT_NAME};
+`;
+
+const HighlightMain = styled.Text`
+  color: ${MAIN_COLOR};
+`;
+
+const HighlightSub = styled.Text`
+  color: ${DEFAULT_TEXT};
 `;
 
 const TouchView = styled.View`
@@ -183,7 +178,7 @@ const TouchView = styled.View`
 `;
 
 const ButtonDetailSection = styled.View`
-  width: 50%;
+  width: 49%;
 `;
 
 interface ButtonViewProps {

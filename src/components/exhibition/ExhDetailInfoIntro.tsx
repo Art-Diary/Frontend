@@ -4,24 +4,33 @@ import styled from 'styled-components/native';
 import {
   responseFont as rf,
   widthSizePercentage as wp,
+  heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import RenderHtml from 'react-native-render-html';
 import {MoreContentsIcon, ReduceContentsIcon} from '~/components/common/icon';
-import {DEFAULT_TEXT, LIGHT_GREY} from '~/components/common/colors';
-import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
-import CustomTouchable from '~/components/common/CustomTouchable';
+import {
+  DEFAULT_TEXT,
+  LIGHT_GREY,
+  MIDDLE_GREY,
+} from '~/components/common/colors';
+import {
+  DASH_WIDTH,
+  FONT_NAME,
+  NADEURI_FONT_NAME,
+  NADEURI_FONT_NAME_BOLD,
+} from '~/components/common/style';
 
 interface Props {
   intro: string | undefined;
+  source: string;
   modalOpen?: boolean;
 }
 
-const ExhDetailInfoIntro: React.FC<Props> = ({intro, modalOpen}) => {
+const ExhDetailInfoIntro: React.FC<Props> = ({intro, source, modalOpen}) => {
   const [isMoreContent, setIsMoreContent] = useState<boolean>(false);
-  const memoizedHtmlContent = useMemo(() => intro, [intro]);
-  //   const [tmp, setTmp] = useState<string>( // 소개 부분 [변경 예정]
-  //     'The Page Gallery is pleased to announce a solo exhibition by German artist André Butzer from November 9 to December 30. This will be the first solo exhibition in Asia in three years and the first for Korean audiences since Yuz Museum in Shanghai in 2020. The exhibition, which will be held at The Page Gallery East, consists of 15 major new works that span the artist"s oeuvre over the past 30 years. At the end of the 20th century, with the end of the Cold War and the sweep of industrialization.',
-  //   );
+  const memoizedHtmlContent = useMemo(() => {
+    return intro;
+  }, [intro]);
 
   const showMore = () => {
     setIsMoreContent(true);
@@ -41,8 +50,8 @@ const ExhDetailInfoIntro: React.FC<Props> = ({intro, modalOpen}) => {
           html: !memoizedHtmlContent
             ? '전시회 소개글이 없습니다.'
             : memoizedHtmlContent.length > 300 && !isMoreContent
-              ? memoizedHtmlContent.substring(0, 300) + '...'
-              : memoizedHtmlContent,
+            ? memoizedHtmlContent.substring(0, 300) + '...'
+            : memoizedHtmlContent,
         }}
       />
     ),
@@ -51,18 +60,22 @@ const ExhDetailInfoIntro: React.FC<Props> = ({intro, modalOpen}) => {
 
   return (
     <IntroduceView modalOpen={modalOpen}>
-      <Title>{'소개'}</Title>
+      <ColWrapper>
+        <Title>소개</Title>
+      </ColWrapper>
       {!memoizedHtmlContent ? (
         <NotIntroText>전시회 소개글이 없습니다.</NotIntroText>
       ) : (
         renderHtmlContent
       )}
-
+      <Source>출처: ©{source}</Source>
       {/* 아이콘 */}
       {memoizedHtmlContent && memoizedHtmlContent.length > 300 && (
-        <ArrowButton onPress={isMoreContent ? backToIntro : showMore}>
-          {isMoreContent ? <ReduceContentsIcon /> : <MoreContentsIcon />}
-        </ArrowButton>
+        <ColWrapper2>
+          <ArrowButton onPress={isMoreContent ? backToIntro : showMore}>
+            {isMoreContent ? <ReduceContentsIcon /> : <MoreContentsIcon />}
+          </ArrowButton>
+        </ColWrapper2>
       )}
     </IntroduceView>
   );
@@ -71,10 +84,27 @@ const ExhDetailInfoIntro: React.FC<Props> = ({intro, modalOpen}) => {
 export default ExhDetailInfoIntro;
 
 /** style */
+const ColWrapper2 = styled.View`
+  align-items: center;
+`;
+const ColWrapper = styled.View`
+  align-items: center;
+  padding-bottom: ${hp(0.5)}px;
+`;
+
 const Title = styled.Text`
   font-size: ${rf(19)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${MIDDLE_GREY};
   font-family: ${FONT_NAME};
+  line-height: ${wp(8)}px;
+`;
+
+const Source = styled.Text`
+  font-size: ${rf(13)}px;
+  color: ${MIDDLE_GREY};
+  font-family: ${FONT_NAME};
+  padding-right: ${wp(2)}px;
+  text-align: right;
   line-height: ${wp(8)}px;
 `;
 
@@ -95,7 +125,6 @@ interface IntroduceProps {
 
 const IntroduceView = styled.View<IntroduceProps>`
   flex-direction: column;
-  align-items: center;
   width: 100%;
   padding-top: ${wp(5.2)}px;
   padding-bottom: ${wp(5.2)}px;
@@ -114,5 +143,6 @@ const styles = StyleSheet.create({
     fontSize: rf(15),
     paddingHorizontal: wp(2),
     paddingVertical: wp(1.5),
+    lineHeight: wp(5.8),
   },
 });

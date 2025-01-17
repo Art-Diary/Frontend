@@ -30,6 +30,7 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
   handleExhInfo,
 }) => {
   // State Management
+  const [keyword, setKeyword] = useState<string>('');
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [exhibitionList, setExhibitionList] = useState([]);
   const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
     isError,
     isSuccess,
     refetch,
-  } = useFetchExhListBySearchContent(searchKeyword);
+  } = useFetchExhListBySearchContent(keyword);
 
   // Effects
   useEffect(() => {
@@ -58,6 +59,7 @@ const SearchExhForDiaryModal: React.FC<SearchExhForDiaryModalProps> = ({
     if (checkBlankInKeyword(searchKeyword)) {
       showToast('다시 검색해 주세요.');
     } else {
+      setKeyword(searchKeyword);
       refetch();
     }
     Keyboard.dismiss();

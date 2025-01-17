@@ -30,6 +30,7 @@ interface ExhDetailData {
   url: string;
   intro: string;
   favoriteExh: boolean | null;
+  source: string;
 }
 
 interface Props {
@@ -128,7 +129,11 @@ const ExhDetailFormat: React.FC<Props> = ({data, state, exhId, modalOpen}) => {
           </InfoListView>
           {/* 소개 */}
           {state === '전시정보' && (
-            <ExhDetailInfoIntro intro={data.intro} modalOpen={modalOpen} />
+            <ExhDetailInfoIntro
+              intro={data.intro}
+              source={data.source}
+              modalOpen={modalOpen}
+            />
           )}
         </>
       )}

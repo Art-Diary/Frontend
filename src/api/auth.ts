@@ -48,6 +48,6 @@ export type LoginUserParams = {
   alarmToken: string | null;
 };
 
-// TODO 삭제
-export const loginUserTest = async (userId: number) =>
-  client.post(`/users/test`, {userId});
+// // TODO 삭제
+// export const loginUserTest = async (userId: number) =>
+//   client.post(`/users/test`, {userId});

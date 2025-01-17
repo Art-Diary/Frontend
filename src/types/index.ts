@@ -30,6 +30,7 @@ export interface ExhDetailInfo {
   intro: string;
   url: string;
   art: string;
+  source: string;
 }
 
 export interface MarkedType {
@@ -88,6 +89,7 @@ export type RegExhDetailInfo = {
   regDate: string;
   regComment: string;
   regState: string;
+  regSource: string;
 };
 
 export type QnaInfo = {
