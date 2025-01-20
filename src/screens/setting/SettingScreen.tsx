@@ -152,7 +152,6 @@ const SettingScreen = () => {
                 }
               />
             )}
-            <GreyNameTag content="도움말" />
           </SettingWrapper>
           {/* 회원정보 */}
           <SettingWrapper>

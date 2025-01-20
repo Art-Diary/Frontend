@@ -43,6 +43,7 @@ export const showPhoto = async (
       const base64Uri = `data:image/jpeg;base64,${imageData}`;
 
       if (editorRef.current) {
+        editorRef.current?.insertText('\n');
         setImages([...images, {uri: imageUri, base64: base64Uri}]);
         editorRef.current?.insertImage(
           base64Uri,

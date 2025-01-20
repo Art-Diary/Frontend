@@ -52,6 +52,7 @@ type ExhDataSetType = {
   art?: string;
   setArt?: React.Dispatch<React.SetStateAction<string>>;
   regState?: string;
+  regSource: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
 };
 
 type CreateApiType = {
@@ -146,12 +147,8 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
       showToast('전시회 관람료를 입력해주세요.');
       return;
     }
-    // 포스터
-    if (
-      (formState === 'updateByAdmin' ||
-        formState === 'updateExhDetailByAdmin') &&
-      !exhData.posterUri
-    ) {
+    // 포스터 formState === 'updateByAdmin' ||
+    if (formState === 'updateExhDetailByAdmin' && !exhData.posterUri) {
       showToast('전시회 포스터를 첨부해주세요.');
       return;
     }
@@ -231,6 +228,9 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
       // 관리자 업데이트
       if (exhData.regComment) {
         formData.append('regComment', exhData.regComment);
+      }
+      if (exhData.regSource) {
+        formData.append('regSource', exhData.regSource);
       }
       requestData.updateRegExhRequest?.updateRegExhApi({
         regExhId: requestData.updateRegExhRequest?.regExhId,
@@ -328,13 +328,13 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
               handleKeyword={exhData.setIntro}
             />
           )}
-          {/* 전시회 포스터 */}
+          {/* 전시회 포스터 formState === 'updateByAdmin' ||*/}
           <ImageInputForm
-            title={'포스터'}
-            isEssential={
-              formState === 'updateByAdmin' ||
-              formState === 'updateExhDetailByAdmin'
+            title={
+              '포스터 ' +
+              (formState === 'updateByAdmin' ? '(등록 완료일 경우 필수)' : '')
             }
+            isEssential={formState === 'updateExhDetailByAdmin'}
             image={exhData.posterUri}
             handleImage={exhData.setPosterUri}
           />

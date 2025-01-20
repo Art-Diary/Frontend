@@ -18,6 +18,7 @@ import {
 } from '../auth';
 import {createQueryKeys} from '@lukemorales/query-key-factory';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useEffect, useState} from 'react';
 
 const authQueryKeys = createQueryKeys('auth', {
   fetchUserInfo: () => ['fetchUserInfo'],
@@ -125,10 +126,21 @@ export const useUpdateNewDateGatheringAlarm = (): UseMutationResult<
   });
 };
 
-export const useFetchUserInfo = () =>
-  useQuery({
+export const useFetchUserInfo = () => {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = await AsyncStorage.getItem('accessToken');
+      setAccessToken(token);
+    };
+    getToken();
+  }, []);
+
+  return useQuery({
     queryKey: authQueryKeys.fetchUserInfo().queryKey,
     queryFn: () => fetchUserInfo(),
+    enabled: !!accessToken,
     staleTime: 500000,
     onError: err => {
       console.log(err);
@@ -139,6 +151,7 @@ export const useFetchUserInfo = () =>
     },
     select: (res: any) => res.data,
   });
+};
 
 export const useUpdateUserInfo = (): UseMutationResult<
   any,
