@@ -53,6 +53,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
   const [regComment, setRegComment] = useState<string | undefined>(undefined);
   const [regArt, setRegArt] = useState<string>('');
   const [regState, setRegState] = useState<string>('');
+  const [regSource, setRegSource] = useState<string | undefined>(undefined);
 
   // update by admin api
   const {
@@ -83,6 +84,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
       setRegComment(regExhInfo.regComment);
       setRegArt(regExhInfo.regArt);
       setRegState(regExhInfo.regState);
+      setRegSource(regExhInfo.regSource);
     }
   }, [regExhInfo]);
 
@@ -151,6 +153,7 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
         art: regArt,
         setArt: setRegArt,
         regState,
+        regSource,
       }}
       requestData={{
         isLoading: role === 'ADMIN' ? isLoadingByAdmin : isLoadingByUser,
@@ -162,6 +165,12 @@ const EditRegExhScreen: React.FC<Props> = ({route}) => {
       }}>
       {role === 'ADMIN' && (
         <>
+          <TextInputForm
+            title={'출처 (등록 완료일 경우 필수)'}
+            multiLine
+            keyword={regSource ?? ''}
+            handleKeyword={setRegSource}
+          />
           <TextInputForm
             title={'코멘트'}
             multiLine

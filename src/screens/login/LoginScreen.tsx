@@ -5,13 +5,14 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import GreyNameTag from '../../components/common/GreyNameTag';
 import {handleGoogleLogin} from './GoogleLogin';
 import {handleNaverLogin} from './NaverLogin';
 import {useUserLoginActions} from '~/zustand/auth/authLogin';
 import {
+  useFetchUserInfo,
   // useLoginTest,
   useLoginUser,
   useUpdateAlarmToken,
@@ -29,14 +30,12 @@ import {
 } from '~/components/common/icon';
 import EmailDuplicateModal from './EmailDuplicateModal';
 import {LoginUserParams} from '~/api/auth';
-import CustomTouchable from '~/components/common/CustomTouchable';
 import notifee, {EventDetail, EventType} from '@notifee/react-native';
 import pushNoti from '~/utils/pushNoti';
 import {Linking} from 'react-native';
 import LoadingModal from '~/components/common/modal/LoadingModal';
 import ErrorModal from '~/components/common/modal/ErrorModal';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {API_URL} from '@env';
 import {initializeClient} from '~/api/client';
 
 type LoginUserInfo = {
@@ -48,6 +47,7 @@ type LoginUserInfo = {
 const LoginScreen = () => {
   // Hooks
   const navigation = useNavigation<RootStackNavigationProp>();
+  const isFocused = useIsFocused();
   const {updateAuthInfo} = useUserActions();
   const {updateEmail, updateProviderId, updateProviderType} =
     useUserLoginActions();
@@ -63,7 +63,6 @@ const LoginScreen = () => {
   const [loginType, setLoginType] = useState<string>('');
   const [isErrorLoginOpen, setIsErrorLoginOpen] = useState<boolean>(false);
   const [isErrorAlarmOpen, setIsErrorAlarmOpen] = useState<boolean>(false);
-  const [isReady, setIsReady] = useState(false);
 
   // API Hooks
   const {
@@ -80,27 +79,14 @@ const LoginScreen = () => {
     isSuccess: isSuccessAlarmToken,
     mutate: updateAlarmToken,
   } = useUpdateAlarmToken();
+  const {refetch} = useFetchUserInfo();
   // const {mutate: testerLogin, isSuccess: isSuccessTest} = useLoginTest(); // TODO 삭제
-
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       await initializeClient();
-  //       setIsLoadingOpen(false);
-  //     } catch (error) {
-  //       console.error('Initialization error:', error);
-  //     }
-  //   };
-  //   setIsLoadingOpen(true);
-  //   init();
-  // }, []);
 
   // Effects
   useEffect(() => {
     const init = async () => {
       try {
         await initializeClient();
-        setIsLoadingOpen(false);
       } catch (error) {
         console.error('Initialization error:', error);
       }
@@ -117,14 +103,25 @@ const LoginScreen = () => {
         if (alarmToken && alarmToken !== pushToken) {
           updateAlarmToken(alarmToken);
         }
-        navigation.navigate('UserInfo');
+        setIsLoadingOpen(false);
+        refetch().then(result => {
+          const res = result.data;
+
+          console.log(res);
+          updateAuthInfo({...res, role: res.roleType});
+          setIsLoadingOpen(false);
+          navigation.navigate('Main', {screen: 'Diary'});
+        });
       }
     };
-    setIsLoadingOpen(true);
-    init();
-    checkUserId();
-  }, []);
-
+    if (isFocused) {
+      setIsLoadingOpen(true);
+      init();
+      checkUserId();
+      setIsLoadingOpen(false);
+    }
+  }, [isFocused]);
+  // [AxiosError: Network Error]
   useEffect(() => {
     if (isSuccessAlarmToken) {
       handlePushToken().then(setPushToken);
@@ -159,7 +156,7 @@ const LoginScreen = () => {
       }
     };
 
-    const handleDismissedNotification = (detail: EventDetail) => {
+    const handleDismissedNotification = async (detail: EventDetail) => {
       // noti 삭제
       if (detail.notification?.id) {
         notifee.cancelNotification(detail.notification.id);
@@ -167,50 +164,55 @@ const LoginScreen = () => {
       }
     };
 
-    notifee.onForegroundEvent(async ({type, detail}) => {
-      if (type === EventType.PRESS) {
-        handlePressNotification(detail);
-      } else if (type === EventType.DISMISSED) {
-        handleDismissedNotification(detail);
-      }
-    });
-
-    notifee.onBackgroundEvent(async ({type, detail}) => {
-      if (type === EventType.PRESS) {
-        const data = detail.notification?.data;
-
-        if (data) {
-          const info = Object(data.info);
-          const type = info.type;
-          const id = Number(info.id);
-
-          if (type === 'exhibition') {
-            await Linking.openURL(`artdiary://exhibition/${id}`);
-          } else if (type === 'gathering') {
-            await Linking.openURL(`artdiary://gathering/${id}`);
-          } else if (type === 'calendar') {
-            await Linking.openURL(`artdiary://calendar`);
-          }
+    if (isFocused) {
+      notifee.onForegroundEvent(async ({type, detail}) => {
+        if (type === EventType.PRESS) {
+          await handlePressNotification(detail);
+        } else if (type === EventType.DISMISSED) {
+          await handleDismissedNotification(detail);
         }
-      } else if (type === EventType.DISMISSED) {
-        handleDismissedNotification(detail);
-      }
-    });
+      });
 
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      await pushNoti.displayNoti(remoteMessage);
-    });
-  }, []);
+      notifee.onBackgroundEvent(async ({type, detail}) => {
+        if (type === EventType.PRESS) {
+          const data = detail.notification?.data;
+
+          if (data) {
+            const info = Object(data.info);
+            const type = info.type;
+            const id = Number(info.id);
+
+            if (type === 'exhibition') {
+              await Linking.openURL(`artdiary://exhibition/${id}`);
+            } else if (type === 'gathering') {
+              await Linking.openURL(`artdiary://gathering/${id}`);
+            } else if (type === 'calendar') {
+              await Linking.openURL(`artdiary://calendar`);
+            }
+          }
+        } else if (type === EventType.DISMISSED) {
+          await handleDismissedNotification(detail);
+        }
+      });
+
+      messaging().setBackgroundMessageHandler(async remoteMessage => {
+        await pushNoti.displayNoti(remoteMessage);
+      });
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (isErrorLogin) {
       const statusCode = error?.response?.status;
+      error?.response?.message;
+      console.log(error?.response);
+      showToast(error?.response);
 
       if (statusCode === 409) {
         // 상태 코드를 체크 (예: 409 Conflict)
         setDuplicateModalOpen(true);
       } else {
-        // console.log(statusCode + ': 로그인 요청 실패');
+        console.log(statusCode + ': 로그인 요청 실패');
         // showToast('다시 시도해주세요.');
         setIsErrorLoginOpen(true);
       }
@@ -302,7 +304,15 @@ const LoginScreen = () => {
     if (alarmToken !== pushToken) {
       updateAlarmToken(alarmToken);
     }
-    navigation.navigate('UserInfo');
+    // navigation.navigate('UserInfo');
+
+    refetch().then(result => {
+      const res = result.data;
+
+      console.log(res);
+      updateAuthInfo({...res, role: res.roleType});
+      navigation.navigate('Main', {screen: 'Diary'});
+    });
   };
 
   return (

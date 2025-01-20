@@ -30,7 +30,6 @@ import ShowExhDiaryScreen from './screens/exhibition/ShowExhDiaryScreen';
 import ShowExhDiaryBackScreen from './screens/exhibition/ShowExhDiaryBackScreen';
 import AddVisitDateInExhScreen from './screens/exhibition/AddVisitDateInExhScreen';
 import ExhToMoreReviewScreen from './screens/exhibition/ExhToMoreReviewScreen';
-import {UserInfo} from './screens/login/UserInfo';
 import GatheringRoutes from './routes/mate/GatheringRoutes';
 import {RootStackParamList} from './utils/stackTypes';
 import SettingRoutes from './routes/setting/SettingRoutes';
@@ -219,7 +218,6 @@ export default function App() {
             {/* 로그인 회원가입 */}
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
-            <Stack.Screen name="UserInfo" component={UserInfo} />
           </Stack.Navigator>
           <Toast config={toastConfig} />
         </RecoilRoot>

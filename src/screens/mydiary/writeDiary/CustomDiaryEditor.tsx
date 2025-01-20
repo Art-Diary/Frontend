@@ -108,6 +108,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          useContainer={false}
         />
       </ScrollView>
       {colorVisible && (

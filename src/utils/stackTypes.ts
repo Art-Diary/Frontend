@@ -104,7 +104,6 @@ export type RootStackParamList = {
   // login
   Login: undefined;
   InitProfile: undefined;
-  UserInfo: undefined;
   // mate
   MateDiaryRoutes: undefined;
   MateDiaryList: undefined;

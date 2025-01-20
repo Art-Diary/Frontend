@@ -13,12 +13,7 @@ import {
   LIGHT_GREY,
   MIDDLE_GREY,
 } from '~/components/common/colors';
-import {
-  DASH_WIDTH,
-  FONT_NAME,
-  NADEURI_FONT_NAME,
-  NADEURI_FONT_NAME_BOLD,
-} from '~/components/common/style';
+import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 
 interface Props {
   intro: string | undefined;
@@ -87,6 +82,7 @@ export default ExhDetailInfoIntro;
 const ColWrapper2 = styled.View`
   align-items: center;
 `;
+
 const ColWrapper = styled.View`
   align-items: center;
   padding-bottom: ${hp(0.5)}px;

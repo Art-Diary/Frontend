@@ -1,31 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {DEFAULT_TEXT} from '../colors';
-import {StyleSheet} from 'react-native';
-import RenderHtml from 'react-native-render-html';
+import {ScrollView, StyleSheet} from 'react-native';
 import {
   widthSizePercentage as wp,
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
-import {FONT_NAME} from '../style';
+import {AREA_FONT_SIZE, FONT_NAME} from '../style';
+import {RichEditor} from 'react-native-pell-rich-editor';
+import FontFamilyStylesheet from '~/assets/fonts/stylesheet';
 
 interface ContentsProps {
   contents: string;
 }
 
 const ContentsInfo: React.FC<ContentsProps> = ({contents}) => {
+  const [fontColor, setFontColor] = useState('#3c4045');
+
+  const initialCSSText = {
+    initialCSSText: `${FontFamilyStylesheet}`,
+    // backgroundColor: '#f6eceb',
+    contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
+  };
   return (
     <Container>
       {/* 내용 */}
       <ContentWrapper>
-        <ContentScroll>
-          <RenderHtml
-            systemFonts={[FONT_NAME]}
-            baseStyle={styles.render}
-            contentWidth={wp(93)}
-            source={{html: contents}}
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <RichEditor
+            editorStyle={initialCSSText}
+            initialContentHTML={contents}
+            disabled={true}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            useContainer={false}
           />
-        </ContentScroll>
+        </ScrollView>
       </ContentWrapper>
     </Container>
   );
@@ -45,12 +56,13 @@ const ContentWrapper = styled.View`
   width: 100%;
 `;
 
-const ContentScroll = styled.ScrollView`
-  height: 100%;
-  width: 100%;
-`;
-
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
   render: {
     fontFamily: FONT_NAME,
     color: DEFAULT_TEXT,
