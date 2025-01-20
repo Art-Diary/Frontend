@@ -17,6 +17,7 @@ import {
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
+import {removeControlCharacter} from '~/utils/keyword';
 
 interface FormProps {
   maxLen?: number;
@@ -30,7 +31,9 @@ const EditExhFeeForm: React.FC<FormProps> = ({
   handleKeyword,
 }) => {
   const onChangeKeyword = useCallback((text: string) => {
-    handleKeyword(text);
+    const cleaned = removeControlCharacter(text);
+    const numericText = cleaned.replace(/[^0-9]/g, ''); // 숫자만 허용
+    handleKeyword(numericText);
   }, []);
 
   return (
@@ -43,7 +46,7 @@ const EditExhFeeForm: React.FC<FormProps> = ({
       {/* section 내용 */}
       <BodyWrapper>
         <TextInputView
-          keyboardType="numeric"
+          keyboardType={'number-pad'}
           maxLength={maxLen}
           placeholderTextColor={MIDDLE_GREY}
           placeholder={!keyword ? '입력' : ''}

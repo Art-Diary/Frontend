@@ -23,6 +23,7 @@ import {
 } from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import LeaveCheckModal from '~/components/setting/modal/LeaveCheckModal';
+import {removeControlCharacter} from '~/utils/keyword';
 
 // [WORD_LIMIT]
 const LeaveScreen = () => {
@@ -31,7 +32,9 @@ const LeaveScreen = () => {
   const [openCheckModal, setOpenCheckModal] = useState<boolean>(false);
 
   const onChangeReason = useCallback((text: string) => {
-    setReasonKeyword(text);
+    const cleaned = removeControlCharacter(text);
+
+    setReasonKeyword(cleaned);
   }, []);
 
   const onPressButton = () => {

@@ -8,7 +8,7 @@ import {
 import {Keyboard} from 'react-native';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {useCreateGathering} from '~/api/queries/gathering';
-import {checkBlankInKeyword} from '~/utils/keyword';
+import {checkBlankInKeyword, removeControlCharacter} from '~/utils/keyword';
 import {
   BACK_COLOR,
   DEFAULT_TEXT,
@@ -52,7 +52,9 @@ const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
   }, [isError, isSuccess]);
 
   const onChangeGathering = useCallback((text: string) => {
-    setGahteringKeyword(text);
+    const cleaned = removeControlCharacter(text);
+
+    setGahteringKeyword(cleaned);
   }, []);
 
   const onPressCreate = () => {

@@ -52,7 +52,7 @@ type ExhDataSetType = {
   art?: string;
   setArt?: React.Dispatch<React.SetStateAction<string>>;
   regState?: string;
-  regSource: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
+  regSource?: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
 };
 
 type CreateApiType = {

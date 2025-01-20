@@ -9,6 +9,7 @@ import {FONT_NAME} from '../common/style';
 import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
 import {SearchButtonIcon, DeleteButtonIcon} from '../common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
+import {removeControlCharacter} from '~/utils/keyword';
 
 interface SearchExhFrameProps {
   searchKeyword: string;
@@ -30,7 +31,9 @@ const SearchExhFrame: React.FC<SearchExhFrameProps> = ({
   handleCurrentPage,
 }) => {
   const onChangeText = useCallback((text: string) => {
-    handleSearchKeyword(text);
+    const cleaned = removeControlCharacter(text);
+
+    handleSearchKeyword(cleaned);
   }, []);
 
   const onPressDelete = () => {

@@ -17,6 +17,7 @@ import {
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
+import {removeControlCharacter} from '~/utils/keyword';
 
 interface SayingInputFormProps {
   maxLen?: number;
@@ -30,7 +31,9 @@ const SayingInputForm: React.FC<SayingInputFormProps> = ({
   handleKeyword,
 }) => {
   const onChangeKeyword = useCallback((text: string) => {
-    handleKeyword(text);
+    const cleaned = removeControlCharacter(text);
+
+    handleKeyword(cleaned);
   }, []);
 
   return (

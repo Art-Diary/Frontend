@@ -8,3 +8,7 @@ export const checkBlankInKeyword = (text: string): boolean => {
   }
   return blank;
 };
+
+export const removeControlCharacter = (text: string): string => {
+  return text.replace(/[\u200E\u200F\u202A-\u202E]/g, '');
+};
