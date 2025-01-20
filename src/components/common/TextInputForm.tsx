@@ -17,6 +17,7 @@ import {
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
+import {removeControlCharacter} from '~/utils/keyword';
 
 interface TextInputFormProps {
   title: string;
@@ -38,7 +39,9 @@ const TextInputForm: React.FC<TextInputFormProps> = ({
   full,
 }) => {
   const onChangeKeyword = useCallback((text: string) => {
-    handleKeyword(text);
+    const cleaned = removeControlCharacter(text);
+
+    handleKeyword(cleaned);
   }, []);
 
   return (

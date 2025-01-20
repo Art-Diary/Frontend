@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {checkBlankInKeyword} from '~/utils/keyword';
+import {checkBlankInKeyword, removeControlCharacter} from '~/utils/keyword';
 import {useUserInfo} from '~/zustand/auth/auth';
 import {
   AREA_FONT_SIZE,
@@ -53,8 +53,10 @@ const EditNickname: React.FC<EditNicknameProps> = ({
   const [messageColor, setMessageColor] = useState<string>('');
 
   const onChangeNickname = useCallback((text: string) => {
-    setNickname(text);
-    if (text === originalName) {
+    const cleaned = removeControlCharacter(text);
+
+    setNickname(cleaned);
+    if (cleaned === originalName) {
       setIsVerified(true);
     } else {
       setIsVerified(false);
