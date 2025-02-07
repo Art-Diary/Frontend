@@ -95,7 +95,9 @@ const ExhReviewList: React.FC<Props> = ({exhId, diaryData}) => {
         <TitleView>
           <Title>{'기록'}</Title>
         </TitleView>
-        <CustomTouchable onPress={onPressButton}>
+        <CustomTouchable
+          onPress={onPressButton}
+          style={{paddingRight: 10, paddingVertical: 3}}>
           <WriteDiaryButtonIcon />
         </CustomTouchable>
       </TitleWrapper>

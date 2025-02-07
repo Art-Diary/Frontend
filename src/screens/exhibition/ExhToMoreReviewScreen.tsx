@@ -198,7 +198,9 @@ const ExhToMoreReviewScreen: React.FC<Props> = ({route}) => {
       <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView title="기록" line={false}>
         <ButtonView>
-          <CustomTouchable onPress={onPressButton}>
+          <CustomTouchable
+            onPress={onPressButton}
+            style={{paddingRight: 10, paddingVertical: 3}}>
             <WriteDiaryButtonIcon />
           </CustomTouchable>
         </ButtonView>

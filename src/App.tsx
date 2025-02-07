@@ -17,8 +17,6 @@ import React, {useEffect} from 'react';
 import {RecoilRoot} from 'recoil';
 import BottomRoutes from './routes/BottomRoutes';
 import MyDiaryRoutes from './routes/mydiary/MyDiaryRoutes';
-import Toast from 'react-native-toast-message';
-import {toastConfig} from './components/common/modal/toastConfig';
 import CalendarDiaryRoutes from './routes/calendar/CalendarDiaryRoutes';
 import WriteMyDiaryRoutes from './routes/mydiary/WriteMyDiaryRoutes';
 import SearchExhNameScreen from './screens/exhibition/SearchExhNameScreen';
@@ -219,7 +217,6 @@ export default function App() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="InitProfile" component={InitProfileScreen} />
           </Stack.Navigator>
-          <Toast config={toastConfig} />
         </RecoilRoot>
       </NavigationContainer>
     </QueryClientProvider>

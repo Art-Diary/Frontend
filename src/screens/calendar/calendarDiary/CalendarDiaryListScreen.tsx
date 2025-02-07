@@ -52,7 +52,9 @@ const CalendarDiaryListScreen: React.FC<Props> = ({route}) => {
       {/* header */}
       <BackView line={false}>
         <ButtonView>
-          <CustomTouchable onPress={onPressButton}>
+          <CustomTouchable
+            onPress={onPressButton}
+            style={{paddingRight: 10, paddingVertical: 3}}>
             <WriteDiaryButtonIcon />
           </CustomTouchable>
           {showOptionBar && (
