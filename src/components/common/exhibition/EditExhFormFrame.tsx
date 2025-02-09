@@ -53,6 +53,7 @@ type ExhDataSetType = {
   setArt?: React.Dispatch<React.SetStateAction<string>>;
   regState?: string;
   regSource?: string | undefined; // 관리자 등록 전시회 업데이트일 경우에 해당
+  source?: string | undefined; // 관리자 전시회 업데이트일 경우에 해당
 };
 
 type CreateApiType = {
@@ -238,6 +239,9 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
       });
     } else if (formState === 'updateExhDetailByAdmin') {
       // 관리자 업데이트
+      if (exhData.source) {
+        formData.append('source', exhData.source);
+      }
       requestData.updateExhDetailByAdminRequest?.updateByAdminApi({
         exhId: requestData.updateExhDetailByAdminRequest?.exhId,
         formData,
@@ -303,11 +307,10 @@ const EditExhFormFrame: React.FC<ExhFormFrameProps> = ({
           {/* 전시회 분야 */}
           {(formState === 'updateByAdmin' ||
             formState === 'updateExhDetailByAdmin') &&
-            exhData.art &&
             exhData.setArt && (
               <EditArtCategory
                 title={'전시 분야'}
-                getValue={exhData.art}
+                getValue={exhData.art ?? undefined}
                 setValue={exhData.setArt}
               />
             )}
