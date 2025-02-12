@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import {
   responseFont as rf,
@@ -7,22 +6,18 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
-import {
-  DEFAULT_TEXT,
-  MAIN_COLOR,
-  MIDDLE_GREY,
-  TEXTINPUTFORM_COLOR,
-} from '../common/colors';
-import {Dropdown} from 'react-native-element-dropdown';
+import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-interface IPicker {
-  label: string;
-  value: string;
+interface Category {
+  id: number;
+  name: string;
+  isClicked: boolean;
 }
 
 interface EditArtProps {
   title: string;
-  getValue: string;
+  getValue: string | undefined;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -31,15 +26,38 @@ const EditArtCategory: React.FC<EditArtProps> = ({
   getValue,
   setValue,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<IPicker[]>([
-    {label: '사진', value: '사진'},
-    {label: '회화', value: '회화'},
-    {label: '조각', value: '조각'},
-    {label: '공예', value: '공예'},
-    {label: '미디어아트', value: '미디어아트'},
-    {label: '그외', value: '그외'},
+  const [items, setItems] = useState<Category[]>([
+    {id: 1, name: '회화', isClicked: false},
+    {id: 2, name: '조각', isClicked: false},
+    {id: 3, name: '사진', isClicked: false},
+    {id: 4, name: '판화', isClicked: false},
+    {id: 5, name: '일러스트레이션', isClicked: false},
+    {id: 6, name: '미디어아트', isClicked: false},
+    {id: 7, name: '공예', isClicked: false},
+    {id: 8, name: '설치미술', isClicked: false},
+    {id: 9, name: '그외', isClicked: false},
   ]);
+
+  useEffect(() => {
+    if (getValue) {
+      const selectedCategories = getValue.split(',');
+      setItems(prevItems =>
+        prevItems.map(item => ({
+          ...item,
+          isClicked: selectedCategories.includes(item.name),
+        })),
+      );
+    }
+  }, [getValue]);
+
+  useEffect(() => {
+    const categories = items
+      .filter(item => item.isClicked)
+      .map(item => item.name)
+      .join(',');
+    console.log(categories);
+    setValue(categories);
+  }, [items]);
 
   return (
     <ContentColumn>
@@ -47,25 +65,33 @@ const EditArtCategory: React.FC<EditArtProps> = ({
         <SectionStar>*</SectionStar>
         <SectionName>{title}</SectionName>
       </SectionWapper>
-      <Dropdown
-        style={pickerStyle.dropdown}
-        placeholderStyle={pickerStyle.placeholderStyle}
-        selectedTextStyle={pickerStyle.selectedTextStyle}
-        itemTextStyle={pickerStyle.selectedTextStyle}
-        containerStyle={pickerStyle.containerStyle}
-        maxHeight={400}
-        data={items}
-        labelField="label"
-        valueField="value"
-        placeholder="전시 분야를 선택해 주세요."
-        value={getValue}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
-        onChange={item => {
-          setValue(item.value);
-          setOpen(false);
-        }}
-      />
+      {items.map((item: Category, index: number) => {
+        return (
+          <BouncyCheckbox
+            key={index}
+            size={17}
+            isChecked={item.isClicked}
+            fillColor={MAIN_COLOR}
+            unFillColor={BACK_COLOR}
+            text={item.name}
+            style={{paddingLeft: wp(2)}}
+            iconStyle={{borderColor: 'red'}}
+            innerIconStyle={{borderWidth: 2}}
+            textStyle={{
+              fontFamily: FONT_NAME,
+              fontSize: rf(15),
+              textDecorationLine: 'none',
+            }}
+            onPress={(isChecked: boolean) => {
+              setItems(prevItems =>
+                prevItems.map(i =>
+                  i.id === item.id ? {...i, isClicked: isChecked} : i,
+                ),
+              );
+            }}
+          />
+        );
+      })}
     </ContentColumn>
   );
 };
@@ -96,29 +122,3 @@ const SectionStar = styled.Text`
   color: ${MAIN_COLOR};
   text-align: center;
 `;
-
-const pickerStyle = StyleSheet.create({
-  dropdown: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    borderRadius: wp(2),
-    borderWidth: wp(0.3),
-    padding: wp(4),
-    borderColor: TEXTINPUTFORM_COLOR,
-    backgroundColor: TEXTINPUTFORM_COLOR,
-  },
-  containerStyle: {
-    borderRadius: wp(2),
-  },
-  placeholderStyle: {
-    fontSize: rf(15),
-    color: MIDDLE_GREY,
-    fontFamily: FONT_NAME,
-  },
-  selectedTextStyle: {
-    fontSize: rf(15),
-    color: DEFAULT_TEXT,
-    fontFamily: FONT_NAME,
-  },
-});

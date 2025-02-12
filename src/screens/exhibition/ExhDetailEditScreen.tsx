@@ -6,6 +6,7 @@ import {RouteProp, useNavigation} from '@react-navigation/native';
 import {ExhDetailInfo} from '~/types';
 import {RootStackNavigationProp} from '~/App';
 import LoadingModal from '~/components/common/modal/LoadingModal';
+import TextInputForm from '~/components/common/TextInputForm';
 type RootStackParamList = {
   ExhDetailEdit: {exhDetailInfo: ExhDetailInfo};
 };
@@ -25,6 +26,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
   const [url, setUrl] = useState<string | undefined>(undefined);
   const [intro, setIntro] = useState<string | undefined>(undefined);
   const [posterUri, setPosterUri] = useState<string | undefined>(undefined);
+  const [source, setSource] = useState<string | undefined>(undefined);
   const [art, setArt] = useState<string>('');
   // update exh detail by admin api
   const {
@@ -46,6 +48,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
       setIntro(exhDetailInfo.intro);
       setPosterUri(exhDetailInfo.poster);
       setArt(exhDetailInfo.art);
+      setSource(exhDetailInfo.source);
     }
   }, [exhDetailInfo]);
 
@@ -84,6 +87,7 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
           setPosterUri,
           art,
           setArt,
+          source,
         }}
         requestData={{
           isLoading: isLoading,
@@ -91,8 +95,15 @@ const ExhDetailEditScreen: React.FC<Props> = ({route}) => {
             exhId: exhDetailInfo.exhId,
             updateByAdminApi: updateExhDetailInfo,
           },
-        }}
-      />
+        }}>
+        <TextInputForm
+          title={'출처'}
+          isEssential
+          multiLine
+          keyword={source ?? ''}
+          handleKeyword={setSource}
+        />
+      </EditExhFormFrame>
     </>
   );
 };
