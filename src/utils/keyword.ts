@@ -1,9 +1,11 @@
 export const checkBlankInKeyword = (text: string): boolean => {
+  const cleaned = removeControlCharacter(text);
   var blank = false;
-  if (text === '') {
+
+  if (cleaned === '') {
     blank = true;
   }
-  if (text.trim() === '') {
+  if (cleaned.trim() === '') {
     blank = true;
   }
   return blank;

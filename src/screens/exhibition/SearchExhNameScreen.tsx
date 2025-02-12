@@ -22,21 +22,23 @@ const SearchExhNameScreen = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useAddSearchContent(content, currentTime);
+  } = useAddSearchContent(currentTime);
 
   useEffect(() => {
     if (isError) {
       showToast('다시 시도해주세요.');
     }
-  }, [isError]);
+    if (isSuccess) {
+      setCurrentPage(true);
+    }
+  }, [isError, isSuccess]);
 
   const onPressSearch = () => {
     if (checkBlankInKeyword(keyword)) {
       showToast('다시 검색해 주세요.');
     } else {
-      addSearchContent();
+      addSearchContent(keyword);
       setContent(keyword);
-      setCurrentPage(true);
     }
     Keyboard.dismiss();
   };
@@ -54,6 +56,7 @@ const SearchExhNameScreen = () => {
         {currentPage ? (
           <ExhListBySearchContents searchContent={content} />
         ) : (
+          // history
           <SearchContentsList
             handlePage={setCurrentPage}
             changeContent={setContent}

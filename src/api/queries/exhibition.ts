@@ -233,13 +233,13 @@ export const useFetchSearchContentList = () =>
   });
 
 export const useAddSearchContent = (
-  searchContent: string,
   searchTime: Date,
-) => {
+): UseMutationResult<any, any, string, unknown> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => fetchAddSearchContent(searchContent, searchTime),
+  return useMutation<any, any, string, unknown>({
+    mutationFn: (searchContent: string) =>
+      fetchAddSearchContent(searchContent, searchTime),
     onError: err => {
       console.log(err);
       console.log('[AddSearchContent] error add SearchContent');
@@ -253,11 +253,16 @@ export const useAddSearchContent = (
   });
 };
 
-export const useDeleteSearchContent = (searchId: number) => {
+export const useDeleteSearchContent = (): UseMutationResult<
+  any,
+  any,
+  number,
+  unknown
+> => {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: () => fetchDeleteSearchContent(searchId),
+  return useMutation<any, any, number, unknown>({
+    mutationFn: (searchId: number) => fetchDeleteSearchContent(searchId),
     onError: err => {
       console.log(err);
       console.log('[DeleteSearchContent] error delete SearchContent');
