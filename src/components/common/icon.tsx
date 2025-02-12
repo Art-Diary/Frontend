@@ -125,12 +125,12 @@ export const AvgRateStarIcon = () => {
   return <AvgRateStar width={106 * (height / 101)} height={height} />;
 };
 
-export const FullStarIcon = ({customHeight = 3.5}) => {
+export const FullStarIcon = ({customHeight = 4.8}) => {
   const height = rw(customHeight);
   return <FullStar width={106 * (height / 100)} height={height} />;
 };
 
-export const EmptyStarIcon = ({customHeight = 3.5}) => {
+export const EmptyStarIcon = ({customHeight = 4.8}) => {
   const height = rw(customHeight);
   return <EmptyStar width={106 * (height / 101)} height={height} />;
 };

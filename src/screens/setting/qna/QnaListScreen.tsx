@@ -142,7 +142,9 @@ const QnaListScreen: React.FC<Props> = ({route}) => {
       <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
       <BackView title={'Q&A' + (isAdmin ? ' (관리자)' : '')} line={true}>
         {!isAdmin && (
-          <CustomTouchable onPress={handleAddQna}>
+          <CustomTouchable
+            onPress={handleAddQna}
+            style={{paddingRight: 10, paddingVertical: 3}}>
             <WriteDiaryButtonIcon />
           </CustomTouchable>
         )}
