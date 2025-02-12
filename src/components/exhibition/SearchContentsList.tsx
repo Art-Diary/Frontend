@@ -28,8 +28,6 @@ const SearchContentsList: React.FC<SearchProps> = ({
   const limit = 10; //보여주는 검색 기록 개수
 
   // State Management
-  const [searchContent, setSearchContent] = useState<string>(''); // 검색할 단어 (검색 기록 추가,업데이트하기 위해 필요)
-  const [searchContentId, setSearchContentId] = useState<number>(-1);
   const [isErrorOpen, setIsErrorOpen] = useState<boolean>(false);
 
   // API Hooks
@@ -41,29 +39,22 @@ const SearchContentsList: React.FC<SearchProps> = ({
   } = useFetchSearchContentList(); // search_history_list 가져오기
   const {
     mutate: addSearchContent,
+    isSuccess: isSuccessAddSearch,
     isLoading: isLoadingAddSearch,
     isError: isErrorAddSearch,
-  } = useAddSearchContent(searchContent, currentTime); //검색 기록 추가
+  } = useAddSearchContent(currentTime); //검색 기록 추가
   const {
     mutate: deleteSearchContent,
     isLoading: isLoadingDeleteSearch,
     isError: isErrorDeleteSearch,
-  } = useDeleteSearchContent(searchContentId); //검색 기록 삭제
+  } = useDeleteSearchContent(); //검색 기록 삭제
 
   // Effects
   useEffect(() => {
-    //DB에서 데이터 추가 or 업데이트
-    if (searchContent) {
-      addSearchContent(); //검색 기록에 추가
+    if (isSuccessAddSearch) {
       handlePage(true);
     }
-  }, [searchContent]);
-
-  useEffect(() => {
-    if (searchContentId != -1) {
-      deleteSearchContent(); //검색기록삭제
-    }
-  }, [searchContentId]);
+  }, [isSuccessAddSearch]);
 
   useEffect(() => {
     if (isError) {
@@ -81,12 +72,12 @@ const SearchContentsList: React.FC<SearchProps> = ({
   const onPressPreSearch = (text: string) => {
     changeKeyword(text);
     changeContent(text);
-    setSearchContent(text);
+    addSearchContent(text);
   };
 
   const onPressDelete = (searchId: number) => {
     //searchList에서 삭제할 기록 searchId
-    setSearchContentId(searchId);
+    deleteSearchContent(searchId);
   };
 
   const handleRetryFetch = () => {
@@ -100,7 +91,7 @@ const SearchContentsList: React.FC<SearchProps> = ({
         isLoading={isLoading || isLoadingAddSearch || isLoadingDeleteSearch}
       />
       <ErrorModal isError={isErrorOpen} retry={handleRetryFetch} />
-      {searchContents && Object.keys(searchContents).length ? (
+      {searchContents && searchContents.length ? (
         <PreSearch>{'최근검색기록'}</PreSearch>
       ) : (
         <PreSearch>{'최근검색기록이 없습니다.'}</PreSearch>
