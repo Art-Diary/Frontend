@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View} from 'react-native-animatable';
 import styled from 'styled-components/native';
-import {DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {DARK_GREY, MAIN_COLOR} from '~/components/common/colors';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   responseFont as rf,
@@ -265,13 +265,13 @@ const ArrowLabel = styled.Text`
   padding-left: ${wp(1)}px;
   padding-right: ${wp(1)}px;
   font-size: ${rf(15.8)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
 const MonthLabel = styled.Text`
   font-size: ${rf(15.8)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -341,7 +341,7 @@ interface CellTextProps {
 
 const CellText = styled.Text<CellTextProps>`
   color: ${(props: CellTextProps) =>
-    props.isInSchedule ? 'white' : `${DEFAULT_TEXT}`};
+    props.isInSchedule ? 'white' : `${DARK_GREY}`};
   font-size: ${rf(13)}px;
   font-family: ${FONT_NAME};
 `;

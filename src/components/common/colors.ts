@@ -1,8 +1,9 @@
 export const BACK_COLOR = '#f6f6f6';
 export const LIGHT_GREY = '#D3D3D3';
-export const DEFAULT_TEXT = '#3c4045';
+export const DARK_GREY = '#3c4045';
 export const BORDER_COLOR = '#D3D3D3';
 export const MIDDLE_GREY = '#979797';
-export const MAIN_COLOR = '#ff6f61';
-export const TEXTINPUTFORM_COLOR = '#f6eceb'; //f6eceb//f6f0f0
-export const COMMENTFORM_COLOR = '#ffefed';
+export const MAIN_COLOR = '#7EB5DF';
+export const TEXTINPUTFORM_COLOR = '#DFE9F5';
+export const COMMENTFORM_COLOR = '#E8F0F9';
+export const LOADING_COLOR = '#E38E49';

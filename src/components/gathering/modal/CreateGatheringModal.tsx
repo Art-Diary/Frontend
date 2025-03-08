@@ -11,7 +11,7 @@ import {useCreateGathering} from '~/api/queries/gathering';
 import {checkBlankInKeyword, removeControlCharacter} from '~/utils/keyword';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -78,7 +78,7 @@ const CreateGatheringModal: React.FC<Props> = ({handleCloseModal}) => {
             <GatheringInput
               maxLength={maxInputLength}
               multiline={false}
-              placeholderTextColor="#D3D3D3"
+              placeholderTextColor={LIGHT_GREY}
               placeholder={'새로운 모임 이름을 작성해주세요.'}
               onChangeText={onChangeGathering}
               value={gahteringKeyword}
@@ -102,7 +102,7 @@ export default CreateGatheringModal;
 /** style */
 const Message = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
   padding-left: ${wp(5)}px;
@@ -147,7 +147,7 @@ const WriteView = styled.View`
 
 const GatheringInput = styled.TextInput`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   width: 80%;
 `;

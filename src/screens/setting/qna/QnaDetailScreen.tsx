@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
@@ -135,26 +135,28 @@ const QnaDetailScreen: React.FC<Props> = ({route}) => {
           <Qna>
             <Question>
               <Title>
-                <Text size={23}>Q. </Text>
-                <Text size={18}>{qnaInfo.title}</Text>
+                <TitleText size={23}>Q. </TitleText>
+                <TitleText size={18} titleStr>
+                  {qnaInfo.title}
+                </TitleText>
               </Title>
               <Body>
-                <Text size={16}>{qnaInfo.body}</Text>
+                <BodyText size={16}>{qnaInfo.body}</BodyText>
                 <Date>
-                  <Text size={12} color>
+                  <BodyText size={12} color>
                     {qnaInfo.writeDate}
-                  </Text>
+                  </BodyText>
                 </Date>
               </Body>
             </Question>
             {qnaInfo.state && (
               <Answer>
-                <Text size={23}>A. </Text>
-                <Text size={16}>{qnaInfo.answer}</Text>
+                <TitleText size={23}>A. </TitleText>
+                <BodyText size={16}>{qnaInfo.answer}</BodyText>
                 <Date>
-                  <Text size={12} color>
+                  <BodyText size={12} color>
                     {qnaInfo.answerDate}
-                  </Text>
+                  </BodyText>
                 </Date>
               </Answer>
             )}
@@ -199,22 +201,28 @@ const Question = styled.View`
 const Title = styled.View`
   flex-direction: row;
   gap: ${wp(1)}px;
-  align-items: center;
-  /* border-width: 1px; */
 `;
 
-interface TitleProps {
+interface TextProps {
   size: number;
   color: boolean;
+  titleStr: boolean;
 }
 
-const Text = styled.Text<TitleProps>`
-  font-size: ${(props: TitleProps) => `${rf(props.size)}px`};
-  color: ${(props: TitleProps) =>
-    props.color ? `${MIDDLE_GREY}` : `${DEFAULT_TEXT}`};
+const TitleText = styled.Text<TextProps>`
+  flex: ${(props: TextProps) => (props.titleStr ? `1` : `none`)};
+  font-size: ${(props: TextProps) => `${rf(props.size)}px`};
+  color: ${(props: TextProps) =>
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
+  font-family: ${FONT_NAME};
+`;
+
+const BodyText = styled.Text<TextProps>`
+  font-size: ${(props: TextProps) => `${rf(props.size)}px`};
+  color: ${(props: TextProps) =>
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
   line-height: ${hp(2.8)}px;
-  /* border-width: 1px; */
 `;
 
 const Body = styled.View`

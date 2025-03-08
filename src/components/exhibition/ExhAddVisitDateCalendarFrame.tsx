@@ -13,7 +13,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '../common/style';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 import {dateToString} from '~/utils/date';
 import {useDateFromExhInfo} from '~/zustand/calendar/dateFromExh';
 import CustomTouchable from '../common/CustomTouchable';
@@ -91,7 +91,7 @@ const ContentsContainer = styled.View`
 
 const GroupText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-bottom: ${hp(1.8)}px;
 `;
@@ -105,7 +105,7 @@ const BodyView = styled.View`
 
 const BodyText = styled.Text`
   font-size: ${rf(16.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

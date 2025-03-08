@@ -11,6 +11,7 @@ import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {CalendarDiaryStackParamList} from '~/utils/stackTypes';
 import DiaryUpdateDeleteModal from '~/components/common/diary/modal/DiaryUpdateDeleteModal';
+import {BACK_COLOR} from '~/components/common/colors';
 
 type CalendarDiaryProps = RouteProp<
   CalendarDiaryStackParamList,
@@ -97,7 +98,7 @@ export default CalendarDiaryListScreen;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   align-items: center;
   width: 100%;
 `;

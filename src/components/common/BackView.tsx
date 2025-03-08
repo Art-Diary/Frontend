@@ -8,7 +8,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {BACK_COLOR, BORDER_COLOR, DEFAULT_TEXT} from './colors';
+import {BACK_COLOR, BORDER_COLOR, DARK_GREY} from './colors';
 import {BACK_FONT_SIZE, DASH_WIDTH, FONT_NAME} from './style';
 import {BackButtonIcon} from './icon';
 import CustomTouchable from './CustomTouchable';
@@ -76,7 +76,7 @@ const DashLine = styled.View`
 
 const Title = styled.Text`
   font-size: ${BACK_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {AREA_FONT_SIZE, FONT_NAME} from '../common/style';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import {BACK_COLOR, DARK_GREY, MAIN_COLOR} from '../common/colors';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 interface Category {
@@ -106,7 +106,7 @@ const ContentColumn = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

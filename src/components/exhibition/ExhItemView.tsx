@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {getDateDay} from '~/utils/date';
-import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '../common/colors';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
@@ -143,7 +143,7 @@ const ExhInfo = styled.View<ExhInfoProps>`
 
 const ExhName = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
@@ -161,21 +161,21 @@ interface GatherNameProps {
 
 const GatherName = styled.Text<GatherNameProps>`
   font-size: ${rf(12.2)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   color: ${(props: GatherNameProps) =>
-    props.color ? `${props.color}` : `${DEFAULT_TEXT}`};
+    props.color ? `${props.color}` : `${DARK_GREY}`};
 `;
 
 const ExhGallery = styled.Text`
   font-size: ${rf(14.2)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
 const ExhDate = styled.Text`
   font-size: ${rf(12.2)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

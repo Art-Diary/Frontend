@@ -1,6 +1,7 @@
 import React from 'react';
 import {Modal, ActivityIndicator} from 'react-native';
 import styled from 'styled-components/native';
+import {LOADING_COLOR} from '../colors';
 
 interface LoadingModalProps {
   isLoading: boolean;
@@ -11,7 +12,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({isLoading}) => {
     <Modal visible={isLoading} animationType="fade" transparent={true}>
       <Container>
         <Content>
-          <ActivityIndicator color={'#FF6F61'} size="large" />
+          <ActivityIndicator color={LOADING_COLOR} size="large" />
         </Content>
       </Container>
     </Modal>

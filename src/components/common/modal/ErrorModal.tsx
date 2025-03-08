@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Modal} from 'react-native';
 import styled from 'styled-components/native';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR, MIDDLE_GREY} from '../colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR, MIDDLE_GREY} from '../colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -20,9 +20,10 @@ import {RootStackNavigationProp} from '~/App';
 interface ErrorModalProps {
   isError: boolean;
   retry: () => void;
+  isLogin?: boolean;
 }
 
-const ErrorModal: React.FC<ErrorModalProps> = ({isError, retry}) => {
+const ErrorModal: React.FC<ErrorModalProps> = ({isError, retry, isLogin}) => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const [error, setError] = useState(false);
 
@@ -33,8 +34,10 @@ const ErrorModal: React.FC<ErrorModalProps> = ({isError, retry}) => {
   }, [isError]);
 
   const onPressBack = () => {
-    if (navigation.canGoBack()) {
-      navigation.goBack();
+    if (!isLogin) {
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     }
     setError(false);
   };
@@ -100,7 +103,7 @@ const MsgWrapper = styled.View`
 
 const Message = styled.Text`
   font-size: ${rf(19)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

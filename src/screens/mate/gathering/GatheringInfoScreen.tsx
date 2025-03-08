@@ -30,7 +30,7 @@ import {
 } from '~/components/common/icon';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MIDDLE_GREY,
 } from '~/components/common/colors';
@@ -358,7 +358,7 @@ const ExhListTitle = styled.View`
 
 const ContentText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -416,7 +416,7 @@ const OptionContent = styled.View`
 const OptionContentText = styled.Text`
   text-align: center;
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

@@ -8,7 +8,13 @@ import {
 import {RichEditor, RichToolbar, actions} from 'react-native-pell-rich-editor';
 import FontFamilyStylesheet from '../../../assets/fonts/stylesheet';
 import {showPhoto} from './GetPhoto';
-import {BACK_COLOR, LIGHT_GREY} from '~/components/common/colors';
+import {
+  BACK_COLOR,
+  DARK_GREY,
+  LIGHT_GREY,
+  MAIN_COLOR,
+  TEXTINPUTFORM_COLOR,
+} from '~/components/common/colors';
 import {AREA_FONT_SIZE, BUTTON_RADIUS} from '~/components/common/style';
 import {CameraButtonIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -20,15 +26,15 @@ import {ImageType} from '~/types';
  * - [-] 색상이 제대로 적용되도록 수정
  */
 
-const colors = [
-  '#000000',
-  '#FF0000',
-  '#00FF00',
-  '#0000FF',
-  '#FFFF00',
-  '#FF00FF',
-  '#00FFFF',
-];
+// const colors = [
+//   '#000000',
+//   '#FF0000',
+//   '#00FF00',
+//   '#0000FF',
+//   '#FFFF00',
+//   '#FF00FF',
+//   '#00FFFF',
+// ];
 
 interface EditorProps {
   handleEditorContent: (content: string) => void;
@@ -45,8 +51,8 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
 }) => {
   const editorRef = useRef<RichEditor>(null);
   const scrollViewRef = useRef<ScrollView>(null);
-  const [fontColor, setFontColor] = useState('#3c4045');
-  const [colorVisible, setColorVisible] = useState(false);
+  const [fontColor, setFontColor] = useState(DARK_GREY);
+  // const [colorVisible, setColorVisible] = useState(false);
 
   const handleContentChange = (content: string) => {
     // console.log(content);
@@ -59,24 +65,24 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
     </CustomTouchable>
   );
 
-  const changeFontColor = (color: string) => {
-    // editorRef.current?.focusContentEditor();
-    editorRef.current?.setForeColor(color);
-    setFontColor(color);
-    setColorVisible(false);
-  };
+  // const changeFontColor = (color: string) => {
+  //   // editorRef.current?.focusContentEditor();
+  //   editorRef.current?.setForeColor(color);
+  //   setFontColor(color);
+  //   setColorVisible(false);
+  // };
 
-  const handleFontColor = () => (
-    <FontColorTouch
-      activeOpacity={0.6}
-      color={fontColor}
-      onPress={() => setColorVisible(true)}
-    />
-  );
+  // const handleFontColor = () => (
+  //   <FontColorTouch
+  //     activeOpacity={0.6}
+  //     color={fontColor}
+  //     onPress={() => setColorVisible(true)}
+  //   />
+  // );
 
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
-    backgroundColor: '#f6eceb',
+    backgroundColor: TEXTINPUTFORM_COLOR,
     contentCSSText: `font-family: omyu_pretty; font-size: ${AREA_FONT_SIZE}px; color: ${fontColor}; height: 100%;`,
   };
 
@@ -111,7 +117,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
           useContainer={false}
         />
       </ScrollView>
-      {colorVisible && (
+      {/* {colorVisible && (
         <Contents isOverContent>
           {colors.map(color => (
             <FontColorTouch
@@ -122,10 +128,10 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
             />
           ))}
         </Contents>
-      )}
+      )} */}
       <RichToolbar
-        selectedIconTint="#ff6f61"
-        iconTint="#3c4045"
+        selectedIconTint={MAIN_COLOR}
+        iconTint={DARK_GREY}
         editor={editorRef}
         style={styles.toolbar}
         actions={[
@@ -145,7 +151,7 @@ const CustomDiaryEditor: React.FC<EditorProps> = ({
         iconMap={{
           [actions.insertImage]: handlePhoto,
           // [actions.fontSize]: handleFontSize,
-          [actions.foreColor]: handleFontColor,
+          // [actions.foreColor]: handleFontColor,
         }}
       />
     </Container>
@@ -158,18 +164,20 @@ const Container = styled.View`
   flex: 1;
   min-height: ${hp(52.5)}px;
   border-radius: ${BUTTON_RADIUS}px;
+  overflow: hidden;
 `;
-interface ColorItemProps {
-  color: string;
-}
 
-const FontColorTouch = styled.TouchableOpacity<ColorItemProps>`
-  width: ${wp(5.5)}px;
-  height: ${wp(5.5)}px;
-  background-color: ${(props: ColorItemProps) => props.color};
-  border-width: ${wp(0.5)}px;
-  border-color: ${LIGHT_GREY};
-`;
+// interface ColorItemProps {
+//   color: string;
+// }
+
+// const FontColorTouch = styled.TouchableOpacity<ColorItemProps>`
+//   width: ${wp(5.5)}px;
+//   height: ${wp(5.5)}px;
+//   background-color: ${(props: ColorItemProps) => props.color};
+//   border-width: ${wp(0.5)}px;
+//   border-color: ${LIGHT_GREY};
+// `;
 
 interface ContentsProps {
   isOverContent: boolean;
@@ -201,14 +209,14 @@ const styles = StyleSheet.create({
     fontSize: 100,
     borderTopLeftRadius: BUTTON_RADIUS,
     borderTopRightRadius: BUTTON_RADIUS,
-    backgroundColor: '#f6eceb',
+    backgroundColor: TEXTINPUTFORM_COLOR,
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 8,
     paddingRight: 8,
   },
   toolbar: {
-    backgroundColor: '#f6eceb',
+    backgroundColor: TEXTINPUTFORM_COLOR,
     borderBottomLeftRadius: BUTTON_RADIUS,
     borderBottomRightRadius: BUTTON_RADIUS,
     borderColor: LIGHT_GREY, // 툴바 경계 색 변경
@@ -216,9 +224,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const FontSizeTouch = styled.TouchableOpacity`
-  background-color: ${BACK_COLOR};
-  border-radius: ${BUTTON_RADIUS}px;
-  border-width: ${wp(0.5)}px;
-  border-color: ${LIGHT_GREY};
-`;
+// const FontSizeTouch = styled.TouchableOpacity`
+//   background-color: ${BACK_COLOR};
+//   border-radius: ${BUTTON_RADIUS}px;
+//   border-width: ${wp(0.5)}px;
+//   border-color: ${LIGHT_GREY};
+// `;

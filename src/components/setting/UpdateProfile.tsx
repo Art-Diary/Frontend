@@ -13,12 +13,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import EditNickname from '~/components/setting/EditNickname';
 import EditArtCategory from '~/components/setting/EditArtCategory';
 import {useUserActions} from '~/zustand/auth/auth';
-import {
-  BACK_COLOR,
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MAIN_COLOR,
-} from '../common/colors';
+import {BACK_COLOR, DARK_GREY, LIGHT_GREY, MAIN_COLOR} from '../common/colors';
 import {
   AREA_FONT_SIZE,
   BUTTON_FONT_SIZE,
@@ -150,7 +145,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           {/* 이메일 */}
           <ContentColumn>
             <SectionName>이메일</SectionName>
-            <BoxView color={true}>
+            <BoxView>
               {initProfile.providerType === 'naver' ? (
                 <NaverLogoIcon customHeight={2.6} />
               ) : initProfile.providerType === 'gmail' ||
@@ -202,21 +197,16 @@ const ContentColumn = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
-interface ContentProps {
-  color: boolean;
-}
-
-const BoxView = styled.View<ContentProps>`
+const BoxView = styled.View`
   border-width: ${wp(0.4)}px;
   border-color: ${LIGHT_GREY};
-  border-radius: ${wp(1.5)}px;
+  border-radius: ${BUTTON_RADIUS}px;
   flex-direction: row;
-  background-color: ${(props: ContentProps) =>
-    props.color ? '#d9d9d9' : `${BACK_COLOR}`};
+  background-color: ${LIGHT_GREY};
   padding: ${wp(3)}px;
   gap: ${wp(1.5)}px;
   align-items: center;

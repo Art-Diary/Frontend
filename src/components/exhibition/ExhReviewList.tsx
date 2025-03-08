@@ -13,11 +13,7 @@ import {
   FullStarIcon,
   WriteDiaryButtonIcon,
 } from '~/components/common/icon';
-import {
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -177,7 +173,7 @@ const TitleView = styled.View`
 
 const Title = styled.Text`
   font-size: ${rf(19)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(8)}px;
 `;
@@ -220,7 +216,7 @@ const AvgRateView = styled.View`
 
 const AvgTitle = styled.Text`
   font-size: ${rf(20)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -254,7 +250,7 @@ const ReviewTextView = styled.View`
 
 const ReviewTitle = styled.Text`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

@@ -29,7 +29,7 @@ import {
   OnMate,
   OnSetting,
   OptionBar,
-  PinkTag,
+  MateTag,
   PrivateToggle,
   ProfileUpdate,
   PublicToggle,
@@ -45,6 +45,7 @@ import {
   TrashDelete,
   CloseButton,
   DeleteButton,
+  Logo,
 } from '~/assets/images';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import {
@@ -145,9 +146,9 @@ export const GreyNameTagIcon = () => {
   return <GreyTag width={2800 * (height / 400)} height={height} />;
 };
 
-export const PinkNameTagIcon = () => {
+export const MateTagIcon = () => {
   const height = rw(12.9);
-  return <PinkTag width={2800 * (height / 400)} height={height} />;
+  return <MateTag width={2800 * (height / 400)} height={height} />;
 };
 
 export const SearchButtonIcon = () => {
@@ -310,4 +311,9 @@ export const NaverLogoIcon = ({customHeight = 3.5}) => {
 export const KakaoLogoIcon = ({customHeight = 3.5}) => {
   const height = hp(customHeight);
   return <KakaoLogo width={100 * (height / 100)} height={height} />;
+};
+
+export const LogoIcon = () => {
+  const height = hp(23);
+  return <Logo width={217 * (height / 148)} height={height} />;
 };

@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {DEFAULT_TEXT, MIDDLE_GREY} from '../colors';
+import {DARK_GREY, MIDDLE_GREY} from '../colors';
 import {FONT_NAME} from '../style';
 import {SearchButtonIcon} from '../icon';
 import CustomTouchable from '../CustomTouchable';
@@ -93,7 +93,7 @@ const SectionWrapper = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

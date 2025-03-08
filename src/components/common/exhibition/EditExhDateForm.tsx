@@ -12,7 +12,7 @@ import {
 } from '~/components/common/style';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
@@ -66,7 +66,7 @@ const Container = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -98,6 +98,6 @@ interface DateTextProps {
 const DateText = styled.Text<DateTextProps>`
   font-size: ${rf(15.5)}px;
   color: ${(props: DateTextProps) =>
-    props.grey ? `${MIDDLE_GREY}` : `${DEFAULT_TEXT}`};
+    props.grey ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
 `;

@@ -11,12 +11,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '../common/style';
-import {
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MAIN_COLOR,
-  MIDDLE_GREY,
-} from '../common/colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR, MIDDLE_GREY} from '../common/colors';
 import CustomTouchable from '../common/CustomTouchable';
 import DecisionModal from '../common/modal/DecisionModal';
 
@@ -87,7 +82,7 @@ const MsgWrapper = styled.View`
 const Message = styled.Text`
   text-align: center;
   font-size: ${rf(18.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

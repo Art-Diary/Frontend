@@ -7,7 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
 } from '~/components/common/colors';
@@ -120,7 +120,7 @@ const DateView = styled.View`
 
 const TextView = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

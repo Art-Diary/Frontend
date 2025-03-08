@@ -6,11 +6,7 @@ import {
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '~/components/common/style';
-import {
-  BORDER_COLOR,
-  DEFAULT_TEXT,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {BORDER_COLOR, DARK_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {
   CloseButtonIcon,
@@ -94,7 +90,7 @@ const MsgWrapper = styled.View`
 
 const Message = styled.Text`
   font-size: ${rf(18)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

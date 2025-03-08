@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
   BORDER_COLOR,
+  BACK_COLOR,
 } from '~/components/common/colors';
 import {FONT_NAME, DASH_WIDTH} from '~/components/common/style';
 import {
@@ -237,40 +238,40 @@ export default RegExhListScreen;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   width: 100%;
 `;
 
 const CategoryName = styled.Text`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
 
 const CategoryNormal = styled.View`
   flex-direction: row;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   justify-content: center;
 `;
 
 const CategoryExhName = styled.View`
   width: ${wp(35)}px;
   flex-direction: row;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   justify-content: center;
 `;
 
 const CategoryExhDate = styled.View`
   width: ${wp(27)}px;
   flex-direction: row;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   justify-content: center;
 `;
 
 const Category = styled.View`
   flex-direction: row;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   justify-content: space-between;
   padding-left: ${wp(3)}px;
   padding-right: ${wp(3)}px;
@@ -286,7 +287,7 @@ const Category = styled.View`
 const RegExhList = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   width: 100%;
   padding-left: ${wp(3)}px;
   padding-right: ${wp(3)}px;
@@ -301,14 +302,14 @@ const RExhNumber = styled.Text`
 
 const RExhName = styled.Text`
   font-size: ${rf(15)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
 
 const RExhDate = styled.Text`
   font-size: ${rf(12)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
@@ -341,7 +342,7 @@ const PageNumberView = styled.View`
 
 const PageNumber = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2)}px;
   padding-right: ${wp(2)}px;

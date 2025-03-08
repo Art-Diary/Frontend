@@ -10,7 +10,7 @@ import {showToast} from '~/components/common/modal/toastConfig';
 import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import {useAddNewMateInGathering} from '~/api/queries/gathering';
 import {useEnterGatheringInfo} from '~/zustand/gathering/enterGathering';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -128,7 +128,7 @@ const Message = styled.Text`
   font-size: ${(props: AreaTextProps) =>
     props.greyColor ? `${rf(14)}px` : `${BUTTON_FONT_SIZE}px`};
   color: ${(props: AreaTextProps) =>
-    props.greyColor ? `${LIGHT_GREY}` : `${DEFAULT_TEXT}`};
+    props.greyColor ? `${LIGHT_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
 `;
 

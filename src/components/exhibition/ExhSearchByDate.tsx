@@ -10,7 +10,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {BACK_COLOR, DARK_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {BackButtonIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import CalendarSelectDateFrame from '~/components/common/CalendarSelectDateFrame';
@@ -91,7 +91,7 @@ const ContentView = styled.View`
 
 const TextView = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

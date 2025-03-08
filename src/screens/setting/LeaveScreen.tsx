@@ -8,7 +8,7 @@ import {
 import BackView from '~/components/common/BackView';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -57,7 +57,7 @@ const LeaveScreen = () => {
             <ReasonInput
               multiline={true}
               maxLength={maxInputLength} // 글자 수 제한
-              placeholderTextColor="#979797"
+              placeholderTextColor={MIDDLE_GREY}
               placeholder={'탈퇴 이유를 작성해주세요.'}
               onChangeText={onChangeReason}
               value={reasonKeyword}
@@ -113,7 +113,7 @@ const ContentColumn = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -126,7 +126,7 @@ const ReasonView = styled.View`
 const ReasonInput = styled.TextInput`
   height: 100%;
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2.9)}px;
   padding-right: ${wp(2.9)}px;

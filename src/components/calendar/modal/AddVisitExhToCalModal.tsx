@@ -12,7 +12,7 @@ import {
   FONT_NAME,
 } from '../../common/style';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -208,7 +208,7 @@ export default AddVisitExhToCalModal;
 /** style */
 const Message = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
   padding-left: ${wp(4)}px;

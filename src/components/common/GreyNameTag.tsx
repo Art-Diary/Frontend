@@ -9,7 +9,7 @@ import {FONT_NAME} from './style';
 import {responsiveScreenWidth as rw} from 'react-native-responsive-dimensions';
 import GreyTag from '../../assets/name_tag/grey_tag.svg';
 import LoginTag from '../../assets/name_tag/login_tag.svg';
-import {DEFAULT_TEXT} from '~/components/common/colors';
+import {DARK_GREY} from '~/components/common/colors';
 
 interface TagProps {
   content: string;
@@ -26,7 +26,7 @@ const GreyNameTag: React.FC<TagProps> = ({
 }) => {
   var height = rw(13.2);
   if (login) {
-    height = rw(13);
+    height = rw(14.3);
   }
   return (
     <Container>
@@ -66,14 +66,14 @@ const WordContainer = styled.View`
 
 const TouchView = styled.TouchableOpacity`
   flex: 1;
-  padding-left: ${wp(6)}px;
+  padding-left: ${wp(9)}px;
   flex-direction: row;
   align-items: center;
-  gap: ${wp(3)}px;
+  gap: ${wp(13)}px;
 `;
 
 const TitleText = styled.Text`
   font-size: ${rf(14.8)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

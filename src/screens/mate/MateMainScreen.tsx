@@ -18,7 +18,7 @@ import GatheringListRequest from '../../components/gathering/GatheringListReques
 import {AddMyExhButtonIcon} from '~/components/common/icon';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MIDDLE_GREY,
 } from '~/components/common/colors';
@@ -154,7 +154,7 @@ const RowView = styled.View`
 
 const ContentText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

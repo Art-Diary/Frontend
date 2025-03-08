@@ -12,7 +12,7 @@ import {
 } from '~/components/common/style';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
@@ -78,7 +78,7 @@ const Container = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -119,7 +119,7 @@ const BodyWrapper = styled.View`
 
 const TextInputView = styled.TextInput`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-right: 0%;
   padding-top: 0%;

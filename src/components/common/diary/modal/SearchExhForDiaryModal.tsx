@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {BUTTON_FONT_SIZE, FONT_NAME} from '../../style';
-import {DEFAULT_TEXT} from '../../colors';
+import {DARK_GREY} from '../../colors';
 import {useFetchExhListBySearchContent} from '~/api/queries/exhibition';
 import {checkBlankInKeyword} from '~/utils/keyword';
 import {showToast} from '../../modal/toastConfig';
@@ -95,7 +95,7 @@ export default SearchExhForDiaryModal;
 /** style */
 const Message = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
   padding-left: ${wp(4)}px;

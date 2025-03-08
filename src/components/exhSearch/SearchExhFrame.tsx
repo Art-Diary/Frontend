@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT, MAIN_COLOR} from '../common/colors';
+import {DARK_GREY, MAIN_COLOR} from '../common/colors';
 import {SearchButtonIcon, DeleteButtonIcon} from '../common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {removeControlCharacter} from '~/utils/keyword';
@@ -113,7 +113,7 @@ interface SearchWordProps {
 
 const SearchWord = styled.TextInput<SearchWordProps>`
   font-size: ${rf(15.2)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-right: 0%;
   padding-bottom: ${hp(1)}px;

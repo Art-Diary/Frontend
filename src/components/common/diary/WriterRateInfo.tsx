@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../style';
-import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '../colors';
 import {EmptyStarIcon, FullStarIcon, WriterIcon} from '../icon';
 
 interface WriterRateProps {
@@ -70,7 +70,7 @@ interface NicknameTextProps {
 const NicknameText = styled.Text<NicknameTextProps>`
   font-size: ${rf(15.5)}px;
   color: ${(props: NicknameTextProps) =>
-    props.nickname ? `${DEFAULT_TEXT}` : `${LIGHT_GREY}`};
+    props.nickname ? `${DARK_GREY}` : `${LIGHT_GREY}`};
   font-family: ${FONT_NAME};
 `;
 

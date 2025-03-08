@@ -12,7 +12,7 @@ import {
   FONT_NAME,
   ITEM_BORDER_WIDTH,
 } from '../../common/style';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '../../common/colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR} from '../../common/colors';
 import {showToast} from '../../common/modal/toastConfig';
 import {MarkedType} from '~/types';
 import InfoModal from '../../common/modal/InfoModal';
@@ -132,7 +132,7 @@ export default AddVisitedDateForDiaryModal;
 /** style */
 const Message = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
   padding-left: ${wp(4)}px;
@@ -152,7 +152,7 @@ const BodyView = styled.View`
 
 const BodyText = styled.Text`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

@@ -5,7 +5,7 @@ import {
   heightSizePercentage as hp,
 } from '~/components/common/ResponsiveSize';
 import {DASH_WIDTH, FONT_NAME} from '../style';
-import {DEFAULT_TEXT, LIGHT_GREY} from '../colors';
+import {DARK_GREY, LIGHT_GREY} from '../colors';
 import {checkBlankInKeyword} from '~/utils/keyword';
 
 interface SayingProps {
@@ -49,7 +49,7 @@ const Container = styled.View`
 
 const SayingText = styled.Text`
   font-size: ${rf(22.3)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 const SayingContentView = styled.View`
@@ -58,12 +58,12 @@ const SayingContentView = styled.View`
 
 const ContentText = styled.Text`
   font-size: ${rf(18)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
 const QuoteText = styled.Text`
   font-size: ${rf(24.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

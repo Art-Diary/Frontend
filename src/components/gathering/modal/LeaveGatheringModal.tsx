@@ -6,7 +6,7 @@ import {
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -77,7 +77,7 @@ const MsgWrapper = styled.View`
 const Message = styled.Text`
   text-align: center;
   font-size: ${rf(18.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
