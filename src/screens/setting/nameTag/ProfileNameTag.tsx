@@ -9,7 +9,7 @@ import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
 import {useNavigation} from '@react-navigation/native';
 import {RootStackNavigationProp} from '~/App';
 import {FONT_NAME} from '~/components/common/style';
-import {DEFAULT_TEXT, MIDDLE_GREY} from '~/components/common/colors';
+import {DARK_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {ProfileTagIcon, ProfileUpdateIcon} from '~/components/common/icon';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -140,7 +140,7 @@ const UserInfoColumn = styled.View`
 
 const NickName = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   text-align: center;
 `;

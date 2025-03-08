@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import styled from 'styled-components/native';
 import {widthSizePercentage as wp} from '~/components/common/ResponsiveSize';
-import {GreyNameTagIcon, PinkNameTagIcon} from '~/components/common/icon';
+import {GreyNameTagIcon, MateTagIcon} from '~/components/common/icon';
 
 interface TagProps {
   isSelected?: boolean;
@@ -11,7 +11,7 @@ interface TagProps {
 const NameTag: React.FC<TagProps> = ({isSelected, children}) => {
   return (
     <Container>
-      {isSelected ? <PinkNameTagIcon /> : <GreyNameTagIcon />}
+      {isSelected ? <MateTagIcon /> : <GreyNameTagIcon />}
       <WordContainer>
         <Wrapper>{children}</Wrapper>
       </WordContainer>

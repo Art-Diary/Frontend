@@ -9,11 +9,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {
-  DEFAULT_TEXT,
-  MAIN_COLOR,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DARK_GREY, MAIN_COLOR, MIDDLE_GREY} from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {DEFAULT_IMAGE} from '@env';
 import CustomTouchable from '~/components/common/CustomTouchable';
@@ -152,7 +148,7 @@ export default SearchNewMateList;
 /** style */
 const Message = styled.Text`
   font-size: ${rf(15)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1.5)}px;
   padding-left: ${wp(4)}px;
@@ -200,7 +196,7 @@ const UserInfoColumn = styled.View`
 const NickName = styled.Text`
   font-size: ${rf(15.1)}px;
   text-align: center;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

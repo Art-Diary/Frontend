@@ -6,11 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {DASH_WIDTH, FONT_NAME, HEADER_FONT_SIZE} from './style';
-import {
-  BACK_COLOR,
-  BORDER_COLOR,
-  DEFAULT_TEXT,
-} from '~/components/common/colors';
+import {BACK_COLOR, BORDER_COLOR, DARK_GREY} from '~/components/common/colors';
 
 interface HeaderProps {
   title: string; // title prop의 타입을 문자열로 지정
@@ -43,6 +39,6 @@ const Container = styled.View`
 
 const Title = styled.Text`
   font-size: ${HEADER_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

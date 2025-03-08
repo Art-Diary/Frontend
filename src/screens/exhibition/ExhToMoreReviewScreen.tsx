@@ -17,7 +17,7 @@ import {
 } from '~/components/common/icon';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -333,7 +333,7 @@ const AvgRateView = styled.View`
 
 const AvgTitle = styled.Text`
   font-size: ${rf(20)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -387,7 +387,7 @@ const ReviewTextView = styled.View`
 
 const ReviewTitle = styled.Text`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -432,7 +432,7 @@ const PageNumberView = styled.View`
 
 const PageNumber = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2)}px;
   padding-right: ${wp(2)}px;

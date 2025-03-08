@@ -15,7 +15,7 @@ import {
   FONT_NAME,
 } from '../common/style';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -72,11 +72,11 @@ const EditNickname: React.FC<EditNicknameProps> = ({
         // 상태 코드를 체크 (예: 409 Conflict)
         if (userInfo.authInfo.nickname === getNickname) {
           setMessage(' 사용 가능한 닉네임입니다.');
-          setMessageColor('#34A853');
+          setMessageColor('green');
           setIsVerified(true);
         } else {
           setMessage(' 이미 사용 중인 닉네임입니다.');
-          setMessageColor('#FF6F61');
+          setMessageColor('red');
         }
       } else {
         showToast('다시 시도해주세요.');
@@ -84,7 +84,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
     }
     if (isSuccess) {
       setMessage(' 사용 가능한 닉네임입니다.');
-      setMessageColor('#34A853');
+      setMessageColor('green');
       setIsVerified(true);
     }
   }, [isError, isSuccess]);
@@ -95,7 +95,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
 
     if (checkBlankInKeyword(getNickname)) {
       setMessage(' 닉네임을 작성해주세요.');
-      setMessageColor('#FF6F61');
+      setMessageColor('red');
     } else if (
       nickname.includes('전시메이트') ||
       nickname.includes('kakao_') ||
@@ -103,7 +103,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
       nickname.includes('naver_')
     ) {
       setMessage(' 이미 사용 중인 닉네임입니다.');
-      setMessageColor('#FF6F61');
+      setMessageColor('red');
     } else {
       verifyNickname();
     }
@@ -115,7 +115,7 @@ const EditNickname: React.FC<EditNicknameProps> = ({
       <CountWrapper>
         <SectionWapper>
           <SectionStar>*</SectionStar>
-          <SectionName main={true} color={'#3c4045'}>
+          <SectionName main={true} color={DARK_GREY}>
             닉네임
           </SectionName>
         </SectionWapper>
@@ -238,7 +238,7 @@ const BodyWrapper = styled.View`
 
 const TextInputView = styled.TextInput`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-right: 0%;
   padding-top: 0%;

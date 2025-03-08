@@ -6,7 +6,7 @@ import SearchExhFrame from '~/components/exhSearch/SearchExhFrame';
 import SearchNewMateList from './SearchNewMateList';
 import {useAddNewMate} from '~/api/queries/mate';
 import {checkBlankInKeyword} from '~/utils/keyword';
-import {DEFAULT_TEXT, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
+import {DARK_GREY, LIGHT_GREY, MAIN_COLOR} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -111,7 +111,7 @@ export default AddNewMateModal;
 /** style */
 const Message = styled.Text`
   font-size: ${BUTTON_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-top: ${hp(1)}px;
   padding-left: ${wp(5)}px;

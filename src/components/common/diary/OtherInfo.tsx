@@ -7,7 +7,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import {PrivateToggleIcon, PublicToggleIcon} from '../icon';
 import {FONT_NAME, ITEM_BORDER_WIDTH} from '../style';
-import {DEFAULT_TEXT, LIGHT_GREY, MIDDLE_GREY} from '../colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '../colors';
 
 interface OtherProps {
   gatherName: string | null;
@@ -79,12 +79,12 @@ const CategoryText = styled.Text`
 
 const WithText = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
 const VisitText = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

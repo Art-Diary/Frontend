@@ -8,11 +8,7 @@ import {
 } from '~/components/common/ResponsiveSize';
 import RenderHtml from 'react-native-render-html';
 import {MoreContentsIcon, ReduceContentsIcon} from '~/components/common/icon';
-import {
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 
 interface Props {
@@ -135,7 +131,7 @@ const IntroduceView = styled.View<IntroduceProps>`
 const styles = StyleSheet.create({
   render: {
     fontFamily: FONT_NAME,
-    color: DEFAULT_TEXT,
+    color: DARK_GREY,
     fontSize: rf(15),
     paddingHorizontal: wp(2),
     paddingVertical: wp(1.5),

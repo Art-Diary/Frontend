@@ -5,7 +5,13 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR, MIDDLE_GREY} from '../colors';
+import {
+  BACK_COLOR,
+  DARK_GREY,
+  MAIN_COLOR,
+  MIDDLE_GREY,
+  TEXTINPUTFORM_COLOR,
+} from '../colors';
 import {FONT_NAME} from '../style';
 import {useFetchMyStoredDateListOfExh} from '~/api/queries/mydiary';
 import {FlatList} from 'react-native';
@@ -235,7 +241,7 @@ const SectionWrapper = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -258,14 +264,14 @@ const DateView = styled.View<DateViewProps>`
   padding-left: ${wp(2)}px;
   padding-right: ${wp(2)}px;
   background-color: ${(props: DateViewProps) =>
-    props.isSelected ? '#fde2e0' : `${BACK_COLOR}`};
+    props.isSelected ? `${TEXTINPUTFORM_COLOR}` : `${BACK_COLOR}`};
   border-radius: ${wp(4)}px;
   width: 100%;
 `;
 
 const DateText = styled.Text`
   font-size: ${rf(15.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

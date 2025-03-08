@@ -7,7 +7,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {dateToString, days, months} from '~/utils/date';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR, MIDDLE_GREY} from './colors';
+import {BACK_COLOR, DARK_GREY, MAIN_COLOR, MIDDLE_GREY} from './colors';
 import {FONT_NAME} from './style';
 import CustomTouchable from './CustomTouchable';
 import {MarkedType} from '~/types';
@@ -284,13 +284,13 @@ const ArrowLabel = styled.Text`
   padding-left: ${wp(1)}px;
   padding-right: ${wp(1)}px;
   font-size: ${rf(15.8)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
 const MonthLabel = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 
@@ -328,7 +328,7 @@ const CellText = styled.Text<CircleProps>`
       ? 'white'
       : props.isDay
       ? `${MIDDLE_GREY}`
-      : `${DEFAULT_TEXT}`};
+      : `${DARK_GREY}`};
   font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
 `;

@@ -18,7 +18,7 @@ import {
 import ExhDetailFormat from '~/components/exhibition/ExhDetailFormat';
 import {DEFAULT_IMAGE} from '@env';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   COMMENTFORM_COLOR,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -247,7 +247,7 @@ const TopCenterView = styled.View`
 
 const Title = styled.Text`
   font-size: ${rf(19)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(8)}px;
 `;
@@ -296,7 +296,7 @@ const RExhStateText = styled.Text<RExhStateProps>`
 
 const RegDateText = styled.Text`
   font-size: ${rf(14)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   /* line-height: ${wp(8)}px; */
   line-height: ${wp(5)}px;

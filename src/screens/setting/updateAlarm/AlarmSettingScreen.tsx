@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {BACK_COLOR, DEFAULT_TEXT, LIGHT_GREY} from '~/components/common/colors';
+import {BACK_COLOR, DARK_GREY, LIGHT_GREY} from '~/components/common/colors';
 import {FONT_NAME} from '~/components/common/style';
 import {useUserActions, useUserInfo} from '~/zustand/auth/auth';
 import {
@@ -169,7 +169,7 @@ const ContentColumn = styled.View`
 
 const AlarmText = styled.Text`
   font-size: ${rf(16.8)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

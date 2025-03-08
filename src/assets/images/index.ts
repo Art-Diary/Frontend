@@ -29,7 +29,7 @@ export {default as FullStar} from './full_star.svg';
 export {default as EmptyStar} from './empty_star.svg';
 export {default as OptionBar} from './option_bar.svg';
 export {default as GreyTag} from '../name_tag/grey_tag.svg';
-export {default as PinkTag} from '../name_tag/pink_tag.svg';
+export {default as MateTag} from '../name_tag/mate_tag.svg';
 export {default as SearchButton} from './search_button.svg';
 export {default as LeaveGathering} from './leave_gathering.svg';
 export {default as AnotherSearch} from './another_search.svg';
@@ -52,5 +52,6 @@ export {default as KakaoLogo} from './kakao_logo.svg';
 
 // for share modal icon (not use)
 export {default as KakaoIconBig} from './kakao_icon_big.svg';
-export {default as Copy} from './copy.svg';
 export {default as Instagram} from './instagram.svg';
+
+export {default as Logo} from './logo.svg';

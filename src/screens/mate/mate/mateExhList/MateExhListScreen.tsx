@@ -9,7 +9,7 @@ import {useMateInfo} from '~/zustand/mate/mate';
 import MateExhList from './MateExhList';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MIDDLE_GREY,
 } from '~/components/common/colors';
@@ -116,7 +116,7 @@ const UserInfoColumn = styled.View`
 const NickName = styled.Text`
   font-size: ${rf(15.1)}px;
   text-align: center;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

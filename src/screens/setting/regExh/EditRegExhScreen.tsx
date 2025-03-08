@@ -12,7 +12,7 @@ import TextInputForm from '~/components/common/TextInputForm';
 import styled from 'styled-components/native';
 import {BUTTON_PADDING, FONT_NAME} from '~/components/common/style';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
@@ -215,7 +215,7 @@ const ButtonText = styled.Text<ButtonTextProps>`
   padding: ${BUTTON_PADDING}px;
   border-radius: ${wp(5)}px;
   text-align: center;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-size: ${rf(15)}px;
   font-family: ${FONT_NAME};
 `;

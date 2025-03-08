@@ -6,7 +6,7 @@ import {
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
 import {FONT_NAME} from '../common/style';
-import {DEFAULT_TEXT} from '../common/colors';
+import {DARK_GREY} from '../common/colors';
 import CalendarFrame from '../common/CalendarFrame';
 import {MarkedType} from '~/types';
 
@@ -68,6 +68,6 @@ const BodyView = styled.View`
 
 const BodyText = styled.Text`
   font-size: ${rf(16.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

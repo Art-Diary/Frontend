@@ -10,7 +10,7 @@ import {
   BUTTON_RADIUS,
   FONT_NAME,
 } from '~/components/common/style';
-import {BACK_COLOR, DEFAULT_TEXT, MAIN_COLOR} from '~/components/common/colors';
+import {BACK_COLOR, DARK_GREY} from '~/components/common/colors';
 import CustomTouchable from '../CustomTouchable';
 import {PrivateToggleIcon, PublicToggleIcon} from '../icon';
 
@@ -64,7 +64,7 @@ const SectionWapper = styled.View`
 
 const SectionName = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2)}px;
 `;

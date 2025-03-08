@@ -4,7 +4,7 @@ import {RootStackNavigationProp} from '~/App';
 import {showToast} from '~/components/common/modal/toastConfig';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
@@ -30,6 +30,7 @@ import {checkBlankInKeyword} from '~/utils/keyword';
 import {useUpdateAnswerByAdmin} from '~/api/queries/qna';
 import {changeDotToHyphen, dateToString} from '~/utils/date';
 import {toastErrorMessage} from '~/utils/message';
+import {ScrollView} from 'react-native';
 
 type QnaDetailScreenProp = RouteProp<RootStackParamList, 'AnswerQna'>;
 
@@ -76,35 +77,38 @@ const AnswerQnaScreen: React.FC<Props> = ({route}) => {
     <Container>
       <LoadingModal isLoading={isLoading} />
       <BackView title="답변 작성" line={true} children={null} />
-      <Qna>
-        <Question>
-          <Title>
-            <Text size={23}>Q. </Text>
-            <Text size={18}>{qnaInfo.title}</Text>
-          </Title>
-          <Body>
-            <Text size={16}>{qnaInfo.body}</Text>
-            <DateView>
-              <Text size={12} color>
-                {qnaInfo.writeDate}
-              </Text>
-            </DateView>
-          </Body>
-        </Question>
-        <Answer>
-          <TextInputForm
-            title={'답변'}
-            multiLine
-            keyword={answer}
-            handleKeyword={setAnswer}
-            full
-          />
-        </Answer>
-        {/* 확인 버튼 */}
-        <CustomTouchable onPress={checkForm}>
-          <ConfirmButton>완료</ConfirmButton>
-        </CustomTouchable>
-      </Qna>
+      <ScrollView>
+        <Qna>
+          <Question>
+            <Title>
+              <TitleText size={23}>Q. </TitleText>
+              <TitleText size={18} titleStr>
+                {qnaInfo.title}
+              </TitleText>
+            </Title>
+            <Body>
+              <BodyText size={16}>{qnaInfo.body}</BodyText>
+              <DateView>
+                <BodyText size={12} color>
+                  {qnaInfo.writeDate}
+                </BodyText>
+              </DateView>
+            </Body>
+          </Question>
+          <Answer>
+            <TextInputForm
+              title={'답변'}
+              multiLine
+              keyword={answer}
+              handleKeyword={setAnswer}
+            />
+          </Answer>
+          {/* 확인 버튼 */}
+          <CustomTouchable onPress={checkForm}>
+            <ConfirmButton>완료</ConfirmButton>
+          </CustomTouchable>
+        </Qna>
+      </ScrollView>
     </Container>
   );
 };
@@ -136,18 +140,26 @@ const Question = styled.View`
 const Title = styled.View`
   flex-direction: row;
   gap: ${wp(1)}px;
-  align-items: center;
 `;
 
-interface TitleProps {
+interface TextProps {
   size: number;
   color: boolean;
+  titleStr: boolean;
 }
 
-const Text = styled.Text<TitleProps>`
-  font-size: ${(props: TitleProps) => `${rf(props.size)}px`};
-  color: ${(props: TitleProps) =>
-    props.color ? `${MIDDLE_GREY}` : `${DEFAULT_TEXT}`};
+const TitleText = styled.Text<TextProps>`
+  flex: ${(props: TextProps) => (props.titleStr ? `1` : `none`)};
+  font-size: ${(props: TextProps) => `${rf(props.size)}px`};
+  color: ${(props: TextProps) =>
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
+  font-family: ${FONT_NAME};
+`;
+
+const BodyText = styled.Text<TextProps>`
+  font-size: ${(props: TextProps) => `${rf(props.size)}px`};
+  color: ${(props: TextProps) =>
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
   line-height: ${hp(2.8)}px;
 `;

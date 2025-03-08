@@ -6,7 +6,7 @@ import {
   heightSizePercentage as hp,
   widthSizePercentage as wp,
 } from '~/components/common/ResponsiveSize';
-import {BORDER_COLOR, DEFAULT_TEXT, MIDDLE_GREY} from '../common/colors';
+import {BORDER_COLOR, DARK_GREY, MIDDLE_GREY} from '../common/colors';
 import {FONT_NAME} from '../common/style';
 import {AvgRateStarIcon} from '../common/icon';
 import {DEFAULT_IMAGE} from '@env';
@@ -85,7 +85,7 @@ const Contents = styled.View`
 
 const ExhTitle = styled.Text`
   font-size: ${rf(16.3)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   text-align: center;
 `;

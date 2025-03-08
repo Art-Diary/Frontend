@@ -12,7 +12,7 @@ import {useQueryClient} from 'react-query';
 import {mydiaryQueryKeys} from '~/api/queries/mydiary';
 import {mateQueryKeys} from '~/api/queries/mate';
 import {AREA_FONT_SIZE, FONT_NAME} from '~/components/common/style';
-import {BACK_COLOR, DEFAULT_TEXT} from '~/components/common/colors';
+import {BACK_COLOR, DARK_GREY} from '~/components/common/colors';
 import {
   useTabIdentifierActions,
   useTabIdentifierInfo,
@@ -190,6 +190,6 @@ const SettingWrapper = styled.View`
 
 const TitleText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

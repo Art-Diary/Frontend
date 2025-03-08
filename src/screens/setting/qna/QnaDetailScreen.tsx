@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
   BACK_COLOR,
-  DEFAULT_TEXT,
+  DARK_GREY,
   MIDDLE_GREY,
   TEXTINPUTFORM_COLOR,
 } from '~/components/common/colors';
@@ -213,14 +213,14 @@ const TitleText = styled.Text<TextProps>`
   flex: ${(props: TextProps) => (props.titleStr ? `1` : `none`)};
   font-size: ${(props: TextProps) => `${rf(props.size)}px`};
   color: ${(props: TextProps) =>
-    props.color ? `${MIDDLE_GREY}` : `${DEFAULT_TEXT}`};
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
 `;
 
 const BodyText = styled.Text<TextProps>`
   font-size: ${(props: TextProps) => `${rf(props.size)}px`};
   color: ${(props: TextProps) =>
-    props.color ? `${MIDDLE_GREY}` : `${DEFAULT_TEXT}`};
+    props.color ? `${MIDDLE_GREY}` : `${DARK_GREY}`};
   font-family: ${FONT_NAME};
   line-height: ${hp(2.8)}px;
 `;

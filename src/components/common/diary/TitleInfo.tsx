@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import {responseFont as rf} from '~/components/common/ResponsiveSize';
-import {DEFAULT_TEXT} from '../colors';
+import {DARK_GREY} from '../colors';
 import {FONT_NAME} from '../style';
 
 interface TitleProps {
@@ -29,6 +29,6 @@ const Container = styled.View`
 
 const TitleText = styled.Text`
   font-size: ${rf(24.3)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;

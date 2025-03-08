@@ -13,11 +13,7 @@ import {useExhFromCalendarActions} from '~/zustand/calendar/exhFromCalendar';
 import {changeDotToHyphen} from '~/utils/date';
 import {useVisitedExhIdActions} from '~/zustand/mydiary/mydiary';
 import {AddMyExhButtonIcon} from '~/components/common/icon';
-import {
-  DEFAULT_TEXT,
-  LIGHT_GREY,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DARK_GREY, LIGHT_GREY, MIDDLE_GREY} from '~/components/common/colors';
 import {AREA_FONT_SIZE, DASH_WIDTH, FONT_NAME} from '~/components/common/style';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import {GatheringColorInfo} from '~/types';
@@ -183,7 +179,7 @@ const SelectedDateView = styled.View`
 
 const SelectedDateText = styled.Text`
   font-size: ${AREA_FONT_SIZE}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

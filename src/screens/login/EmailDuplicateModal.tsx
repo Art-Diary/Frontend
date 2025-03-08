@@ -11,7 +11,7 @@ import {
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import {
-  DEFAULT_TEXT,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -158,7 +158,7 @@ const Message = styled.Text<MessageProps>`
   font-size: ${(props: MessageProps) =>
     props.isMainMsg ? `${rf(19)}px` : `${rf(14.5)}px`};
   color: ${(props: MessageProps) =>
-    props.isMainMsg ? `${DEFAULT_TEXT}` : `${MIDDLE_GREY}`};
+    props.isMainMsg ? `${DARK_GREY}` : `${MIDDLE_GREY}`};
   font-family: ${FONT_NAME};
 `;
 
@@ -167,7 +167,7 @@ const HighlightMain = styled.Text`
 `;
 
 const HighlightSub = styled.Text`
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
 `;
 
 const TouchView = styled.View`

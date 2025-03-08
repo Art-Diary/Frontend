@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
 import BackView from '~/components/common/BackView';
 import {
-  DEFAULT_TEXT,
+  BACK_COLOR,
+  DARK_GREY,
   LIGHT_GREY,
   MAIN_COLOR,
   MIDDLE_GREY,
@@ -241,7 +242,7 @@ export default QnaListScreen;
 const Container = styled.View`
   flex: 1;
   flex-direction: column;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   width: 100%;
 `;
 
@@ -279,7 +280,7 @@ const CategoryNormal = styled.View`
 
 const CategoryName = styled.Text`
   font-size: ${rf(16)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
@@ -293,14 +294,14 @@ const QnaNumber = styled.Text`
 
 const QnaTitle = styled.Text`
   font-size: ${rf(15)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
 
 const QnaWriteDate = styled.Text`
   font-size: ${rf(12)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   line-height: ${wp(6)}px;
 `;
@@ -330,7 +331,7 @@ const PageNumberView = styled.View`
 
 const PageNumber = styled.Text`
   font-size: ${rf(17)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
   padding-left: ${wp(2)}px;
   padding-right: ${wp(2)}px;

@@ -7,6 +7,7 @@ import BackView from '~/components/common/BackView';
 import {OptionBarIcon} from '~/components/common/icon';
 import CustomTouchable from '~/components/common/CustomTouchable';
 import DiaryUpdateDeleteModal from '~/components/common/diary/modal/DiaryUpdateDeleteModal';
+import {BACK_COLOR} from '~/components/common/colors';
 
 type RootStackParamList = {
   ExhToDiary: {diary: any};
@@ -88,7 +89,7 @@ const Container = styled.View`
   flex: 1;
   flex-direction: column;
   width: 100%;
-  background-color: #f6f6f6;
+  background-color: ${BACK_COLOR};
   /* justify-content: center;
   align-items: center; */
 `;

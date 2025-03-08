@@ -6,11 +6,7 @@ import {
   responseFont as rf,
 } from '~/components/common/ResponsiveSize';
 import {showToast} from '~/components/common/modal/toastConfig';
-import {
-  DEFAULT_TEXT,
-  MAIN_COLOR,
-  MIDDLE_GREY,
-} from '~/components/common/colors';
+import {DARK_GREY, MAIN_COLOR, MIDDLE_GREY} from '~/components/common/colors';
 import {
   BUTTON_FONT_SIZE,
   BUTTON_PADDING,
@@ -103,7 +99,7 @@ const MsgWrapper = styled.View`
 const Message = styled.Text`
   text-align: center;
   font-size: ${rf(18.5)}px;
-  color: ${DEFAULT_TEXT};
+  color: ${DARK_GREY};
   font-family: ${FONT_NAME};
 `;
 

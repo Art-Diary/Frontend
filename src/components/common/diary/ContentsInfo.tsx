@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
-import {DEFAULT_TEXT} from '../colors';
+import {DARK_GREY} from '../colors';
 import {ScrollView, StyleSheet} from 'react-native';
 import {
   widthSizePercentage as wp,
@@ -15,7 +15,7 @@ interface ContentsProps {
 }
 
 const ContentsInfo: React.FC<ContentsProps> = ({contents}) => {
-  const [fontColor, setFontColor] = useState('#3c4045');
+  const [fontColor, setFontColor] = useState(DARK_GREY);
 
   const initialCSSText = {
     initialCSSText: `${FontFamilyStylesheet}`,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   render: {
     fontFamily: FONT_NAME,
-    color: DEFAULT_TEXT,
+    color: DARK_GREY,
     fontSize: rf(17),
     paddingHorizontal: wp(2),
     paddingVertical: wp(1.5),
